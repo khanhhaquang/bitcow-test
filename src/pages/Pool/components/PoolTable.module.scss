@@ -1,0 +1,36 @@
+.poolTable {
+  :global {
+    .ant-table {
+      @apply bg-black text-white;
+
+      .ant-table-cell {
+        @apply bg-black border-black text-gray_05;
+      }
+
+      .ant-table-column-sorter-up.active,
+      .ant-table-column-sorter-down.active {
+        @apply text-color_main;
+      }
+
+      .ant-table-tbody {
+        .ant-table-cell {
+          @apply bg-color_bg_2 border-black border-b-0 border-t-4;
+        }
+      }
+
+      .ant-table-tbody > tr > td > .ant-table-wrapper:only-child .ant-table {
+        @apply border-t-[1px] border-gray_03;
+      }
+
+      .ant-table-tbody > tr > td > .ant-table-wrapper:only-child .ant-table,
+      .ant-table-tbody
+        > tr
+        > td
+        > .ant-table-expanded-row-fixed
+        > .ant-table-wrapper:only-child
+        .ant-table {
+        @apply -m-4;
+      }
+    }
+  }
+}

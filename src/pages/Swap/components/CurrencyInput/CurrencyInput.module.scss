@@ -1,0 +1,25 @@
+@import 'styles/mixins';
+
+.currencyInput {
+  :global {
+    @include currencyInput;
+  }
+}
+
+.modal {
+  :global {
+    // coin seletor modal
+    .ant-modal-content {
+      @apply bg-color_bg_3;
+      .ant-modal-body {
+        @apply p-4;
+      }
+      .ant-modal-close {
+        @apply top-0 right-0;
+        .ant-modal-close-x svg {
+          @apply absolute bottom-4 left-4;
+        }
+      }
+    }
+  }
+}

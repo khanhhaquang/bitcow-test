@@ -1,0 +1,19 @@
+.tabs {
+  :global {
+    .ant-tabs-extra-content {
+      @apply w-1/3;
+    }
+    .ant-tabs-nav::before {
+      @apply border-b-0 #{!important};
+    }
+    .ant-tabs-tab {
+      @apply text-gray_05;
+      &.ant-tabs-tab-active .ant-tabs-tab-btn {
+        @apply text-color_main;
+      }
+    }
+    .ant-tabs-ink-bar {
+      @apply bg-color_main w-[62px] #{!important};
+    }
+  }
+}

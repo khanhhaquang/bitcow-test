@@ -1,0 +1,12 @@
+.searchInput {
+  :global {
+    .ant-input,
+    .ant-input-affix-wrapper {
+      @apply bg-black rounded-none text-gray_05;
+    }
+
+    .ant-input-affix-wrapper {
+      @apply h-[38px] border-[#272A2C];
+    }
+  }
+}

@@ -1,0 +1,34 @@
+.menu {
+  :global {
+    // menu
+    .ant-menu-item.ant-menu-item-selected {
+      @apply bg-transparent #{!important}; // remove blue background
+      .link {
+        @apply text-color_main #{!important};
+      }
+      &::after {
+        @apply content-[''] w-6 h-[2px] bg-color_main absolute top-10 left-1/2 transform -translate-x-1/2 #{!important};
+      }
+    }
+
+    .ant-menu-item {
+      @apply border-0 flex items-center px-0 mr-[30px] #{!important};
+      .link {
+        @apply text-white capitalize #{!important};
+      }
+    }
+
+    .ant-menu .ant-menu-item {
+      display: flex;
+      align-items: center;
+    }
+
+    // link color
+    .ant-menu .ant-menu-item,
+    .ant-menu .ant-menu-item-group-title,
+    .ant-menu .ant-menu-item > a,
+    .ant-menu .ant-menu-item > span > a {
+      @apply text-color_main text-lg px-11;
+    }
+  }
+}

@@ -1,0 +1,63 @@
+.menu {
+  :global {
+    // menu
+    .ant-menu-item.ant-menu-item-selected {
+      @apply bg-transparent #{!important}; // remove blue background
+      a {
+        @apply text-color_main #{!important};
+        &::after {
+          display: inline-flex;
+          margin-left: 8.5px;
+          content: '';
+          background-image: url('../../../../resources/icons/triangle.svg');
+          background-size: 6px 6px;
+          height: 6px;
+          width: 6px;
+        }
+      }
+    }
+
+    .ant-menu-item {
+      @apply pl-28 border-0 flex items-center #{!important};
+      a {
+        @apply text-white #{!important};
+      }
+      &:hover {
+        @apply bg-transparent #{!important};
+        a {
+          @apply text-color_main #{!important};
+        }
+      }
+    }
+
+    .ant-menu-item::after,
+    .ant-menu-submenu::after {
+      @apply bottom-3 #{!important};
+    }
+
+    .ant-menu .ant-menu-item {
+      display: flex;
+      align-items: center;
+    }
+
+    // link color
+    .ant-menu .ant-menu-item,
+    .ant-menu .ant-menu-item-group-title,
+    .ant-menu .ant-menu-item > a,
+    .ant-menu .ant-menu-item > span > a {
+      @apply text-color_text_1 font-Furore text-lg px-11;
+    }
+  }
+}
+
+.blur {
+  --fallback-background: #fbf5ff;
+  background-color: var(--fallback-background) !important; /* Fallback */
+}
+
+@supports (backdrop-filter: blur()) {
+  .blur {
+    backdrop-filter: blur(40px);
+    // @apply bg-primeBlack #{!important};
+  }
+}

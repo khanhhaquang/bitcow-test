@@ -1,0 +1,68 @@
+.select {
+  @apply w-full;
+
+  :global {
+    .ant-select {
+      @apply w-full border-[1px] border-[#272A2C] rounded-none h-[38px] ring-offset-0 ring-offset-transparent #{!important};
+
+      &:not(.ant-select-disabled):hover .ant-select-selector,
+      &:not(.ant-select-customize-input) .ant-select-selector {
+        @apply border-0 #{!important};
+      }
+      &:not(.ant-select-customize-input) {
+        .ant-select-selector {
+          @apply h-full p-[10px] rounded-none bg-color_bg_2 border-0;
+          .ant-select-selection-item {
+            @apply text-white bg-transparent leading-[18px] text-right;
+          }
+        }
+      }
+    }
+
+    .ant-select-dropdown {
+      @apply bg-color_bg_2;
+    }
+
+    ::placeholder {
+      @apply text-gray_05;
+    }
+    /* Edge */
+    ::-webkit-input-placeholder {
+      @apply text-gray_05;
+    }
+    /* Internet Explorer */
+    :-ms-input-placeholder {
+      @apply text-gray_05;
+    }
+  }
+}
+
+:global {
+  .ant-select-dropdown {
+    @apply bg-color_bg_2 #{!important};
+
+    .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+      @apply bg-color_bg_2 text-white;
+    }
+
+    .ant-select-item {
+      @apply text-gray_05;
+    }
+    .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+      @apply text-white bg-color_bg_2 #{!important};
+      svg {
+        @apply block;
+      }
+    }
+
+    .ant-select-item-option-content {
+      @apply flex justify-between;
+      svg {
+        @apply hidden;
+        path {
+          @apply fill-white #{!important};
+        }
+      }
+    }
+  }
+}

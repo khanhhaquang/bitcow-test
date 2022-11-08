@@ -1,0 +1,60 @@
+@import '~antd/dist/antd.css';
+@import url(https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800&display=swap);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'styles/typography.scss';
+
+body {
+  margin: 0;
+  font-family: 'Rany', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @apply text-base;
+  line-height: 1.2;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@layer components {
+  svg.font-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    // vertical alignment when adjacent with texts
+    vertical-align: -0.15em;
+    // change color by setting color
+    fill: currentColor;
+    overflow: hidden;
+  }
+
+  /* Chrome, Safari and Opera */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar::-webkit-scrollbar {
+    @apply w-1 ml-1;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-grey-300 rounded-[100vh];
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-grey-500;
+  }
+}

@@ -30,8 +30,6 @@ module.exports = {
         box: 'url(resources/img/boxBg.png)',
         boxBorder:
           'linear-gradient(90deg, rgba(176, 255, 74, 0.6) 0%, #272B2C 14.81%, #272B2C 83.86%, rgba(176, 255, 74, 0.6) 100%);',
-        auditBox: 'url(resources/img/landingPage/auditBox.png)',
-        auditBoxMobile: 'url(resources/img/landingPage/auditBoxMobile.png)',
         dotBg: 'url(resources/img/dotBg.png)',
         accountBg: 'url(resources/img/accountBg.svg)'
       }

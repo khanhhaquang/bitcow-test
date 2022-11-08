@@ -2,6 +2,15 @@ import { MoveResource } from 'aptos/src/generated';
 import { useCallback, useEffect, useState } from 'react';
 import useAptosWallet from './useAptosWallet';
 
+export type CoinInfo = {
+  coin: {
+    value: number;
+  };
+  frozen: boolean;
+  deposit_events: Record<string, any>;
+  withdraw_events: Record<string, any>;
+};
+
 const useCoinStore = () => {
   const { walletResource } = useAptosWallet();
   const [coinStore, setCoinStore] = useState<Record<string, MoveResource>>({});

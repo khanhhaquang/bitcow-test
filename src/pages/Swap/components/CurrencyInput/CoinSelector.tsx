@@ -12,7 +12,7 @@ import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';
 import { RawCoinInfo } from '@manahippo/coin-list';
 import useAptosWallet from 'hooks/useAptosWallet';
-import useCoinStore from 'hooks/useCoinStore';
+import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
 import { TokenBalance } from 'types/hippo';
 // import useHippoClient from 'hooks/useHippoClient';
 // import { TokenInfo } from '@manahippo/hippo-sdk/dist/generated/coin_registry/coin_registry';
@@ -72,7 +72,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
         const balance = !activeWallet
           ? -1
           : tokenStore
-          ? (tokenStore.data as any).coin.value / Math.pow(10, t.decimals)
+          ? (tokenStore.data as CoinInfo).coin.value / Math.pow(10, t.decimals)
           : 0;
         return {
           token: t,

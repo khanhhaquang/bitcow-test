@@ -30,7 +30,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType }) => {
   const [isCoinSelectorVisible, setIsCoinSelectorVisible] = useState(false);
 
   const selectedCurrency = values[actionType];
-  const selectedSymbol = selectedCurrency?.token?.symbol;
+  const selectedSymbol = selectedCurrency?.token;
   const [uiBalance] = useTokenBalane(selectedSymbol);
   // const tokenList = useSelector(getTokenList);
   const isCoinSelectorDisabled = !tokenList || tokenList.length === 0;

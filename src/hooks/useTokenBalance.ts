@@ -1,28 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// import { useWallet } from '@manahippo/aptos-wallet-adapter';
+import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { useMemo } from 'react';
-// import useHippoClient from './useHippoClient';
-// import invariant from 'tiny-invariant';
+import invariant from 'tiny-invariant';
+import { RawCoinInfo } from '@manahippo/coin-list';
+import useAptosWallet from './useAptosWallet';
+import useCoinStore, { CoinInfo } from './useCoinStore';
 
-export type Balance = number | '';
+export type Balance = number | null;
 
-const useTokenBalane = (tokenSymbol: string | undefined): [Balance, boolean] => {
-  // const { tokenInfos, tokenStores } = useHippoClient();
-  // const { connected } = useWallet();
+const useTokenBalane = (token: RawCoinInfo | undefined): [Balance, boolean] => {
+  const { obricSDK } = useAptosWallet();
+  const { coinStore } = useCoinStore();
+  // const { getTokenInfoByFullName, getTokenStoreByFullName } = useHippoClient();
+  const { connected } = useWallet();
 
   const inputTokenBalance = useMemo(() => {
-    // if (tokenSymbol && connected && tokenInfos && tokenStores) {
-    //   const tokenInfo = tokenInfos[tokenSymbol];
-    //   invariant(tokenInfo, `Can't find token info for symbol ${tokenSymbol}`);
-    //   const tokenStore = tokenStores[tokenSymbol];
-    //   return tokenStore
-    //     ? tokenStore.coin.value.toJsNumber() / Math.pow(10, tokenInfo.decimals.toJsNumber())
-    //     : 0;
-    // } else {
-    //   return '';
-    // }
-    return 0;
-  }, []);
+    if (token && connected && obricSDK) {
+      const fullName = token.token_type.type;
+      const tokenInfo = obricSDK.coinList.getCoinInfoByFullName(fullName);
+      invariant(tokenInfo, `Can't find token info of symbol ${token.symbol}`);
+      const tokenStore = coinStore[fullName];
+      if (!tokenStore) return null;
+      return tokenStore
+        ? (tokenStore.data as CoinInfo).coin.value / Math.pow(10, tokenInfo.decimals)
+        : 0;
+    } else {
+      return null;
+    }
+  }, [coinStore, connected, obricSDK, token]);
 
   const isReady = typeof inputTokenBalance === 'number';
 

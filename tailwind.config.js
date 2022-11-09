@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        color_main: '#B0FF4A',
+        color_main: 'rgba(255, 237, 72, 1)',
         color_minor: '#FFCC4A',
         color_text_1: '#ffffff',
         color_text_2: 'rgba(255, 255, 255, 0.5)',
@@ -19,12 +19,13 @@ module.exports = {
         gray_03: 'rgba(255, 255, 255, 0.3)',
         gray_05: 'rgba(255, 255, 255, 0.5)',
         gray_004: 'rgba(255, 255, 255, 0.04)',
-        gray_008: 'rgba(255, 255, 255, 0.08)'
+        gray_008: 'rgba(255, 255, 255, 0.08)',
+        color_error: '#FF6666'
       },
       backgroundImage: {
         main: 'url(resources/img/mainBg.png)',
         secondary: 'url(resources/img/bg.png)',
-        button_gradient: 'linear-gradient(90deg, #B0FF4A 2.6%, #70F0E1 100%)',
+        button_gradient: 'linear-gradient(88.99deg, #FFED48 0%, #00FFF0 100%)',
         color_minor_1: 'linear-gradient(90deg, #B0FF4A 0%, #70F0E1 100%);',
         launch_btn: 'linear-gradient(90deg, #B0FF4A 0.21%, #70F0E1 105.26%)',
         box: 'url(resources/img/boxBg.png)',

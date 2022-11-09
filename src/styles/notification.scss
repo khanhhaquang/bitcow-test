@@ -1,0 +1,45 @@
+.ant-notification {
+  .ant-notification-notice {
+    @apply bg-color_bg_3 relative text-white p-4 rounded-none;
+    &::before {
+      content: '';
+      width: 2px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      width: 17.66px;
+      height: 17.66px;
+      top: -9px;
+      background: #040822;
+      right: -9px;
+      transform: rotate(-45deg);
+    }
+    &.obric-notification--success::before {
+      @apply bg-color_main;
+    }
+    &.obric-notification--error::before {
+      @apply bg-color_error;
+    }
+    // &.obric-notification--warn::before {
+    //   @apply bg-warn-500;
+    // }
+    // &.obric-notification--info::before {
+    //   @apply bg-info-500;
+    // }
+    // @apply rounded-[16px];
+    .ant-notification-notice-message {
+      @apply text-white text-lg;
+    }
+    .ant-notification-notice-close {
+      @apply w-6 h-6 opacity-30 hover:opacity-100;
+    }
+    // .ant-notification-notice-description {
+    //   @apply text-grey-700 body-medium;
+    // }
+  }
+}

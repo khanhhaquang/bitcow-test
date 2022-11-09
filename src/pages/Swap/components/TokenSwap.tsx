@@ -3,7 +3,6 @@
 import Button from 'components/Button';
 import { useFormikContext } from 'formik';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
-// import { ArrowRight, MoreArrowDown, SwapIcon } from 'resources/icons';
 import { ISwapSettings } from '../types';
 import CurrencyInput from './CurrencyInput';
 // import SwapDetail from './SwapDetail';
@@ -16,67 +15,74 @@ import { CancelIcon, SettingIcon, SwapIcon } from 'resources/icons';
 import HippoModal from 'components/HippoModal';
 import CoinSelector from './CurrencyInput/CoinSelector';
 import SwapSetting from './SwapSetting';
-import Tooltip from 'components/Tooltip';
+import { ApiError } from 'aptos';
+import { openErrorNotification } from 'utils/notifications';
+import { Tooltip } from 'components/Antd';
 
 const TokenSwap = () => {
   const { values, setFieldValue, submitForm, isSubmitting } = useFormikContext<ISwapSettings>();
-  const { activeWallet, openModal } = useAptosWallet();
+  const { activeWallet, openModal, obricSDK } = useAptosWallet();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  // const { hippoAgg } = useHippoClient();
-  const fromSymbol = values.currencyFrom?.token?.symbol || 'USDC';
-  const toSymbol = values.currencyTo?.token?.symbol || 'BTC';
+  const fromToken = values.currencyFrom?.token;
+  const toToken = values.currencyTo?.token;
   const fromUiAmt = values.currencyFrom?.amount;
+  const [isPeriodicRefreshPaused, setIsPeriodicRefreshPaused] = useState(false);
   // const [allRoutes, setAllRoutes] = useState<RouteAndQuote[]>([]);
   // const [routeSelected, setRouteSelected] = useState<RouteAndQuote | null>(null);
 
-  // useEffect(() => {
-  //   if (hippoAgg) {
-  //     if (!values.currencyFrom?.token) {
-  //       setFieldValue(
-  //         'currencyFrom.token',
-  //         hippoAgg.registryClient.getTokenInfoBySymbol(fromSymbol)[0]
-  //       );
-  //     }
-  //     if (!values.currencyTo?.token) {
-  //       setFieldValue(
-  //         'currencyTo.token',
-  //         hippoAgg.registryClient.getTokenInfoBySymbol(toSymbol)[0]
-  //       );
-  //     }
-  //   }
-  // }, [
-  //   fromSymbol,
-  //   hippoAgg,
-  //   hippoAgg?.registryClient,
-  //   setFieldValue,
-  //   toSymbol,
-  //   values.currencyFrom,
-  //   values.currencyTo
-  // ]);
-
-  const latestInputParams = useRef({
-    fromSymbol,
-    toSymbol,
-    fromUiAmt
-  });
-  latestInputParams.current = {
-    fromSymbol,
-    toSymbol,
-    fromUiAmt
-  };
-
-  const ifInputParametersDifferentWithLatest = useCallback(
-    (fromSymbolLocal: string, toSymbolLocal: string, fromUiAmtLocal: number) => {
-      return !(
-        fromSymbolLocal === latestInputParams.current.fromSymbol &&
-        toSymbolLocal === latestInputParams.current.toSymbol &&
-        fromUiAmtLocal === latestInputParams.current.fromUiAmt
-      );
-    },
-    []
-  );
+  console.log('swap form values>>>', values);
+  useEffect(() => {
+    if (obricSDK) {
+      if (!values.currencyFrom?.token) {
+        setFieldValue('currencyFrom.token', obricSDK.coinList.getCoinInfoBySymbol('USDC')[0]);
+      }
+      if (!values.currencyTo?.token) {
+        setFieldValue('currencyTo.token', obricSDK.coinList.getCoinInfoBySymbol('APT')[0]);
+      }
+    }
+  }, [fromToken, obricSDK, setFieldValue, toToken, values.currencyFrom, values.currencyTo]);
 
   const lastFetchTs = useRef(0);
+
+  const fetchSwapRoute = useCallback(async () => {
+    try {
+      const now = Date.now();
+      lastFetchTs.current = now;
+
+      if (obricSDK && fromToken && toToken && fromUiAmt) {
+        console.log('swapRoute>>>', fromToken, toToken, fromUiAmt);
+        const route = await obricSDK.getQuote(fromToken.symbol, toToken.symbol, fromUiAmt);
+        console.log('swapRoute22222>>>', route);
+      }
+    } catch (error) {
+      console.log('Fetch swap routes:', error);
+      if (error instanceof ApiError) {
+        // let detail = `${error.status} : ${error.errorCode} : ${error.vmErrorCode} : ${error.message}`;
+        let detail = error.message;
+        const msg = JSON.parse(error.message);
+        if (msg.message === 'Generic Error') {
+          detail = 'Too many requests. You need to wait 60s and try again';
+          setIsPeriodicRefreshPaused(true);
+        }
+        if (fromUiAmt) openErrorNotification({ detail, title: 'Fetch API error' });
+      } else {
+        openErrorNotification({
+          detail: error?.message || JSON.stringify(error),
+          title: 'Fetch swap routes error'
+        });
+      }
+
+      setFieldValue('currencyFrom', {
+        ...values.currencyFrom,
+        amount: 0
+      });
+    }
+  }, [fromToken, fromUiAmt, obricSDK, setFieldValue, toToken, values.currencyFrom]);
+
+  useEffect(() => {
+    fetchSwapRoute();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromToken, toToken, fromUiAmt, obricSDK]);
 
   // const fetchSwapRoutes = useCallback(async () => {
   //   try {
@@ -86,18 +92,18 @@ const TokenSwap = () => {
   //       }
   //       lastFetchTs.current = Date.now();
   //     }
-  //     if (hippoAgg && fromSymbol && toSymbol && fromUiAmt) {
-  //       const [xToken] = hippoAgg.registryClient.getTokenInfoBySymbol(fromSymbol);
-  //       const [yToken] = hippoAgg.registryClient.getTokenInfoBySymbol(toSymbol);
+  //     if (hippoAgg && fromToken && toToken && fromUiAmt) {
+  //       const [xToken] = hippoAgg.registryClient.getTokenInfoBySymbol(fromToken);
+  //       const [yToken] = hippoAgg.registryClient.getTokenInfoBySymbol(toToken);
 
   //       const routes = await hippoAgg.getQuotes(fromUiAmt, xToken, yToken);
   //       if (routes.length === 0) {
   //         throw new Error(
-  //           `No quotes from ${fromSymbol} to ${toSymbol} with input amount ${fromUiAmt}`
+  //           `No quotes from ${fromToken} to ${toToken} with input amount ${fromUiAmt}`
   //         );
   //       }
 
-  //       if (!ifInputParametersDifferentWithLatest(fromSymbol, toSymbol, fromUiAmt)) {
+  //       if (!ifInputParametersDifferentWithLatest(fromToken, toToken, fromUiAmt)) {
   //         setAllRoutes(routes);
   //         setRouteSelected(routes[0]);
   //       }
@@ -118,8 +124,8 @@ const TokenSwap = () => {
   //   }
   // }, [
   //   hippoAgg,
-  //   fromSymbol,
-  //   toSymbol,
+  //   fromToken,
+  //   toToken,
   //   fromUiAmt,
   //   ifInputParametersDifferentWithLatest,
   //   setFieldValue,
@@ -188,14 +194,6 @@ const TokenSwap = () => {
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>
-        {/* {allRoutes.length > 0 && routeSelected && (
-          <RoutesAvailable
-            className="mt-4"
-            routes={allRoutes}
-            routeSelected={routeSelected}
-            onRouteSelected={(ro) => setRouteSelected(ro)}
-          />
-        )} */}
         <Button
           isLoading={isSubmitting}
           className="mt-5 w-full bg-button_gradient text-black font-Furore text-lg disabled:bg-color_bg_3 rounded-none"
@@ -203,8 +201,8 @@ const TokenSwap = () => {
           onClick={!activeWallet ? openModal : submitForm}>
           {!activeWallet ? 'Connect to Wallet' : 'SWAP'}
         </Button>
-        {/* {routeSelected && fromSymbol && toSymbol && (
-          <SwapDetail routeAndQuote={routeSelected} fromSymbol={fromSymbol} toSymbol={toSymbol} />
+        {/* {routeSelected && fromToken && toToken && (
+          <SwapDetail routeAndQuote={routeSelected} fromToken={fromToken} toToken={toToken} />
         )} */}
       </div>
       <HippoModal
@@ -213,7 +211,7 @@ const TokenSwap = () => {
         // wrapClassName={styles.modal}
         open={isSettingsOpen}
         footer={null}
-        closeIcon={<CancelIcon />}
+        closeIcon={<CancelIcon className="opacity-30 hover:opacity-100" />}
         width={424}>
         <SwapSetting onClose={() => setIsSettingsOpen(false)} />
       </HippoModal>

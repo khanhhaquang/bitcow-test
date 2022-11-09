@@ -22,7 +22,7 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
   if (type === 'success') {
     icon = <NotiSuccessIcon />;
   } else if (type === 'error') {
-    icon = <NotiErrorIcon />;
+    icon = <NotiErrorIcon className="fill-color_error" />;
   } else if (type === 'info') {
     icon = <HintIcon />;
   }
@@ -30,10 +30,11 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
   notification.open({
     message: title,
     description: detail,
-    placement: 'bottomLeft',
+    placement: 'topRight',
     icon,
-    className: `hippo-notification hippo-notification--${type}`,
-    closeIcon: <CancelIcon className="font-icon h5 text-grey-500" />,
+    className: `obric-notification obric-notification--${type}`,
+    closeIcon: <CancelIcon className="w-full h-full" />,
+    top: 84,
     duration: 6
   });
 };

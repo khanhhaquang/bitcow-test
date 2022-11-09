@@ -9,13 +9,13 @@ const useTokenAmountFormatter = () => {
   const formatter = useMemo(
     () =>
       (amount: number | undefined | null, token: CoinInfo | undefined): string => {
-        if (typeof amount !== 'number' || amount < 0 || !token) return '';
+        if (!obricSDK || typeof amount !== 'number' || amount < 0 || !token) return '';
         const tokenInfo = obricSDK.coinList.getCoinInfoByFullName(token.token_type.type);
         if (!tokenInfo) return '';
         const decimals = tokenInfo.decimals;
         return numberGroupFormat(amount, decimals);
       },
-    [obricSDK.coinList]
+    [obricSDK]
   );
 
   return [formatter];

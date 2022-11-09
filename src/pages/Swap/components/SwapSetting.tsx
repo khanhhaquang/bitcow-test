@@ -9,6 +9,7 @@ import classNames from 'classnames';
 // import { initState as swapInitState } from 'modules/swap/reducer';
 import { HintIcon } from 'resources/icons';
 import Switch from 'components/Switch';
+import { Tooltip } from 'antd';
 
 interface TProps {
   onClose: () => void;
@@ -18,14 +19,14 @@ const SubTitle = ({ children }: { children: string }) => {
   return (
     <div className="flex gap-2 items-center mb-4">
       <div className="text-base">{children}</div>
-      <HintIcon />
+      <Tooltip title={children}>
+        <HintIcon className="opacity-30 hover:opacity-100" />
+      </Tooltip>
     </div>
   );
 };
 
 const SwapSetting: React.FC<TProps> = ({ onClose }) => {
-  const slippageOptions = [0.5, 1, 2];
-
   const dispatch = useDispatch();
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
 
@@ -42,8 +43,10 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   //   setFieldValue('privacySwap', swapInitState.swapSettings.privacySwap);
   // }, [setFieldValue]);
 
-  // TODO: manage state here!
-  const isCustomSlippage = !slippageOptions.includes(values.slipTolerance);
+  const onClickAuto = useCallback(() => {
+    const randomSlip = Math.round(Math.random() * 100 * 2) / 100;
+    setFieldValue('slipTolerance', randomSlip);
+  }, [setFieldValue]);
 
   return (
     <div className="w-full font-Rany text-white">
@@ -54,7 +57,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         <div className="flex gap-2">
           <div className="flex relative items-center w-full border-color_bg_2 border-[1px]">
             <PositiveFloatNumInput
-              inputAmount={!isCustomSlippage ? 0 : values.slipTolerance}
+              inputAmount={values.slipTolerance}
               min={0}
               max={10}
               isConfine={true}
@@ -66,7 +69,8 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
           </div>
           <Button
             className="border-[1px] border-color_main text-color_main hover:text-black hover:bg-color_main font-Rany text-base py-3 px-5 rounded-none"
-            variant="outlined">
+            variant="outlined"
+            onClick={onClickAuto}>
             Auto
           </Button>
         </div>

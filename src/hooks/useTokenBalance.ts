@@ -19,7 +19,7 @@ const useTokenBalane = (token: RawCoinInfo | undefined): [Balance, boolean] => {
       const tokenInfo = obricSDK.coinList.getCoinInfoByFullName(fullName);
       invariant(tokenInfo, `Can't find token info of symbol ${token.symbol}`);
       const tokenStore = coinStore[fullName];
-      if (!tokenStore) return null;
+      if (!tokenStore) return 0;
       return tokenStore
         ? (tokenStore.data as CoinInfo).coin.value / Math.pow(10, tokenInfo.decimals)
         : 0;

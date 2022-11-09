@@ -31,7 +31,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
   const { tokenList, activeWallet } = useAptosWallet();
   const commonCoins = tokenList.filter((token) => {
-    return ['devBTC', 'devUSDT', 'devUSDC'].includes(token.symbol);
+    return ['APT', 'WBTC', 'WETH', 'USDT', 'USDC'].includes(token.symbol);
   });
   const [filter, setFilter] = useState<string>('');
   const { coinStore } = useCoinStore();
@@ -105,7 +105,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
           onChange={(e) => setFilter(e.target.value.toLowerCase())}
           placeholder="Search name or paste address"
         />
-        <div className="flex gap-2 mt-4 mb-4">
+        <div className="flex gap-2 mt-2 mb-2">
           {commonCoins.map((coin) => (
             <CommonCoinButton
               coin={coin}

@@ -51,6 +51,7 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [tokenList, setTokenList] = useState<RawCoinInfo[]>();
   const [tokenInfo, setTokenInfo] = useState<Record<string, RawCoinInfo[]>>();
   const [coinStore, setCoinStore] = useState();
+  const [shouldRefresh, setShouldRefresh] = useState(false);
 
   // useEffect(() => {
   //   const currentNetwork = process.env.REACT_APP_CURRENT_NETWORK;
@@ -73,8 +74,22 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
     [networkCfg.fullNodeUrl]
   );
 
+  const refreshSDKState = useCallback(() => {
+    if (obricSDK) {
+      obricSDK.loadState();
+      setShouldRefresh(false);
+    }
+  }, [obricSDK]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      refreshSDKState();
+    }
+  }, [shouldRefresh, refreshSDKState]);
+
   const getBasiqSdk = useCallback(() => {
     setObricSDK(ObricSDK.create(aptosClient));
+    setShouldRefresh(true);
   }, [aptosClient]);
 
   useEffect(() => {

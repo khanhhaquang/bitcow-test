@@ -18,6 +18,7 @@ import SwapSetting from './SwapSetting';
 import { ApiError } from 'aptos';
 import { openErrorNotification } from 'utils/notifications';
 import { Tooltip } from 'components/Antd';
+import SwapDetail from './SwapDetail';
 
 const TokenSwap = () => {
   const { values, setFieldValue, submitForm, isSubmitting } = useFormikContext<ISwapSettings>();
@@ -51,7 +52,7 @@ const TokenSwap = () => {
 
       if (obricSDK && fromToken && toToken && fromUiAmt) {
         console.log('swapRoute>>>', fromToken, toToken, fromUiAmt);
-        const route = await obricSDK.getQuote(fromToken.symbol, toToken.symbol, fromUiAmt);
+        const route = await obricSDK.getQuote(fromToken.symbol, toToken.symbol, Number(fromUiAmt));
         console.log('swapRoute22222>>>', route);
       }
     } catch (error) {
@@ -194,6 +195,9 @@ const TokenSwap = () => {
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>
+        {fromToken && toToken && (
+          <SwapDetail routeAndQuote={1} fromToken={fromToken} toToken={toToken} />
+        )}
         <Button
           isLoading={isSubmitting}
           className="mt-5 w-full bg-button_gradient text-black font-Furore text-lg disabled:bg-color_bg_3 rounded-none"
@@ -201,9 +205,6 @@ const TokenSwap = () => {
           onClick={!activeWallet ? openModal : submitForm}>
           {!activeWallet ? 'Connect to Wallet' : 'SWAP'}
         </Button>
-        {/* {routeSelected && fromToken && toToken && (
-          <SwapDetail routeAndQuote={routeSelected} fromToken={fromToken} toToken={toToken} />
-        )} */}
       </div>
       <HippoModal
         onCancel={() => setIsSettingsOpen(false)}

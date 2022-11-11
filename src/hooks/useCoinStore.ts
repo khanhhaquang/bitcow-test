@@ -1,6 +1,7 @@
+import { parseMoveStructTag, StructTag } from '@manahippo/move-to-ts';
 import { MoveResource } from 'aptos/src/generated';
 import { useCallback, useEffect, useState } from 'react';
-import { parseMoveStructTag, StructTag } from '@manahippo/move-to-ts';
+
 import useAptosWallet from './useAptosWallet';
 
 export type CoinInfo = {
@@ -11,6 +12,7 @@ export type CoinInfo = {
   deposit_events: Record<string, any>;
   withdraw_events: Record<string, any>;
   fullName: string;
+  poolName?: string;
 };
 
 const useCoinStore = () => {
@@ -34,14 +36,18 @@ const useCoinStore = () => {
         if (module === 'coin' && name === 'CoinStore') {
           if (tokenType.module === 'piece_swap') {
             const poolAddress = tokenType.address.toString();
-            poolResources[poolAddress] = {
-              ...resource,
-              fullName: tokenType.getFullname()
+            console.log('HELLLLOOO', structType.getFullname());
+            poolResources[poolAddress] = resource;
+            poolResources[poolAddress].data = {
+              ...poolResources[poolAddress].data,
+              fullName: tokenType.getFullname(),
+              poolName: structType.getFullname()
             };
           } else {
             const tokenFullname = tokenType.getFullname();
-            tokenResources[tokenFullname] = {
-              ...resource,
+            tokenResources[tokenFullname] = resource;
+            tokenResources[tokenFullname].data = {
+              ...tokenResources[tokenFullname].data,
               fullName: tokenType.getFullname()
             };
           }

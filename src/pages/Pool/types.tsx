@@ -10,5 +10,5 @@ export interface AddLiquidity {
 export interface WithdrawLiquidity {
   xToken: RawCoinInfo;
   yToken: RawCoinInfo;
-  amt: number;
+  percent: number;
 }

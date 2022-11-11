@@ -8,22 +8,11 @@ import { IPool } from 'types/pool';
 
 import useAptosWallet from './useAptosWallet';
 import useCoinStore, { CoinInfo } from './useCoinStore';
-import useTokenAmountFormatter from './useTokenAmountFormatter';
 
 const usePools = () => {
   const { obricSDK, liquidityPools } = useAptosWallet();
   const [activePools, setActivePools] = useState<IPool[]>([]);
   const { poolStore } = useCoinStore();
-  const [tokenAmountFormatter] = useTokenAmountFormatter();
-
-  // const searchPoolBySymbol = useCallback(
-  //   async (fromT) => {
-  //     if (obricSDK) {
-  //       const pools = await obricSDK.findPoolBySymbol();
-  //     }
-  //   },
-  //   [second],
-  // )
 
   const parsePoolData = useCallback(
     (pools: PieceSwapPoolInfo[]): IPool[] => {
@@ -35,18 +24,20 @@ const usePools = () => {
           const [rhsType] = (pool.reserve_y.typeTag as StructTag).typeParams as [StructTag];
           const token0 = obricSDK.coinList.getCoinInfoByFullName(lhsType.getFullname());
           const token1 = obricSDK.coinList.getCoinInfoByFullName(rhsType.getFullname());
-          const liquidity = pool.reserve_x.value.add(pool.reserve_y.value).toJsNumber();
+          const token0Reserve = pool.reserve_x.value.toJsNumber() / Math.pow(10, token0.decimals);
+          const token1Reserve = pool.reserve_y.value.toJsNumber() / Math.pow(10, token1.decimals);
+          // const liquidity = pool.reserve_x.value.add(pool.reserve_y.value).toJsNumber();
           return {
             id: (pool.typeTag as StructTag).address.toString(),
-            liquidity,
+            liquidity: token0Reserve + token1Reserve,
             token0,
             token1,
             volumn7D: '-',
             fees7D: '-',
             apr7D: '-',
             invested: true,
-            token0Reserve: pool.reserve_x.value.div(pool.x_deci_mult).toJsNumber(),
-            token1Reserve: pool.reserve_y.value.div(pool.y_deci_mult).toJsNumber()
+            token0Reserve,
+            token1Reserve
           };
         });
       }
@@ -63,41 +54,34 @@ const usePools = () => {
   }, [activePools, liquidityPools, obricSDK, parsePoolData]);
 
   const getOwnedLiquidity = useCallback(
-    (poolAddress) => {
-      // let result = 0;
+    async (poolAddress) => {
       let result = {
         lp: 0,
         coins: {}
       };
-      console.log('get owned liquidty>>', poolAddress);
       if (poolStore && obricSDK) {
         const coinInfo = (poolStore[poolAddress] || {}).data as CoinInfo;
         const poolInfo = activePools.find((pool) => pool.id === poolAddress);
         if (coinInfo && poolInfo) {
           // eslint-disable-next-line @typescript-eslint/naming-convention
           const { token0, token1, token0Reserve, token1Reserve, liquidity } = poolInfo;
-          const myLp = coinInfo?.coin?.value;
-          console.log(
-            'get owned liquidty222>>',
-            poolStore[poolAddress],
-            poolInfo,
-            token0Reserve,
-            token1Reserve
+          const lpResources = await obricSDK.aptosClient.getAccountResources(poolAddress);
+          const lpPair = lpResources.find(
+            (resource) => resource.type === coinInfo.poolName.replace(/CoinStore/g, 'CoinInfo')
           );
+          const myLp = coinInfo?.coin?.value / Math.pow(10, (lpPair.data as any).decimals);
           result = {
             lp: myLp,
             coins: {
-              [token0.symbol]: tokenAmountFormatter((myLp / liquidity) * token0Reserve, token0),
-              [token1.symbol]: tokenAmountFormatter((myLp / liquidity) * token1Reserve, token1)
+              [token0.symbol]: (myLp / liquidity) * token0Reserve,
+              [token1.symbol]: (myLp / liquidity) * token1Reserve
             }
           };
-          // result = coinInfo?.coin?.value;
-          console.log('get owned liquidty333>>', result);
         }
       }
       return result;
     },
-    [activePools, obricSDK, poolStore, tokenAmountFormatter]
+    [activePools, obricSDK, poolStore]
   );
 
   return {

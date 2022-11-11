@@ -1,30 +1,48 @@
-import { Formik, FormikHelpers } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
-import { useCallback } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import Button from 'components/Button';
+import CoinIcon from 'components/CoinIcon';
+import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import useAptosWallet from 'hooks/useAptosWallet';
+import useDebouncedCallback from 'hooks/useDebouncedCallback';
+import usePools from 'hooks/usePools';
 import { WithdrawLiquidity as WithdrawLiquidityProps } from 'pages/Pool/types';
+import { LeftArrowIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 import { openErrorNotification } from 'utils/notifications';
 
-import TokenLiquidity from './TokenLiquidity';
+const percentageOptions = [25, 50, 75, 100];
 
 const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const dispatch = useDispatch();
   const { requestWithdrawLiquidity } = useAptosWallet();
+  const { getOwnedLiquidity } = usePools();
+  const [pool, setPool] = useState<{ lp: number; coins: {} }>();
+
+  const fetchRecord = useCallback(async () => {
+    const { lp, coins } = await getOwnedLiquidity(liquidityPool.id);
+    setPool({ lp, coins });
+  }, [getOwnedLiquidity, liquidityPool.id]);
+
+  useEffect(() => {
+    fetchRecord();
+  }, [fetchRecord]);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = useCallback(
     async (values: WithdrawLiquidityProps, formikHelper: FormikHelpers<WithdrawLiquidityProps>) => {
       console.log('on submit withdraw liquidity');
-      const { xToken, yToken, amt } = values;
-      if (xToken && yToken && amt) {
+      const { xToken, yToken, percent } = values;
+      if (xToken && yToken && percent && pool) {
         const result = await requestWithdrawLiquidity({
           xToken,
           yToken,
-          amt
+          amt: pool.lp * (percent / 100)
         });
         console.log('withdraw result>>>', result);
         if (result) {
@@ -36,20 +54,49 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
         openErrorNotification({ detail: 'Invalid input for withdrawing Liquidity' });
       }
     },
-    [dispatch, requestWithdrawLiquidity]
+    [dispatch, pool, requestWithdrawLiquidity]
   );
 
   const validationSchema = yup.object({
     xToken: yup.object().required(),
     yToken: yup.object().required(),
-    amt: yup.number().positive()
+    percent: yup.number().positive()
   });
+
+  const onAmountChange = useDebouncedCallback(
+    useCallback((a: number, props: FormikProps<WithdrawLiquidityProps>) => {
+      props.setFieldValue('percent', a);
+    }, []),
+    200
+  );
+
+  const renderCoinRow = useCallback(
+    (percent?: number) => {
+      if (pool) {
+        return Object.keys(pool?.coins).map((key) => {
+          return (
+            <div className="flex w-full items-center justify-between" key={key}>
+              <div className="flex items-center gap-2">
+                <CoinIcon symbol={key} size={20} />
+                <div className="text-[18px]">{key}</div>
+              </div>
+              <div className="text-sm text-gray_05">
+                {percent ? (pool.coins[key] * percent) / 100 : pool.coins[key]}
+              </div>
+            </div>
+          );
+        });
+      }
+    },
+    [pool]
+  );
 
   return (
     <Formik
       initialValues={{
         xToken: liquidityPool.token0,
         yToken: liquidityPool.token1,
+        percent: 0,
         amt: 0
       }}
       validationSchema={validationSchema}
@@ -57,13 +104,47 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
       {(props) => (
         <div className="w-full font-Rany text-white">
           <div className="text-lg">Withdraw liquidity</div>
-          <div className="mt-5 flex w-full flex-col">
-            <div className="relative flex flex-col items-center gap-2">
-              <div className="bg-color_bg_2 p-4">
-                <div className="mb-2 text-xs uppercase text-gray_05">Get</div>
-                <TokenLiquidity token={liquidityPool.token0} type="xAmt" />
+          <div className="mt-5 flex w-full flex-col items-center justify-center gap-2">
+            <div className="w-full bg-color_bg_2 p-4">
+              <div className="mb-2 text-xs uppercase text-gray_05">AVAILABLE FOR WITHDRAWAL</div>
+              <div className="mt-4 flex flex-col gap-4">{renderCoinRow()}</div>
+              <div className="flex flex-col">
+                <div className={'flex font-Rany text-gray_03'}>
+                  <PositiveFloatNumInput
+                    ref={inputRef}
+                    min={0.01}
+                    max={100}
+                    maxDecimals={2}
+                    placeholder="0.00"
+                    className="relative mt-6 w-full bg-transparent pr-0 pl-1 text-3xl text-white"
+                    inputAmount={props.values.percent || 0}
+                    onAmountChange={(a) => onAmountChange(a, props)}
+                  />
+                  <div className="mt-6 grow text-3xl text-gray_05">%</div>
+                </div>
+                <div className="mt-5 flex w-full justify-between gap-3">
+                  {percentageOptions.map((option) => (
+                    <Button
+                      key={option}
+                      onClick={() => onAmountChange(option, props)}
+                      className="h-6 grow rounded-none bg-gray_01 text-sm text-gray_05 hover:bg-gray_03 hover:text-white">
+                      {option}%
+                    </Button>
+                  ))}
+                </div>
               </div>
             </div>
+            {props.values.percent > 0 && (
+              <Fragment>
+                <LeftArrowIcon className="rotate-90 fill-white" />
+                <div className="w-full bg-color_bg_2 p-4">
+                  <div className="mb-2 text-xs uppercase text-gray_05">AMOUNT TO RECEIVE</div>
+                  <div className="mt-4 flex flex-col gap-4">
+                    {renderCoinRow(props.values.percent)}
+                  </div>
+                </div>
+              </Fragment>
+            )}
           </div>
           <div className="absolute left-0 -bottom-[92.5px] w-full bg-color_bg_3">
             <div className="bg-gray_008 p-5">

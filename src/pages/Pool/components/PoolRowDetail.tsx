@@ -1,8 +1,10 @@
 import poolAction from 'modules/pool/actions';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { ColumnsType, Table } from 'components/Antd';
 import Button from 'components/Button';
+import usePools from 'hooks/usePools';
 import { RemoveIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
@@ -15,11 +17,30 @@ interface ExpandedDataType {
 
 interface IProps {
   pool: IPool;
-  poolRecord: ExpandedDataType[];
 }
 
-const PoolRowDetail = ({ pool, poolRecord }: IProps) => {
+const PoolRowDetail = ({ pool }: IProps) => {
   const dispatch = useDispatch();
+  const { getOwnedLiquidity } = usePools();
+  const [poolRecord, setPoolRecord] = useState<ExpandedDataType[]>();
+
+  const fetchRecord = useCallback(async () => {
+    const { lp, coins } = await getOwnedLiquidity(pool.id);
+    const poolData = [
+      {
+        id: pool.id,
+        liquidity: lp,
+        assetsPooled: coins,
+        share: (lp / pool.liquidity) * 100
+      }
+    ];
+    setPoolRecord(poolData);
+  }, [getOwnedLiquidity, pool.id, pool.liquidity]);
+
+  useEffect(() => {
+    fetchRecord();
+  }, [fetchRecord]);
+
   const columns: ColumnsType<ExpandedDataType> = [
     {
       title: 'Your Liquidity',
@@ -53,10 +74,9 @@ const PoolRowDetail = ({ pool, poolRecord }: IProps) => {
       title: 'Your Share',
       dataIndex: 'share',
       key: 'share',
-      render: () => (
+      render: (val) => (
         <div className="text-base text-white">
-          {/* <div className="text-sm text-gray_05">Your Liquidity</div> */}
-          <div className="">-</div>
+          <div className="">{val}%</div>
         </div>
       )
     },

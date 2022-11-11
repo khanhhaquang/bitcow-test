@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ColumnsType, Table, TableProps } from 'components/Antd';
-import usePools from 'hooks/usePools';
 import { HintIcon, LessIcon, MoreIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
@@ -13,8 +12,6 @@ interface IProps {
 }
 
 const PoolTable = ({ data }: IProps) => {
-  const { getOwnedLiquidity } = usePools();
-
   const columns: ColumnsType<IPool> = [
     {
       title: 'Trading Pair',
@@ -89,17 +86,7 @@ const PoolTable = ({ data }: IProps) => {
       rowKey={(record) => record.id}
       expandable={{
         expandedRowRender: (record) => {
-          console.log('row expand>>', record.id, getOwnedLiquidity(record.id));
-          const { lp, coins } = getOwnedLiquidity(record.id);
-          const poolData = [
-            {
-              id: record.id,
-              liquidity: lp,
-              assetsPooled: coins,
-              share: 0
-            }
-          ];
-          return <PoolRowDetail pool={record} poolRecord={poolData} />;
+          return <PoolRowDetail pool={record} />;
         },
         expandIcon: ({ expanded, onExpand, record }) => {
           return expanded ? (

@@ -2,7 +2,7 @@ import { RawCoinInfo } from '@manahippo/coin-list';
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 
 // import { Popover } from 'antd';
 import Button from 'components/Button';
@@ -24,8 +24,6 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type }) => {
   const [tokenAmountFormatter] = useTokenAmountFormatter();
 
   const [uiBalance, isReady] = useTokenBalane(token);
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   // The debounce delay should be bigger than the average of key input intervals
   const onAmountChange = useDebouncedCallback(
@@ -68,7 +66,6 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type }) => {
           'flex justify-between font-Rany text-gray_03'
         )}>
         <PositiveFloatNumInput
-          ref={inputRef}
           min={0}
           max={1e11}
           maxDecimals={token?.decimals || 9}

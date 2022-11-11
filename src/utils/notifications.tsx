@@ -1,7 +1,8 @@
 import { MaybeHexString } from 'aptos';
+import { ReactNode } from 'react';
+
 import { notification } from 'components/Antd';
 import TextLink from 'components/TextLink';
-import { ReactNode } from 'react';
 import { CancelIcon, NotiErrorIcon, HintIcon, NotiSuccessIcon } from 'resources/icons';
 
 type NotificationType = 'success' | 'error' | 'info' | 'warn';
@@ -33,7 +34,7 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     placement: 'topRight',
     icon,
     className: `obric-notification obric-notification--${type}`,
-    closeIcon: <CancelIcon className="w-full h-full" />,
+    closeIcon: <CancelIcon className="h-full w-full" />,
     top: 84,
     duration: 6
   });
@@ -46,10 +47,24 @@ export const openTxSuccessNotification = (txHash: MaybeHexString, content: strin
   const detail = (
     <p>
       <div>{content}</div>
-      <TextLink href={`https://explorer.aptoslabs.com/txn/${txHash}`}>View transaction</TextLink>
+      <TextLink href={`https://explorer.aptoslabs.com/txn/${txHash}`} className="!text-color_main">
+        View on Explorer
+      </TextLink>
     </p>
   );
   return openNotification({ detail, title: 'Transaction Success' });
+};
+
+export const openTxErrorNotification = (txHash: MaybeHexString, content: string) => {
+  const detail = (
+    <p>
+      <div>{content}</div>
+      <TextLink href={`https://explorer.aptoslabs.com/txn/${txHash}`} className="text-color_main">
+        View on Explorer
+      </TextLink>
+    </p>
+  );
+  return openNotification({ type: 'error', detail, title: 'Transaction Failed' });
 };
 
 export default openNotification;

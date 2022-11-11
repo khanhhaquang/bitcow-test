@@ -1,6 +1,6 @@
 import { createReducer, createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'modules/rootReducer';
-import { IPool, IPoolFilters } from 'types/pool';
+import { IPool, IPoolFilters, LiquidityModal } from 'types/pool';
 import { sortBy } from 'lodash';
 import actions from './actions';
 
@@ -10,6 +10,7 @@ interface SwapState {
   error: any;
   poolList: IPool[];
   filters: IPoolFilters;
+  liquidityModal: LiquidityModal;
 }
 
 const initState: SwapState = {
@@ -17,6 +18,7 @@ const initState: SwapState = {
   isFetched: false,
   error: null,
   poolList: [],
+  liquidityModal: null,
   filters: {
     search: '',
     filterBy: '',
@@ -31,6 +33,9 @@ export default createReducer(initState, (builder) => {
       state.isFetching = payload;
       state.isFetched = false;
     })
+    .addCase(actions.TOGGLE_LIQUIDITY_MODAL, (state, { payload }) => {
+      state.liquidityModal = payload;
+    })
     .addCase(actions.SET_POOL_LIST, (state, { payload }) => {
       state.poolList = payload;
       state.isFetching = false;
@@ -43,6 +48,7 @@ export default createReducer(initState, (builder) => {
 
 export const getIsFetchingPoolList = (state: RootState) => state.pool.isFetching;
 export const getIsFetchedPoolList = (state: RootState) => state.pool.isFetched;
+export const getLiquidityModal = (state: RootState) => state.pool.liquidityModal;
 export const getPoolList = (state: RootState) => state.pool.poolList;
 export const getPoolFilters = (state: RootState) => state.pool.filters;
 

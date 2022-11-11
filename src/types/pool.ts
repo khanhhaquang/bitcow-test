@@ -1,3 +1,5 @@
+import { RawCoinInfo } from '@manahippo/coin-list';
+
 export interface IPoolToken {
   id: string;
   symbol: string;
@@ -6,20 +8,15 @@ export interface IPoolToken {
 
 export interface IPool {
   id: string;
-  feeTier: string;
-  liquidity: string;
-  sqrtPrice: string;
-  tick: string;
-  token0: IPoolToken;
-  token1: IPoolToken;
-  poolType: string;
-  token0Price: string;
-  token1Price: string;
-  volumeUSD: string;
-  txCount: string;
-  totalValueLockedToken0: string;
-  totalValueLockedToken1: string;
-  totalValueLockedUSD: string;
+  liquidity: number;
+  token0: RawCoinInfo;
+  token1: RawCoinInfo;
+  volumn7D: '-' | number;
+  fees7D: '-' | number;
+  apr7D: '-' | number;
+  invested: boolean;
+  totalValueLockedUSD?: string;
+  volumeUSD?: string;
 }
 
 export interface IPoolFilters {
@@ -27,4 +24,9 @@ export interface IPoolFilters {
   filterBy: string;
   sortBy: string;
   showSelfLiquidity: boolean;
+}
+
+export interface LiquidityModal {
+  type: 'add' | 'withdraw';
+  pool: IPool;
 }

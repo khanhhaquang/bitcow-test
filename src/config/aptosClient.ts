@@ -1,5 +1,6 @@
 import { AptosClient } from 'aptos';
 import { FaucetClient } from 'aptos';
+
 import { NODE_URL, FAUCET_URL } from './aptosConstants';
 
 export const faucetClient = new FaucetClient(NODE_URL, FAUCET_URL);

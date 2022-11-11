@@ -1,12 +1,21 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import poolAction from 'modules/pool/actions';
+import { getLiquidityModal } from 'modules/pool/reducer';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { Tabs } from 'components/Antd';
-import SelectInput from 'components/SelectInput';
-import { useState } from 'react';
-import PoolTable from './components/PoolTable';
+import HippoModal from 'components/HippoModal';
 import SearchInput from 'components/SearchInput';
+import SelectInput from 'components/SelectInput';
+import usePools from 'hooks/usePools';
+import { CancelIcon } from 'resources/icons';
+
+import AddLiquidity from './components/AddLiquidity';
+import PoolTable from './components/PoolTable';
+import WithdrawLiquidity from './components/WithdrawLiquidity';
 import styles from './Pool.module.scss';
-import { IPoolItem } from './types';
 
 const filterOptions = [
   {
@@ -28,73 +37,19 @@ const Pool = () => {
     text: '',
     timeBasis: '7D'
   });
-
-  const data: IPoolItem[] = [
-    {
-      id: '1',
-      liquidity: 29925054,
-      volumn7D: 20418784,
-      token0: {
-        id: '001',
-        symbol: 'devUSDT',
-        name: 'USDT'
-      },
-      token1: {
-        id: '002',
-        symbol: 'devBTC',
-        name: 'BTC'
-      },
-      fees7D: 44921,
-      apr7D: 7.83,
-      invested: true
-    },
-    {
-      id: '2',
-      liquidity: 29925054,
-      volumn7D: 20418784,
-      token0: {
-        id: '001',
-        symbol: 'devUSDT',
-        name: 'USDT'
-      },
-      token1: {
-        id: '002',
-        symbol: 'devBTC',
-        name: 'BTC'
-      },
-      fees7D: 44921,
-      apr7D: 7.83,
-      invested: true
-    },
-    {
-      id: '3',
-      liquidity: 29925054,
-      volumn7D: 20418784,
-      token0: {
-        id: '001',
-        symbol: 'devUSDT',
-        name: 'USDT'
-      },
-      token1: {
-        id: '002',
-        symbol: 'devBTC',
-        name: 'BTC'
-      },
-      fees7D: 44921,
-      apr7D: 7.83,
-      invested: true
-    }
-  ];
+  const { activePools } = usePools();
+  const dispatch = useDispatch();
+  const liquidityModal = useSelector(getLiquidityModal);
 
   const renderHeader = () => (
-    <div className="flex justify-between mb-8">
+    <div className="mb-8 flex justify-between">
       <div className="font-Furore text-2xl text-white">Pools</div>
       <div className="flex gap-2 text-gray_05">
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <div className="">TVL :</div>
           <div className="text-white">$197,995,519.01</div>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <div className="">Volume24H :</div>
           <div className="text-white">$15,704,982.3</div>
         </div>
@@ -121,9 +76,9 @@ const Pool = () => {
   };
 
   return (
-    <div className="flex flex-col mt-[100px]">
+    <div className="mt-[100px] flex flex-col">
       {renderHeader()}
-      <div className="py-11 px-8 bg-black border-[1px] border-[#272A2C] backdrop-blur-lg">
+      <div className="border-[1px] border-[#272A2C] bg-black py-11 px-8 backdrop-blur-lg">
         <Tabs
           defaultActiveKey="1"
           className={styles.tabs}
@@ -132,7 +87,7 @@ const Pool = () => {
               <div className="flex gap-4">
                 <SelectInput
                   className={
-                    "w-1/2 relative before:content-['TimeBasis'] before:absolute before:text-gray_05 before:top-2 before:left-3 before:z-10"
+                    "relative w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-gray_05 before:content-['TimeBasis']"
                   }
                   value={filter.timeBasis}
                   options={filterOptions}
@@ -151,11 +106,27 @@ const Pool = () => {
             return {
               label: tab.label,
               key: tab.id,
-              children: <PoolTable data={data} />
+              children: <PoolTable data={activePools} />
             };
           })}
         />
       </div>
+      <HippoModal
+        onCancel={() => dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null))}
+        className=""
+        // wrapClassName={styles.modal}
+        open={!!liquidityModal}
+        footer={null}
+        closeIcon={<CancelIcon className="opacity-30 hover:opacity-100" />}
+        width={432}
+        destroyOnClose>
+        {liquidityModal &&
+          (liquidityModal.type === 'add' ? (
+            <AddLiquidity liquidityPool={liquidityModal.pool} />
+          ) : (
+            <WithdrawLiquidity liquidityPool={liquidityModal.pool} />
+          ))}
+      </HippoModal>
     </div>
   );
 };

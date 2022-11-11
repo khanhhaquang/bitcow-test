@@ -3,12 +3,17 @@
 import { NetworkInfo, useWallet, Wallet } from '@manahippo/aptos-wallet-adapter';
 import { createContext, FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { ActiveAptosWallet } from 'types/aptos';
-import { AptosClient, HexString } from 'aptos';
+import { AptosClient, HexString, Types } from 'aptos';
 import { SDK as ObricSDK } from 'obric';
-import { openErrorNotification } from 'utils/notifications';
+import {
+  openErrorNotification,
+  openTxErrorNotification,
+  openTxSuccessNotification
+} from 'utils/notifications';
 import useNetworkConfiguration from 'hooks/useNetworkConfiguration';
 import { RawCoinInfo } from '@manahippo/coin-list';
-import { MoveResource } from 'aptos/src/generated';
+import { MoveResource, UserTransaction } from 'aptos/src/generated';
+import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
 // import { App as CoinListApp } from '@manahippo/coin-list';
 
 interface AptosWalletContextType {
@@ -22,6 +27,26 @@ interface AptosWalletContextType {
   tokenInfo: Record<string, RawCoinInfo[]>;
   walletResource: MoveResource[];
   obricSDK: ObricSDK;
+  pendingTx: boolean;
+  liquidityPools: PieceSwapPoolInfo[];
+  requestSwap: (params: {
+    fromToken: RawCoinInfo;
+    toToken: RawCoinInfo;
+    inputAmt: number;
+    minOutputAmt: number;
+    options?: Partial<Types.SubmitTransactionRequest>;
+  }) => Promise<boolean>;
+  requestAddLiquidity: (params: {
+    xToken: RawCoinInfo;
+    yToken: RawCoinInfo;
+    xAmt: number;
+    yAmt: number;
+  }) => Promise<boolean>;
+  requestWithdrawLiquidity: (params: {
+    xToken: RawCoinInfo;
+    yToken: RawCoinInfo;
+    amt: number;
+  }) => Promise<boolean>;
 }
 
 interface TProviderProps {
@@ -41,7 +66,7 @@ const hexStringV0ToV1 = (v0: any) => {
 };
 
 const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
-  const { connected, account, network, wallet } = useWallet();
+  const { connected, account, network, wallet, signAndSubmitTransaction } = useWallet();
   const [obricSDK, setObricSDK] = useState<ObricSDK>();
   const [activeWallet, setActiveWallet] = useState<ActiveAptosWallet>(undefined);
   const [activeNetwork, setActiveNetwork] = useState<NetworkInfo>();
@@ -50,20 +75,11 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [walletResource, setWalletResource] = useState<MoveResource[]>();
   const [tokenList, setTokenList] = useState<RawCoinInfo[]>();
   const [tokenInfo, setTokenInfo] = useState<Record<string, RawCoinInfo[]>>();
-  const [coinStore, setCoinStore] = useState();
+  const [liquidityPools, setLiquidityPools] = useState<PieceSwapPoolInfo[]>();
   const [shouldRefresh, setShouldRefresh] = useState(false);
+  const [pendingTx, setPendingTx] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   const currentNetwork = process.env.REACT_APP_CURRENT_NETWORK;
-  //   if (connected && !new RegExp(currentNetwork, 'i').test(network?.name)) {
-  //     openErrorNotification({
-  //       detail: `Your wallet network is ${network.name} mismatched with the network of the site: ${currentNetwork}. This might cause transaction failures`,
-  //       title: 'Wallet Network Mismatch'
-  //     });
-  //   }
-  // }, [connected, network?.name]);
-  // console.log('MEMEME>>>', obricSDK?.coinList.getCoinInfoByType());
-
+  console.log('111111>>', tokenList, tokenInfo);
   const { networkCfg } = useNetworkConfiguration();
   const aptosClient = useMemo(
     () =>
@@ -73,19 +89,6 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
       }),
     [networkCfg.fullNodeUrl]
   );
-
-  const refreshSDKState = useCallback(() => {
-    if (obricSDK) {
-      obricSDK.loadState();
-      setShouldRefresh(false);
-    }
-  }, [obricSDK]);
-
-  useEffect(() => {
-    if (shouldRefresh) {
-      refreshSDKState();
-    }
-  }, [shouldRefresh, refreshSDKState]);
 
   const getBasiqSdk = useCallback(() => {
     setObricSDK(ObricSDK.create(aptosClient));
@@ -97,26 +100,51 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, [getBasiqSdk]);
 
   const fetchCoinList = useCallback(async () => {
-    // const list = DEFAULT_COIN_LIST;
-    const list = obricSDK.coinList.coinList;
-    const tokens = obricSDK.coinList.symbolToCoinInfo;
-    const resources = await obricSDK?.aptosClient.getAccountResources(activeWallet);
-    console.log('MEMEM>>>', resources);
-    setTokenList(list);
-    setTokenInfo(tokens);
-    setWalletResource(resources);
-  }, [
-    activeWallet,
-    obricSDK?.aptosClient,
-    obricSDK?.coinList.coinList,
-    obricSDK?.coinList.symbolToCoinInfo
-  ]);
+    if (obricSDK) {
+      const list = obricSDK.coinList.coinList;
+      const tokens = obricSDK.coinList.symbolToCoinInfo;
+      setTokenList(list);
+      setTokenInfo(tokens);
+    }
+  }, [obricSDK]);
+
+  const fetchActiveWalletResources = useCallback(async () => {
+    if (obricSDK) {
+      const resources = await obricSDK?.aptosClient.getAccountResources(activeWallet);
+      const txHistory = await obricSDK?.aptosClient.getAccountTransactions(activeWallet);
+      const pools = obricSDK.pools;
+      console.log('check resources', resources, txHistory);
+
+      setWalletResource(resources);
+      setLiquidityPools(pools);
+    }
+  }, [activeWallet, obricSDK]);
 
   useEffect(() => {
-    if (account) {
+    if (activeWallet && obricSDK) {
+      fetchActiveWalletResources();
+    }
+  }, [activeWallet, obricSDK, fetchActiveWalletResources]);
+
+  const refreshSDKState = useCallback(() => {
+    if (obricSDK) {
+      obricSDK.loadState();
+      fetchActiveWalletResources();
+      setShouldRefresh(false);
+    }
+  }, [fetchActiveWalletResources, obricSDK]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      refreshSDKState();
+    }
+  }, [shouldRefresh, refreshSDKState]);
+
+  useEffect(() => {
+    if (obricSDK) {
       fetchCoinList();
     }
-  }, [account, fetchCoinList]);
+  }, [obricSDK, fetchCoinList]);
 
   useEffect(() => {
     if (connected && account?.address) {
@@ -135,6 +163,156 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
   const openModal = useCallback(() => setOpen(true), []);
   const closeModal = useCallback(() => setOpen(false), []);
 
+  const requestSwap = useCallback(
+    async ({ fromToken, toToken, inputAmt, minOutputAmt, options }) => {
+      let success = false;
+      try {
+        if (!activeWallet) throw new Error('Please connect wallet first');
+        if (obricSDK) {
+          const payload = await obricSDK.swapPayload(
+            fromToken.symbol,
+            toToken.symbol,
+            inputAmt,
+            minOutputAmt
+          );
+          const result = await signAndSubmitTransaction(
+            payload as Types.TransactionPayload_EntryFunctionPayload,
+            options
+          );
+          if (result && result.hash) {
+            // pending tx notification first
+            setPendingTx(true);
+            const txnResult = (await aptosClient.waitForTransactionWithResult(result.hash, {
+              timeoutSecs: 20,
+              checkSuccess: true
+            })) as UserTransaction;
+            if (txnResult.success) {
+              openTxSuccessNotification(
+                result.hash,
+                `Swapped ${inputAmt} ${fromToken.symbol} to ${toToken.symbol}`
+              );
+            } else {
+              openTxErrorNotification(
+                result.hash,
+                `Failed to swap ${inputAmt} ${fromToken.symbol} to ${toToken.symbol}`
+              );
+            }
+            setPendingTx(false);
+            success = true;
+          }
+        }
+      } catch (error) {
+        console.log('Request swap by route error:', error);
+        if (error instanceof Error) {
+          openErrorNotification({ detail: error?.message });
+        }
+        success = false;
+      } finally {
+        setShouldRefresh(true);
+        return success;
+      }
+    },
+    [activeWallet, aptosClient, obricSDK, signAndSubmitTransaction]
+  );
+
+  const requestAddLiquidity = useCallback(
+    async ({ xToken, yToken, xAmt, yAmt }) => {
+      let success = false;
+      try {
+        if (!activeWallet) throw new Error('Please connect wallet first');
+        if (obricSDK) {
+          const payload = await obricSDK.addLiquidityPayload(
+            xToken.symbol,
+            yToken.symbol,
+            xAmt,
+            yAmt
+          );
+          const result = await signAndSubmitTransaction(
+            payload as Types.TransactionPayload_EntryFunctionPayload
+          );
+          if (result && result.hash) {
+            // pending tx notification first
+            setPendingTx(true);
+            const txnResult = (await aptosClient.waitForTransactionWithResult(result.hash, {
+              timeoutSecs: 20,
+              checkSuccess: true
+            })) as UserTransaction;
+            if (txnResult.success) {
+              openTxSuccessNotification(result.hash, `Added ${xToken.symbol} - ${yToken.symbol}`);
+            } else {
+              openTxErrorNotification(
+                result.hash,
+                `Failed to add to ${xToken.symbol} - ${yToken.symbol}`
+              );
+            }
+            setPendingTx(false);
+            success = true;
+          }
+        }
+      } catch (error) {
+        console.log('Request add liquidity error:', error);
+        if (error instanceof Error) {
+          openErrorNotification({ detail: error?.message });
+        }
+        success = false;
+      } finally {
+        setShouldRefresh(true);
+        return success;
+      }
+    },
+    [activeWallet, aptosClient, obricSDK, signAndSubmitTransaction]
+  );
+
+  const requestWithdrawLiquidity = useCallback(
+    async ({ xToken, yToken, amt }) => {
+      let success = false;
+      try {
+        if (!activeWallet) throw new Error('Please connect wallet first');
+        if (obricSDK) {
+          const payload = await obricSDK.withdrawLiquidityPayload(
+            xToken.symbol,
+            yToken.symbol,
+            amt
+          );
+          const result = await signAndSubmitTransaction(
+            payload as Types.TransactionPayload_EntryFunctionPayload
+          );
+          if (result && result.hash) {
+            // pending tx notification first
+            setPendingTx(true);
+            const txnResult = (await aptosClient.waitForTransactionWithResult(result.hash, {
+              timeoutSecs: 20,
+              checkSuccess: true
+            })) as UserTransaction;
+            if (txnResult.success) {
+              openTxSuccessNotification(
+                result.hash,
+                `Withdraw ${amt} froom ${xToken.symbol} - ${yToken.symbol}`
+              );
+            } else {
+              openTxErrorNotification(
+                result.hash,
+                `Failed to withdraw ${amt} from ${xToken.symbol} - ${yToken.symbol}`
+              );
+            }
+            setPendingTx(false);
+            success = true;
+          }
+        }
+      } catch (error) {
+        console.log('Request withdraw liquidity error:', error);
+        if (error instanceof Error) {
+          openErrorNotification({ detail: error?.message });
+        }
+        success = false;
+      } finally {
+        setShouldRefresh(true);
+        return success;
+      }
+    },
+    [activeWallet, aptosClient, obricSDK, signAndSubmitTransaction]
+  );
+
   return (
     <AptosWalletContext.Provider
       value={{
@@ -147,7 +325,12 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
         tokenList,
         tokenInfo,
         walletResource,
-        obricSDK
+        obricSDK,
+        pendingTx,
+        requestSwap,
+        requestAddLiquidity,
+        requestWithdrawLiquidity,
+        liquidityPools
       }}>
       {children}
     </AptosWalletContext.Provider>

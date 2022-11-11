@@ -1,31 +1,55 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Fragment, useCallback } from 'react';
-import HippoModal from 'components/HippoModal';
-import { useDispatch, useSelector } from 'react-redux';
-import { getShowWalletConnector } from 'modules/common/reducer';
+import { motion } from 'framer-motion';
 import commonActions from 'modules/common/actions';
-import { CancelIcon } from 'resources/icons';
-import styles from './WalletConnector.module.scss';
-import WalletSelector from './components/WalletSelector';
+import { getShowWalletConnector } from 'modules/common/reducer';
+import { Fragment, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import HippoModal from 'components/HippoModal';
 import { walletAddressEllipsis } from 'components/utils/utility';
 import useAptosWallet from 'hooks/useAptosWallet';
+import { CancelIcon, LoadingIcon } from 'resources/icons';
+
 import AccountDetails from './components/AccountDetails';
+import WalletSelector from './components/WalletSelector';
+import styles from './WalletConnector.module.scss';
 
 const WalletConnector = () => {
-  const { activeWallet, openModal, open, closeModal } = useAptosWallet();
+  const { activeWallet, openModal, open, closeModal, pendingTx } = useAptosWallet();
+
+  const renderActiveBtn = useCallback(() => {
+    if (pendingTx) {
+      return (
+        <div className="flex items-center justify-center bg-color_main px-4 py-3 font-Rany text-lg text-black">
+          Pending
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{
+              repeat: Infinity,
+              duration: 2
+            }}>
+            <LoadingIcon />
+          </motion.div>
+        </div>
+      );
+    }
+    return (
+      <div
+        className="flex items-center justify-center bg-gray_008 px-4 py-3 font-Rany text-lg text-white"
+        onClick={openModal}>
+        {walletAddressEllipsis(activeWallet.toString() || '')}
+      </div>
+    );
+  }, [activeWallet, openModal, pendingTx]);
 
   return (
     <Fragment>
       {activeWallet ? (
-        <div
-          className="flex justify-center items-center text-white text-lg font-Rany bg-gray_008 px-4 py-3"
-          onClick={openModal}>
-          {walletAddressEllipsis(activeWallet.toString() || '')}
-        </div>
+        renderActiveBtn()
       ) : (
         <div
-          className="font-Furore text-2xl w-full h-full flex justify-center items-center text-color_main"
+          className="flex h-full w-full items-center justify-center font-Furore text-2xl text-color_main"
           onClick={openModal}>
           {'Connect Wallet'}
         </div>

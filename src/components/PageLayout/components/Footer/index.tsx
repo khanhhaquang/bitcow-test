@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { Layout } from 'components/Antd';
-import useCurrentPage from 'hooks/useCurrentPage';
 import { Link } from 'react-router-dom';
 
+import { Layout } from 'components/Antd';
+import useCurrentPage from 'hooks/useCurrentPage';
 import { DiscordIcon, DocIcon, LogoIcon, MediumIcon, TwitterIcon } from 'resources/icons';
 
 const { Footer } = Layout;
@@ -29,7 +29,7 @@ const ExternalLink = ({ href, children }: { href: string; children: any }) => {
 
 const SocialBtnGroups = () => {
   return (
-    <div className="flex items-center gap-10 laptop:justify-center laptop:w-full">
+    <div className="flex items-center gap-10 laptop:w-full laptop:justify-center">
       <ExternalLink href={URLs.medium}>
         <MediumIcon />
       </ExternalLink>
@@ -51,18 +51,18 @@ const PageFooter: React.FC = () => {
 
   return (
     <Footer
-      className={classNames('flex justify-between bg-transparent z-10', {
+      className={classNames('z-10 flex justify-between bg-transparent', {
         'py-10 px-20 laptop:pb-24 laptop:pt-5': currentPageName === 'Home',
-        'border-t-[1px] border-gray_02 py-5 px-15': currentPageName !== 'Home'
+        'px-15 border-t-[1px] border-gray_02 py-5': currentPageName !== 'Home'
       })}>
       {currentPageName === 'Home' && (
-        <Link to="/" className="h-full flex items-center justify-center laptop:hidden">
-          <LogoIcon className="w-[120px] mobile:hidden tablet:block" />
+        <Link to="/" className="flex h-full items-center justify-center laptop:hidden">
+          <LogoIcon className="w-[120px]" />
         </Link>
       )}
       <SocialBtnGroups />
       {currentPageName !== 'Home' && (
-        <div className="font-Furore text-lg h-full flex cursor-pointer justify-center items-center text-color_main">
+        <div className="block flex h-full cursor-pointer items-center justify-center font-Furore text-lg text-color_main laptop:hidden">
           {'Contact us'}
         </div>
       )}

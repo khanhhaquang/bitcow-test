@@ -1,18 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Layout, Menu } from 'components/Antd';
-import WalletConnector from 'components/WalletConnector';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { routes, TRoute } from 'App.routes';
-import { LeftArrowIcon, LogoIcon, LogoMobileIcon } from 'resources/icons';
 import cx from 'classnames';
-import styles from './Header.module.scss';
-import useCurrentPage from 'hooks/useCurrentPage';
 import classNames from 'classnames';
 // import { CloseIcon, MenuIcon } from 'resources/icons';
 // import { Drawer } from 'antd';
 import { Fragment, useCallback, useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+
+import { Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
+import WalletConnector from 'components/WalletConnector';
+import useCurrentPage from 'hooks/useCurrentPage';
+import { LeftArrowIcon, LogoIcon, LogoMobileIcon } from 'resources/icons';
+
+import styles from './Header.module.scss';
 // import { useSelector } from 'react-redux';
 // import { getIsResourcesNotFound } from 'modules/common/reducer';
 
@@ -31,7 +33,7 @@ const PageHeader: React.FC = () => {
       if (path === '*' || hidden) return null;
       return (
         <Menu.Item key={name}>
-          <Link to={path || '/'} className="text-lg bold font-Furore">
+          <Link to={path || '/'} className="bold font-Furore text-lg">
             {name}
           </Link>
         </Menu.Item>
@@ -41,27 +43,27 @@ const PageHeader: React.FC = () => {
 
   const renderDesktop = () => {
     return currentPageName !== 'Home' ? (
-      <div className="flex items-center w-full">
-        <div className="grow h-full">
+      <div className="flex w-full items-center">
+        <div className="h-full grow">
           <Menu
             mode="horizontal"
             theme="dark"
             className={cx(
               styles.menu,
-              'flex justify-start h-full min-w-[200px] w-full !bg-transparent mobile:hidden'
+              'mobile:hidden flex h-full w-full min-w-[200px] justify-start !bg-transparent'
             )}
             selectedKeys={[currentPageName]}>
             {renderNavItems()}
           </Menu>
         </div>
-        <div className="px-20 justify-center h-full flex items-center cursor-pointer">
+        <div className="flex h-full cursor-pointer items-center justify-center px-20">
           {<WalletConnector />}
         </div>
       </div>
     ) : (
       <NavLink
         to="swap"
-        className="font-Furore text-2xl px-20 border-l-[1px] border-gray_02 ml-auto h-full flex justify-end items-center text-color_main hover:text-color_main bg-transparent">
+        className="ml-auto flex h-full items-center justify-end border-l-[1px] border-gray_02 bg-transparent px-20 font-Furore text-2xl text-color_main hover:text-color_main">
         {'Launch App'}
       </NavLink>
     );
@@ -69,16 +71,16 @@ const PageHeader: React.FC = () => {
 
   return (
     <Header
-      className={classNames('w-full h-[62px] bg-black border-gray_02 border-b-[1px] px-0 z-30', {
-        'desktop:h-[126px] laptop:h-[64px] bg-transparent absolute top-0 z-10':
+      className={classNames('z-30 h-[62px] w-full border-b-[1px] border-gray_02 bg-black px-0', {
+        'absolute top-0 z-10 bg-transparent desktop:h-[126px] laptop:h-[64px]':
           currentPageName === 'Home'
       })}>
-      <div className="mx-auto h-full top-0 left-0 flex items-center relative laptop:justify-center">
+      <div className="relative top-0 left-0 mx-auto flex h-full items-center laptop:justify-center">
         <div
           className={classNames('h-full desktop:pl-[60px] laptop:pl-0', {
             'desktop:pl-20': currentPageName === 'Home'
           })}>
-          <Link to="/" className={classNames('h-full flex items-center justify-center')}>
+          <Link to="/" className={classNames('flex h-full items-center justify-center')}>
             <div
               className={classNames('desktop:hidden', {
                 'laptop:block': currentPageName !== 'Home'
@@ -96,15 +98,15 @@ const PageHeader: React.FC = () => {
         <div
           className={classNames('desktop:block laptop:hidden', {
             grow: currentPageName !== 'Home',
-            'h-full ml-auto': currentPageName === 'Home'
+            'ml-auto h-full': currentPageName === 'Home'
           })}>
           {renderDesktop()}
         </div>
         {currentPageName === 'Home' && (
-          <div className="hidden laptop:block fixed bottom-0 w-full z-30">
+          <div className="fixed bottom-0 z-30 hidden w-full laptop:block">
             <NavLink
               to="swap"
-              className="font-Furore text-base py-5 w-full flex gap-2 justify-center items-center bg-color_main !text-black">
+              className="flex w-full items-center justify-center gap-2 bg-color_main py-5 font-Furore text-base !text-black">
               {'Launch App'}
               <LeftArrowIcon className="fill-black" width={24} height={24} />
             </NavLink>

@@ -1,17 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ColumnsType, Table, TableProps } from 'components/Antd';
+import usePools from 'hooks/usePools';
 import { HintIcon, LessIcon, MoreIcon } from 'resources/icons';
-import { IPoolItem } from '../types';
+import { IPool } from 'types/pool';
+
 import PoolRowDetail from './PoolRowDetail';
-import TokenPair from './TokenPair';
 import styles from './PoolTable.module.scss';
+import TokenPair from './TokenPair';
 
 interface IProps {
-  data: IPoolItem[];
+  data: IPool[];
 }
 
 const PoolTable = ({ data }: IProps) => {
-  const columns: ColumnsType<IPoolItem> = [
+  const { getOwnedLiquidity } = usePools();
+
+  const columns: ColumnsType<IPool> = [
     {
       title: 'Trading Pair',
       dataIndex: 'token0',
@@ -31,7 +35,11 @@ const PoolTable = ({ data }: IProps) => {
       title: 'Volume 7D',
       dataIndex: 'volumn7D',
       sorter: {
-        compare: (a, b) => a.volumn7D - b.volumn7D,
+        compare: (a, b) => {
+          if (typeof a.volumn7D === 'number' && typeof b.volumn7D === 'number') {
+            return a.volumn7D - b.volumn7D;
+          }
+        },
         multiple: 2
       }
     },
@@ -39,27 +47,35 @@ const PoolTable = ({ data }: IProps) => {
       title: 'Fees 7D',
       dataIndex: 'fees7D',
       sorter: {
-        compare: (a, b) => a.fees7D - b.fees7D,
+        compare: (a, b) => {
+          if (typeof a.fees7D === 'number' && typeof b.fees7D === 'number') {
+            return a.fees7D - b.fees7D;
+          }
+        },
         multiple: 2
       }
     },
     {
       title: () => (
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <div>APR 7D</div>
-          <HintIcon className="w-3 h-3" />
+          <HintIcon className="h-3 w-3" />
         </div>
       ),
       dataIndex: 'apr7D',
       sorter: {
-        compare: (a, b) => a.apr7D - b.apr7D,
+        compare: (a, b) => {
+          if (typeof a.apr7D === 'number' && typeof b.apr7D === 'number') {
+            return a.apr7D - b.apr7D;
+          }
+        },
         multiple: 2
       }
     },
     Table.EXPAND_COLUMN
   ];
 
-  const handleChange: TableProps<IPoolItem>['onChange'] = (pagination, filters, sorter) => {
+  const handleChange: TableProps<IPool>['onChange'] = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
   };
 
@@ -73,14 +89,16 @@ const PoolTable = ({ data }: IProps) => {
       rowKey={(record) => record.id}
       expandable={{
         expandedRowRender: (record) => {
+          console.log('row expand>>', record.id, getOwnedLiquidity(record.id));
           const poolData = [
             {
-              liquidity: 0,
+              id: record.id,
+              liquidity: getOwnedLiquidity(record.id),
               assetsPooled: 0,
               share: 0
             }
           ];
-          return <PoolRowDetail poolRecord={poolData} />;
+          return <PoolRowDetail pool={record} poolRecord={poolData} />;
         },
         expandIcon: ({ expanded, onExpand, record }) => {
           return expanded ? (

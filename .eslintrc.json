@@ -47,6 +47,34 @@
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": true }],
     "@typescript-eslint/comma-dangle": 0,
     "@typescript-eslint/no-use-before-define": 0,
-    "@typescript-eslint/indent": 0
+    "@typescript-eslint/indent": 0,
+    "import/order": [
+      1,
+      {
+        "newlines-between": "always",
+        "groups": ["external", "builtin", "internal", "sibling", "parent", "index"],
+        "pathGroups": [
+          { "pattern": "components", "group": "internal" },
+          { "pattern": "components/**", "group": "internal" },
+          { "pattern": "configs", "group": "internal" },
+          { "pattern": "config/**", "group": "internal" },
+          { "pattern": "contexts", "group": "internal" },
+          { "pattern": "contexts/**", "group": "internal" },
+          { "pattern": "hooks/**", "group": "internal" },
+          { "pattern": "pages/**", "group": "internal" },
+          { "pattern": "resources/**", "group": "internal" },
+          { "pattern": "services/**", "group": "internal" },
+          { "pattern": "store/**", "group": "internal" },
+          { "pattern": "types/**", "group": "internal" },
+          { "pattern": "utils/**", "group": "internal" },
+          { "pattern": "styles/**", "group": "internal" }
+        ],
+        "pathGroupsExcludedImportTypes": ["internal"],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
   }
 }

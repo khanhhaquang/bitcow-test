@@ -1,12 +1,14 @@
-import { Layout } from 'components/Antd';
+import classNames from 'classnames';
 import { useRef } from 'react';
+
+import { Layout } from 'components/Antd';
 // import { useDispatch } from 'react-redux';
 // import commonAction from 'modules/common/actions';
+import useCurrentPage from 'hooks/useCurrentPage';
+
 import { Footer, Header } from './components';
 // import { getLayoutHeight } from 'modules/common/reducer';
 // import { useSelector } from 'react-redux';
-import useCurrentPage from 'hooks/useCurrentPage';
-import classNames from 'classnames';
 // import { TRoute } from 'App.routes';
 // import styles from './PageLayout.module.scss';
 
@@ -29,7 +31,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Layout
       className={classNames(
-        'relative min-h-screen bg-black bg-cover bg-no-repeat bg-center overflow-hidden',
+        'relative min-h-screen overflow-hidden bg-black bg-cover bg-center bg-no-repeat',
         {
           'bg-primary': currentPageName === 'Home',
           'bg-secondary': currentPageName !== 'Home'

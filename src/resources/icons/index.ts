@@ -30,3 +30,5 @@ export { ReactComponent as StatsPageActiveIcon } from './statsPageActive.svg';
 export { ReactComponent as CopyIcon } from './copy.svg';
 export { ReactComponent as ExportIcon } from './export.svg';
 export { ReactComponent as QuitIcon } from './quit.svg';
+export { ReactComponent as LoadingIcon } from './loading.svg';
+export { ReactComponent as AddIcon } from './add.svg';

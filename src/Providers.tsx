@@ -14,7 +14,6 @@ import {
   SpikaWalletAdapter
 } from '@manahippo/aptos-wallet-adapter';
 import { useMemo } from 'react';
-import { message } from 'antd';
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
@@ -53,11 +52,6 @@ const Providers: React.FC<TProps> = (props: TProps) => {
         autoConnect
         onError={(error: Error) => {
           console.log('wallet errors: ', error);
-          let text = '';
-          if (error.name === 'WalletNotReadyError') {
-            text = 'Wallet not ready';
-          }
-          message.error(error.message || text);
         }}>
         <AptosWalletProvider>
           <ReduxProvider store={store}>

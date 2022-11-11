@@ -15,6 +15,7 @@ module.exports = {
         color_bg_3: '#272B30',
         color_mask: 'rgba(0, 0, 0, 0.9)',
         color_tooltip: '#363B42',
+        gray_01: 'rgba(255, 255, 255, 0.1)',
         gray_02: 'rgba(255, 255, 255, 0.2)',
         gray_03: 'rgba(255, 255, 255, 0.3)',
         gray_05: 'rgba(255, 255, 255, 0.5)',

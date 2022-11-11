@@ -1,15 +1,16 @@
+import { Tooltip } from 'antd';
+import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { ISwapSettings } from 'pages/Swap/types';
-import Button from 'components/Button';
+import swapAction from 'modules/swap/actions';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import swapAction from 'modules/swap/actions';
+
+import Button from 'components/Button';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
-import classNames from 'classnames';
 // import { initState as swapInitState } from 'modules/swap/reducer';
-import { HintIcon } from 'resources/icons';
 import Switch from 'components/Switch';
-import { Tooltip } from 'antd';
+import { ISwapSettings } from 'pages/Swap/types';
+import { HintIcon } from 'resources/icons';
 
 interface TProps {
   onClose: () => void;
@@ -17,7 +18,7 @@ interface TProps {
 
 const SubTitle = ({ children }: { children: string }) => {
   return (
-    <div className="flex gap-2 items-center mb-4">
+    <div className="mb-4 flex items-center gap-2">
       <div className="text-base">{children}</div>
       <Tooltip title={children}>
         <HintIcon className="opacity-30 hover:opacity-100" />
@@ -51,24 +52,24 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   return (
     <div className="w-full font-Rany text-white">
       <div className="text-lg">Transaction Settings</div>
-      <hr className="h-[1px] bg-color_list_hover my-4 border-0" />
-      <div className="mt-6 mobile:mt-0">
+      <hr className="my-4 h-[1px] border-0 bg-color_list_hover" />
+      <div className="mobile:mt-0 mt-6">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">
-          <div className="flex relative items-center w-full border-color_bg_2 border-[1px]">
+          <div className="relative flex w-full items-center border-[1px] border-color_bg_2">
             <PositiveFloatNumInput
               inputAmount={values.slipTolerance}
               min={0}
               max={10}
               isConfine={true}
               placeholder="Custom"
-              className={classNames('bg-color_bg_2 text-white py-3 px-4 w-full h-full')}
+              className={classNames('h-full w-full bg-color_bg_2 py-3 px-4 text-white')}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
-            <div className={'text-base text-gray_05 absolute right-3'}>%</div>
+            <div className={'absolute right-3 text-base text-gray_05'}>%</div>
           </div>
           <Button
-            className="border-[1px] border-color_main text-color_main hover:text-black hover:bg-color_main font-Rany text-base py-3 px-5 rounded-none"
+            className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-black"
             variant="outlined"
             onClick={onClickAuto}>
             Auto
@@ -79,7 +80,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         <SubTitle>Transaction Deadline</SubTitle>
         <div className="flex w-fit items-center gap-x-4">
           <PositiveFloatNumInput
-            className={classNames('bg-color_bg_2 text-white py-3 px-4')}
+            className={classNames('bg-color_bg_2 py-3 px-4 text-white')}
             inputAmount={values.trasactionDeadline}
             isConfine={true}
             placeholder="0"
@@ -87,10 +88,10 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
             max={600}
             onAmountChange={(v) => setFieldValue('trasactionDeadline', v)}
           />
-          <div className="capitalize text-base">minutes</div>
+          <div className="text-base capitalize">minutes</div>
         </div>
       </div>
-      <hr className="h-[1px] bg-color_list_hover my-4 border-0" />
+      <hr className="my-4 h-[1px] border-0 bg-color_list_hover" />
       <div className="mt-6 flex justify-between">
         <SubTitle>Expert Mode</SubTitle>
         <Switch
@@ -113,7 +114,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         />
       </div>
       <Button
-        className="mt-5 w-full bg-button_gradient text-black font-Furore text-lg disabled:bg-color_bg_3 rounded-none"
+        className="mt-5 w-full rounded-none bg-button_gradient font-Furore text-lg text-black disabled:bg-color_bg_3"
         // disabled={activeWallet && (!isValid || !dirty)}
         onClick={onConfirm}>
         SAVE

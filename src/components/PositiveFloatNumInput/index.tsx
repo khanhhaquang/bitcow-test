@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 import invariant from 'tiny-invariant';
+
 import { avoidScientificNotation, cutDecimals, numToGrouped } from './numberFormats';
 
 type PositiveFloatNumInputProps = {
@@ -87,7 +88,7 @@ const PositiveFloatNumInput = forwardRef<
         ref={ref}
         className={classNames(
           'positiveFloatNumInput',
-          'px-1 focus: outline-none min-w-0',
+          'focus: min-w-0 px-1 outline-none',
           { 'cursor-not-allowed': isDisabled },
           className
         )}

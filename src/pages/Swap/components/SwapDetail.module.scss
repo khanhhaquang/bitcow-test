@@ -1,0 +1,17 @@
+.collapse {
+  :global {
+    .ant-collapse {
+      .ant-collapse-item {
+        .ant-collapse-header {
+          @apply text-white py-6 px-5 text-xs;
+          .ant-collapse-expand-icon {
+            @apply font-bold text-sm;
+          }
+        }
+        .ant-collapse-content-box {
+          @apply pt-0 px-5 #{!important};
+        }
+      }
+    }
+  }
+}

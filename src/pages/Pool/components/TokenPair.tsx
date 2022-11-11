@@ -1,23 +1,22 @@
+import { RawCoinInfo } from '@manahippo/coin-list';
+
 import CoinIcon from 'components/CoinIcon';
-import useToken from 'hooks/useToken';
-import { IPoolToken } from 'types/pool';
 
 interface TProps {
-  token0: IPoolToken;
-  token1: IPoolToken;
+  token0: RawCoinInfo;
+  token1: RawCoinInfo;
 }
 
 const TokenPair: React.FC<TProps> = ({ token0, token1 }) => {
-  const { retreiveTokenImg } = useToken();
-  const [token0URI, token1URI] = retreiveTokenImg([token0, token1]);
+  const [token0URI, token1URI] = [token0.logo_url, token1.logo_url];
 
   return (
-    <div className="flex items-center gap-4 w-[240px] max-w-[240px]">
+    <div className="flex w-[240px] max-w-[240px] items-center gap-4">
       <div className="flex items-center">
-        <CoinIcon className="w-6 h-6 rounded-full" logoSrc={token0URI || ''} />
-        <CoinIcon className="w-6 h-6 -ml-1 rounded-full" logoSrc={token1URI || ''} />
+        <CoinIcon className="h-6 w-6 rounded-full" logoSrc={token0URI || ''} />
+        <CoinIcon className="-ml-[6px] h-6 w-6 rounded-full" logoSrc={token1URI || ''} />
       </div>
-      <div className="text-base text-white uppercase">
+      <div className="text-base text-white">
         {token0.symbol}-{token1.symbol}
       </div>
     </div>

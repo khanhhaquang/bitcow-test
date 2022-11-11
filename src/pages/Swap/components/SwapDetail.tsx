@@ -1,32 +1,123 @@
+import { RawCoinInfo } from '@manahippo/coin-list';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import { useCallback, useMemo } from 'react';
+
 import { Collapse } from 'components/Antd';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
-import { useMemo } from 'react';
+import { MoreIcon } from 'resources/icons';
+
+import styles from './SwapDetail.module.scss';
+
+import { ISwapSettings } from '../types';
 
 const { Panel } = Collapse;
 
-const SwapDetail = ({ fromToken, toToken, routeAndQuote = 1 }) => {
+const SwapDetail = ({
+  fromToken,
+  toToken,
+  swapRateQuote,
+  fromUiAmt,
+  impact
+}: {
+  swapRateQuote: number;
+  fromToken: RawCoinInfo;
+  toToken: RawCoinInfo;
+  fromUiAmt: number;
+  impact: number;
+}) => {
   const [tokenAmountFormatter] = useTokenAmountFormatter();
-  const [swapRate] = useMemo(() => {
+  const { values } = useFormikContext<ISwapSettings>();
+  const [swapRate, outputUiAmt, priceImpact, minimumOutput] = useMemo(() => {
     let rate: string = '-';
-    if (routeAndQuote) {
-      // const avgPrice = routeAndQuote.quote.outputUiAmt / routeAndQuote.quote.inputUiAmt;
-      const avgPrice = 1;
+    let output: string = '-';
+    let minimum: string = '-';
+    let impactPercent: string = '-';
+    if (swapRateQuote) {
+      output = `${tokenAmountFormatter(swapRateQuote, toToken)} ${toToken.symbol}`;
+      impactPercent = (impact || 0) >= 0.0001 ? `${impact.toFixed(2)}%` : '<0.01%';
+      minimum = `${tokenAmountFormatter(
+        swapRateQuote * (1 - values.slipTolerance / 100),
+        toToken
+      )} ${toToken.symbol}`;
+      const avgPrice = swapRateQuote / fromUiAmt;
       rate =
         !avgPrice || avgPrice === Infinity
           ? 'n/a'
           : `1 ${fromToken.symbol} ≈ ${tokenAmountFormatter(avgPrice, toToken)} ${toToken.symbol}`;
     }
-    return [rate];
-  }, [fromToken.symbol, routeAndQuote, toToken, tokenAmountFormatter]);
+    return [rate, output, impactPercent, minimum];
+  }, [
+    fromToken.symbol,
+    fromUiAmt,
+    impact,
+    swapRateQuote,
+    toToken,
+    tokenAmountFormatter,
+    values.slipTolerance
+  ]);
+
+  const renderOutput = useCallback(() => {
+    const details = [
+      {
+        label: 'Expected Output',
+        value: outputUiAmt
+      },
+      {
+        label: 'Price Impact',
+        value: priceImpact,
+        className: 'text-color_error'
+      }
+    ];
+    return (
+      <div className={classNames('flex flex-col gap-1')}>
+        {details.map((detail) => (
+          <div className="flex justify-between text-xs text-white" key={detail.label}>
+            <div className="">{detail.label}</div>
+            <div className={detail.className}>{detail.value}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }, [outputUiAmt, priceImpact]);
+
+  const renderDetails = useCallback(() => {
+    const details = [
+      {
+        label: `Minimum received after slippage (${values.slipTolerance}%)`,
+        value: minimumOutput
+      },
+      {
+        label: 'Route',
+        value: `${fromToken.symbol} > ${toToken.symbol}`
+      }
+    ];
+    return (
+      <div className={classNames('flex flex-col gap-1')}>
+        {details.map((detail) => (
+          <div className="flex justify-between text-xs text-gray_05" key={detail.label}>
+            <div className="">{detail.label}</div>
+            <div className="">{detail.value}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }, [fromToken.symbol, minimumOutput, toToken.symbol, values.slipTolerance]);
 
   return (
-    <div className="py-6 px-5">
+    <div className={classNames('mt-2 bg-color_bg_2', styles.collapse)}>
       <Collapse
-        bordered={false}
-        // expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
-        className="site-collapse-custom-collapse">
-        <Panel header={swapRate} key="1" className="site-collapse-custom-panel">
-          <p>test</p>
+        ghost
+        expandIconPosition="end"
+        expandIcon={({ isActive }) => (
+          <div>
+            <MoreIcon className={isActive ? '-rotate-180' : '-rotate-90'} />
+          </div>
+        )}>
+        <Panel header={swapRate} key="1" className="text-white">
+          {renderOutput()}
+          <hr className="my-4 h-[1px] w-full border-0 bg-gray_008" />
+          {renderDetails()}
         </Panel>
       </Collapse>
     </div>

@@ -1,12 +1,14 @@
-import { IPoolToken } from 'types/pool';
+import { RawCoinInfo } from '@manahippo/coin-list';
 
-export interface IPoolItem {
-  id: string;
-  liquidity: number;
-  volumn7D: number;
-  token0: IPoolToken;
-  token1: IPoolToken;
-  fees7D: number;
-  apr7D: number;
-  invested: boolean;
+export interface AddLiquidity {
+  xToken: RawCoinInfo;
+  yToken: RawCoinInfo;
+  xAmt: number;
+  yAmt: number;
+}
+
+export interface WithdrawLiquidity {
+  xToken: RawCoinInfo;
+  yToken: RawCoinInfo;
+  amt: number;
 }

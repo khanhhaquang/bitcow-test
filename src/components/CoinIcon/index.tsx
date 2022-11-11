@@ -1,8 +1,9 @@
 import { RawCoinInfo } from '@manahippo/coin-list';
 import classNames from 'classnames';
+import React, { useCallback, useState } from 'react';
+
 import Skeleton from 'components/Skeleton';
 import useAptosWallet from 'hooks/useAptosWallet';
-import React, { useCallback, useState } from 'react';
 
 interface TProps {
   logoSrc?: string;
@@ -36,12 +37,12 @@ const CoinIcon: React.FC<TProps> = ({ logoSrc, size = 24, className, symbol, tok
       className={classNames('relative', className)}
       style={{ width: `${size}px`, height: `${size}px` }}>
       {(!logoSrc || !isLoaded) && (
-        <Skeleton className="absolute left-0 top-0 w-full h-full" circle={true} height={'100%'} />
+        <Skeleton className="absolute left-0 top-0 h-full w-full" circle={true} height={'100%'} />
       )}
       {logoSrc && (
         <img
           src={logoSrc}
-          className={classNames('w-full h-full rounded-full', { invisible: !isLoaded })}
+          className={classNames('h-full w-full rounded-full', { invisible: !isLoaded })}
           alt="coin icon"
           onError={onImgError}
           onLoad={onImgLoad}

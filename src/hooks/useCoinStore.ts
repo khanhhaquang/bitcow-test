@@ -1,5 +1,6 @@
 import { MoveResource } from 'aptos/src/generated';
 import { useCallback, useEffect, useState } from 'react';
+import { parseMoveStructTag, StructTag } from '@manahippo/move-to-ts';
 import useAptosWallet from './useAptosWallet';
 
 export type CoinInfo = {
@@ -9,24 +10,47 @@ export type CoinInfo = {
   frozen: boolean;
   deposit_events: Record<string, any>;
   withdraw_events: Record<string, any>;
+  fullName: string;
 };
 
 const useCoinStore = () => {
-  const { walletResource } = useAptosWallet();
-  const [coinStore, setCoinStore] = useState<Record<string, MoveResource>>({});
+  const { walletResource, obricSDK } = useAptosWallet();
+  const [coinStore, setCoinStore] = useState<Record<string, MoveResource>>();
+  const [poolStore, setPoolStore] = useState<Record<string, MoveResource>>();
 
   const fetchAllCoinInfo = useCallback(async () => {
-    const resources = {};
-    const coinResources = walletResource.filter((resource) =>
-      resource.type.startsWith('0x1::coin::CoinStore')
-    );
-    coinResources.map(async (resource) => {
-      const type = resource.type.replace(/(0x1::coin::CoinStore<)|>/g, '');
-      resources[type] = resource;
-    });
-    setCoinStore(resources);
-    console.log('fetch all coin info>>>>', coinResources);
-  }, [walletResource]);
+    if (obricSDK) {
+      const tokenResources = {};
+      const poolResources = {};
+
+      walletResource.map((resource) => {
+        const structType = parseMoveStructTag(resource.type);
+        const {
+          module,
+          name,
+          typeParams: [token]
+        } = structType;
+        const tokenType = token as StructTag;
+        if (module === 'coin' && name === 'CoinStore') {
+          if (tokenType.module === 'piece_swap') {
+            const poolAddress = tokenType.address.toString();
+            poolResources[poolAddress] = {
+              ...resource,
+              fullName: tokenType.getFullname()
+            };
+          } else {
+            const tokenFullname = tokenType.getFullname();
+            tokenResources[tokenFullname] = {
+              ...resource,
+              fullName: tokenType.getFullname()
+            };
+          }
+        }
+      });
+      setCoinStore(tokenResources);
+      setPoolStore(poolResources);
+    }
+  }, [obricSDK, walletResource]);
 
   useEffect(() => {
     if (walletResource?.length > 0) {
@@ -34,7 +58,7 @@ const useCoinStore = () => {
     }
   }, [fetchAllCoinInfo, walletResource]);
 
-  return { coinStore };
+  return { coinStore, poolStore };
 };
 
 export default useCoinStore;

@@ -14,7 +14,7 @@ const useTokenBalane = (token: RawCoinInfo | undefined): [Balance, boolean] => {
   const { connected } = useWallet();
 
   const inputTokenBalance = useMemo(() => {
-    if (token && connected && obricSDK) {
+    if (token && connected && obricSDK && coinStore) {
       const fullName = token.token_type.type;
       const tokenInfo = obricSDK.coinList.getCoinInfoByFullName(fullName);
       invariant(tokenInfo, `Can't find token info of symbol ${token.symbol}`);

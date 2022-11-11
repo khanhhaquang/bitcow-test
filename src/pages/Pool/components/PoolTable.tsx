@@ -90,11 +90,12 @@ const PoolTable = ({ data }: IProps) => {
       expandable={{
         expandedRowRender: (record) => {
           console.log('row expand>>', record.id, getOwnedLiquidity(record.id));
+          const { lp, coins } = getOwnedLiquidity(record.id);
           const poolData = [
             {
               id: record.id,
-              liquidity: getOwnedLiquidity(record.id),
-              assetsPooled: 0,
+              liquidity: lp,
+              assetsPooled: coins,
               share: 0
             }
           ];

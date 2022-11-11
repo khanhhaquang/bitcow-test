@@ -3,7 +3,9 @@
 import { StructTag } from '@manahippo/move-to-ts';
 import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
 import { useCallback, useEffect, useState } from 'react';
+
 import { IPool } from 'types/pool';
+
 import useAptosWallet from './useAptosWallet';
 import useCoinStore, { CoinInfo } from './useCoinStore';
 import useTokenAmountFormatter from './useTokenAmountFormatter';
@@ -42,7 +44,9 @@ const usePools = () => {
             volumn7D: '-',
             fees7D: '-',
             apr7D: '-',
-            invested: true
+            invested: true,
+            token0Reserve: pool.reserve_x.value.div(pool.x_deci_mult).toJsNumber(),
+            token1Reserve: pool.reserve_y.value.div(pool.y_deci_mult).toJsNumber()
           };
         });
       }
@@ -60,19 +64,40 @@ const usePools = () => {
 
   const getOwnedLiquidity = useCallback(
     (poolAddress) => {
-      let result = 0;
+      // let result = 0;
+      let result = {
+        lp: 0,
+        coins: {}
+      };
       console.log('get owned liquidty>>', poolAddress);
-      if (poolStore) {
-        console.log('get owned liquidty222>>', poolAddress, poolStore, poolStore[poolAddress]);
+      if (poolStore && obricSDK) {
         const coinInfo = (poolStore[poolAddress] || {}).data as CoinInfo;
-        result = coinInfo?.coin?.value;
-        // const token = obricSDK.coinList.getCoinInfoByFullName(coinInfo.fullName);
-        // result = tokenAmountFormatter(value, token);
-        console.log('get owned liquidty333>>', result);
+        const poolInfo = activePools.find((pool) => pool.id === poolAddress);
+        if (coinInfo && poolInfo) {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          const { token0, token1, token0Reserve, token1Reserve, liquidity } = poolInfo;
+          const myLp = coinInfo?.coin?.value;
+          console.log(
+            'get owned liquidty222>>',
+            poolStore[poolAddress],
+            poolInfo,
+            token0Reserve,
+            token1Reserve
+          );
+          result = {
+            lp: myLp,
+            coins: {
+              [token0.symbol]: tokenAmountFormatter((myLp / liquidity) * token0Reserve, token0),
+              [token1.symbol]: tokenAmountFormatter((myLp / liquidity) * token1Reserve, token1)
+            }
+          };
+          // result = coinInfo?.coin?.value;
+          console.log('get owned liquidty333>>', result);
+        }
       }
       return result;
     },
-    [poolStore]
+    [activePools, obricSDK, poolStore, tokenAmountFormatter]
   );
 
   return {

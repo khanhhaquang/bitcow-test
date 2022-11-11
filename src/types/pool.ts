@@ -17,6 +17,8 @@ export interface IPool {
   invested: boolean;
   totalValueLockedUSD?: string;
   volumeUSD?: string;
+  token0Reserve?: number;
+  token1Reserve?: number;
 }
 
 export interface IPoolFilters {

@@ -9,7 +9,7 @@ import { IPool } from 'types/pool';
 interface ExpandedDataType {
   id: string;
   liquidity: number;
-  assetsPooled: number;
+  assetsPooled: Record<string, number>;
   share: number;
 }
 
@@ -37,11 +37,15 @@ const PoolRowDetail = ({ pool, poolRecord }: IProps) => {
       title: 'Assets Pooled',
       dataIndex: 'assetsPooled',
       key: 'assetsPooled',
-      render: () => (
+      render: (val) => (
         <div className="text-base text-white">
-          {/* <div className="text-sm text-gray_05">Your Liquidity</div> */}
-          <div className="">-</div>
-          <div className="">-</div>
+          {Object.keys(val).map((key) => {
+            return (
+              <div className="" key={`${val}-${key}`}>
+                {val[key]} {key}
+              </div>
+            );
+          })}
         </div>
       )
     },

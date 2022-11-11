@@ -1,6 +1,8 @@
-import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
-import { useMemo } from 'react';
 import { RawCoinInfo as CoinInfo } from '@manahippo/coin-list';
+import { useMemo } from 'react';
+
+import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
+
 import useAptosWallet from './useAptosWallet';
 
 const useTokenAmountFormatter = () => {

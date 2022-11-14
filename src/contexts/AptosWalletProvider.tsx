@@ -111,10 +111,8 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
     if (obricSDK) {
       const resources = await obricSDK?.aptosClient.getAccountResources(activeWallet);
       const txHistory = await obricSDK?.aptosClient.getAccountTransactions(activeWallet);
-      const pools = obricSDK.pools;
 
       setWalletResource(resources);
-      setLiquidityPools(pools);
     }
   }, [activeWallet, obricSDK]);
 
@@ -124,13 +122,27 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, [activeWallet, obricSDK, fetchActiveWalletResources]);
 
-  const refreshSDKState = useCallback(() => {
+  const fetchPools = useCallback(async () => {
     if (obricSDK) {
-      obricSDK.loadState();
+      const pools = await obricSDK.pools;
+      setLiquidityPools(pools);
+    }
+  }, [obricSDK]);
+
+  useEffect(() => {
+    if (obricSDK) {
+      fetchPools();
+    }
+  }, [fetchPools, obricSDK, activeWallet]);
+
+  const refreshSDKState = useCallback(async () => {
+    if (obricSDK) {
+      await obricSDK.loadState();
       fetchActiveWalletResources();
+      fetchPools();
       setShouldRefresh(false);
     }
-  }, [fetchActiveWalletResources, obricSDK]);
+  }, [fetchActiveWalletResources, fetchPools, obricSDK]);
 
   useEffect(() => {
     if (shouldRefresh) {

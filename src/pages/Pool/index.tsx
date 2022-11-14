@@ -45,11 +45,11 @@ const Pool = () => {
       <div className="flex gap-2 text-gray_05">
         <div className="flex items-center gap-2">
           <div className="">TVL :</div>
-          <div className="text-white">$197,995,519.01</div>
+          <div className="text-white">-</div>
         </div>
         <div className="flex items-center gap-2">
           <div className="">Volume24H :</div>
-          <div className="text-white">$15,704,982.3</div>
+          <div className="text-white">-</div>
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@ const Pool = () => {
             return {
               label: tab.label,
               key: tab.id,
-              children: <PoolTable activePools={currentPools} />
+              children: <PoolTable activePools={currentPools} viewOwned={tab.id === '2'} />
             };
           })}
         />

@@ -16,7 +16,7 @@ export type CoinInfo = {
 };
 
 const useCoinStore = () => {
-  const { walletResource, obricSDK } = useAptosWallet();
+  const { walletResource, obricSDK, activeWallet } = useAptosWallet();
   const [coinStore, setCoinStore] = useState<Record<string, MoveResource>>();
   const [poolStore, setPoolStore] = useState<Record<string, MoveResource>>();
 
@@ -64,10 +64,17 @@ const useCoinStore = () => {
   }, [obricSDK, walletResource]);
 
   useEffect(() => {
-    if (walletResource?.length > 0) {
+    if (!activeWallet && (coinStore || poolStore)) {
+      setCoinStore(null);
+      setPoolStore(null);
+    }
+  }, [activeWallet, coinStore, poolStore]);
+
+  useEffect(() => {
+    if (activeWallet && walletResource?.length > 0) {
       fetchAllCoinInfo();
     }
-  }, [fetchAllCoinInfo, walletResource]);
+  }, [activeWallet, fetchAllCoinInfo, walletResource]);
 
   return { coinStore, poolStore };
 };

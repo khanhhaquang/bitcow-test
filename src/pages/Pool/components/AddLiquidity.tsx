@@ -60,12 +60,12 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           <div className="text-lg">Add liquidity</div>
           <div className="mt-5 flex w-full flex-col">
             <div className="relative flex flex-col items-center gap-2">
-              <div className="bg-color_bg_2 p-4">
+              <div className="w-full bg-color_bg_2 p-4">
                 <div className="mb-2 text-xs uppercase text-gray_05">Pay</div>
                 <TokenLiquidity token={liquidityPool.token0} type="xAmt" />
               </div>
               <AddIcon className="h-[18px] w-[18px]" />
-              <div className="bg-color_bg_2 p-4">
+              <div className="w-full bg-color_bg_2 p-4">
                 <div className="mb-2 text-xs uppercase text-gray_05">Pay</div>
                 <TokenLiquidity token={liquidityPool.token1} type="yAmt" />
               </div>

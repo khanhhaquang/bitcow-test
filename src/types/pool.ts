@@ -20,6 +20,7 @@ export interface IPool {
   volumeUSD?: string;
   token0Reserve?: number;
   token1Reserve?: number;
+  decimals?: number;
 }
 
 export interface IPoolFilters {

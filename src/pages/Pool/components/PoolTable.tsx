@@ -10,9 +10,10 @@ import TokenPair from './TokenPair';
 
 interface TProps {
   activePools: IPool[];
+  viewOwned: boolean;
 }
 
-const PoolTable = ({ activePools }: TProps) => {
+const PoolTable = ({ activePools, viewOwned }: TProps) => {
   const columns: ColumnsType<IPool> = [
     {
       title: 'Trading Pair',
@@ -24,6 +25,9 @@ const PoolTable = ({ activePools }: TProps) => {
     {
       title: 'Liquidity',
       dataIndex: 'liquidity',
+      render: (val) => {
+        return val.toFixed(6);
+      },
       sorter: {
         compare: (a, b) => a.liquidity - b.liquidity,
         multiple: 2
@@ -86,6 +90,8 @@ const PoolTable = ({ activePools }: TProps) => {
       onChange={handleChange}
       rowKey={(record) => record.id}
       expandable={{
+        expandRowByClick: true,
+        defaultExpandAllRows: viewOwned,
         expandedRowRender: (record) => {
           return <PoolRowDetail pool={record} />;
         },

@@ -1,20 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NetworkInfo, useWallet, Wallet } from '@manahippo/aptos-wallet-adapter';
-import { createContext, FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { ActiveAptosWallet } from 'types/aptos';
+import { RawCoinInfo } from '@manahippo/coin-list';
 import { AptosClient, HexString, Types } from 'aptos';
+import { MoveResource, UserTransaction } from 'aptos/src/generated';
 import { SDK as ObricSDK } from 'obric';
+import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
+import { createContext, FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+
+import useNetworkConfiguration from 'hooks/useNetworkConfiguration';
+import { ActiveAptosWallet } from 'types/aptos';
 import {
   openErrorNotification,
   openTxErrorNotification,
   openTxSuccessNotification
 } from 'utils/notifications';
-import useNetworkConfiguration from 'hooks/useNetworkConfiguration';
-import { RawCoinInfo } from '@manahippo/coin-list';
-import { MoveResource, UserTransaction } from 'aptos/src/generated';
-import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
-// import { App as CoinListApp } from '@manahippo/coin-list';
 
 interface AptosWalletContextType {
   activeWallet?: ActiveAptosWallet;
@@ -79,7 +79,6 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const [pendingTx, setPendingTx] = useState<boolean>(false);
 
-  console.log('111111>>', tokenList, tokenInfo);
   const { networkCfg } = useNetworkConfiguration();
   const aptosClient = useMemo(
     () =>
@@ -113,7 +112,6 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
       const resources = await obricSDK?.aptosClient.getAccountResources(activeWallet);
       const txHistory = await obricSDK?.aptosClient.getAccountTransactions(activeWallet);
       const pools = obricSDK.pools;
-      console.log('check resources', resources, txHistory);
 
       setWalletResource(resources);
       setLiquidityPools(pools);
@@ -202,7 +200,7 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
           }
         }
       } catch (error) {
-        console.log('Request swap by route error:', error);
+        console.log('Request swap error:', error);
         if (error instanceof Error) {
           openErrorNotification({ detail: error?.message });
         }

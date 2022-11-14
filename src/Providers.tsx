@@ -1,10 +1,3 @@
-import { Provider as ReduxProvider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { logger } from 'redux-logger';
-import ErrorBoundary from 'components/ErrorBoundary';
-import reducer from 'modules/rootReducer';
-import { AptosWalletProvider } from 'contexts/AptosWalletProvider';
-// import { HippoClientProvider } from 'contexts/HippoClientProvider';
 import {
   WalletProvider,
   AptosWalletAdapter,
@@ -13,7 +6,14 @@ import {
   PontemWalletAdapter,
   SpikaWalletAdapter
 } from '@manahippo/aptos-wallet-adapter';
+import { configureStore } from '@reduxjs/toolkit';
+import reducer from 'modules/rootReducer';
 import { useMemo } from 'react';
+import { Provider as ReduxProvider } from 'react-redux';
+import { logger } from 'redux-logger';
+
+import ErrorBoundary from 'components/ErrorBoundary';
+import { AptosWalletProvider } from 'contexts/AptosWalletProvider';
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development';
 

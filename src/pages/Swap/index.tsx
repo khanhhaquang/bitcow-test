@@ -7,19 +7,11 @@ import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
-import Card from 'components/Card';
 import useAptosWallet from 'hooks/useAptosWallet';
-import { SettingIcon } from 'resources/icons';
-
-// import SwapSetting from './components/SwapSetting';
-// import styles from './Swap.module.scss';
-
 import { openErrorNotification } from 'utils/notifications';
 
 import TokenSwap from './components/TokenSwap';
 import { ISwapSettings } from './types';
-// import useHippoClient from 'hooks/useHippoClient';
-// import { ISwapSettings } from './types';
 
 const validationSchema = yup.object({
   currencyFrom: yup.object({
@@ -40,7 +32,6 @@ const Swap: React.FC = () => {
 
   const onSubmitSwap = useCallback(
     async (values: ISwapSettings, formikHelper: FormikHelpers<ISwapSettings>) => {
-      console.log('on submit swap');
       const fromToken = values.currencyFrom?.token;
       const toToken = values.currencyTo?.token;
       const inputAmt = values.currencyFrom?.amount;
@@ -52,7 +43,6 @@ const Swap: React.FC = () => {
           // max_gas_amount: '' + values.maxGasFee
         };
         const result = await requestSwap({ fromToken, toToken, inputAmt, minOutputAmt, options });
-        console.log('swap result>>>', result);
         if (result) {
           // formikHelper.setFieldValue('currencyFrom', {
           //   ...values.currencyFrom,

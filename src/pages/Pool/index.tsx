@@ -1,15 +1,12 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import poolAction from 'modules/pool/actions';
 import { getLiquidityModal } from 'modules/pool/reducer';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Tabs } from 'components/Antd';
 import HippoModal from 'components/HippoModal';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
-import usePools from 'hooks/usePools';
 import { CancelIcon } from 'resources/icons';
 
 import AddLiquidity from './components/AddLiquidity';
@@ -37,7 +34,6 @@ const Pool = () => {
     text: '',
     timeBasis: '7D'
   });
-  const { activePools } = usePools();
   const dispatch = useDispatch();
   const liquidityModal = useSelector(getLiquidityModal);
 
@@ -106,7 +102,7 @@ const Pool = () => {
             return {
               label: tab.label,
               key: tab.id,
-              children: <PoolTable data={activePools} />
+              children: <PoolTable />
             };
           })}
         />

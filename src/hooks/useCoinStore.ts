@@ -36,7 +36,6 @@ const useCoinStore = () => {
         if (module === 'coin' && name === 'CoinStore') {
           if (tokenType.module === 'piece_swap') {
             const poolAddress = tokenType.address.toString();
-            console.log('HELLLLOOO', structType.getFullname());
             poolResources[poolAddress] = resource;
             poolResources[poolAddress].data = {
               ...poolResources[poolAddress].data,

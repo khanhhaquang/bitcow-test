@@ -18,7 +18,6 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const dispatch = useDispatch();
   const onSubmit = useCallback(
     async (values: AddLiquidityProps, formikHelper: FormikHelpers<AddLiquidityProps>) => {
-      console.log('on submit add liquidity');
       const { xToken, yToken, xAmt, yAmt } = values;
       if (xToken && yToken && xAmt && yAmt) {
         const result = await requestAddLiquidity({
@@ -27,7 +26,6 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           xAmt,
           yAmt
         });
-        console.log('swap result>>>', result);
         if (result) {
           formikHelper.resetForm();
           dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null));

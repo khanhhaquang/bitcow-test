@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ColumnsType, Table, TableProps } from 'components/Antd';
+import usePools from 'hooks/usePools';
 import { HintIcon, LessIcon, MoreIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
@@ -7,11 +8,9 @@ import PoolRowDetail from './PoolRowDetail';
 import styles from './PoolTable.module.scss';
 import TokenPair from './TokenPair';
 
-interface IProps {
-  data: IPool[];
-}
+const PoolTable = () => {
+  const { activePools } = usePools();
 
-const PoolTable = ({ data }: IProps) => {
   const columns: ColumnsType<IPool> = [
     {
       title: 'Trading Pair',
@@ -79,7 +78,7 @@ const PoolTable = ({ data }: IProps) => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={activePools}
       pagination={false}
       className={styles.poolTable}
       onChange={handleChange}
@@ -99,7 +98,7 @@ const PoolTable = ({ data }: IProps) => {
             </div>
           );
         },
-        rowExpandable: (record) => record.invested
+        rowExpandable: () => true
       }}
     />
   );

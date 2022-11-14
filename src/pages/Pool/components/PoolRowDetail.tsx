@@ -31,7 +31,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
         id: pool.id,
         liquidity: lp,
         assetsPooled: coins,
-        share: (lp / pool.liquidity) * 100
+        share: pool.liquidity ? (lp / pool.liquidity) * 100 : 0
       }
     ];
     setPoolRecord(poolData);

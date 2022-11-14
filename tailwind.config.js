@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        color_main: 'rgba(255, 237, 72, 1)',
+        color_main: '#FF6827',
         color_minor: '#FFCC4A',
         color_text_1: '#ffffff',
         color_text_2: 'rgba(255, 255, 255, 0.5)',

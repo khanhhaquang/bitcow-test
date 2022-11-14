@@ -23,15 +23,12 @@ const AccountDetails = () => {
     if (obricSDK && coinStore) {
       aptToken = obricSDK.coinList.getCoinInfoBySymbol('APT')[0];
       const aptCoin = coinStore[aptToken.token_type.type] || 0;
-      console.log('checkkkk', aptCoin, coinStore, aptToken.token_type.type);
       if (aptCoin) {
         balance = (aptCoin.data as CoinInfo).coin.value / Math.pow(10, aptToken.decimals);
       }
     }
     return [aptToken, balance];
   }, [coinStore, obricSDK]);
-
-  console.log('coinss', coinStore);
 
   const handleCopy = (text) => {
     copyToClipboard(text, () => {

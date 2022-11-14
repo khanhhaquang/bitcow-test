@@ -1,8 +1,9 @@
+import Providers from 'Providers';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Providers from 'Providers';
-import reportWebVitals from './reportWebVitals';
+
 import App from './App';
+import reportWebVitals from './reportWebVitals';
 
 import './resources/fonts/Furore/Furore.otf';
 import './resources/fonts/Rany/Rany.otf';

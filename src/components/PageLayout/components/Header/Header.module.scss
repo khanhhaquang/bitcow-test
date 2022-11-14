@@ -4,9 +4,11 @@
     .ant-menu-item.ant-menu-item-selected {
       @apply bg-transparent #{!important}; // remove blue background
       a {
-        @apply text-color_main #{!important};
+        @apply relative text-color_main #{!important};
         &::after {
-          display: inline-flex;
+          position: absolute;
+          right: -16px;
+          bottom: 0;
           margin-left: 8.5px;
           content: '';
           background-image: url('../../../../resources/icons/triangle.svg');
@@ -18,7 +20,7 @@
     }
 
     .ant-menu-item {
-      @apply pl-28 border-0 flex items-center #{!important};
+      @apply flex items-center border-0 pl-28 #{!important};
       a {
         @apply text-white #{!important};
       }
@@ -45,7 +47,7 @@
     .ant-menu .ant-menu-item-group-title,
     .ant-menu .ant-menu-item > a,
     .ant-menu .ant-menu-item > span > a {
-      @apply text-color_text_1 font-Furore text-lg px-11;
+      @apply px-11 font-Furore text-lg text-color_text_1;
     }
   }
 }

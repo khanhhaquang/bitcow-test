@@ -36,7 +36,6 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
 
   const onSubmit = useCallback(
     async (values: WithdrawLiquidityProps, formikHelper: FormikHelpers<WithdrawLiquidityProps>) => {
-      console.log('on submit withdraw liquidity');
       const { xToken, yToken, percent } = values;
       if (xToken && yToken && percent && pool) {
         const result = await requestWithdrawLiquidity({
@@ -44,7 +43,6 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           yToken,
           amt: pool.lp * (percent / 100)
         });
-        console.log('withdraw result>>>', result);
         if (result) {
           formikHelper.resetForm();
           dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null));

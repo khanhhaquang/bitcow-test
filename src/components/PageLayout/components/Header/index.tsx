@@ -2,21 +2,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { routes, TRoute } from 'App.routes';
 import cx from 'classnames';
-import classNames from 'classnames';
-// import { CloseIcon, MenuIcon } from 'resources/icons';
-// import { Drawer } from 'antd';
-import { Fragment, useCallback, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 import { Layout, Menu } from 'components/Antd';
-import Button from 'components/Button';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { LeftArrowIcon, LogoIcon, LogoMobileIcon } from 'resources/icons';
 
 import styles from './Header.module.scss';
-// import { useSelector } from 'react-redux';
-// import { getIsResourcesNotFound } from 'modules/common/reducer';
 
 const { Header } = Layout;
 
@@ -50,7 +44,7 @@ const PageHeader: React.FC = () => {
             theme="dark"
             className={cx(
               styles.menu,
-              'mobile:hidden flex h-full w-full min-w-[200px] justify-start !bg-transparent'
+              'mobile:hidden flex h-full w-full min-w-[200px] justify-center !bg-transparent'
             )}
             selectedKeys={[currentPageName]}>
             {renderNavItems()}
@@ -71,24 +65,24 @@ const PageHeader: React.FC = () => {
 
   return (
     <Header
-      className={classNames('z-30 h-[62px] w-full border-b-[1px] border-gray_02 bg-black px-0', {
+      className={cx('z-30 h-[62px] w-full border-b-[1px] border-gray_02 bg-black px-0', {
         'absolute top-0 z-10 bg-transparent desktop:h-[126px] laptop:h-[64px]':
           currentPageName === 'Home'
       })}>
       <div className="relative top-0 left-0 mx-auto flex h-full items-center laptop:justify-center">
         <div
-          className={classNames('h-full desktop:pl-[60px] laptop:pl-0', {
+          className={cx('h-full desktop:pl-[60px] laptop:pl-0', {
             'desktop:pl-20': currentPageName === 'Home'
           })}>
-          <Link to="/" className={classNames('flex h-full items-center justify-center')}>
+          <Link to="/" className={cx('flex h-full items-center justify-center')}>
             <div
-              className={classNames('desktop:hidden', {
+              className={cx('desktop:hidden', {
                 'laptop:block': currentPageName !== 'Home'
               })}>
               <LogoMobileIcon className="w-[120px]" />
             </div>
             <div
-              className={classNames('desktop:block', {
+              className={cx('desktop:block', {
                 'laptop:hidden': currentPageName !== 'Home'
               })}>
               <LogoIcon className="w-[120px]" />
@@ -96,7 +90,7 @@ const PageHeader: React.FC = () => {
           </Link>
         </div>
         <div
-          className={classNames('desktop:block laptop:hidden', {
+          className={cx('desktop:block laptop:hidden', {
             grow: currentPageName !== 'Home',
             'ml-auto h-full': currentPageName === 'Home'
           })}>

@@ -106,21 +106,8 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             <div className="w-full bg-color_bg_2 p-4">
               <div className="mb-2 text-xs uppercase text-gray_05">AVAILABLE FOR WITHDRAWAL</div>
               <div className="mt-4 flex flex-col gap-4">{renderCoinRow()}</div>
-              <div className="flex flex-col">
-                <div className={'flex font-Rany text-gray_03'}>
-                  <PositiveFloatNumInput
-                    ref={inputRef}
-                    min={0.01}
-                    max={100}
-                    maxDecimals={2}
-                    placeholder="0.00"
-                    className="relative mt-6 w-full bg-transparent pr-0 pl-1 text-3xl text-white"
-                    inputAmount={props.values.percent || 0}
-                    onAmountChange={(a) => onAmountChange(a, props)}
-                  />
-                  <div className="mt-6 grow text-3xl text-gray_05">%</div>
-                </div>
-                <div className="mt-5 flex w-full justify-between gap-3">
+              <div className="flex">
+                <div className="mt-5 flex w-full items-center justify-between gap-2">
                   {percentageOptions.map((option) => (
                     <Button
                       key={option}
@@ -129,6 +116,19 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                       {option}%
                     </Button>
                   ))}
+                </div>
+                <div className={'flex grow font-Rany text-gray_03'}>
+                  <PositiveFloatNumInput
+                    ref={inputRef}
+                    min={0.01}
+                    max={100}
+                    maxDecimals={2}
+                    placeholder="0.00"
+                    className="relative mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl text-white"
+                    inputAmount={props.values.percent || 0}
+                    onAmountChange={(a) => onAmountChange(a, props)}
+                  />
+                  <div className="mt-6 grow text-3xl text-gray_05">%</div>
                 </div>
               </div>
             </div>
@@ -148,7 +148,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             <div className="bg-gray_008 p-5">
               <Button
                 isLoading={props.isSubmitting}
-                className="w-full rounded-none bg-button_gradient font-Furore text-[18px] text-black disabled:bg-[#272B30] disabled:bg-none disabled:text-gray_03"
+                className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white hover:bg-opacity-90 disabled:bg-[#272B30] disabled:bg-none disabled:text-gray_03"
                 disabled={!props.isValid || !props.dirty}
                 onClick={props.submitForm}>
                 Withdraw

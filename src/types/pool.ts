@@ -8,6 +8,7 @@ export interface IPoolToken {
 
 export interface IPool {
   id: string;
+  address?: string;
   liquidity: number;
   token0: RawCoinInfo;
   token1: RawCoinInfo;

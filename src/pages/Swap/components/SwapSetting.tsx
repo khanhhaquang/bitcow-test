@@ -114,7 +114,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         />
       </div>
       <Button
-        className="mt-5 w-full rounded-none bg-button_gradient font-Furore text-lg text-black disabled:bg-color_bg_3"
+        className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-black disabled:bg-color_bg_3"
         // disabled={activeWallet && (!isValid || !dirty)}
         onClick={onConfirm}>
         SAVE

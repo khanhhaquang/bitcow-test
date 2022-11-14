@@ -75,7 +75,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             <div className="bg-gray_008 p-5">
               <Button
                 isLoading={props.isSubmitting}
-                className="w-full rounded-none bg-button_gradient font-Furore text-[18px] text-black disabled:bg-[#272B30] disabled:bg-none disabled:text-gray_03"
+                className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white disabled:bg-[#272B30] disabled:bg-none disabled:text-gray_03"
                 disabled={!props.isValid || !props.dirty}
                 onClick={props.submitForm}>
                 ADD

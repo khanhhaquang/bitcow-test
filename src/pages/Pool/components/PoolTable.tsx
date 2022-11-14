@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { ColumnsType, Table, TableProps } from 'components/Antd';
-import usePools from 'hooks/usePools';
 import { HintIcon, LessIcon, MoreIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
@@ -8,9 +8,11 @@ import PoolRowDetail from './PoolRowDetail';
 import styles from './PoolTable.module.scss';
 import TokenPair from './TokenPair';
 
-const PoolTable = () => {
-  const { activePools } = usePools();
+interface TProps {
+  activePools: IPool[];
+}
 
+const PoolTable = ({ activePools }: TProps) => {
   const columns: ColumnsType<IPool> = [
     {
       title: 'Trading Pair',

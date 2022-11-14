@@ -16,8 +16,8 @@ import { ISwapSettings } from './types';
 const validationSchema = yup.object({
   currencyFrom: yup.object({
     // token: yup.required(),
-    amount: yup.number().required(),
-    balance: yup.number().required()
+    amount: yup.number().positive().required(),
+    balance: yup.number().positive().required()
   }),
   expertMode: yup.boolean(),
   disableIndirect: yup.boolean(),
@@ -25,7 +25,6 @@ const validationSchema = yup.object({
 });
 
 const Swap: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const swapSettings = useSelector(getSwapSettings);
   const { requestSwap } = useAptosWallet();
   // const { hippoSwap, hippoWallet, requestSwap } = useHippoClient();

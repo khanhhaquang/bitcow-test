@@ -13,6 +13,7 @@ import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
 import styles from './Pool.module.scss';
+import usePools from 'hooks/usePools';
 
 const filterOptions = [
   {
@@ -34,6 +35,7 @@ const Pool = () => {
     text: '',
     timeBasis: '7D'
   });
+  const { activePools, checkIfInvested } = usePools();
   const dispatch = useDispatch();
   const liquidityModal = useSelector(getLiquidityModal);
 
@@ -74,7 +76,7 @@ const Pool = () => {
   return (
     <div className="mt-[100px] flex flex-col">
       {renderHeader()}
-      <div className="border-[1px] border-[#272A2C] bg-black py-11 px-8 backdrop-blur-lg">
+      <div className="border-[1px] border-[#272A2C] bg-black py-8 backdrop-blur-lg">
         <Tabs
           defaultActiveKey="1"
           className={styles.tabs}
@@ -99,10 +101,14 @@ const Pool = () => {
             )
           }}
           items={tabs.map((tab) => {
+            let currentPools = activePools;
+            if (tab.id === '2') {
+              currentPools = currentPools.filter((pool) => checkIfInvested(pool.id));
+            }
             return {
               label: tab.label,
               key: tab.id,
-              children: <PoolTable />
+              children: <PoolTable activePools={currentPools} />
             };
           })}
         />
@@ -114,7 +120,7 @@ const Pool = () => {
         open={!!liquidityModal}
         footer={null}
         closeIcon={<CancelIcon className="opacity-30 hover:opacity-100" />}
-        width={432}
+        width={512}
         destroyOnClose>
         {liquidityModal &&
           (liquidityModal.type === 'add' ? (

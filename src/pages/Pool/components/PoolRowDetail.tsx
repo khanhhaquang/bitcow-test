@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { ColumnsType, Table } from 'components/Antd';
 import Button from 'components/Button';
 import usePools from 'hooks/usePools';
-import { RemoveIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
 interface ExpandedDataType {
@@ -86,22 +85,23 @@ const PoolRowDetail = ({ pool }: IProps) => {
       render: (val, record) => {
         return (
           <div className="flex justify-end gap-4">
-            {record.liquidity > 0 && (
-              <Button
-                className="h-12 w-12 rounded-none border-[1px] border-[#272A2C] p-0 text-white hover:bg-gray_01"
-                onClick={() => {
-                  dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL({ type: 'withdraw', pool }));
-                }}>
-                <RemoveIcon />
-              </Button>
-            )}
             <Button
-              className="rounded-none bg-button_gradient text-base text-black hover:opacity-90"
+              className="rounded-none bg-color_main text-base text-white hover:opacity-90"
               onClick={() => {
                 dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL({ type: 'add', pool }));
               }}>
-              Add Liquidity
+              Deposit
             </Button>
+            {record.liquidity > 0 && (
+              <Button
+                className="rounded-none border-[1px] border-color_main px-6 py-4 text-color_main hover:bg-gray_01"
+                variant="outlined"
+                onClick={() => {
+                  dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL({ type: 'withdraw', pool }));
+                }}>
+                Withdraw
+              </Button>
+            )}
           </div>
         );
       }

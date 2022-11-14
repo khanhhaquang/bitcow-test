@@ -1,10 +1,19 @@
 .poolTable {
+  @apply relative w-full;
+
+  &::before {
+    @apply absolute top-0 z-10 h-[1px] w-full bg-gray_02;
+  }
+  &::after {
+    @apply absolute top-[52px] z-10 h-[1px] w-full bg-gray_02;
+  }
+
   :global {
     .ant-table {
-      @apply bg-black text-white;
+      @apply relative bg-black px-8 text-white;
 
       .ant-table-cell {
-        @apply bg-black border-black text-gray_05;
+        @apply border-black bg-black text-gray_05;
       }
 
       .ant-table-column-sorter-up.active,
@@ -12,9 +21,25 @@
         @apply text-color_main;
       }
 
-      .ant-table-tbody {
+      .ant-table-thead {
         .ant-table-cell {
-          @apply bg-color_bg_2 border-black border-b-0 border-t-4;
+          @apply border-b-[24px] border-black;
+        }
+      }
+
+      .ant-table-tbody {
+        .ant-table {
+          @apply px-0;
+        }
+        .ant-table-row-level-0 {
+          &:not(:first-of-type) {
+            .ant-table-cell {
+              @apply border-t-[16px] border-black;
+            }
+          }
+        }
+        .ant-table-cell {
+          @apply rounded-none border-b-0 border-t-0 bg-color_bg_2;
         }
       }
 

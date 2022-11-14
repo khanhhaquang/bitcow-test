@@ -35,10 +35,16 @@ const useCoinStore = () => {
         const tokenType = token as StructTag;
         if (module === 'coin' && name === 'CoinStore') {
           if (tokenType.module === 'piece_swap') {
-            const poolAddress = tokenType.address.toString();
-            poolResources[poolAddress] = resource;
-            poolResources[poolAddress].data = {
-              ...poolResources[poolAddress].data,
+            // console.log(
+            //   'coinStore',
+            //   tokenType.address.toString(),
+            //   tokenType.getFullname(),
+            //   structType.getFullname()
+            // );
+            const poolIdentifier = tokenType.getFullname();
+            poolResources[poolIdentifier] = resource;
+            poolResources[poolIdentifier].data = {
+              ...poolResources[poolIdentifier].data,
               fullName: tokenType.getFullname(),
               poolName: structType.getFullname()
             };

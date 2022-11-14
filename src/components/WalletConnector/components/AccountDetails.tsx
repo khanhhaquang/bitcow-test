@@ -72,7 +72,7 @@ const AccountDetails = () => {
       </div>
       <div className="w-full px-5">
         <div className="mt-6 mb-8 flex h-[134px] w-full justify-between bg-accountBg bg-cover bg-center bg-no-repeat p-6">
-          <div className="flex h-[24px] w-full items-center justify-between">
+          <div className="flex h-[24px] w-full items-center justify-between text-white">
             <div className="flex items-center gap-2 text-[20px]">
               <CoinIcon size={24} logoSrc={AptToken?.logo_url} />
               <div className="">{AptToken?.name}</div>

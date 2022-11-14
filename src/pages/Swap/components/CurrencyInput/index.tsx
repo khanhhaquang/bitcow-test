@@ -5,7 +5,7 @@ import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { getTokenList } from 'modules/swap/reducer';
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import CoinIcon from 'components/CoinIcon';
@@ -41,6 +41,12 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
   const isCoinSelectorDisabled = !tokenList || tokenList.length === 0;
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (actionType === 'currencyFrom' && isReady && uiBalance) {
+      setFieldValue('currencyFrom.balance', uiBalance);
+    }
+  }, [actionType, isReady, setFieldValue, uiBalance]);
 
   // The debounce delay should be bigger than the average of key input intervals
   const onAmountChange = useDebouncedCallback(

@@ -20,8 +20,8 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       className={classNames(
         'relative min-h-screen overflow-hidden bg-black bg-cover bg-center bg-no-repeat',
         {
-          'bg-primary': currentPageName === 'Home'
-          // 'bg-secondary': currentPageName !== 'Home'
+          'bg-primary': currentPageName === 'Home',
+          'bg-secondary': currentPageName !== 'Home'
         }
       )}>
       <Header />

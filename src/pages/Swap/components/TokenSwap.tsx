@@ -24,7 +24,8 @@ import SwapSetting from './SwapSetting';
 import { ISwapSettings } from '../types';
 
 const TokenSwap = () => {
-  const { values, setFieldValue, submitForm, isSubmitting } = useFormikContext<ISwapSettings>();
+  const { values, setFieldValue, submitForm, isSubmitting, isValid, dirty } =
+    useFormikContext<ISwapSettings>();
   const { activeWallet, openModal, obricSDK } = useAptosWallet();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
@@ -93,8 +94,14 @@ const TokenSwap = () => {
   const onClickSwapToken = useCallback(() => {
     const tokenFrom = values.currencyFrom;
     const tokenTo = values.currencyTo;
-    setFieldValue('currencyFrom', tokenTo);
-    setFieldValue('currencyTo', tokenFrom);
+    setFieldValue('currencyFrom', {
+      ...tokenTo,
+      amount: 0
+    });
+    setFieldValue('currencyTo', {
+      ...tokenFrom,
+      amount: 0
+    });
   }, [values, setFieldValue]);
 
   const renderCardHeader = () => (
@@ -112,18 +119,19 @@ const TokenSwap = () => {
     </Fragment>
   );
 
+  console.log('MEMEMEME>>>', isValid, dirty);
   return (
-    <Card className="relative flex min-h-[442px] w-[432px] flex-col bg-color_bg_3 py-6 px-5 font-Rany text-white">
+    <Card className="relative flex min-h-[442px] w-[512px] flex-col bg-color_bg_3 py-6 px-5 font-Rany text-white">
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col">
-        <div className="relative flex flex-col gap-1">
+        <div className="relative flex flex-col gap-[2px]">
           <div className="bg-color_bg_2 p-4">
             <div className="mb-2 text-xs uppercase text-gray_05">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
           </div>
           <Button
             variant="icon"
-            className="group absolute top-1/2 left-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-color_bg_3 p-0"
+            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-color_bg_3 bg-[#101010] p-0"
             onClick={onClickSwapToken}>
             <SwapIcon className="fill-white opacity-30 group-hover:opacity-100" />
           </Button>
@@ -143,8 +151,8 @@ const TokenSwap = () => {
         )}
         <Button
           isLoading={isSubmitting}
-          className="mt-5 w-full rounded-none bg-button_gradient font-Furore text-lg text-black hover:opacity-90 disabled:bg-color_bg_3"
-          // disabled={activeWallet && (!isValid || !dirty)}
+          className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white hover:opacity-90 disabled:bg-[#505050]"
+          disabled={activeWallet && (!isValid || !dirty)}
           onClick={!activeWallet ? openModal : submitForm}>
           {!activeWallet ? 'Connect to Wallet' : 'SWAP'}
         </Button>

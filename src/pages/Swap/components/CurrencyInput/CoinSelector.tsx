@@ -69,7 +69,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
     let currentTokenList = tokenList
       ?.sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
       .map((t) => {
-        const tokenStore = coinStore[t.token_type.type];
+        const tokenStore = (coinStore || {})[t.token_type.type];
         const balance = !activeWallet
           ? -1
           : tokenStore

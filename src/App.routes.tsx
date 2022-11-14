@@ -31,11 +31,11 @@ export const routes: TRoute[] = [
     // hidden: true,
     element: <Pool />
   },
-  {
-    path: 'stats',
-    name: 'Stats',
-    element: <Pool />
-  },
+  // {
+  //   path: 'stats',
+  //   name: 'Stats',
+  //   element: <Pool />
+  // },
   // {
   //   path: 'stats',
   //   name: 'Stats',

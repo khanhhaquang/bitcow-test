@@ -16,7 +16,7 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
   return (
     <div className="flex w-full items-center justify-between gap-2 px-2 font-Rany text-gray_05 hover:bg-gray_008">
       <div className="flex items-center gap-2">
-        <CoinIcon size={32} logoSrc={item.token.logo_url} />
+        <CoinIcon size={32} token={item.token} />
         <div className="">
           <small className="text-xs">{item.token.name}</small>
           <div className="text-base text-white">{item.token.symbol}</div>

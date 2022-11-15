@@ -28,7 +28,7 @@ const CoinSelectButton = ({
       {token?.symbol ? (
         <>
           <div className="flex items-center gap-2">
-            <CoinIcon logoSrc={token.logo_url} />
+            <CoinIcon token={token} />
             {token.symbol}
           </div>
           <CaretIcon className="font-icon text-grey-300" />

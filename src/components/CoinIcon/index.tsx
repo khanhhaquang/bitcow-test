@@ -1,12 +1,11 @@
 import { RawCoinInfo } from '@manahippo/coin-list';
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';
 import useAptosWallet from 'hooks/useAptosWallet';
 
 interface TProps {
-  logoSrc?: string;
   className?: string;
   symbol?: string;
   token?: RawCoinInfo;
@@ -14,16 +13,17 @@ interface TProps {
 }
 
 // Use size instead of className to set the size of images
-const CoinIcon: React.FC<TProps> = ({ logoSrc, size = 24, className, symbol, token }) => {
+const CoinIcon: React.FC<TProps> = ({ size = 24, className, symbol, token }) => {
   const { tokenInfo } = useAptosWallet();
   const [isLoaded, setIsLoaded] = useState(false);
-  if (!logoSrc) {
-    if (token) logoSrc = token?.logo_url;
+  const logoSrc = useMemo(() => {
+    if (token) return token?.logo_url;
     if (symbol) {
-      token = tokenInfo && tokenInfo[symbol][0];
-      logoSrc = token?.logo_url;
+      const tok = tokenInfo && tokenInfo[symbol][0];
+      return tok?.logo_url;
     }
-  }
+  }, [symbol, token, tokenInfo]);
+  const isAPT = token?.symbol === 'APT' || symbol === 'APT';
   const onImgError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = '';
     event.currentTarget.className = 'bg-black';
@@ -42,7 +42,10 @@ const CoinIcon: React.FC<TProps> = ({ logoSrc, size = 24, className, symbol, tok
       {logoSrc && (
         <img
           src={logoSrc}
-          className={classNames('h-full w-full rounded-full', { invisible: !isLoaded })}
+          className={classNames('h-full w-full rounded-full', {
+            invisible: !isLoaded,
+            'bg-white': isAPT
+          })}
           alt="coin icon"
           onError={onImgError}
           onLoad={onImgLoad}

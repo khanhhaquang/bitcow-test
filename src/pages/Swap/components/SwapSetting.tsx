@@ -51,12 +51,14 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
 
   return (
     <div className="w-full font-Rany text-white">
-      <div className="text-lg">Transaction Settings</div>
-      <hr className="my-4 h-[1px] border-0 bg-color_list_hover" />
-      <div className="mobile:mt-0 mt-6">
+      <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
+        Transaction Settings
+      </div>
+      <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:my-0" />
+      <div className="mt-6 tablet:mx-5">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">
-          <div className="relative flex w-full items-center border-[1px] border-color_bg_2">
+          <div className="relative flex w-full items-center border-[1px] border-color_bg_2 tablet:h-10">
             <PositiveFloatNumInput
               inputAmount={values.slipTolerance}
               min={0}
@@ -69,16 +71,16 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
             <div className={'absolute right-3 text-base text-gray_05'}>%</div>
           </div>
           <Button
-            className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-black"
+            className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-black tablet:h-10"
             variant="outlined"
             onClick={onClickAuto}>
             Auto
           </Button>
         </div>
       </div>
-      <div className="mt-6">
+      <div className="mt-6 tablet:mx-5">
         <SubTitle>Transaction Deadline</SubTitle>
-        <div className="flex w-fit items-center gap-x-4">
+        <div className="flex w-fit items-center gap-x-4 tablet:h-10">
           <PositiveFloatNumInput
             className={classNames('bg-color_bg_2 py-3 px-4 text-white')}
             inputAmount={values.trasactionDeadline}
@@ -91,30 +93,40 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
           <div className="text-base capitalize">minutes</div>
         </div>
       </div>
-      <hr className="my-4 h-[1px] border-0 bg-color_list_hover" />
-      <div className="mt-6 flex justify-between">
+      <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:mx-5" />
+      <div className="mt-6 flex justify-between tablet:mx-5">
         <SubTitle>Expert Mode</SubTitle>
         <Switch
           checked={values.expertMode}
           onChange={(checked) => setFieldValue('expertMode', checked)}
         />
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between tablet:mx-5">
         <SubTitle>Disable Indirect Routing</SubTitle>
         <Switch
           checked={values.disableIndirect}
           onChange={(checked) => setFieldValue('disableIndirect', checked)}
         />
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between tablet:mx-5">
         <SubTitle>Privacy Swap</SubTitle>
         <Switch
           checked={values.privacySwap}
           onChange={(checked) => setFieldValue('privacySwap', checked)}
         />
       </div>
+      {/* Mobile */}
+      <div className="hidden bg-gray_008 p-4 tablet:block">
+        <Button
+          className="h-10 w-full rounded-none bg-color_main font-Furore text-lg text-white disabled:bg-color_bg_3"
+          // disabled={activeWallet && (!isValid || !dirty)}
+          onClick={onConfirm}>
+          SAVE
+        </Button>
+      </div>
+      {/* Desktop */}
       <Button
-        className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white disabled:bg-color_bg_3"
+        className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white disabled:bg-color_bg_3 tablet:hidden"
         // disabled={activeWallet && (!isValid || !dirty)}
         onClick={onConfirm}>
         SAVE

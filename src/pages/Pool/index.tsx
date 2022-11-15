@@ -1,6 +1,6 @@
 import poolAction from 'modules/pool/actions';
 import { getLiquidityModal } from 'modules/pool/reducer';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Tabs } from 'components/Antd';
@@ -55,23 +55,37 @@ const Pool = () => {
     </div>
   );
 
-  const tabs = [
-    {
-      id: '1',
-      label: 'Liquidity Pools'
-    },
-    {
-      id: '2',
-      label: 'My Position'
-    }
-  ];
-
   const onUpdateFilter = (val: string, field: string) => {
     setFilter((prevState) => ({
       ...prevState,
       [field]: val
     }));
   };
+
+  const renderTabContents = useCallback(() => {
+    const tabs = [
+      {
+        id: '1',
+        label: 'Liquidity Pools'
+      },
+      {
+        id: '2',
+        label: 'My Position'
+      }
+    ];
+
+    return tabs.map((tab) => {
+      let currentPools = activePools;
+      if (tab.id === '2') {
+        currentPools = currentPools.filter((pool) => checkIfInvested(pool.id));
+      }
+      return {
+        label: tab.label,
+        key: tab.id,
+        children: <PoolTable activePools={currentPools} viewOwned={tab.id === '2'} />
+      };
+    });
+  }, [activePools, checkIfInvested]);
 
   return (
     <div className="mt-[100px] flex flex-col">
@@ -100,17 +114,7 @@ const Pool = () => {
               </div>
             )
           }}
-          items={tabs.map((tab) => {
-            let currentPools = activePools;
-            if (tab.id === '2') {
-              currentPools = currentPools.filter((pool) => checkIfInvested(pool.id));
-            }
-            return {
-              label: tab.label,
-              key: tab.id,
-              children: <PoolTable activePools={currentPools} viewOwned={tab.id === '2'} />
-            };
-          })}
+          items={renderTabContents()}
         />
       </div>
       <HippoModal
@@ -118,8 +122,7 @@ const Pool = () => {
         className=""
         // wrapClassName={styles.modal}
         open={!!liquidityModal}
-        footer={null}
-        closeIcon={<CancelIcon className="opacity-30 hover:opacity-100" />}
+        closeIcon={<CancelIcon />}
         width={512}
         destroyOnClose>
         {liquidityModal &&

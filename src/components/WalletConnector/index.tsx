@@ -49,7 +49,7 @@ const WalletConnector = () => {
         renderActiveBtn()
       ) : (
         <div
-          className="flex h-full w-full items-center justify-center font-Furore text-2xl text-color_main tablet:h-full tablet:p-[10px]"
+          className="flex h-full w-full items-center justify-center bg-button_gradient px-[22px] py-[13px] font-Furore text-sm text-white tablet:h-full tablet:p-[10px]"
           onClick={openModal}>
           {'Connect Wallet'}
         </div>
@@ -59,7 +59,7 @@ const WalletConnector = () => {
         className=""
         wrapClassName={activeWallet ? styles.walletDetail : styles.walletsModal}
         open={open}
-        footer={null}
+        // mobileHeight={activeWallet ? 466 : 400}
         closeIcon={<CancelIcon />}>
         {activeWallet ? <AccountDetails /> : <WalletSelector />}
       </HippoModal>

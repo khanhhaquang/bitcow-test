@@ -111,8 +111,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
         className=""
         wrapClassName={styles.modal}
         open={isCoinSelectorVisible}
-        footer={null}
-        closeIcon={<CancelIcon className="opacity-30 hover:opacity-100" />}>
+        closeIcon={<CancelIcon />}>
         <CoinSelector
           actionType={actionType}
           dismissiModal={() => setIsCoinSelectorVisible(!isCoinSelectorVisible)}

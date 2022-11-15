@@ -7,11 +7,26 @@
         @apply p-4;
       }
       .ant-modal-close {
-        @apply top-0 right-0;
+        @apply top-0 right-0 opacity-30 hover:opacity-100;
         .ant-modal-close-x svg {
           @apply absolute bottom-4 left-4;
         }
       }
     }
+  }
+}
+
+.drawer {
+  :global {
+    .ant-drawer-body {
+      @apply bg-gray_bg p-0;
+    }
+  }
+}
+
+:global {
+  // coin seletor modal
+  .ant-modal-wrap {
+    @apply tablet:z-[1] #{!important};
   }
 }

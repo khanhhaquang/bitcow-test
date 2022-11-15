@@ -53,10 +53,10 @@ const WalletSelector: React.FC = () => {
 
   return (
     <div className="font-Rany text-white">
-      <div className="text-lg">Connect wallet</div>
-      <hr className="my-4 h-[1px] border-0 bg-color_list_hover" />
-      <div className="mb-4 text-lg">Select Wallet</div>
-      <div className="grid grid-cols-2 gap-4">{renderButtonGroup}</div>
+      <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">Connect wallet</div>
+      <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:my-0" />
+      <div className="mb-4 text-lg tablet:px-5 tablet:pt-6">Select Wallet</div>
+      <div className="grid grid-cols-2 gap-4 tablet:px-5 tablet:pb-9">{renderButtonGroup}</div>
     </div>
   );
 };

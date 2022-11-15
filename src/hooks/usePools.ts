@@ -18,7 +18,14 @@ const usePools = () => {
   });
 
   const checkIfInvested = useCallback(
-    (poolAddress) => poolStore && !!poolStore[poolAddress.replace(/PieceSwapPoolInfo/g, 'LPToken')],
+    (poolAddress) => {
+      const pool = poolStore && poolStore[poolAddress.replace(/PieceSwapPoolInfo/g, 'LPToken')];
+      if (pool) {
+        const coinInfo = pool.data as CoinInfo;
+        return coinInfo?.coin?.value > 0;
+      }
+      return false;
+    },
     [poolStore]
   );
 
@@ -98,11 +105,9 @@ const usePools = () => {
         const coinInfo = (poolStore[poolAddress.replace(/PieceSwapPoolInfo/g, 'LPToken')] || {})
           .data as CoinInfo;
         const poolInfo = activePools.find((pool) => pool.id === poolAddress);
-        console.log('check', poolStore, coinInfo, poolInfo, poolAddress);
         if (coinInfo && poolInfo) {
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          const { token0, token1, token0Reserve, token1Reserve, liquidity, address, decimals } =
-            poolInfo;
+          const { token0, token1, token0Reserve, token1Reserve, liquidity, decimals } = poolInfo;
           const myLp = coinInfo?.coin?.value / Math.pow(10, decimals);
           result = {
             lp: myLp,

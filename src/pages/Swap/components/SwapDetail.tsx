@@ -108,6 +108,7 @@ const SwapDetail = ({
     <div className={classNames('mt-2 bg-color_bg_2', styles.collapse)}>
       <Collapse
         ghost
+        defaultActiveKey={['1']}
         expandIconPosition="end"
         expandIcon={({ isActive }) => (
           <div>

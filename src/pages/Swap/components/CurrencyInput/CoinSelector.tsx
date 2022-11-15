@@ -15,6 +15,7 @@ import { TokenBalance } from 'types/hippo';
 
 import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';
+import { SearchIcon } from 'resources/icons';
 // import useHippoClient from 'hooks/useHippoClient';
 // import { TokenInfo } from '@manahippo/hippo-sdk/dist/generated/coin_registry/coin_registry';
 
@@ -97,16 +98,19 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
 
   const renderHeaderSearch = useMemo(() => {
     return (
-      <div className="flex flex-col gap-2 font-Rany text-white">
-        <div className="text-lg">Select a token</div>
-        <hr className="my-4 h-[1px] border-0 bg-color_list_hover" />
-        <Input
-          className="!border-[1px] !border-gray_008 bg-color_bg_2 py-5 px-4 text-base text-gray_05"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value.toLowerCase())}
-          placeholder="Search name or paste address"
-        />
-        <div className="mt-2 mb-2 flex gap-2">
+      <div className="flex flex-col gap-2 font-Rany text-white tablet:gap-0">
+        <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">Select a token</div>
+        <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:my-0" />
+        <div className="relative tablet:mx-5 tablet:mt-6 tablet:mb-4">
+          <Input
+            className="w-full !border-[1px] !border-gray_008 bg-color_bg_2 py-5 px-4 text-base text-gray_05 tablet:py-[18px] tablet:text-base tablet:leading-4"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value.toLowerCase())}
+            placeholder="Search name or paste address"
+          />
+          <SearchIcon className="absolute top-1/2 right-[14px] -translate-y-1/2 " />
+        </div>
+        <div className="mt-2 mb-2 flex flex-wrap gap-2 tablet:px-5">
           {commonCoins.map((coin) => (
             <CommonCoinButton
               coin={coin}
@@ -122,7 +126,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const renderTokenList = useMemo(() => {
     return (
       <List
-        className="h-[354px] overflow-y-scroll border-0 bg-color_bg_2 p-2 no-scrollbar"
+        className="h-[354px] overflow-y-scroll border-0 bg-color_bg_2 p-2 no-scrollbar tablet:mx-5 tablet:mb-6"
         rowKey={(item) => `list-row-${(item as RawCoinInfo).symbol}`}>
         <VirtualList
           data={tokenListBalance || []}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { DiscordIcon, DocIcon, LogoIcon, MediumIcon, TwitterIcon } from 'resources/icons';
+import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
 
 const { Footer } = Layout;
 
@@ -30,15 +30,15 @@ const ExternalLink = ({ href, children }: { href: string; children: any }) => {
 const SocialBtnGroups = () => {
   return (
     <div className="flex items-center gap-10 laptop:w-full laptop:justify-center">
-      <ExternalLink href={URLs.medium}>
+      {/* <ExternalLink href={URLs.medium}>
         <MediumIcon />
-      </ExternalLink>
+      </ExternalLink> */}
       <ExternalLink href={URLs.discord}>
         <DiscordIcon />
       </ExternalLink>
-      <ExternalLink href={URLs.docs}>
-        <DocIcon />
-      </ExternalLink>
+      {/* <ExternalLink href={URLs.docs}>
+        <TelegramIcon />
+      </ExternalLink> */}
       <ExternalLink href={URLs.twitter}>
         <TwitterIcon />
       </ExternalLink>
@@ -60,12 +60,13 @@ const PageFooter: React.FC = () => {
           <LogoIcon className="w-[120px]" />
         </Link>
       )}
+      {currentPageName !== 'Home' && <div className="block grow tablet:hidden" />}
       <SocialBtnGroups />
-      {currentPageName !== 'Home' && (
+      {/* {currentPageName !== 'Home' && (
         <div className="block flex h-full cursor-pointer items-center justify-center font-Furore text-lg text-color_main laptop:hidden">
           {'Contact us'}
         </div>
-      )}
+      )} */}
     </Footer>
   );
 };

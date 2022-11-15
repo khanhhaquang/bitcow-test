@@ -1,4 +1,5 @@
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
+import cx from 'classnames';
 import { useMemo, useState } from 'react';
 
 import { Tooltip } from 'components/Antd';
@@ -9,6 +10,8 @@ import useAptosWallet from 'hooks/useAptosWallet';
 import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
 import { CopyIcon, ExportIcon, QuitIcon } from 'resources/icons';
 import { copyToClipboard } from 'utils/copy';
+
+import styles from './AccountDetails.module.scss';
 
 let timer: NodeJS.Timeout;
 
@@ -46,7 +49,7 @@ const AccountDetails = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex px-5">
+      <div className="flex px-5 tablet:pt-5">
         <div className="flex flex-col text-gray_05">
           <div className="flex gap-4">
             <div className="text-lg text-white">
@@ -71,13 +74,22 @@ const AccountDetails = () => {
         </div>
       </div>
       <div className="w-full px-5">
-        <div className="mt-6 mb-8 flex h-[134px] w-full justify-between bg-accountBg bg-cover bg-center bg-no-repeat p-6">
-          <div className="flex h-[24px] w-full items-center justify-between text-white">
-            <div className="flex items-center gap-2 text-[20px]">
-              <CoinIcon size={24} token={AptToken} />
-              <div className="">{AptToken?.name}</div>
+        <div className="relative mt-6 mb-8 flex h-[134px] w-full justify-between bg-accountGradientBg">
+          <div className="h-full w-full bg-accountBg bg-contain bg-center p-6">
+            <div className="flex h-[24px] w-full items-center justify-between text-white">
+              <div className="flex items-center gap-2 text-[20px]">
+                <CoinIcon size={24} token={AptToken} />
+                <div className="">{AptToken?.name}</div>
+              </div>
+              <div className="text-[20px]">{availableApt}</div>
             </div>
-            <div className="text-[20px]">{availableApt}</div>
+            <div className="absolute -top-[15px] -left-[15px] h-[30px] w-[30px] -rotate-45 bg-gray_bg"></div>
+            <div className="absolute -top-[15px] -right-[15px] h-[30px] w-[30px] rotate-45 bg-gray_bg"></div>
+            <div
+              className={cx(
+                'absolute left-0 bottom-0 h-[54px] w-full backdrop-blur-[15px]',
+                styles.bottomBg
+              )}></div>
           </div>
         </div>
       </div>

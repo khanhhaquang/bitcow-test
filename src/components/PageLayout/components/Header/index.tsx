@@ -10,6 +10,7 @@ import Button from 'components/Button';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { LeftArrowIcon, LogoIcon, LogoMobileIcon, MenuIcon } from 'resources/icons';
+import LogoImg from 'resources/img/logo.png';
 
 import styles from './Header.module.scss';
 import SideMenu from './SideMenu';
@@ -29,7 +30,7 @@ const PageHeader: React.FC = () => {
     return routes.map(({ name, path, hidden }) => {
       if (path === '*' || hidden) return null;
       return (
-        <Menu.Item key={name}>
+        <Menu.Item key={name} onClick={() => setIsSideMenuOpen(false)}>
           <Link to={path || '/'} className="bold font-Furore text-lg">
             {name}
           </Link>
@@ -68,9 +69,11 @@ const PageHeader: React.FC = () => {
 
   const rednerMobileMenu = () => {
     return (
-      <div className="flex flex-col">
-        <Link to="/" className={cx('flex h-full items-center justify-center')}>
-          <LogoIcon className="" />
+      <div className="flex flex-col items-start">
+        <Link to="/" className={cx('mb-24 flex h-full items-center justify-center')}>
+          <div className={cx('block w-[109px]')}>
+            <img src={LogoImg} className="h-full w-full" alt="Logo" />
+          </div>
         </Link>
         <Menu
           mode="vertical"
@@ -141,10 +144,10 @@ const PageHeader: React.FC = () => {
       </div>
       <Drawer
         open={isSideMenuOpen}
-        className={styles.drawer}
+        className={cx(styles.drawer, 'hidden tablet:block')}
         closable={false}
         placement="right"
-        width="60%"
+        width="212px"
         onClose={() => setIsSideMenuOpen(false)}>
         {rednerMobileMenu()}
         {/* <SideMenu

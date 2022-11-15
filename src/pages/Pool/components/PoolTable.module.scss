@@ -32,10 +32,18 @@
           @apply px-0;
         }
         .ant-table-row-level-0 {
+          .ant-table-cell {
+            @apply cursor-pointer;
+          }
           &:not(:first-of-type) {
             .ant-table-cell {
               @apply border-t-[16px] border-black;
             }
+          }
+        }
+        .ant-table-expanded-row-level-1 {
+          .ant-table-cell {
+            @apply cursor-default;
           }
         }
         .ant-table-cell {

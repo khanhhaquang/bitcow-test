@@ -139,7 +139,7 @@ const TokenSwap = () => {
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>
-        {swapRate && fromToken && toToken && (
+        {swapRate > 0 && fromToken && toToken && (
           <SwapDetail
             swapRateQuote={swapRate}
             impact={priceImpact}
@@ -161,9 +161,10 @@ const TokenSwap = () => {
         className=""
         // wrapClassName={styles.modal}
         open={isSettingsOpen}
-        footer={null}
-        closeIcon={<CancelIcon className="opacity-30 hover:opacity-100" />}
-        width={424}>
+        closeIcon={<CancelIcon />}
+        width={424}
+        // mobileHeight={556}
+      >
         <SwapSetting onClose={() => setIsSettingsOpen(false)} />
       </HippoModal>
     </Card>

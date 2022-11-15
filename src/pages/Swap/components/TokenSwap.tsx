@@ -119,9 +119,8 @@ const TokenSwap = () => {
     </Fragment>
   );
 
-  console.log('MEMEMEME>>>', isValid, dirty);
   return (
-    <Card className="relative flex min-h-[442px] w-[512px] flex-col bg-color_bg_3 py-6 px-5 font-Rany text-white">
+    <Card className="relative flex w-[512px] flex-col bg-color_bg_3 py-6 px-5 font-Rany text-white">
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col">
         <div className="relative flex flex-col gap-[2px]">

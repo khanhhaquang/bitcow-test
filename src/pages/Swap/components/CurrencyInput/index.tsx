@@ -64,16 +64,12 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
 
   return (
     <div className="flex flex-col gap-6">
-      <CoinSelectButton
-        onClick={() => setIsCoinSelectorVisible(true)}
-        token={selectedCurrency?.token}
-        isDisabled={isCoinSelectorDisabled}
-      />
-      <div
-        className={cx(
-          // styles.currencyInput,
-          'flex justify-between font-Rany text-gray_03'
-        )}>
+      <div className="flex w-full justify-between">
+        <CoinSelectButton
+          onClick={() => setIsCoinSelectorVisible(true)}
+          token={selectedCurrency?.token}
+          isDisabled={isCoinSelectorDisabled}
+        />
         <PositiveFloatNumInput
           ref={inputRef}
           min={0}
@@ -81,30 +77,34 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           maxDecimals={values[actionType]?.token?.decimals || 9}
           isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
-          className="w-2/3 bg-transparent pr-0 pl-1 text-3xl text-white"
+          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl text-white"
           inputAmount={selectedCurrency?.amount || 0}
           onAmountChange={onAmountChange}
         />
-        {isReady && (
-          <small className="flex items-end text-sm text-gray_05">
-            Balance:
-            <span
-              className={classNames('ml-1', {
-                'pointer-events-auto cursor-pointer underline':
-                  actionType === 'currencyFrom' && !isDisableAmountInput
-              })}
-              onClick={() => {
-                if (actionType === 'currencyFrom' && !isDisableAmountInput) {
-                  setFieldValue(actionType, {
-                    ...selectedCurrency,
-                    amount: uiBalance
-                  });
-                }
-              }}>
-              {tokenAmountFormatter(uiBalance, selectedToken)}
-            </span>
-          </small>
-        )}
+      </div>
+      <div
+        className={cx(
+          // styles.currencyInput,
+          'flex justify-between font-Rany text-gray_05'
+        )}>
+        <small className="flex items-end text-sm text-gray_05">
+          Balance:
+          <span
+            className={classNames('ml-1', {
+              'pointer-events-auto cursor-pointer underline':
+                actionType === 'currencyFrom' && !isDisableAmountInput && isReady
+            })}
+            onClick={() => {
+              if (actionType === 'currencyFrom' && !isDisableAmountInput && isReady) {
+                setFieldValue(actionType, {
+                  ...selectedCurrency,
+                  amount: uiBalance
+                });
+              }
+            }}>
+            {isReady ? tokenAmountFormatter(uiBalance, selectedToken) : 0}
+          </span>
+        </small>
       </div>
       <HippoModal
         onCancel={() => setIsCoinSelectorVisible(false)}

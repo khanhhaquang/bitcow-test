@@ -20,7 +20,7 @@
     }
 
     .ant-menu-item {
-      @apply flex items-center border-0 pl-28 #{!important};
+      @apply flex items-center border-0 pl-28 tablet:pl-0 tablet:text-lg #{!important};
       a {
         @apply text-white #{!important};
       }
@@ -48,6 +48,14 @@
     .ant-menu .ant-menu-item > a,
     .ant-menu .ant-menu-item > span > a {
       @apply px-11 font-Furore text-lg text-color_text_1;
+    }
+  }
+}
+
+.drawer {
+  :global {
+    .ant-drawer-body {
+      @apply bg-gray_bg;
     }
   }
 }

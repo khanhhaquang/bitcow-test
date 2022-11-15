@@ -21,7 +21,8 @@ module.exports = {
         gray_05: 'rgba(255, 255, 255, 0.5)',
         gray_004: 'rgba(255, 255, 255, 0.04)',
         gray_008: 'rgba(255, 255, 255, 0.08)',
-        color_error: '#FF6666'
+        color_error: '#FF6666',
+        gray_bg: '#333333'
       },
       backgroundImage: {
         main: 'url(resources/img/mainBg.png)',
@@ -38,7 +39,8 @@ module.exports = {
     },
     screens: {
       desktop: { max: '99999px' }, // desktop first
-      laptop: { max: '1439px' }
+      laptop: { max: '1439px' },
+      tablet: { max: '1023px' }
     },
     backgroundColor: (theme) => ({
       ...theme('colors'),

@@ -2,15 +2,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { routes, TRoute } from 'App.routes';
 import cx from 'classnames';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-import { Layout, Menu } from 'components/Antd';
+import { Drawer, Layout, Menu } from 'components/Antd';
+import Button from 'components/Button';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { LeftArrowIcon, LogoIcon, LogoMobileIcon } from 'resources/icons';
+import { LeftArrowIcon, LogoIcon, LogoMobileIcon, MenuIcon } from 'resources/icons';
 
 import styles from './Header.module.scss';
+import SideMenu from './SideMenu';
 
 const { Header } = Layout;
 
@@ -21,6 +23,7 @@ interface ISideMenuProps {
 
 const PageHeader: React.FC = () => {
   const [currentPageName] = useCurrentPage();
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
 
   const renderNavItems = useCallback(() => {
     return routes.map(({ name, path, hidden }) => {
@@ -44,7 +47,7 @@ const PageHeader: React.FC = () => {
             theme="dark"
             className={cx(
               styles.menu,
-              'mobile:hidden flex h-full w-full min-w-[200px] justify-center !bg-transparent'
+              'flex h-full w-full min-w-[200px] justify-center !bg-transparent'
             )}
             selectedKeys={[currentPageName]}>
             {renderNavItems()}
@@ -63,41 +66,61 @@ const PageHeader: React.FC = () => {
     );
   };
 
+  const rednerMobileMenu = () => {
+    return (
+      <div className="flex flex-col">
+        <Link to="/" className={cx('flex h-full items-center justify-center')}>
+          <LogoIcon className="" />
+        </Link>
+        <Menu
+          mode="vertical"
+          theme="dark"
+          className={cx(styles.menu, 'flex h-full w-full flex-col justify-center !bg-transparent')}
+          selectedKeys={[currentPageName]}>
+          {renderNavItems()}
+        </Menu>
+      </div>
+    );
+  };
+
   return (
     <Header
-      className={cx('z-30 h-[62px] w-full border-b-[1px] border-gray_02 bg-black px-0', {
-        'absolute top-0 z-10 bg-transparent desktop:h-[126px] laptop:h-[64px]':
-          currentPageName === 'Home'
-      })}>
-      <div className="relative top-0 left-0 mx-auto flex h-full items-center laptop:justify-center">
+      className={cx(
+        'z-30 h-[72px] w-full border-b-[1px] border-gray_02 bg-black px-0 tablet:h-[64px]',
+        {
+          'absolute top-0 z-10 h-[126px] bg-transparent tablet:h-[64px]': currentPageName === 'Home'
+        }
+      )}>
+      <div className="relative top-0 left-0 mx-auto flex h-full items-center tablet:justify-between tablet:px-4">
         <div
-          className={cx('h-full desktop:pl-[60px] laptop:pl-0', {
-            'desktop:pl-20': currentPageName === 'Home'
+          className={cx('h-full pl-[60px] tablet:pl-0', {
+            'pl-20': currentPageName === 'Home'
           })}>
           <Link to="/" className={cx('flex h-full items-center justify-center')}>
             <div
-              className={cx('desktop:hidden', {
-                'laptop:block': currentPageName !== 'Home'
+              className={cx('hidden', {
+                'tablet:block': currentPageName !== 'Home'
               })}>
-              <LogoMobileIcon className="w-[120px]" />
+              <LogoMobileIcon className="w-8" />
             </div>
             <div
-              className={cx('desktop:block', {
-                'laptop:hidden': currentPageName !== 'Home'
+              className={cx('block', {
+                'tablet:hidden': currentPageName !== 'Home'
               })}>
               <LogoIcon className="w-[120px]" />
             </div>
           </Link>
         </div>
         <div
-          className={cx('desktop:block laptop:hidden', {
+          className={cx('block tablet:hidden', {
             grow: currentPageName !== 'Home',
             'ml-auto h-full': currentPageName === 'Home'
           })}>
           {renderDesktop()}
         </div>
+        {/* Mobile - Home Page */}
         {currentPageName === 'Home' && (
-          <div className="fixed bottom-0 z-30 hidden w-full laptop:block">
+          <div className="fixed bottom-0 z-30 hidden w-full tablet:block">
             <NavLink
               to="swap"
               className="flex w-full items-center justify-center gap-2 bg-color_main py-5 font-Furore text-base !text-black">
@@ -106,7 +129,29 @@ const PageHeader: React.FC = () => {
             </NavLink>
           </div>
         )}
+        {/* Mobile - non home page */}
+        <div className="hidden items-center gap-2 tablet:flex">
+          <div className="h-8">
+            <WalletConnector />
+          </div>
+          <Button className="h-8 w-8 p-0" variant="icon" onClick={() => setIsSideMenuOpen(true)}>
+            <MenuIcon />
+          </Button>
+        </div>
       </div>
+      <Drawer
+        open={isSideMenuOpen}
+        className={styles.drawer}
+        closable={false}
+        placement="right"
+        width="60%"
+        onClose={() => setIsSideMenuOpen(false)}>
+        {rednerMobileMenu()}
+        {/* <SideMenu
+          currentPageName={currentPageName}
+          onRouteSelected={() => setIsSideMenuOpen(false)}
+        /> */}
+      </Drawer>
     </Header>
   );
 };

@@ -26,7 +26,12 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       title: 'Liquidity',
       dataIndex: 'liquidity',
       render: (val) => {
-        return val.toFixed(6);
+        return (
+          <div className="flex tablet:flex-col">
+            <span className="hidden text-xs tablet:block">Liquidity</span>
+            <span className="tablet:text-white">{val.toFixed(6)}</span>
+          </div>
+        );
       },
       sorter: {
         compare: (a, b) => a.liquidity - b.liquidity,
@@ -36,6 +41,9 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     {
       title: 'Volume 7D',
       dataIndex: 'volumn7D',
+      render: (val) => {
+        return <div className="tablet:hidden">{val}</div>;
+      },
       sorter: {
         compare: (a, b) => {
           if (typeof a.volumn7D === 'number' && typeof b.volumn7D === 'number') {
@@ -48,6 +56,9 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     {
       title: 'Fees 7D',
       dataIndex: 'fees7D',
+      render: (val) => {
+        return <div className="tablet:hidden">{val}</div>;
+      },
       sorter: {
         compare: (a, b) => {
           if (typeof a.fees7D === 'number' && typeof b.fees7D === 'number') {
@@ -65,6 +76,14 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         </div>
       ),
       dataIndex: 'apr7D',
+      render: (val) => {
+        return (
+          <div className="flex tablet:flex-col">
+            <span className="hidden text-xs tablet:block">APR 7D</span>
+            <span className="tablet:text-white">{val}</span>
+          </div>
+        );
+      },
       sorter: {
         compare: (a, b) => {
           if (typeof a.apr7D === 'number' && typeof b.apr7D === 'number') {
@@ -72,6 +91,13 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           }
         },
         multiple: 2
+      }
+    },
+    {
+      title: '',
+      key: 'operation',
+      render: () => {
+        return <div className="flex w-12"></div>;
       }
     },
     Table.EXPAND_COLUMN

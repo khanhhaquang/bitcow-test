@@ -26,7 +26,8 @@
 
 :global {
   // coin seletor modal
-  .ant-modal-wrap {
-    @apply tablet:z-[1] #{!important};
+  .ant-modal-wrap,
+  .ant-modal-mask {
+    @apply tablet:hidden #{!important};
   }
 }

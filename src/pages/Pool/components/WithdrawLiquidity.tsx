@@ -101,8 +101,11 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
       onSubmit={onSubmit}>
       {(props) => (
         <div className="w-full font-Rany text-white">
-          <div className="text-lg">Withdraw liquidity</div>
-          <div className="mt-5 flex w-full flex-col items-center justify-center gap-2">
+          <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
+            Withdraw liquidity
+          </div>
+          <hr className="hidden h-[1px] border-0 bg-color_list_hover tablet:my-0 tablet:block" />
+          <div className="mt-5 flex w-full flex-col items-center justify-center gap-2 tablet:mt-6 tablet:px-5 tablet:pb-[110px]">
             <div className="w-full bg-color_bg_2 p-4">
               <div className="mb-2 text-xs uppercase text-gray_05">AVAILABLE FOR WITHDRAWAL</div>
               <div className="mt-4 flex flex-col gap-4">{renderCoinRow()}</div>
@@ -144,7 +147,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
               </Fragment>
             )}
           </div>
-          <div className="absolute left-0 -bottom-[92.5px] w-full bg-color_bg_3">
+          <div className="absolute left-0 -bottom-[92.5px] w-full bg-color_bg_3 tablet:bottom-0">
             <div className="bg-gray_008 p-5">
               <Button
                 isLoading={props.isSubmitting}

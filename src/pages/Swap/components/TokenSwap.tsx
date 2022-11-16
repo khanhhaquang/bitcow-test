@@ -130,7 +130,7 @@ const TokenSwap = () => {
           </div>
           <Button
             variant="icon"
-            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-color_bg_3 bg-[#101010] p-0"
+            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-color_bg_3 bg-table_bg p-0"
             onClick={onClickSwapToken}>
             <SwapIcon className="fill-white opacity-30 group-hover:opacity-100" />
           </Button>

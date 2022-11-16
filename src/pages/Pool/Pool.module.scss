@@ -1,22 +1,42 @@
 .tabs {
   :global {
     .ant-tabs-extra-content {
-      @apply w-1/3;
+      @apply w-1/3 tablet:w-full;
     }
     .ant-tabs-nav {
-      @apply mb-8 px-8 #{!important};
+      @apply mb-8 px-8 tablet:flex-col tablet:px-0 #{!important};
       &::before {
         @apply border-b-0 #{!important};
       }
     }
     .ant-tabs-tab {
-      @apply text-gray_05;
+      @apply tablet:hidden;
+      .ant-tabs-tab-btn {
+        @apply text-gray_05;
+      }
       &.ant-tabs-tab-active .ant-tabs-tab-btn {
         @apply text-color_main;
       }
+      & {
+        @apply tablet:ml-0 #{!important};
+      }
+    }
+    .ant-tabs-nav-operations {
+      @apply tablet:hidden #{!important};
     }
     .ant-tabs-ink-bar {
-      @apply w-[62px] bg-color_main #{!important};
+      @apply w-[62px] bg-color_main tablet:hidden #{!important};
+    }
+  }
+}
+
+.radioGroup {
+  :global {
+    .ant-radio-button-wrapper {
+      @apply h-[40px] rounded-none border-gray_bg bg-gray_bg py-3 px-4 leading-[14px] text-gray_05 #{!important};
+      &.ant-radio-button-wrapper-checked {
+        @apply border-color_main bg-color_main text-white #{!important};
+      }
     }
   }
 }

@@ -3,7 +3,7 @@
 
   :global {
     .ant-select {
-      @apply w-full border-[1px] border-[#272A2C] rounded-none h-[38px] ring-offset-0 ring-offset-transparent #{!important};
+      @apply h-[38px] w-full rounded-none border-[1px] border-[#272A2C] ring-offset-0 ring-offset-transparent tablet:h-[52px] #{!important};
 
       &:not(.ant-select-disabled):hover .ant-select-selector,
       &:not(.ant-select-customize-input) .ant-select-selector {
@@ -11,9 +11,9 @@
       }
       &:not(.ant-select-customize-input) {
         .ant-select-selector {
-          @apply h-full p-[10px] rounded-none bg-color_bg_2 border-0;
+          @apply h-full rounded-none border-0 bg-color_bg_2 p-[10px];
           .ant-select-selection-item {
-            @apply text-white bg-transparent leading-[18px] text-right;
+            @apply bg-transparent text-right leading-[18px] text-white tablet:leading-[30px];
           }
         }
       }
@@ -49,7 +49,7 @@
       @apply text-gray_05;
     }
     .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-      @apply text-white bg-color_bg_2 #{!important};
+      @apply bg-color_bg_2 text-white #{!important};
       svg {
         @apply block;
       }

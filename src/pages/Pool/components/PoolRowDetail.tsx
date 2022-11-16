@@ -1,8 +1,7 @@
 import poolAction from 'modules/pool/actions';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ColumnsType, Table } from 'components/Antd';
 import Button from 'components/Button';
 import useAptosWallet from 'hooks/useAptosWallet';
 import usePools from 'hooks/usePools';
@@ -23,7 +22,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
   const dispatch = useDispatch();
   const { activeWallet, openModal } = useAptosWallet();
   const { getOwnedLiquidity } = usePools();
-  const [poolRecord, setPoolRecord] = useState<ExpandedDataType[]>();
+  const [poolRecord, setPoolRecord] = useState<ExpandedDataType[]>([]);
 
   const fetchRecord = useCallback(async () => {
     const { lp, coins } = await getOwnedLiquidity(pool.id);
@@ -54,77 +53,64 @@ const PoolRowDetail = ({ pool }: IProps) => {
     [activeWallet, dispatch, openModal, pool]
   );
 
-  const columns: ColumnsType<ExpandedDataType> = [
-    {
-      title: 'Your Liquidity',
-      dataIndex: 'liquidity',
-      key: 'liquidity',
-      render: (val) => (
-        <div className="text-base text-white">
-          {/* <div className="text-sm text-gray_05">Your Liquidity</div> */}
-          <div className="">{val.toFixed(6)} LP</div>
-          {/* <div className="">0 LP</div> */}
+  return (
+    <Fragment>
+      <div className="flex-col tablet:flex">
+        <div className="hidden gap-6 p-4 tablet:flex">
+          <div className="flex flex-col">
+            <span className="block text-xs">Volume 7D</span>
+            <span className="text-white">{pool.volumn7D}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="block text-xs">Fees 7D</span>
+            <span className="text-white">{pool.fees7D}</span>
+          </div>
         </div>
-      )
-    },
-    {
-      title: 'Assets Pooled',
-      dataIndex: 'assetsPooled',
-      key: 'assetsPooled',
-      render: (val) => (
-        <div className="text-base text-white">
-          {Object.keys(val).map((key) => {
-            return (
-              <div className="" key={`${val}-${key}`}>
-                {val[key] ? val[key].toFixed(6) : 0} {key}
+        <div className="flex gap-6 tablet:flex-col tablet:bg-gray_bg tablet:p-4">
+          <div className="flex grow gap-6 tablet:w-full">
+            <div className="flex w-[240px] grow flex-col gap-4 tablet:w-[82px]">
+              <span className="block text-xs">Your Liquidity</span>
+              <span className="text-white">{poolRecord[0]?.liquidity.toFixed(6)} LP</span>
+            </div>
+            <div className="flex grow flex-col gap-4">
+              <span className="block text-xs">Assets Pooled</span>
+              <div className="flex flex-col">
+                {poolRecord[0]?.assetsPooled &&
+                  Object.keys(poolRecord[0]?.assetsPooled).map((key) => {
+                    return (
+                      <div className="text-white" key={`pool-asset-${key}`}>
+                        {poolRecord[0]?.assetsPooled[key]
+                          ? poolRecord[0]?.assetsPooled[key].toFixed(6)
+                          : 0}{' '}
+                        {key}
+                      </div>
+                    );
+                  })}
               </div>
-            );
-          })}
-        </div>
-      )
-    },
-    {
-      title: 'Your Share',
-      dataIndex: 'share',
-      key: 'share',
-      render: (val) => (
-        <div className="text-base text-white">
-          <div className="">{val}%</div>
-        </div>
-      )
-    },
-    {
-      title: '',
-      key: 'operation',
-      render: (val, record) => {
-        return (
-          <div className="flex justify-end gap-4">
+            </div>
+            <div className="flex grow flex-col gap-4">
+              <span className="block text-xs">Your Share</span>
+              <span className="text-white">{poolRecord[0]?.share} %</span>
+            </div>
+          </div>
+          <div className="flex h-12 w-[240px] justify-end gap-4 tablet:w-full">
             <Button
-              className="rounded-none bg-color_main text-base text-white hover:opacity-90"
+              className="w-full max-w-[108px] rounded-none bg-color_main text-base text-white hover:opacity-90 tablet:max-w-full"
               onClick={() => handleOnClick('add')}>
               {activeWallet ? 'Deposit' : 'Connect Wallet'}
             </Button>
-            {activeWallet && record.liquidity > 0 && (
+            {activeWallet && poolRecord[0]?.liquidity > 0 && (
               <Button
-                className="rounded-none border-[1px] border-color_main px-6 py-4 text-color_main hover:bg-gray_01"
+                className="w-full rounded-none border-[1px] border-color_main px-6 py-4 text-color_main hover:bg-gray_01"
                 variant="outlined"
                 onClick={() => handleOnClick('withdraw')}>
                 Withdraw
               </Button>
             )}
           </div>
-        );
-      }
-    }
-  ];
-
-  return (
-    <Table
-      rowKey={(record) => record.id}
-      columns={columns}
-      dataSource={poolRecord}
-      pagination={false}
-    />
+        </div>
+      </div>
+    </Fragment>
   );
 };
 

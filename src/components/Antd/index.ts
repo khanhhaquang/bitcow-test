@@ -20,6 +20,7 @@ export { default as Form } from 'antd/lib/form';
 export { default as message } from 'antd/lib/message';
 export { default as notification } from 'antd/lib/notification';
 export { default as Drawer } from 'antd/lib/drawer';
+export { default as Radio } from 'antd/lib/radio';
 export type { InputNumberProps } from 'antd/lib/input-number';
 export type { TableProps, ColumnsType } from 'antd/lib/table';
 export type { InputProps } from 'antd/lib/input';

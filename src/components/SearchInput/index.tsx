@@ -18,7 +18,7 @@ const SearchInput = ({ onChange, value, onSearch, className }: IProps) => {
   return (
     <div className={cx(styles.searchInput, className)}>
       <Input
-        suffix={<SearchIcon />}
+        suffix={<SearchIcon className="tablet:w-6" />}
         placeholder={'Search Pools'}
         value={value}
         onChange={handleOnChange}

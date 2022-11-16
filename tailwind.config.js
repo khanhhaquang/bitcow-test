@@ -22,7 +22,9 @@ module.exports = {
         gray_004: 'rgba(255, 255, 255, 0.04)',
         gray_008: 'rgba(255, 255, 255, 0.08)',
         color_error: '#FF6666',
-        gray_bg: '#333333'
+        gray_bg: '#333333',
+        table_row_bg: '#1E1E1E',
+        table_bg: '#101010'
       },
       backgroundImage: {
         main: 'url(resources/img/mainBg.png)',

@@ -2,18 +2,18 @@
   @apply relative w-full;
 
   &::before {
-    @apply absolute top-0 z-10 h-[1px] w-full bg-gray_02;
+    @apply absolute top-0 z-10 h-[1px] w-full bg-gray_008 tablet:hidden #{!important};
   }
   &::after {
-    @apply absolute top-[52px] z-10 h-[1px] w-full bg-gray_02;
+    @apply absolute top-[52px] z-10 h-[1px] w-full bg-gray_008 tablet:hidden #{!important};
   }
 
   :global {
     .ant-table {
-      @apply relative bg-black px-8 text-white;
+      @apply relative bg-table_bg px-8 text-white tablet:p-0;
 
       .ant-table-cell {
-        @apply border-black bg-black text-gray_05;
+        @apply border-black bg-table_bg text-gray_05;
       }
 
       .ant-table-column-sorter-up.active,
@@ -22,6 +22,7 @@
       }
 
       .ant-table-thead {
+        @apply tablet:hidden;
         .ant-table-cell {
           @apply border-b-[24px] border-black;
         }
@@ -42,12 +43,12 @@
           }
         }
         .ant-table-expanded-row-level-1 {
-          .ant-table-cell {
-            @apply cursor-default;
+          > .ant-table-cell {
+            @apply cursor-default border-t-[1px] border-gray_008 tablet:p-0;
           }
         }
         .ant-table-cell {
-          @apply rounded-none border-b-0 border-t-0 bg-color_bg_2;
+          @apply rounded-none border-b-0 border-t-0 bg-table_row_bg;
         }
       }
 

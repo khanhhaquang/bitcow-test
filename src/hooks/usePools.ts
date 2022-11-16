@@ -36,7 +36,6 @@ const usePools = () => {
         const lpPair = lpResources.find(
           (resource) => resource.type === poolName.replace(/CoinStore/g, 'CoinInfo')
         );
-        console.log('checkcccc', lpResources, poolName.replace(/CoinStore/g, 'CoinInfo'), lpPair);
         return lpPair;
       }
     },
@@ -47,7 +46,6 @@ const usePools = () => {
     async (pools: PieceSwapPoolInfo[]) => {
       let parsedPools: IPool[] = [];
       if (obricSDK) {
-        console.log('pasr');
         const filteredPools = pools;
         parsedPools = await Promise.all(
           filteredPools.map(async (pool) => {
@@ -89,7 +87,6 @@ const usePools = () => {
   );
 
   useEffect(() => {
-    console.log('HELLO>>>', obricSDK?.pools, liquidityPools, activePools);
     if (obricSDK && liquidityPools?.length && !activePools.length) {
       parsePoolData(liquidityPools);
     }
@@ -101,21 +98,24 @@ const usePools = () => {
         lp: 0,
         coins: {}
       };
-      if (poolStore && obricSDK) {
-        const coinInfo = (poolStore[poolAddress.replace(/PieceSwapPoolInfo/g, 'LPToken')] || {})
-          .data as CoinInfo;
-        const poolInfo = activePools.find((pool) => pool.id === poolAddress);
-        if (coinInfo && poolInfo) {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          const { token0, token1, token0Reserve, token1Reserve, liquidity, decimals } = poolInfo;
-          const myLp = coinInfo?.coin?.value / Math.pow(10, decimals);
-          result = {
-            lp: myLp,
-            coins: {
-              [token0.symbol]: liquidity ? (myLp / liquidity) * token0Reserve : 0,
-              [token1.symbol]: liquidity ? (myLp / liquidity) * token1Reserve : 0
-            }
-          };
+      const poolInfo = activePools.find((pool) => pool.id === poolAddress);
+      if (poolInfo) {
+        const { token0, token1, token0Reserve, token1Reserve, liquidity, decimals } = poolInfo;
+        result = {
+          lp: 0,
+          coins: {
+            [token0.symbol]: token0Reserve,
+            [token1.symbol]: token1Reserve
+          }
+        };
+        if (poolStore && obricSDK) {
+          const coinInfo = (poolStore[poolAddress.replace(/PieceSwapPoolInfo/g, 'LPToken')] || {})
+            .data as CoinInfo;
+          if (coinInfo) {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            const myLp = coinInfo?.coin?.value / Math.pow(10, decimals);
+            result.lp = myLp;
+          }
         }
       }
       return result;

@@ -2,7 +2,7 @@ import { RawCoinInfo } from '@manahippo/coin-list';
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 // import { Popover } from 'antd';
 import Button from 'components/Button';
@@ -12,26 +12,45 @@ import useDebouncedCallback from 'hooks/useDebouncedCallback';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import useTokenBalane from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
+import { IPool } from 'types/pool';
 
 interface TProps {
   token: RawCoinInfo;
   type: 'xAmt' | 'yAmt';
   isDisableAmountInput?: boolean;
+  liquidityPool: IPool;
 }
 
-const TokenLiquidity: React.FC<TProps> = ({ token, type }) => {
-  const { values, setFieldValue } = useFormikContext<ISwapSettings>();
+const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
+  const { values, setFieldValue, validateField } = useFormikContext<ISwapSettings>();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
 
   const [uiBalance, isReady] = useTokenBalane(token);
+
+  useEffect(() => {
+    validateField('xAmt');
+    validateField('yAmt');
+  }, [values, validateField]);
 
   // The debounce delay should be bigger than the average of key input intervals
   const onAmountChange = useDebouncedCallback(
     useCallback(
       (a: number) => {
+        const { token0Reserve, token1Reserve } = liquidityPool;
+        let pairType = '';
+        let pairValue = 0;
+        const ratio = token0Reserve / token1Reserve;
+        if (type === 'xAmt') {
+          pairType = 'yAmt';
+          pairValue = a / ratio;
+        } else {
+          pairType = 'xAmt';
+          pairValue = a * ratio;
+        }
         setFieldValue(type, a);
+        setFieldValue(pairType, pairValue);
       },
-      [setFieldValue, type]
+      [liquidityPool, setFieldValue, type]
     ),
     200
   );
@@ -47,14 +66,14 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type }) => {
           <Button
             className="h-5 w-[31px] rounded-none bg-[#272B30] p-1 text-xs text-gray_05 opacity-30 hover:opacity-100"
             onClick={() => {
-              setFieldValue(type, uiBalance * 0.5);
+              onAmountChange(uiBalance * 0.5);
             }}>
             Half
           </Button>
           <Button
             className="h-5 w-[31px] rounded-none bg-[#272B30] p-1 text-xs text-gray_05 opacity-30 hover:opacity-100"
             onClick={() => {
-              setFieldValue(type, uiBalance);
+              onAmountChange(uiBalance);
             }}>
             Max
           </Button>

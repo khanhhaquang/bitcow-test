@@ -13,7 +13,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const [currentPageName] = useCurrentPage();
 
-  const layoutPadding = currentPageName === 'Home' ? '' : 'px-16';
+  const layoutPadding = currentPageName === 'Home' ? '' : 'px-16 tablet:px-4';
 
   return (
     <Layout

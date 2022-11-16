@@ -32,6 +32,7 @@ const HippoModal: React.FC<TProps> = ({ className, ...rest }) => {
         className={cx(styles.drawer, 'hidden tablet:block')}
         closable={false}
         placement="bottom"
+        maskClosable
         destroyOnClose
         width="100%"
         height={rest.mobileHeight || ''}

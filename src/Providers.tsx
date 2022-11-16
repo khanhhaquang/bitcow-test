@@ -14,6 +14,7 @@ import { logger } from 'redux-logger';
 
 import ErrorBoundary from 'components/ErrorBoundary';
 import { AptosWalletProvider } from 'contexts/AptosWalletProvider';
+import { PoolsProvider } from 'contexts/PoolsProvider';
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
@@ -54,11 +55,13 @@ const Providers: React.FC<TProps> = (props: TProps) => {
           console.log('wallet errors: ', error);
         }}>
         <AptosWalletProvider>
-          <ReduxProvider store={store}>
-            {/* <HippoClientProvider> */}
-            {props.children}
-            {/* </HippoClientProvider> */}
-          </ReduxProvider>
+          <PoolsProvider>
+            <ReduxProvider store={store}>
+              {/* <HippoClientProvider> */}
+              {props.children}
+              {/* </HippoClientProvider> */}
+            </ReduxProvider>
+          </PoolsProvider>
         </AptosWalletProvider>
       </WalletProvider>
     </ErrorBoundary>

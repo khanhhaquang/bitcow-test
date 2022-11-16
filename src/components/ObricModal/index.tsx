@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { Drawer, Modal } from 'components/Antd';
 import { CancelIcon } from 'resources/icons';
 
-import styles from './HippoModal.module.scss';
+import styles from './ObricModal.module.scss';
 
 interface TProps {
   className?: string;
@@ -19,7 +19,7 @@ interface TProps {
   mobileHeight?: number | string;
 }
 
-const HippoModal: React.FC<TProps> = ({ className, ...rest }) => {
+const ObricModal: React.FC<TProps> = ({ className, ...rest }) => {
   return (
     <Fragment>
       <Modal
@@ -48,4 +48,4 @@ const HippoModal: React.FC<TProps> = ({ className, ...rest }) => {
   );
 };
 
-export default HippoModal;
+export default ObricModal;

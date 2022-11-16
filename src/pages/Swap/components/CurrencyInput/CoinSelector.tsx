@@ -11,13 +11,11 @@ import { Input, List } from 'components/Antd';
 import useAptosWallet from 'hooks/useAptosWallet';
 import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
 import { ISwapSettings } from 'pages/Swap/types';
-import { TokenBalance } from 'types/hippo';
+import { TokenBalance } from 'types/obric';
 
 import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';
 import { SearchIcon } from 'resources/icons';
-// import useHippoClient from 'hooks/useHippoClient';
-// import { TokenInfo } from '@manahippo/hippo-sdk/dist/generated/coin_registry/coin_registry';
 
 interface TProps {
   actionType: 'currencyTo' | 'currencyFrom';

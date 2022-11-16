@@ -9,7 +9,7 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import { useSelector } from 'react-redux';
 
 import CoinIcon from 'components/CoinIcon';
-import HippoModal from 'components/HippoModal';
+import ObricModal from 'components/ObricModal';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import useAptosWallet from 'hooks/useAptosWallet';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
@@ -106,7 +106,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           </span>
         </small>
       </div>
-      <HippoModal
+      <ObricModal
         onCancel={() => setIsCoinSelectorVisible(false)}
         className=""
         wrapClassName={styles.modal}
@@ -116,7 +116,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           actionType={actionType}
           dismissiModal={() => setIsCoinSelectorVisible(!isCoinSelectorVisible)}
         />
-      </HippoModal>
+      </ObricModal>
     </div>
   );
 };

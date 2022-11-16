@@ -6,7 +6,7 @@ import { getShowWalletConnector } from 'modules/common/reducer';
 import { Fragment, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import HippoModal from 'components/HippoModal';
+import ObricModal from 'components/ObricModal';
 import { walletAddressEllipsis } from 'components/utils/utility';
 import useAptosWallet from 'hooks/useAptosWallet';
 import { CancelIcon, LoadingIcon } from 'resources/icons';
@@ -54,7 +54,7 @@ const WalletConnector = () => {
           {'Connect Wallet'}
         </div>
       )}
-      <HippoModal
+      <ObricModal
         onCancel={closeModal}
         className=""
         wrapClassName={activeWallet ? styles.walletDetail : styles.walletsModal}
@@ -62,7 +62,7 @@ const WalletConnector = () => {
         // mobileHeight={activeWallet ? 466 : 400}
         closeIcon={<CancelIcon />}>
         {activeWallet ? <AccountDetails /> : <WalletSelector />}
-      </HippoModal>
+      </ObricModal>
     </Fragment>
   );
 };

@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Radio, Tabs } from 'components/Antd';
-import HippoModal from 'components/HippoModal';
+import ObricModal from 'components/ObricModal';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import usePools from 'hooks/usePools';
@@ -176,7 +176,7 @@ const Pool = () => {
           items={renderTabContents()}
         />
       </div>
-      <HippoModal
+      <ObricModal
         onCancel={() => dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null))}
         className=""
         // wrapClassName={styles.modal}
@@ -190,7 +190,7 @@ const Pool = () => {
           ) : (
             <WithdrawLiquidity liquidityPool={liquidityModal.pool} />
           ))}
-      </HippoModal>
+      </ObricModal>
     </div>
   );
 };

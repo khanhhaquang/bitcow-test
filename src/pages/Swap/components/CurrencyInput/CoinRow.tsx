@@ -4,7 +4,7 @@ import { Skeleton } from 'antd';
 
 import CoinIcon from 'components/CoinIcon';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
-import { TokenBalance } from 'types/hippo';
+import { TokenBalance } from 'types/obric';
 
 interface TProps {
   item: TokenBalance;

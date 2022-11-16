@@ -8,11 +8,8 @@ import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
 const { Footer } = Layout;
 
 const URLs = {
-  discord: 'https://discord.gg/f7qFxfJWMX',
-  github: 'https://github.com/hippospace',
-  docs: 'https://hippo-labs.gitbook.io/dev/',
-  medium: 'https://medium.com/@hippolabs',
-  twitter: 'https://twitter.com/hippolabs__'
+  discord: 'https://discord.gg/TNXY8Xd7bH',
+  twitter: 'https://twitter.com/poor_obric'
 };
 
 const ExternalLink = ({ href, children }: { href: string; children: any }) => {

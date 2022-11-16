@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import SwapDetail from './SwapDetail';
-// import useHippoClient from 'hooks/useHippoClient';
 // import { DEX_TYPE_NAME, RouteAndQuote } from '@manahippo/hippo-sdk/dist/aggregator/types';
 import { ApiError } from 'aptos';
 import classNames from 'classnames';
@@ -11,7 +10,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'components/Antd';
 import Button from 'components/Button';
 import Card from 'components/Card';
-import HippoModal from 'components/HippoModal';
+import ObricModal from 'components/ObricModal';
 import useAptosWallet from 'hooks/useAptosWallet';
 import { CancelIcon, SettingIcon, SwapIcon } from 'resources/icons';
 import { openErrorNotification } from 'utils/notifications';
@@ -156,7 +155,7 @@ const TokenSwap = () => {
           {!activeWallet ? 'Connect to Wallet' : 'SWAP'}
         </Button>
       </div>
-      <HippoModal
+      <ObricModal
         onCancel={() => setIsSettingsOpen(false)}
         className=""
         // wrapClassName={styles.modal}
@@ -166,7 +165,7 @@ const TokenSwap = () => {
         // mobileHeight={556}
       >
         <SwapSetting onClose={() => setIsSettingsOpen(false)} />
-      </HippoModal>
+      </ObricModal>
     </Card>
   );
 };

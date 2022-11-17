@@ -11,7 +11,7 @@ interface ExpandedDataType {
   id: string;
   liquidity: number;
   assetsPooled: Record<string, number>;
-  share: string;
+  share: number;
 }
 
 interface IProps {
@@ -21,19 +21,17 @@ interface IProps {
 const PoolRowDetail = ({ pool }: IProps) => {
   const dispatch = useDispatch();
   const { activeWallet, openModal } = useAptosWallet();
-  const { getOwnedLiquidity } = usePools();
-  const [poolRecord, setPoolRecord] = useState<ExpandedDataType[]>([]);
+  const { getOwnedLiquidity, getPoolTVL } = usePools();
+  const [poolRecord, setPoolRecord] = useState<ExpandedDataType>();
 
   const fetchRecord = useCallback(async () => {
     const { lp, coins } = await getOwnedLiquidity(pool.id);
-    const poolData = [
-      {
-        id: pool.id,
-        liquidity: lp,
-        assetsPooled: coins,
-        share: pool.liquidity ? ((lp / pool.liquidity) * 100).toFixed(3) : '0'
-      }
-    ];
+    const poolData = {
+      id: pool.id,
+      liquidity: lp,
+      assetsPooled: coins,
+      share: pool.liquidity ? (lp / pool.liquidity) * 100 : 0
+    };
     setPoolRecord(poolData);
   }, [getOwnedLiquidity, pool.id, pool.liquidity]);
 
@@ -59,7 +57,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
         <div className="hidden gap-6 p-4 tablet:flex">
           <div className="flex flex-col">
             <span className="block text-xs">Volume 7D</span>
-            <span className="text-white">{pool.volumn7D}</span>
+            <span className="text-white">{pool.volume7D}</span>
           </div>
           <div className="flex flex-col">
             <span className="block text-xs">Fees 7D</span>
@@ -70,17 +68,22 @@ const PoolRowDetail = ({ pool }: IProps) => {
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[240px] grow flex-col gap-4 tablet:w-[82px]">
               <span className="block text-xs">Your Liquidity</span>
-              <span className="text-white">{poolRecord[0]?.liquidity.toFixed(6)} LP</span>
+              <div className="flex flex-col">
+                <span className="text-white">
+                  ${(getPoolTVL(pool) * poolRecord?.share).toFixed(3)}
+                </span>
+                <span className="text-white">{poolRecord?.liquidity.toFixed(6)} LP</span>
+              </div>
             </div>
             <div className="flex grow flex-col gap-4">
               <span className="block text-xs">Assets Pooled</span>
               <div className="flex flex-col">
-                {poolRecord[0]?.assetsPooled &&
-                  Object.keys(poolRecord[0]?.assetsPooled).map((key) => {
+                {poolRecord?.assetsPooled &&
+                  Object.keys(poolRecord?.assetsPooled).map((key) => {
                     return (
                       <div className="text-white" key={`pool-asset-${key}`}>
-                        {poolRecord[0]?.assetsPooled[key]
-                          ? poolRecord[0]?.assetsPooled[key].toFixed(6)
+                        {poolRecord?.assetsPooled[key]
+                          ? poolRecord?.assetsPooled[key].toFixed(6)
                           : 0}{' '}
                         {key}
                       </div>
@@ -90,7 +93,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </div>
             <div className="flex grow flex-col gap-4">
               <span className="block text-xs">Your Share</span>
-              <span className="text-white">{poolRecord[0]?.share} %</span>
+              <span className="text-white">{poolRecord?.share.toFixed(3)} %</span>
             </div>
           </div>
           <div className="flex h-12 w-[240px] justify-end gap-4 tablet:w-full">
@@ -99,7 +102,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
               onClick={() => handleOnClick('add')}>
               {activeWallet ? 'Deposit' : 'Connect Wallet'}
             </Button>
-            {activeWallet && poolRecord[0]?.liquidity > 0 && (
+            {activeWallet && poolRecord?.liquidity > 0 && (
               <Button
                 className="w-full rounded-none border-[1px] border-color_main px-6 py-4 text-color_main hover:bg-gray_01"
                 variant="outlined"

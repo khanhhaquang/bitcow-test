@@ -38,5 +38,8 @@
         @apply border-color_main bg-color_main text-white #{!important};
       }
     }
+    .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
+      @apply hidden;
+    }
   }
 }

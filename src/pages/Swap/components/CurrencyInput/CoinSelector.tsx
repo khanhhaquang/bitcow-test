@@ -1,37 +1,30 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { RawCoinInfo } from '@manahippo/coin-list';
 import { useFormikContext } from 'formik';
-import { getTokenList } from 'modules/swap/reducer';
 import VirtualList from 'rc-virtual-list';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Input, List } from 'components/Antd';
 import useAptosWallet from 'hooks/useAptosWallet';
 import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
+import usePools from 'hooks/usePools';
 import { ISwapSettings } from 'pages/Swap/types';
+import { SearchIcon } from 'resources/icons';
 import { TokenBalance } from 'types/obric';
 
 import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';
-import { SearchIcon } from 'resources/icons';
 
 interface TProps {
   actionType: 'currencyTo' | 'currencyFrom';
-  // isVisible: boolean;
   dismissiModal: () => void;
 }
-
-// interface TokenWithBalance extends ITokenInfo {
-//   balance: string;
-// }
 
 const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
   const { tokenList, activeWallet } = useAptosWallet();
+  const { coinInPools } = usePools();
   const commonCoins = tokenList.filter((token) => {
-    return ['APT', 'WBTC', 'WETH', 'USDT', 'USDC'].includes(token.symbol);
+    return ['APT', 'USDT', 'USDC'].includes(token.symbol);
   });
   const [filter, setFilter] = useState<string>('');
   const { coinStore } = useCoinStore();
@@ -56,17 +49,10 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
     [actionType, values, setFieldValue, dismissiModal]
   );
 
-  // const filteredTokenList = useMemo(() => {
-  //   if (!filter) return tokenList;
-  //   return tokenList.filter((token) => {
-  //     const keysForFilter = [token.name, token.symbol, token.address].join(',').toLowerCase();
-  //     return keysForFilter.includes(filter);
-  //   });
-  // }, [tokenList, filter]);
-
   const getFilteredTokenListWithBalance = useCallback(() => {
     let currentTokenList = tokenList
-      ?.sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
+      ?.filter((token) => coinInPools[token.symbol])
+      .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
       .map((t) => {
         const tokenStore = (coinStore || {})[t.token_type.type];
         const balance = !activeWallet
@@ -88,7 +74,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
       });
     }
     setTokenListBalance(currentTokenList);
-  }, [activeWallet, coinStore, filter, tokenList]);
+  }, [activeWallet, coinInPools, coinStore, filter, tokenList]);
 
   useEffect(() => {
     getFilteredTokenListWithBalance();

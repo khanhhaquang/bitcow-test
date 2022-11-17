@@ -3,7 +3,7 @@
 import { Types } from 'aptos';
 import { Formik, FormikHelpers } from 'formik';
 import { getSwapSettings } from 'modules/swap/reducer';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
@@ -15,7 +15,6 @@ import { ISwapSettings } from './types';
 
 const validationSchema = yup.object({
   currencyFrom: yup.object({
-    // token: yup.required(),
     amount: yup.number().positive().required(),
     balance: yup.number().positive().required()
   }),
@@ -27,7 +26,6 @@ const validationSchema = yup.object({
 const Swap: React.FC = () => {
   const swapSettings = useSelector(getSwapSettings);
   const { requestSwap } = useAptosWallet();
-  // const { hippoSwap, hippoWallet, requestSwap } = useHippoClient();
 
   const onSubmitSwap = useCallback(
     async (values: ISwapSettings, formikHelper: FormikHelpers<ISwapSettings>) => {
@@ -58,7 +56,7 @@ const Swap: React.FC = () => {
   );
 
   return (
-    <div className="relative mx-auto mt-[140px] flex h-full w-full max-w-[463px] flex-col items-center justify-center">
+    <div className="relative mx-auto mt-[140px] flex h-full w-full flex-col items-center justify-center tablet:!m-0 tablet:!mt-10 tablet:max-w-full">
       <Formik
         initialValues={swapSettings}
         validationSchema={validationSchema}

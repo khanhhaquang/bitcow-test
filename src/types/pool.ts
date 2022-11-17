@@ -12,7 +12,7 @@ export interface IPool {
   liquidity: number;
   token0: RawCoinInfo;
   token1: RawCoinInfo;
-  volumn7D: '-' | number;
+  volume7D: '-' | number;
   fees7D: '-' | number;
   apr7D: '-' | number;
   invested: boolean;

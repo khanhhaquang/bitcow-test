@@ -1,4 +1,5 @@
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
+import { RawCoinInfo } from '@manahippo/coin-list';
 import cx from 'classnames';
 import { useMemo, useState } from 'react';
 
@@ -8,20 +9,23 @@ import CoinIcon from 'components/CoinIcon';
 import { walletAddressEllipsis } from 'components/utils/utility';
 import useAptosWallet from 'hooks/useAptosWallet';
 import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
+import usePools from 'hooks/usePools';
 import { CopyIcon, ExportIcon, QuitIcon } from 'resources/icons';
 import { copyToClipboard } from 'utils/copy';
 
 import styles from './AccountDetails.module.scss';
+import useTokenBalane from 'hooks/useTokenBalance';
 
 let timer: NodeJS.Timeout;
 
 const AccountDetails = () => {
   const { activeWallet, selectedWallet, closeModal, obricSDK } = useAptosWallet();
+  const { getTokenBalanceInUSD } = usePools();
   const [copied, setCopied] = useState(false);
   const { disconnect } = useWallet();
   const { coinStore } = useCoinStore();
   const [AptToken, availableApt] = useMemo(() => {
-    let aptToken;
+    let aptToken: RawCoinInfo;
     let balance = 0;
     if (obricSDK && coinStore) {
       aptToken = obricSDK.coinList.getCoinInfoBySymbol('APT')[0];
@@ -32,6 +36,7 @@ const AccountDetails = () => {
     }
     return [aptToken, balance];
   }, [coinStore, obricSDK]);
+  const [uiBalance] = useTokenBalane(AptToken);
 
   const handleCopy = (text) => {
     copyToClipboard(text, () => {
@@ -76,12 +81,17 @@ const AccountDetails = () => {
       <div className="w-full px-5">
         <div className="relative mt-6 mb-8 flex h-[134px] w-full justify-between bg-accountGradientBg">
           <div className="h-full w-full bg-accountBg bg-contain bg-center p-6">
-            <div className="flex h-[24px] w-full items-center justify-between text-white">
-              <div className="flex items-center gap-2 text-[20px]">
-                <CoinIcon size={24} token={AptToken} />
-                <div className="">{AptToken?.name}</div>
+            <div className="flex w-full flex-col items-end">
+              <div className="flex h-[24px] w-full items-center justify-between text-white">
+                <div className="flex items-center gap-2 text-[20px]">
+                  <CoinIcon size={24} token={AptToken} />
+                  <div className="">{AptToken?.name}</div>
+                </div>
+                <div className="text-[20px]">{availableApt}</div>
               </div>
-              <div className="text-[20px]">{availableApt}</div>
+              <small className="text-base text-gray_05">
+                ${getTokenBalanceInUSD(uiBalance, AptToken)}
+              </small>
             </div>
             <div className="absolute -top-[15px] -left-[15px] h-[30px] w-[30px] -rotate-45 bg-gray_bg"></div>
             <div className="absolute -top-[15px] -right-[15px] h-[30px] w-[30px] rotate-45 bg-gray_bg"></div>

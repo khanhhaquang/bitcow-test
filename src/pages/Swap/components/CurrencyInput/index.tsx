@@ -13,6 +13,7 @@ import ObricModal from 'components/ObricModal';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import useAptosWallet from 'hooks/useAptosWallet';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
+import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import useTokenBalane from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
@@ -31,6 +32,7 @@ interface TProps {
 
 const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = false }) => {
   const { tokenList } = useAptosWallet();
+  const { getTokenBalanceInUSD } = usePools();
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
   const [isCoinSelectorVisible, setIsCoinSelectorVisible] = useState(false);
   const [tokenAmountFormatter] = useTokenAmountFormatter();
@@ -104,6 +106,9 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
             }}>
             {isReady ? tokenAmountFormatter(uiBalance, selectedToken) : 0}
           </span>
+        </small>
+        <small className="text-sm text-gray_05">
+          ~${getTokenBalanceInUSD(uiBalance, selectedToken)}
         </small>
       </div>
       <ObricModal

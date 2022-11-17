@@ -23,7 +23,7 @@ const SortOptions = [
   },
   {
     label: 'Volume 7D',
-    value: 'volumn7D'
+    value: 'volume7D'
   },
   {
     label: 'Fees 7D',
@@ -56,10 +56,19 @@ const Pool = () => {
     timeBasis: '7D',
     sortBy: 'liquidity'
   });
-  const { activePools, checkIfInvested } = usePools();
+  const { activePools, checkIfInvested, coinInPools } = usePools();
   const [activeTab, setActiveTab] = useState('1');
   const dispatch = useDispatch();
   const liquidityModal = useSelector(getLiquidityModal);
+
+  const getPoolTVL = useCallback(() => {
+    const result = activePools.reduce((total, pool) => {
+      return (total +=
+        pool.token0Reserve * coinInPools[pool.token0.symbol] +
+        pool.token1Reserve * coinInPools[pool.token1.symbol]);
+    }, 0);
+    return result;
+  }, [activePools, coinInPools]);
 
   const renderHeader = () => (
     <div className="mb-8 flex justify-between tablet:flex-col">
@@ -69,13 +78,13 @@ const Pool = () => {
           <div className="">
             TVL <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-white tablet:text-[32px]">-</div>
+          <div className="text-white tablet:text-2xl">$ {getPoolTVL().toFixed(3)}</div>
         </div>
         <div className="flex items-center gap-2 bg-gray_bg py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-gray_05">
           <div className="">
             Volume24H <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-white tablet:text-[32px]">-</div>
+          <div className="text-white tablet:text-2xl">-</div>
         </div>
       </div>
     </div>
@@ -108,13 +117,22 @@ const Pool = () => {
       if (tab.id === '2') {
         currentPools = currentPools.filter((pool) => checkIfInvested(pool.id));
       }
+      if (filter.text) {
+        currentPools = currentPools.filter((pool) =>
+          [pool.address, pool.token0.symbol, pool.token1.symbol]
+            .join('+')
+            .toLowerCase()
+            .includes(filter.text.toLowerCase())
+        );
+      }
+
       return {
         label: tab.label,
         key: tab.id,
         children: <PoolTable activePools={currentPools} viewOwned={tab.id === '2'} />
       };
     });
-  }, [activePools, checkIfInvested, tabs]);
+  }, [activePools, checkIfInvested, filter.text, tabs]);
 
   return (
     <div className="mt-[100px] flex flex-col tablet:mt-4">

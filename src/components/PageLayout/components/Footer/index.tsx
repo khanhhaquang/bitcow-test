@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
+import { Fragment } from 'react';
+import FooterMobileBg from 'resources/img/footerMobileBg.png';
 
 const { Footer } = Layout;
 
@@ -26,7 +28,7 @@ const ExternalLink = ({ href, children }: { href: string; children: any }) => {
 
 const SocialBtnGroups = () => {
   return (
-    <div className="flex items-center gap-10 laptop:w-full laptop:justify-center">
+    <div className="flex items-center gap-10 tablet:w-full tablet:justify-center">
       {/* <ExternalLink href={URLs.medium}>
         <MediumIcon />
       </ExternalLink> */}
@@ -47,24 +49,29 @@ const PageFooter: React.FC = () => {
   const [currentPageName] = useCurrentPage();
 
   return (
-    <Footer
-      className={classNames('z-10 flex justify-between bg-transparent', {
-        'py-10 px-20 laptop:pb-24 laptop:pt-5': currentPageName === 'Home',
-        'px-15 border-t-[1px] border-gray_02 py-5': currentPageName !== 'Home'
-      })}>
-      {currentPageName === 'Home' && (
-        <Link to="/" className="flex h-full items-center justify-center laptop:hidden">
-          <LogoIcon className="w-[120px]" />
-        </Link>
-      )}
-      {currentPageName !== 'Home' && <div className="block grow tablet:hidden" />}
-      <SocialBtnGroups />
-      {/* {currentPageName !== 'Home' && (
-        <div className="block flex h-full cursor-pointer items-center justify-center font-Furore text-lg text-color_main laptop:hidden">
-          {'Contact us'}
-        </div>
-      )} */}
-    </Footer>
+    <Fragment>
+      <div className="hidden w-full tablet:block">
+        <img src={FooterMobileBg} alt="" className="h-full w-full object-cover" />
+      </div>
+      <Footer
+        className={classNames('z-10 flex justify-between bg-transparent', {
+          'py-10 px-20 tablet:pb-24 tablet:pt-5': currentPageName === 'Home',
+          'px-15 border-t-[1px] border-gray_02 py-5 tablet:border-none': currentPageName !== 'Home'
+        })}>
+        {currentPageName === 'Home' && (
+          <Link to="/" className="flex h-full items-center justify-center tablet:hidden">
+            <LogoIcon className="w-[120px]" />
+          </Link>
+        )}
+        {currentPageName !== 'Home' && <div className="block grow tablet:hidden" />}
+        <SocialBtnGroups />
+        {/* {currentPageName !== 'Home' && (
+          <div className="block flex h-full cursor-pointer items-center justify-center font-Furore text-lg text-color_main tablet:hidden">
+            {'Contact us'}
+          </div>
+        )} */}
+      </Footer>
+    </Fragment>
   );
 };
 

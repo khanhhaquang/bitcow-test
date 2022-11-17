@@ -1,8 +1,9 @@
 import poolAction from 'modules/pool/actions';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Button from 'components/Button';
+import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import useAptosWallet from 'hooks/useAptosWallet';
 import usePools from 'hooks/usePools';
 import { IPool } from 'types/pool';
@@ -21,8 +22,10 @@ interface IProps {
 const PoolRowDetail = ({ pool }: IProps) => {
   const dispatch = useDispatch();
   const { activeWallet, openModal } = useAptosWallet();
-  const { getOwnedLiquidity, getPoolTVL } = usePools();
+  const { getOwnedLiquidity, getPoolTVL, poolFilter, getPoolStatsByTimebasis } = usePools();
   const [poolRecord, setPoolRecord] = useState<ExpandedDataType>();
+
+  const poolStats = useMemo(() => getPoolStatsByTimebasis(pool), [getPoolStatsByTimebasis, pool]);
 
   const fetchRecord = useCallback(async () => {
     const { lp, coins } = await getOwnedLiquidity(pool.id);
@@ -56,12 +59,12 @@ const PoolRowDetail = ({ pool }: IProps) => {
       <div className="flex-col tablet:flex">
         <div className="hidden gap-6 p-4 tablet:flex">
           <div className="flex flex-col">
-            <span className="block text-xs">Volume 7D</span>
-            <span className="text-white">{pool.volume7D}</span>
+            <span className="block text-xs">Volume {poolFilter.timeBasis}</span>
+            <span className="text-white">{numberGroupFormat(poolStats.volume, 3) || 0}</span>
           </div>
           <div className="flex flex-col">
-            <span className="block text-xs">Fees 7D</span>
-            <span className="text-white">{pool.fees7D}</span>
+            <span className="block text-xs">Fees {poolFilter.timeBasis}</span>
+            <span className="text-white">{numberGroupFormat(poolStats.fees, 3) || 0}</span>
           </div>
         </div>
         <div className="flex gap-6 tablet:flex-col tablet:bg-gray_bg tablet:p-4">
@@ -70,9 +73,11 @@ const PoolRowDetail = ({ pool }: IProps) => {
               <span className="block text-xs">Your Liquidity</span>
               <div className="flex flex-col">
                 <span className="text-white">
-                  ${(getPoolTVL(pool) * poolRecord?.share).toFixed(3)}
+                  ${numberGroupFormat(getPoolTVL(pool) * poolRecord?.share, 3) || 0}
                 </span>
-                <span className="text-white">{poolRecord?.liquidity.toFixed(6)} LP</span>
+                <span className="text-white">
+                  {numberGroupFormat(poolRecord?.liquidity, 6) || 0} LP
+                </span>
               </div>
             </div>
             <div className="flex grow flex-col gap-4">
@@ -83,7 +88,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
                     return (
                       <div className="text-white" key={`pool-asset-${key}`}>
                         {poolRecord?.assetsPooled[key]
-                          ? poolRecord?.assetsPooled[key].toFixed(6)
+                          ? numberGroupFormat(poolRecord?.assetsPooled[key], 6) || 0
                           : 0}{' '}
                         {key}
                       </div>
@@ -93,7 +98,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </div>
             <div className="flex grow flex-col gap-4">
               <span className="block text-xs">Your Share</span>
-              <span className="text-white">{poolRecord?.share.toFixed(3)} %</span>
+              <span className="text-white">{numberGroupFormat(poolRecord?.share, 3) || 0} %</span>
             </div>
           </div>
           <div className="flex h-12 w-[240px] justify-end gap-4 tablet:w-full">

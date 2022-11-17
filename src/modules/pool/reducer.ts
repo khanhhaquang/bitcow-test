@@ -1,7 +1,9 @@
 import { createReducer, createSelector } from '@reduxjs/toolkit';
+// import { sortBy } from 'lodash';
 import { RootState } from 'modules/rootReducer';
-import { IPool, IPoolFilters, LiquidityModal } from 'types/pool';
-import { sortBy } from 'lodash';
+
+import { IPool, LiquidityModal } from 'types/pool';
+
 import actions from './actions';
 
 interface SwapState {
@@ -9,7 +11,7 @@ interface SwapState {
   isFetched: boolean;
   error: any;
   poolList: IPool[];
-  filters: IPoolFilters;
+  // filters: IPoolFilters;
   liquidityModal: LiquidityModal;
 }
 
@@ -18,13 +20,13 @@ const initState: SwapState = {
   isFetched: false,
   error: null,
   poolList: [],
-  liquidityModal: null,
-  filters: {
-    search: '',
-    filterBy: '',
-    sortBy: '',
-    showSelfLiquidity: false
-  }
+  liquidityModal: null
+  // filters: {
+  //   search: '',
+  //   filterBy: '',
+  //   sortBy: '',
+  //   showSelfLiquidity: false
+  // }
 };
 
 export default createReducer(initState, (builder) => {
@@ -40,17 +42,17 @@ export default createReducer(initState, (builder) => {
       state.poolList = payload;
       state.isFetching = false;
       state.isFetched = true;
-    })
-    .addCase(actions.SET_FILTERS, (state, { payload }) => {
-      state.filters = payload;
     });
+  // .addCase(actions.SET_FILTERS, (state, { payload }) => {
+  //   state.filters = payload;
+  // });
 });
 
 export const getIsFetchingPoolList = (state: RootState) => state.pool.isFetching;
 export const getIsFetchedPoolList = (state: RootState) => state.pool.isFetched;
 export const getLiquidityModal = (state: RootState) => state.pool.liquidityModal;
 export const getPoolList = (state: RootState) => state.pool.poolList;
-export const getPoolFilters = (state: RootState) => state.pool.filters;
+// export const getPoolFilters = (state: RootState) => state.pool.filters;
 
 export const getPoolSummary = createSelector(getPoolList, (poolList) => {
   const totalValueLocked = poolList.reduce((totalValue, pool) => {
@@ -65,24 +67,24 @@ export const getPoolSummary = createSelector(getPoolList, (poolList) => {
   };
 });
 
-export const getFilteredPoolList = createSelector(
-  getPoolFilters,
-  getPoolList,
-  (filters, poolList) => {
-    let filteredList: IPool[] = poolList;
-    if (filters.sortBy) filteredList = sortBy(filteredList, filters.sortBy);
-    if (!filters.search) return filteredList;
-    filteredList = filteredList.filter((pool) => {
-      const keysToFilter = [
-        pool.token0.symbol,
-        pool.token1.symbol,
-        pool.token0.name,
-        pool.token1.name
-      ]
-        .join(',')
-        .toLowerCase();
-      return keysToFilter.includes(filters.search);
-    });
-    return filteredList;
-  }
-);
+// export const getFilteredPoolList = createSelector(
+//   getPoolFilters,
+//   getPoolList,
+//   (filters, poolList) => {
+//     let filteredList: IPool[] = poolList;
+//     if (filters.sortBy) filteredList = sortBy(filteredList, filters.sortBy);
+//     if (!filters.search) return filteredList;
+//     filteredList = filteredList.filter((pool) => {
+//       const keysToFilter = [
+//         pool.token0.symbol,
+//         pool.token1.symbol,
+//         pool.token0.name,
+//         pool.token1.name
+//       ]
+//         .join(',')
+//         .toLowerCase();
+//       return keysToFilter.includes(filters.search);
+//     });
+//     return filteredList;
+//   }
+// );

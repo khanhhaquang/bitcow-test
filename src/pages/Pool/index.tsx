@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Radio, Tabs } from 'components/Antd';
 import ObricModal from 'components/ObricModal';
+import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import usePools from 'hooks/usePools';
@@ -15,25 +16,6 @@ import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
 import styles from './Pool.module.scss';
-
-const SortOptions = [
-  {
-    label: 'Liquidity',
-    value: 'liquidity'
-  },
-  {
-    label: 'Volume 7D',
-    value: 'volume7D'
-  },
-  {
-    label: 'Fees 7D',
-    value: 'fees7D'
-  },
-  {
-    label: 'Apr 7D',
-    value: 'apr7D'
-  }
-];
 
 const filterOptions = [
   {
@@ -51,12 +33,7 @@ const filterOptions = [
 ];
 
 const Pool = () => {
-  const [filter, setFilter] = useState({
-    text: '',
-    timeBasis: '7D',
-    sortBy: 'liquidity'
-  });
-  const { activePools, checkIfInvested, coinInPools } = usePools();
+  const { activePools, checkIfInvested, coinInPools, setPoolFilter, poolFilter } = usePools();
   const [activeTab, setActiveTab] = useState('1');
   const dispatch = useDispatch();
   const liquidityModal = useSelector(getLiquidityModal);
@@ -70,6 +47,27 @@ const Pool = () => {
     return result;
   }, [activePools, coinInPools]);
 
+  const SortOptions = useCallback(() => {
+    return [
+      {
+        label: 'Liquidity',
+        value: 'liquidity'
+      },
+      {
+        label: `Volume ${poolFilter.timeBasis}`,
+        value: 'volume'
+      },
+      {
+        label: `Fees ${poolFilter.timeBasis}`,
+        value: 'fees'
+      },
+      {
+        label: `Apr ${poolFilter.timeBasis}`,
+        value: 'apr'
+      }
+    ];
+  }, [poolFilter.timeBasis]);
+
   const renderHeader = () => (
     <div className="mb-8 flex justify-between tablet:flex-col">
       <div className="font-Furore text-2xl text-white tablet:text-lg">Pools</div>
@@ -78,7 +76,7 @@ const Pool = () => {
           <div className="">
             TVL <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-white tablet:text-2xl">$ {getPoolTVL().toFixed(3)}</div>
+          <div className="text-white tablet:text-2xl">$ {numberGroupFormat(getPoolTVL(), 3)}</div>
         </div>
         <div className="flex items-center gap-2 bg-gray_bg py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-gray_05">
           <div className="">
@@ -91,7 +89,7 @@ const Pool = () => {
   );
 
   const onUpdateFilter = (val: string, field: string) => {
-    setFilter((prevState) => ({
+    setPoolFilter((prevState) => ({
       ...prevState,
       [field]: val
     }));
@@ -117,12 +115,12 @@ const Pool = () => {
       if (tab.id === '2') {
         currentPools = currentPools.filter((pool) => checkIfInvested(pool.id));
       }
-      if (filter.text) {
+      if (poolFilter.text) {
         currentPools = currentPools.filter((pool) =>
           [pool.address, pool.token0.symbol, pool.token1.symbol]
             .join('+')
             .toLowerCase()
-            .includes(filter.text.toLowerCase())
+            .includes(poolFilter.text.toLowerCase())
         );
       }
 
@@ -132,7 +130,7 @@ const Pool = () => {
         children: <PoolTable activePools={currentPools} viewOwned={tab.id === '2'} />
       };
     });
-  }, [activePools, checkIfInvested, filter.text, tabs]);
+  }, [activePools, checkIfInvested, poolFilter.text, tabs]);
 
   return (
     <div className="mt-[100px] flex flex-col tablet:mt-4">
@@ -160,15 +158,15 @@ const Pool = () => {
                     className={
                       "relative w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-gray_05 before:content-['Sort_by'] tablet:before:top-[14px]"
                     }
-                    value={filter.sortBy}
-                    options={SortOptions}
+                    value={poolFilter.sortBy}
+                    options={SortOptions()}
                     onChange={(val) => onUpdateFilter(val, 'sortBy')}
                   />
                   <SelectInput
                     className={
                       "relative w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-gray_05 before:content-['Time_Basis'] tablet:before:top-[14px]"
                     }
-                    value={filter.timeBasis}
+                    value={poolFilter.timeBasis}
                     options={filterOptions}
                     onChange={(val) => onUpdateFilter(val, 'timeBasis')}
                   />
@@ -178,13 +176,13 @@ const Pool = () => {
                   className={
                     "relative w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-gray_05 before:content-['Time_Basis'] tablet:hidden"
                   }
-                  value={filter.timeBasis}
+                  value={poolFilter.timeBasis}
                   options={filterOptions}
                   onChange={(val) => onUpdateFilter(val, 'timeBasis')}
                 />
                 <SearchInput
                   className={'w-1/2 tablet:mt-4 tablet:w-full'}
-                  value={filter.text}
+                  value={poolFilter.text}
                   onChange={(val) => onUpdateFilter(val, 'text')}
                   onSearch={() => {}}
                 />

@@ -12,9 +12,9 @@ export interface IPool {
   liquidity: number;
   token0: RawCoinInfo;
   token1: RawCoinInfo;
-  volume7D: '-' | number;
-  fees7D: '-' | number;
-  apr7D: '-' | number;
+  volume: number;
+  fees: number;
+  apr: number;
   invested: boolean;
   totalValueLockedUSD?: string;
   volumeUSD?: string;
@@ -24,10 +24,9 @@ export interface IPool {
 }
 
 export interface IPoolFilters {
-  search: string;
-  filterBy: string;
+  text: string;
+  timeBasis: string;
   sortBy: string;
-  showSelfLiquidity: boolean;
 }
 
 export interface LiquidityModal {

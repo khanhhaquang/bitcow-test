@@ -4,13 +4,13 @@ import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';
 import { useBreakpoint } from 'hooks/useBreakpoint';
-import { HintIcon, LessIcon, MoreIcon } from 'resources/icons';
+import usePools from 'hooks/usePools';
+import { LessIcon, MoreIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
 import PoolRowDetail from './PoolRowDetail';
 import styles from './PoolTable.module.scss';
 import TokenPair from './TokenPair';
-import usePools from 'hooks/usePools';
 
 interface TProps {
   activePools: IPool[];
@@ -19,12 +19,13 @@ interface TProps {
 
 const PoolTable = ({ activePools, viewOwned }: TProps) => {
   const { isTablet } = useBreakpoint('tablet');
-  const { getPoolTVL } = usePools();
+  const { getPoolTVL, poolFilter } = usePools();
 
   const columns: () => ColumnsType<IPool> = useCallback(() => {
     let cols = [
       {
         title: 'Trading Pair',
+        // width: 240,
         dataIndex: 'token0',
         render: (val, record, index) => {
           return <TokenPair token0={record.token0} token1={record.token1} />;
@@ -42,61 +43,57 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
             </div>
           );
         },
+        defaultSortOrder: 'descend',
         sorter: {
           compare: (a, b) => a.liquidity - b.liquidity,
           multiple: 2
         }
       },
       {
-        title: 'Volume 7D',
-        dataIndex: 'volume7D',
+        title: `Volume ${poolFilter.timeBasis}`,
+        dataIndex: 'volume',
         render: (val) => {
           return <div className="tablet:hidden">{val}</div>;
         },
         sorter: {
           compare: (a, b) => {
-            if (typeof a.volume7D === 'number' && typeof b.volume7D === 'number') {
-              return a.volume7D - b.volume7D;
+            if (typeof a.volume === 'number' && typeof b.volume === 'number') {
+              return a.volume - b.volume;
             }
           },
           multiple: 2
         }
       },
       {
-        title: 'Fees 7D',
-        dataIndex: 'fees7D',
+        title: `Fees ${poolFilter.timeBasis}`,
+        dataIndex: 'fees',
         render: (val) => {
           return <div className="tablet:hidden">{val}</div>;
         },
         sorter: {
           compare: (a, b) => {
-            if (typeof a.fees7D === 'number' && typeof b.fees7D === 'number') {
-              return a.fees7D - b.fees7D;
+            if (typeof a.fees === 'number' && typeof b.fees === 'number') {
+              return a.fees - b.fees;
             }
           },
           multiple: 2
         }
       },
       {
-        title: () => (
-          <div className="flex items-center gap-2">
-            <div>APR 7D</div>
-            <HintIcon className="h-3 w-3" />
-          </div>
-        ),
-        dataIndex: 'apr7D',
+        title: `APR ${poolFilter.timeBasis}`,
+        dataIndex: 'apr',
         render: (val) => {
           return (
             <div className="flex tablet:flex-col">
-              <span className="hidden text-xs tablet:block">APR 7D</span>
+              <span className="hidden text-xs tablet:block">APR {poolFilter.timeBasis}</span>
               <span className="tablet:text-white">{val}</span>
             </div>
           );
         },
         sorter: {
           compare: (a, b) => {
-            if (typeof a.apr7D === 'number' && typeof b.apr7D === 'number') {
-              return a.apr7D - b.apr7D;
+            if (typeof a.apr === 'number' && typeof b.apr === 'number') {
+              return a.apr - b.apr;
             }
           },
           multiple: 2
@@ -114,12 +111,12 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     ];
 
     if (isTablet) {
-      const tabletExludedCols = ['volume7D', 'fees7D', 'operation'];
+      const tabletExludedCols = ['volume', 'fees', 'operation'];
       cols = cols.filter((col: any) => !tabletExludedCols.includes(col.dataIndex));
     }
 
     return cols;
-  }, [getPoolTVL, isTablet]);
+  }, [getPoolTVL, isTablet, poolFilter.timeBasis]);
 
   const handleChange: TableProps<IPool>['onChange'] = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -132,6 +129,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       pagination={false}
       className={styles.poolTable}
       onChange={handleChange}
+      // tableLayout="fixed"
       rowKey={(record) => record.id}
       expandable={{
         expandRowByClick: true,

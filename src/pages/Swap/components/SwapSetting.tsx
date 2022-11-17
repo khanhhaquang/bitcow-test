@@ -1,4 +1,4 @@
-import { Tooltip } from 'antd';
+// import { Tooltip } from 'antd';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import swapAction from 'modules/swap/actions';
@@ -8,9 +8,9 @@ import { useDispatch } from 'react-redux';
 import Button from 'components/Button';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 // import { initState as swapInitState } from 'modules/swap/reducer';
-import Switch from 'components/Switch';
+// import Switch from 'components/Switch';
 import { ISwapSettings } from 'pages/Swap/types';
-import { HintIcon } from 'resources/icons';
+// import { HintIcon } from 'resources/icons';
 
 interface TProps {
   onClose: () => void;
@@ -20,9 +20,9 @@ const SubTitle = ({ children }: { children: string }) => {
   return (
     <div className="mb-4 flex items-center gap-2">
       <div className="text-base">{children}</div>
-      <Tooltip title={children}>
+      {/* <Tooltip title={children}>
         <HintIcon className="opacity-30 hover:opacity-100" />
-      </Tooltip>
+      </Tooltip> */}
     </div>
   );
 };
@@ -93,7 +93,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
           <div className="text-base capitalize">minutes</div>
         </div>
       </div>
-      <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:mx-5" />
+      {/* <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:mx-5" />
       <div className="mt-6 flex justify-between tablet:mx-5">
         <SubTitle>Expert Mode</SubTitle>
         <Switch
@@ -114,7 +114,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
           checked={values.privacySwap}
           onChange={(checked) => setFieldValue('privacySwap', checked)}
         />
-      </div>
+      </div> */}
       {/* Mobile */}
       <div className="hidden bg-gray_008 p-4 tablet:block">
         <Button

@@ -14,6 +14,13 @@
 
       .ant-table-cell {
         @apply border-black bg-table_bg text-gray_05;
+
+        .ant-table-column-sorters {
+          @apply justify-start gap-2;
+          .ant-table-column-title {
+            @apply flex-[none];
+          }
+        }
       }
 
       .ant-table-column-sorter-up.active,

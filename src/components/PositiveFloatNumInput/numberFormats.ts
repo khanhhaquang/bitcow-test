@@ -55,7 +55,7 @@ export const cutDecimals = (v: string, maxDecimals: number | undefined) => {
 };
 
 export const numberGroupFormat = (amount: number, decimals = 2) => {
-  return numToGrouped(cutDecimals(avoidScientificNotation(amount), decimals));
+  return amount > 0 ? numToGrouped(cutDecimals(avoidScientificNotation(amount), decimals)) : '';
 };
 
 export const numberOfAbbr = (amount: number, decimals = 0) => {

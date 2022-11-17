@@ -5,9 +5,10 @@ import { StructTag } from '@manahippo/move-to-ts';
 import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 
+import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import useAptosWallet from 'hooks/useAptosWallet';
 import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
-import { IPool } from 'types/pool';
+import { IPool, IPoolFilters } from 'types/pool';
 import { openErrorNotification } from 'utils/notifications';
 
 interface PoolsContextType {
@@ -17,11 +18,13 @@ interface PoolsContextType {
   getPoolTVL: (pool: IPool) => number;
   getOwnedLiquidity: (address: string) => Promise<{ lp: number; coins: Record<string, any> }>;
   checkIfInvested: (address: string) => boolean;
-  setFilters: React.Dispatch<
-    React.SetStateAction<{
-      onlyInvested: boolean;
-    }>
-  >;
+  setPoolFilter: React.Dispatch<React.SetStateAction<IPoolFilters>>;
+  poolFilter: IPoolFilters;
+  getPoolStatsByTimebasis: (pool: IPool) => {
+    volume: number;
+    fees: number;
+    apr: number;
+  };
 }
 
 interface TProviderProps {
@@ -36,8 +39,10 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   const [coinInPools, setCoinInPools] = useState<Record<string, number>>();
   const [fetching, setFetching] = useState(false);
   const { poolStore } = useCoinStore();
-  const [filters, setFilters] = useState({
-    onlyInvested: false
+  const [poolFilter, setPoolFilter] = useState<IPoolFilters>({
+    text: '',
+    timeBasis: '7D',
+    sortBy: 'liquidity'
   });
 
   const checkIfInvested = useCallback(
@@ -123,9 +128,9 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
               liquidity: pool.lp_amt.toJsNumber() / Math.pow(10, decimals),
               token0,
               token1,
-              volume7D: '-',
-              fees7D: '-',
-              apr7D: '-',
+              volume: 0,
+              fees: 0,
+              apr: 0,
               invested: true,
               token0Reserve,
               token1Reserve,
@@ -190,7 +195,6 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         if (poolStore && obricSDK) {
           const coinInfo = (poolStore[poolAddress.replace(/PieceSwapPoolInfo/g, 'LPToken')] || {})
             .data as CoinInfo;
-          console.log('++++>>', coinInfo);
           if (coinInfo) {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             const myLp = coinInfo?.coin?.value / Math.pow(10, decimals);
@@ -209,7 +213,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       if (coinInPools && token && coinInPools[token.symbol]) {
         value = balance * coinInPools[token.symbol];
       }
-      return value ? value.toFixed(3) : '';
+      return value ? numberGroupFormat(value, 3) : '0';
     },
     [coinInPools]
   );
@@ -226,6 +230,22 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     [coinInPools]
   );
 
+  const getPoolStatsByTimebasis = useCallback(
+    (pool: IPool) => {
+      const denominator = {
+        '24H': 24,
+        '7D': 24 * 7,
+        '30D': 24 * 30
+      };
+      return {
+        volume: pool.volume / denominator[poolFilter.timeBasis] || 0,
+        fees: pool.fees / denominator[poolFilter.timeBasis] || 0,
+        apr: pool.apr / denominator[poolFilter.timeBasis] || 0
+      };
+    },
+    [poolFilter.timeBasis]
+  );
+
   return (
     <PoolsContext.Provider
       value={{
@@ -233,9 +253,11 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         coinInPools,
         getOwnedLiquidity,
         checkIfInvested,
-        setFilters,
         getTokenBalanceInUSD,
-        getPoolTVL
+        getPoolTVL,
+        poolFilter,
+        setPoolFilter,
+        getPoolStatsByTimebasis
       }}>
       {children}
     </PoolsContext.Provider>

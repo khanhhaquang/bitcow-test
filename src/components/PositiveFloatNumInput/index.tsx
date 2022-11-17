@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { forwardRef, useEffect, useMemo, useState } from 'react';
+import { forwardRef, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import invariant from 'tiny-invariant';
 
 import { avoidScientificNotation, cutDecimals, numToGrouped } from './numberFormats';
@@ -17,6 +17,8 @@ type PositiveFloatNumInputProps = {
   onInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEnter?: () => {};
   onAmountChange?: (a: number) => void;
+  suffix?: string;
+  suffixClassname?: string;
 };
 
 const MIN_DEFAULT = 0;
@@ -41,7 +43,9 @@ const PositiveFloatNumInput = forwardRef<
       maxDecimals = MAX_DECIMALS_DEFAULT,
       onInputChange = () => {},
       onEnter = () => {},
-      onAmountChange = () => {}
+      onAmountChange = () => {},
+      suffix,
+      suffixClassname
     },
     ref
   ) => {
@@ -51,6 +55,8 @@ const PositiveFloatNumInput = forwardRef<
       maxDecimals <= MAX_DECIMALS_DEFAULT && maxDecimals % 1 === 0,
       'Max decimals prop value invalid'
     );
+    const canvasRef = useRef<HTMLCanvasElement>();
+    const suffixRef = useRef<HTMLSpanElement>();
 
     const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
       if (event.key === 'Enter') {
@@ -83,56 +89,91 @@ const PositiveFloatNumInput = forwardRef<
 
     const displayText = numToGrouped(internalAmountText);
 
-    return (
-      <input
-        ref={ref}
-        className={classNames(
-          'positiveFloatNumInput',
-          'focus: min-w-0 px-1 outline-none',
-          { 'cursor-not-allowed': isDisabled },
-          className
-        )}
-        value={displayText}
-        placeholder={placeholder}
-        inputMode="decimal"
-        type="text"
-        min={min}
-        max={max}
-        disabled={isDisabled}
-        style={styles}
-        onKeyDown={onKeyDown}
-        onChange={(event) => {
-          if (!/^[0-9,]*[.]?[0-9]*$/.test(event.target.value)) {
-            return;
-          }
-          // Remove group separator
-          let valueStr = event.target.value
-            .split('')
-            .filter((l) => l !== ',')
-            .join('');
-          // Avoid the case to parse strings like '.123'
-          if (/^\./.test(valueStr)) valueStr = '0' + valueStr;
+    const getTextWidth = useCallback((text, font) => {
+      // re-use canvas object for better performance
+      const canvas = canvasRef.current ? canvasRef.current : document.createElement('canvas');
+      canvasRef.current = canvas;
+      const context = canvas.getContext('2d');
+      context.font = font;
+      const metrics = context.measureText(text);
+      return metrics.width;
+    }, []);
 
-          if (valueStr !== '') {
-            const decimalsLength = valueStr.split('.')[1]?.length || 0;
-            if (maxDecimals !== undefined && decimalsLength > maxDecimals) {
+    const updateSuffix = useCallback(() => {
+      const width = displayText ? getTextWidth(displayText, '30px Rany') : '54';
+      if (suffixRef.current) {
+        suffixRef.current.style.left = width + 'px';
+        if (displayText) {
+          suffixRef.current.style.color = '#fff';
+        } else {
+          suffixRef.current.style.color = 'rgba(255, 255, 255, 0.5)';
+        }
+      }
+    }, [displayText, getTextWidth]);
+
+    useEffect(() => {
+      if (suffix) {
+        updateSuffix();
+      }
+    }, [displayText, suffix, updateSuffix]);
+
+    return (
+      <Fragment>
+        <input
+          ref={ref}
+          className={classNames(
+            'positiveFloatNumInput',
+            'focus: min-w-0 px-1 outline-none',
+            { 'cursor-not-allowed': isDisabled },
+            className
+          )}
+          value={displayText}
+          placeholder={placeholder}
+          inputMode="decimal"
+          type="text"
+          min={min}
+          max={max}
+          disabled={isDisabled}
+          style={styles}
+          onKeyDown={onKeyDown}
+          onChange={(event) => {
+            if (!/^[0-9,]*[.]?[0-9]*$/.test(event.target.value)) {
               return;
             }
-            const value = parseFloat(valueStr);
-            if (value < min) {
-              if (isConfine) valueStr = '0';
-              else return;
-            } else if (value > max) {
-              if (isConfine) valueStr = '' + max;
-              else return;
+            // Remove group separator
+            let valueStr = event.target.value
+              .split('')
+              .filter((l) => l !== ',')
+              .join('');
+            // Avoid the case to parse strings like '.123'
+            if (/^\./.test(valueStr)) valueStr = '0' + valueStr;
+
+            if (valueStr !== '') {
+              const decimalsLength = valueStr.split('.')[1]?.length || 0;
+              if (maxDecimals !== undefined && decimalsLength > maxDecimals) {
+                return;
+              }
+              const value = parseFloat(valueStr);
+              if (value < min) {
+                if (isConfine) valueStr = '0';
+                else return;
+              } else if (value > max) {
+                if (isConfine) valueStr = '' + max;
+                else return;
+              }
             }
-          }
-          setInternalAmountText(valueStr);
-          onInputChange(event);
-          // When internal value is '', convert to 0
-          onAmountChange(parseFloat(valueStr || '0'));
-        }}
-      />
+            setInternalAmountText(valueStr);
+            onInputChange(event);
+            // When internal value is '', convert to 0
+            onAmountChange(parseFloat(valueStr || '0'));
+          }}
+        />
+        {suffix && (
+          <span className={suffixClassname} ref={suffixRef}>
+            {suffix}
+          </span>
+        )}
+      </Fragment>
     );
   }
 );

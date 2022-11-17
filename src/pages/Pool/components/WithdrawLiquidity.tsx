@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
@@ -7,7 +8,9 @@ import * as yup from 'yup';
 import Button from 'components/Button';
 import CoinIcon from 'components/CoinIcon';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
+import SliderInput from 'components/SliderInput';
 import useAptosWallet from 'hooks/useAptosWallet';
+import { useBreakpoint } from 'hooks/useBreakpoint';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
 import usePools from 'hooks/usePools';
 import { WithdrawLiquidity as WithdrawLiquidityProps } from 'pages/Pool/types';
@@ -20,6 +23,7 @@ const percentageOptions = [25, 50, 75, 100];
 const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const dispatch = useDispatch();
   const { requestWithdrawLiquidity } = useAptosWallet();
+  const { isTablet } = useBreakpoint('tablet');
   const { getOwnedLiquidity } = usePools();
   const [pool, setPool] = useState<{ lp: number; coins: {} }>();
 
@@ -109,8 +113,16 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             <div className="w-full bg-color_bg_2 p-4">
               <div className="mb-2 text-xs uppercase text-gray_05">AVAILABLE FOR WITHDRAWAL</div>
               <div className="mt-4 flex flex-col gap-4">{renderCoinRow()}</div>
-              <div className="flex">
-                <div className="mt-5 flex w-full items-center justify-between gap-2">
+              <SliderInput
+                className="mx-0 mt-6 mb-0 tablet:hidden"
+                min={0}
+                max={100}
+                tooltip={null}
+                onChange={(val: number) => props.setFieldValue('percent', val)}
+                value={props.values.percent}
+              />
+              <div className="flex tablet:flex-col-reverse">
+                <div className="mt-4 flex w-full items-center justify-between gap-2">
                   {percentageOptions.map((option) => (
                     <Button
                       key={option}
@@ -120,18 +132,25 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     </Button>
                   ))}
                 </div>
-                <div className={'flex grow font-Rany text-gray_03'}>
+                <div className={'relative flex grow font-Rany text-gray_03'}>
                   <PositiveFloatNumInput
                     ref={inputRef}
                     min={0.01}
                     max={100}
                     maxDecimals={2}
                     placeholder="0.00"
-                    className="relative mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl text-white"
+                    className="relative z-[2] mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl text-white tablet:text-left"
                     inputAmount={props.values.percent || 0}
                     onAmountChange={(a) => onAmountChange(a, props)}
+                    suffix={isTablet ? '%' : null}
+                    suffixClassname="text-3xl text-gray_05 absolute left-[54px] pl-3 z-[1] top-6"
                   />
-                  <div className="mt-6 grow text-3xl text-gray_05">%</div>
+                  <div
+                    className={cx('mt-6 grow text-3xl text-gray_05 tablet:hidden', {
+                      '!text-white': props.values.percent > 0
+                    })}>
+                    %
+                  </div>
                 </div>
               </div>
             </div>

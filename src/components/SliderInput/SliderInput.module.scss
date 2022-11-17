@@ -1,0 +1,17 @@
+.sliderInput {
+  :global {
+    .ant-slider {
+      .ant-slider-rail,
+      &:hover .ant-slider-rail {
+        @apply bg-gray_01 #{!important};
+      }
+      .ant-slider-track,
+      &:hover .ant-slider-track {
+        @apply bg-white #{!important};
+      }
+      .ant-slider-handle {
+        @apply h-4 w-4 border-white bg-table_bg #{!important};
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import cx from 'classnames';
+
 import { Input } from 'components/Antd';
 import { SearchIcon } from 'resources/icons';
+
 import styles from './SearchInput.module.scss';
 
 interface IProps {

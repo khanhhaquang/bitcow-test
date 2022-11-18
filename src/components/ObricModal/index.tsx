@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { Drawer, Modal } from 'components/Antd';
 import { CancelIcon } from 'resources/icons';
 
-import styles from './ObricModal.module.scss';
+// import styles from './ObricModal.module.scss';
 
 interface TProps {
   className?: string;
@@ -22,14 +22,10 @@ interface TProps {
 const ObricModal: React.FC<TProps> = ({ className, ...rest }) => {
   return (
     <Fragment>
-      <Modal
-        className={cx(styles.modal, 'block tablet:hidden', className)}
-        footer={null}
-        {...rest}
-      />
+      <Modal className={cx('block tablet:hidden', className)} footer={null} {...rest} />
       <Drawer
         open={rest.open}
-        className={cx(styles.drawer, 'hidden tablet:block')}
+        className={cx('hidden tablet:block')}
         closable={false}
         placement="bottom"
         maskClosable

@@ -1,11 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import cx from 'classnames';
 
-// import { Switch, SwitchProps } from 'components/Antd';
 import { CheckIcon, CrossIcon } from 'resources/icons';
-
-import styles from './SwitchInput.module.scss';
 
 interface TProps {
   className?: string;
@@ -13,7 +8,7 @@ interface TProps {
   onChange: (checked: boolean) => void;
 }
 
-const SwitchInput: React.FC<TProps> = ({ className, onChange, checked }) => {
+const SwitchCheckbox: React.FC<TProps> = ({ className, onChange, checked }) => {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const check = e.target.checked;
     onChange(check);
@@ -32,4 +27,4 @@ const SwitchInput: React.FC<TProps> = ({ className, onChange, checked }) => {
   );
 };
 
-export default SwitchInput;
+export default SwitchCheckbox;

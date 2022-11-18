@@ -6,6 +6,7 @@
 @import 'styles/typography.scss';
 @import 'styles/notification.scss';
 @import 'styles/tooltip.scss';
+@import 'styles/modal.scss';
 
 body {
   margin: 0;
@@ -45,7 +46,7 @@ code {
   }
 
   .scrollbar::-webkit-scrollbar {
-    @apply w-1 ml-1;
+    @apply ml-1 w-1;
   }
 
   .scrollbar::-webkit-scrollbar-track {

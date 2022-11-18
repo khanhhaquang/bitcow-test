@@ -14,12 +14,12 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
   const { connected } = useWallet();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
   return (
-    <div className="flex w-full items-center justify-between gap-2 px-2 font-Rany text-gray_05 hover:bg-gray_008">
+    <div className="flex w-full items-center justify-between gap-2 px-2 font-Rany text-white_gray_05 hover:bg-white_gray_bg dark:text-gray_05 dark:hover:bg-gray_008">
       <div className="flex items-center gap-2">
         <CoinIcon size={32} token={item.token} />
         <div className="">
           <small className="text-xs">{item.token.name}</small>
-          <div className="text-base text-white">{item.token.symbol}</div>
+          <div className="text-base text-item_black dark:text-white">{item.token.symbol}</div>
         </div>
       </div>
       <small className="text-base">

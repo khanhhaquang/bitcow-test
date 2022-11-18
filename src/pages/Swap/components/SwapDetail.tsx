@@ -1,5 +1,6 @@
 import { RawCoinInfo } from '@manahippo/coin-list';
 import classNames from 'classnames';
+import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { useCallback, useMemo } from 'react';
 
@@ -72,7 +73,9 @@ const SwapDetail = ({
     return (
       <div className={classNames('flex flex-col gap-1')}>
         {details.map((detail) => (
-          <div className="flex justify-between text-xs text-white" key={detail.label}>
+          <div
+            className="flex justify-between text-xs text-item_black dark:text-white"
+            key={detail.label}>
             <div className="">{detail.label}</div>
             <div className={detail.className}>{detail.value}</div>
           </div>
@@ -95,7 +98,9 @@ const SwapDetail = ({
     return (
       <div className={classNames('flex flex-col gap-1')}>
         {details.map((detail) => (
-          <div className="flex justify-between text-xs text-gray_05" key={detail.label}>
+          <div
+            className="flex justify-between text-xs text-white_gray_05 dark:text-gray_05"
+            key={detail.label}>
             <div className="">{detail.label}</div>
             <div className="">{detail.value}</div>
           </div>
@@ -105,19 +110,27 @@ const SwapDetail = ({
   }, [fromToken.symbol, minimumOutput, toToken.symbol, values.slipTolerance]);
 
   return (
-    <div className={classNames('mt-2 bg-color_bg_2', styles.collapse)}>
+    <div className={classNames('mt-2 bg-white_gray_bg dark:bg-color_bg_2', styles.collapse)}>
       <Collapse
         ghost
         defaultActiveKey={['1']}
         expandIconPosition="end"
         expandIcon={({ isActive }) => (
           <div>
-            <MoreIcon className={isActive ? '-rotate-180' : '-rotate-90'} />
+            <MoreIcon
+              className={cx(
+                'fill-item_black dark:fill-white',
+                isActive ? '-rotate-180' : '-rotate-90'
+              )}
+            />
           </div>
         )}>
-        <Panel header={swapRate} key="1" className="text-white">
+        <Panel
+          header={<div className="text-item_black dark:text-white">{swapRate}</div>}
+          key="1"
+          className="text-item_black dark:text-white">
           {renderOutput()}
-          <hr className="my-4 h-[1px] w-full border-0 bg-gray_008" />
+          <hr className="my-4 h-[1px] w-full border-0 bg-white_gray_008 dark:bg-gray_008" />
           {renderDetails()}
         </Panel>
       </Collapse>

@@ -18,7 +18,7 @@ const CoinSelectButton = ({
   return (
     <div
       className={classNames(
-        'flex w-fit cursor-pointer items-center gap-2 bg-gray_004 p-2 font-bold',
+        'flex w-fit cursor-pointer items-center gap-2 bg-white fill-item_black p-2  font-bold dark:bg-gray_004 dark:fill-white',
         {
           'pointer-events-none cursor-not-allowed': isDisabled
         },
@@ -26,19 +26,14 @@ const CoinSelectButton = ({
       )}
       onClick={onClick}>
       {token?.symbol ? (
-        <>
-          <div className="flex items-center gap-2">
-            <CoinIcon token={token} />
-            {token.symbol}
-          </div>
-          <CaretIcon className="font-icon text-grey-300" />
-        </>
+        <div className="flex items-center gap-2">
+          <CoinIcon token={token} />
+          {token.symbol}
+        </div>
       ) : (
-        <>
-          <div className="small">--</div>
-          <CaretIcon className="font-icon text-grey-300" />
-        </>
+        <div className="small">--</div>
       )}
+      <CaretIcon className="font-icon text-grey-300 fill-inherit" />
     </div>
   );
 };

@@ -14,6 +14,7 @@ import { logger } from 'redux-logger';
 
 import ErrorBoundary from 'components/ErrorBoundary';
 import { AptosWalletProvider } from 'contexts/AptosWalletProvider';
+import { GlobalSettingProvider } from 'contexts/GlobalSettingProvider';
 import { PoolsProvider } from 'contexts/PoolsProvider';
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development';
@@ -54,11 +55,13 @@ const Providers: React.FC<TProps> = (props: TProps) => {
         onError={(error: Error) => {
           console.log('wallet errors: ', error);
         }}>
-        <AptosWalletProvider>
-          <PoolsProvider>
-            <ReduxProvider store={store}>{props.children}</ReduxProvider>
-          </PoolsProvider>
-        </AptosWalletProvider>
+        <GlobalSettingProvider>
+          <AptosWalletProvider>
+            <PoolsProvider>
+              <ReduxProvider store={store}>{props.children}</ReduxProvider>
+            </PoolsProvider>
+          </AptosWalletProvider>
+        </GlobalSettingProvider>
       </WalletProvider>
     </ErrorBoundary>
   );

@@ -1,6 +1,7 @@
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
+  darkMode: 'class',
   content: ['./src/**/*.{js,jsx,ts,tsx}', './src/**/*.module.scss', './public/index.html'],
   theme: {
     extend: {
@@ -21,14 +22,22 @@ module.exports = {
         gray_05: 'rgba(255, 255, 255, 0.5)',
         gray_004: 'rgba(255, 255, 255, 0.04)',
         gray_008: 'rgba(255, 255, 255, 0.08)',
+        gray_016: 'rgba(255, 255, 255, 0.16)',
         color_error: '#FF6666',
         gray_bg: '#333333',
         table_row_bg: '#1E1E1E',
-        table_bg: '#101010'
+        table_bg: '#101010',
+        item_black: '#041219',
+        white_gray_03: 'rgba(4, 18, 25, 0.3)',
+        white_gray_05: 'rgba(4, 18, 25, 0.5)',
+        white_gray_008: 'rgba(4, 18, 25, 0.08)',
+        white_gray_bg: '#F0F1F6',
+        white_color_list_hover: '#EBEDF4'
       },
       backgroundImage: {
         main: 'url(resources/img/mainBg.png)',
-        secondary: 'url(resources/img/bg.png)',
+        darkBg: 'url(resources/img/bg.png)',
+        whiteBg: 'url(resources/img/whiteBg.png);',
         button_gradient:
           'linear-gradient(264.61deg, rgba(255, 104, 39, 0.44) 0.36%, #FF6827 21.67%, #FF6827 100%)',
         color_minor_1: 'linear-gradient(90deg, #B0FF4A 0%, #70F0E1 100%);',

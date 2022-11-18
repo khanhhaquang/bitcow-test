@@ -107,38 +107,40 @@ const TokenSwap = () => {
     <Fragment>
       <Tooltip title="Setting">
         <button
-          className="absolute top-0 right-0 z-10 cursor-pointer py-6 px-5"
+          className="absolute top-0 right-0 z-10 cursor-pointer fill-inherit stroke-inherit py-6 px-5"
           onClick={() => setIsSettingsOpen(true)}>
           <SettingIcon />
         </button>
       </Tooltip>
       <div className="relative flex w-full justify-start">
-        <h5 className="text-base font-bold text-white">Swap</h5>
+        <h5 className="text-base font-bold text-inherit">Swap</h5>
       </div>
     </Fragment>
   );
 
   return (
-    <Card className="relative flex w-[512px] flex-col bg-color_bg_3 py-6 px-5 font-Rany text-white tablet:w-full">
+    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-white fill-item_black stroke-item_black py-6 px-5 font-Rany text-item_black dark:bg-color_bg_3 dark:fill-white dark:stroke-white dark:text-white tablet:w-full">
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col">
         <div className="relative flex flex-col gap-[2px]">
-          <div className="bg-color_bg_2 p-4">
-            <div className="mb-2 text-xs uppercase text-gray_05">Pay</div>
+          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_2">
+            <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
           </div>
           <Button
             variant="icon"
-            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-color_bg_3 bg-table_bg p-0"
+            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-white_gray_bg p-0 dark:border-color_bg_3 dark:bg-table_bg"
             onClick={onClickSwapToken}>
-            <SwapIcon className="fill-white opacity-30 group-hover:opacity-100" />
+            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] opacity-30 group-hover:opacity-100 dark:fill-white" />
           </Button>
-          <div className="bg-color_bg_2 p-4">
-            <div className="mb-2 text-xs uppercase text-gray_05">RECEIVE</div>
+          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_2">
+            <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+              RECEIVE
+            </div>
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>
-        {swapRate > 0 && fromToken && toToken && (
+        {swapRate > 0 && fromUiAmt > 0 && fromToken && toToken && (
           <SwapDetail
             swapRateQuote={swapRate}
             impact={priceImpact}

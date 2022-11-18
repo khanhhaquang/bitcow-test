@@ -14,6 +14,7 @@ import LogoImg from 'resources/img/logo.png';
 
 import styles from './Header.module.scss';
 import SideMenu from './SideMenu';
+import ThemeToggler from 'components/ThemeToggler';
 
 const { Header } = Layout;
 
@@ -30,8 +31,13 @@ const PageHeader: React.FC = () => {
     return routes.map(({ name, path, hidden }) => {
       if (path === '*' || hidden) return null;
       return (
-        <Menu.Item key={name} onClick={() => setIsSideMenuOpen(false)}>
-          <Link to={path || '/'} className="bold font-Furore text-lg">
+        <Menu.Item
+          key={name}
+          onClick={() => setIsSideMenuOpen(false)}
+          className={'group !bg-transparent'}>
+          <Link
+            to={path || '/'}
+            className="bold font-Furore text-lg !text-item_black group-hover:!text-color_main dark:!text-white">
             {name}
           </Link>
         </Menu.Item>
@@ -54,8 +60,11 @@ const PageHeader: React.FC = () => {
             {renderNavItems()}
           </Menu>
         </div>
-        <div className="flex h-full cursor-pointer items-center justify-center px-20">
-          {<WalletConnector />}
+        <div className="flex h-full items-center justify-center gap-4 px-20">
+          <div className="flex h-full cursor-pointer items-center justify-center">
+            {<WalletConnector />}
+          </div>
+          <ThemeToggler />
         </div>
       </div>
     ) : (
@@ -69,19 +78,25 @@ const PageHeader: React.FC = () => {
 
   const rednerMobileMenu = () => {
     return (
-      <div className="flex flex-col items-start">
-        <Link to="/" className={cx('mb-24 flex h-full items-center justify-center')}>
-          <div className={cx('block w-[109px]')}>
-            <img src={LogoImg} className="h-full w-full" alt="Logo" />
-          </div>
-        </Link>
-        <Menu
-          mode="vertical"
-          theme="dark"
-          className={cx(styles.menu, 'flex h-full w-full flex-col justify-center !bg-transparent')}
-          selectedKeys={[currentPageName]}>
-          {renderNavItems()}
-        </Menu>
+      <div className="flex h-full flex-col justify-between">
+        <div className="flex flex-col items-start">
+          <Link to="/" className={cx('mb-24 flex h-full items-center justify-center')}>
+            <div className={cx('block w-[109px]')}>
+              <img src={LogoImg} className="h-full w-full" alt="Logo" />
+            </div>
+          </Link>
+          <Menu
+            mode="vertical"
+            theme="dark"
+            className={cx(
+              styles.menu,
+              'flex h-full w-full flex-col justify-center !bg-transparent'
+            )}
+            selectedKeys={[currentPageName]}>
+            {renderNavItems()}
+          </Menu>
+        </div>
+        <ThemeToggler />
       </div>
     );
   };
@@ -89,7 +104,7 @@ const PageHeader: React.FC = () => {
   return (
     <Header
       className={cx(
-        'z-30 h-[72px] w-full border-b-[1px] border-gray_02 bg-black px-0 tablet:h-[64px]',
+        'z-30 h-[72px] w-full border-gray_02 bg-transparent px-0 dark:border-b-[1px] tablet:h-[64px]',
         {
           'absolute top-0 z-10 h-[126px] bg-transparent tablet:h-[64px]': currentPageName === 'Home'
         }
@@ -110,10 +125,11 @@ const PageHeader: React.FC = () => {
               className={cx('block', {
                 'tablet:hidden': currentPageName !== 'Home'
               })}>
-              <LogoIcon className="w-[120px]" />
+              <LogoIcon className="w-[120px] fill-black dark:fill-white" />
             </div>
           </Link>
         </div>
+        {/* Desktop */}
         <div
           className={cx('block tablet:hidden', {
             grow: currentPageName !== 'Home',

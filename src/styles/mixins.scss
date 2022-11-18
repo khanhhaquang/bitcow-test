@@ -1,20 +1,20 @@
 @mixin currencyInput {
   .ant-input-number {
-    @apply border-none border-0;
+    @apply border-0 border-none;
     box-shadow: none;
     &:hover,
     &:focus,
     &:active {
-      @apply border-none border-0;
+      @apply border-0 border-none;
       box-shadow: none;
     }
 
     input {
-      @apply text-right font-extrabold text-base text-gray_03 px-0;
+      @apply px-0 text-right text-base font-extrabold text-item_black dark:text-gray_03;
       box-shadow: none;
 
       &:read-only {
-        @apply text-[14px] font-bold text-gray_03;
+        @apply text-[14px] font-bold text-item_black dark:text-gray_03;
       }
     }
 

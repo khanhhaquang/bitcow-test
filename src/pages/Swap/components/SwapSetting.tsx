@@ -1,4 +1,3 @@
-// import { Tooltip } from 'antd';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import swapAction from 'modules/swap/actions';
@@ -7,10 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import Button from 'components/Button';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
-// import { initState as swapInitState } from 'modules/swap/reducer';
-// import Switch from 'components/Switch';
 import { ISwapSettings } from 'pages/Swap/types';
-// import { HintIcon } from 'resources/icons';
 
 interface TProps {
   onClose: () => void;
@@ -50,28 +46,32 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   }, [setFieldValue]);
 
   return (
-    <div className="w-full font-Rany text-white">
+    <div className="w-full font-Rany text-item_black dark:text-white">
       <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
         Transaction Settings
       </div>
-      <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:my-0" />
+      <hr className="my-4 h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0" />
       <div className="mt-6 tablet:mx-5">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">
-          <div className="relative flex w-full items-center border-[1px] border-color_bg_2 tablet:h-10">
+          <div className="relative flex w-full items-center tablet:h-10">
             <PositiveFloatNumInput
               inputAmount={values.slipTolerance}
               min={0}
               max={10}
               isConfine={true}
               placeholder="Custom"
-              className={classNames('h-full w-full bg-color_bg_2 py-3 px-4 text-white')}
+              className={classNames(
+                'h-full w-full bg-white_gray_bg py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
+              )}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
-            <div className={'absolute right-3 text-base text-gray_05'}>%</div>
+            <div className={'absolute right-3 text-base text-white_gray_05 dark:text-gray_05'}>
+              %
+            </div>
           </div>
           <Button
-            className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-black tablet:h-10"
+            className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-white tablet:h-10"
             variant="outlined"
             onClick={onClickAuto}>
             Auto
@@ -82,7 +82,9 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         <SubTitle>Transaction Deadline</SubTitle>
         <div className="flex w-fit items-center gap-x-4 tablet:h-10">
           <PositiveFloatNumInput
-            className={classNames('bg-color_bg_2 py-3 px-4 text-white')}
+            className={classNames(
+              'bg-white_gray_bg py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
+            )}
             inputAmount={values.trasactionDeadline}
             isConfine={true}
             placeholder="0"

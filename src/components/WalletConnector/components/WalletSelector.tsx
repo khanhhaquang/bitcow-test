@@ -22,7 +22,7 @@ const Option: React.FC<TOptionProps> = ({ onClick, label, icon }) => {
   return (
     <Button
       onClick={onClick ? onClick : undefined}
-      className="flex w-auto grow justify-between gap-2 !rounded-none border-[1px] border-gray_008 bg-color_bg_2 !py-3 !px-4 hover:border-color_main"
+      className="flex w-auto grow justify-start gap-2 !rounded-none border-[1px] border-white_gray_bg bg-white_gray_bg !py-3 !px-4 hover:!border-color_main dark:border-gray_008 dark:bg-color_bg_2 dark:hover:!bg-color_main"
       variant="outlined">
       {getWalletIcon()}
       <div className="text-base">{label}</div>
@@ -52,9 +52,9 @@ const WalletSelector: React.FC = () => {
   }, [wallets, select, closeModal]);
 
   return (
-    <div className="font-Rany text-white">
+    <div className="font-Rany text-item_black dark:text-white">
       <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">Connect wallet</div>
-      <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:my-0" />
+      <hr className="my-4 h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0" />
       <div className="mb-4 text-lg tablet:px-5 tablet:pt-6">Select Wallet</div>
       <div className="grid grid-cols-2 gap-4 tablet:px-5 tablet:pb-9">{renderButtonGroup}</div>
     </div>

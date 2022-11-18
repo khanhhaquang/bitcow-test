@@ -1,10 +1,10 @@
 import classNames from 'classnames';
+import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
-import { Fragment } from 'react';
 import FooterMobileBg from 'resources/img/footerMobileBg.png';
 
 const { Footer } = Layout;
@@ -20,7 +20,7 @@ const ExternalLink = ({ href, children }: { href: string; children: any }) => {
       target="_blank"
       rel="noreferrer"
       href={href}
-      className="flex fill-gray_05 hover:fill-color_main">
+      className="flex fill-white_gray_05 hover:!fill-color_main dark:fill-gray_05">
       {children}
     </a>
   );

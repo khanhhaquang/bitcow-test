@@ -1,0 +1,26 @@
+.ant-modal {
+  .ant-modal-content {
+    @apply bg-white dark:bg-gray_bg;
+    .ant-modal-body {
+      @apply p-4;
+    }
+    .ant-modal-close {
+      @apply top-0 right-0 fill-white_gray_05 opacity-30 hover:opacity-100 dark:fill-gray_05;
+      .ant-modal-close-x svg {
+        @apply absolute bottom-4 left-4;
+      }
+    }
+  }
+
+  // coin seletor modal
+  .ant-modal-wrap,
+  .ant-modal-mask {
+    @apply tablet:hidden #{!important};
+  }
+}
+
+.ant-drawer {
+  .ant-drawer-body {
+    @apply bg-white p-0 dark:bg-gray_bg;
+  }
+}

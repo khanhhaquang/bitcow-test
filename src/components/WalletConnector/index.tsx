@@ -21,7 +21,7 @@ const WalletConnector = () => {
   const renderActiveBtn = useCallback(() => {
     if (pendingTx) {
       return (
-        <div className="flex items-center justify-center bg-color_main px-4 py-3 font-Rany text-lg text-black tablet:h-full tablet:p-[10px]">
+        <div className="flex items-center justify-center bg-color_main fill-white px-4 py-3 font-Rany text-lg text-white dark:fill-black dark:text-black tablet:h-full tablet:p-[10px]">
           Pending
           <motion.div
             animate={{ rotate: 360 }}
@@ -36,7 +36,7 @@ const WalletConnector = () => {
     }
     return (
       <div
-        className="flex items-center justify-center bg-gray_008 px-4 py-3 font-Rany text-lg text-white tablet:h-full tablet:p-[10px]"
+        className="flex items-center justify-center bg-white px-4 py-3 font-Rany text-lg text-item_black dark:bg-gray_008 dark:text-white tablet:h-full tablet:p-[10px]"
         onClick={openModal}>
         {walletAddressEllipsis(activeWallet.toString() || '')}
       </div>
@@ -49,7 +49,7 @@ const WalletConnector = () => {
         renderActiveBtn()
       ) : (
         <div
-          className="flex h-full w-full items-center justify-center bg-button_gradient px-[22px] py-[13px] font-Furore text-sm text-white tablet:h-full tablet:p-[10px]"
+          className="flex h-full w-full items-center justify-center bg-color_main px-[22px] py-[13px] font-Furore text-sm text-white dark:bg-transparent dark:bg-button_gradient tablet:h-full tablet:p-[10px]"
           onClick={openModal}>
           {'Connect Wallet'}
         </div>

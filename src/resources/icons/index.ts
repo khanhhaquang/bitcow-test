@@ -34,3 +34,5 @@ export { ReactComponent as LoadingIcon } from './loading.svg';
 export { ReactComponent as AddIcon } from './add.svg';
 export { ReactComponent as MenuIcon } from './menu.svg';
 export { ReactComponent as BottomBgIcon } from './accountDetailBottom.svg';
+export { ReactComponent as SunIcon } from './sun.svg';
+export { ReactComponent as MoonIcon } from './moon.svg';

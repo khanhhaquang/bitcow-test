@@ -10,11 +10,11 @@ import { walletAddressEllipsis } from 'components/utils/utility';
 import useAptosWallet from 'hooks/useAptosWallet';
 import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
 import usePools from 'hooks/usePools';
-import { CopyIcon, ExportIcon, QuitIcon } from 'resources/icons';
+import useTokenBalane from 'hooks/useTokenBalance';
+import { CopyIcon, QuitIcon } from 'resources/icons';
 import { copyToClipboard } from 'utils/copy';
 
 import styles from './AccountDetails.module.scss';
-import useTokenBalane from 'hooks/useTokenBalance';
 
 let timer: NodeJS.Timeout;
 
@@ -55,20 +55,22 @@ const AccountDetails = () => {
   return (
     <div className="flex flex-col">
       <div className="flex px-5 tablet:pt-5">
-        <div className="flex flex-col text-gray_05">
+        <div className="flex flex-col text-item_black dark:text-gray_05">
           <div className="flex gap-4">
-            <div className="text-lg text-white">
+            <div className="text-lg text-item_black dark:text-white">
               {walletAddressEllipsis(activeWallet?.toString() || '')}
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => ''} className="w-full p-0 opacity-30 hover:opacity-100">
+              {/* <Button
+                onClick={() => ''}
+                className="w-full fill-gray_05 p-0 opacity-30 hover:opacity-100">
                 <Tooltip placement="top" title="View Tokenlist">
                   <ExportIcon />
                 </Tooltip>
-              </Button>
+              </Button> */}
               <Button
                 onClick={() => handleCopy(activeWallet?.toString())}
-                className="w-full p-0 opacity-30 hover:opacity-100">
+                className="w-full fill-white_gray_05 p-0 opacity-30 hover:opacity-100 dark:fill-gray_05">
                 <Tooltip placement="top" title="Copy">
                   <CopyIcon />
                 </Tooltip>
@@ -93,8 +95,8 @@ const AccountDetails = () => {
                 ${getTokenBalanceInUSD(uiBalance, AptToken)}
               </small>
             </div>
-            <div className="absolute -top-[15px] -left-[15px] h-[30px] w-[30px] -rotate-45 bg-gray_bg"></div>
-            <div className="absolute -top-[15px] -right-[15px] h-[30px] w-[30px] rotate-45 bg-gray_bg"></div>
+            <div className="absolute -top-[15px] -left-[15px] h-[30px] w-[30px] -rotate-45 bg-white dark:bg-gray_bg"></div>
+            <div className="absolute -top-[15px] -right-[15px] h-[30px] w-[30px] rotate-45 bg-white dark:bg-gray_bg"></div>
             <div
               className={cx(
                 'absolute left-0 bottom-0 h-[54px] w-full backdrop-blur-[15px]',
@@ -103,13 +105,13 @@ const AccountDetails = () => {
           </div>
         </div>
       </div>
-      <div className="border-t-[1px] border-gray_008">
+      <div className="border-t-[1px] border-white_color_list_hover dark:border-gray_008">
         <Button
           onClick={() => {
             closeModal();
             disconnect();
           }}
-          className="flex h-full w-full gap-2 p-0 py-4 text-white opacity-30 hover:opacity-100">
+          className="flex h-full w-full gap-2 fill-white_gray_05 p-0 py-4 text-white_gray_05 opacity-30 hover:opacity-100 dark:fill-white dark:text-white">
           <QuitIcon />
           <div className="text-base">Disconnect</div>
         </Button>

@@ -11,6 +11,7 @@ import { IPool } from 'types/pool';
 import PoolRowDetail from './PoolRowDetail';
 import styles from './PoolTable.module.scss';
 import TokenPair from './TokenPair';
+import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 
 interface TProps {
   activePools: IPool[];
@@ -39,7 +40,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">TVL</span>
-              <span className="tablet:text-white">${tvl.toFixed(3)}</span>
+              <span className="tablet:text-white">${numberGroupFormat(tvl, 3) || 0}</span>
             </div>
           );
         },

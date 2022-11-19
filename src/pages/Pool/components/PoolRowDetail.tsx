@@ -73,7 +73,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
               <span className="block text-xs">Your Liquidity</span>
               <div className="flex flex-col">
                 <span className="text-white">
-                  ${numberGroupFormat(getPoolTVL(pool) * poolRecord?.share, 3) || 0}
+                  ${numberGroupFormat(getPoolTVL(pool) * (poolRecord?.share / 100), 3) || 0}
                 </span>
                 <span className="text-white">
                   {numberGroupFormat(poolRecord?.liquidity, 6) || 0} LP

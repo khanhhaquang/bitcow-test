@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import poolAction from 'modules/pool/actions';
 import { getLiquidityModal } from 'modules/pool/reducer';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Radio, Tabs } from 'components/Antd';
@@ -11,6 +11,7 @@ import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import usePools from 'hooks/usePools';
 import { CancelIcon } from 'resources/icons';
+import { IPool } from 'types/pool';
 
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
@@ -33,17 +34,57 @@ const filterOptions = [
 ];
 
 const Pool = () => {
-  const { activePools, checkIfInvested, coinInPools, setPoolFilter, poolFilter } = usePools();
+  const { activePools, checkIfInvested, coinInPools, setPoolFilter, poolFilter, getPoolTVL } =
+    usePools();
   const [activeTab, setActiveTab] = useState('1');
   const dispatch = useDispatch();
+  const [filteredPools, setFilteredPools] = useState(activePools);
   const liquidityModal = useSelector(getLiquidityModal);
 
-  const getPoolTVL = useCallback(() => {
-    const result = activePools.reduce((total, pool) => {
-      return (total +=
-        pool.token0Reserve * coinInPools[pool.token0.symbol] +
-        pool.token1Reserve * coinInPools[pool.token1.symbol]);
-    }, 0);
+  const sortPoolsByFilter = useCallback(
+    (poolsToSort: IPool[]) => {
+      let currentPools = poolsToSort;
+      if (poolFilter.text) {
+        currentPools = currentPools.filter((pool) =>
+          [pool.address, pool.token0.symbol, pool.token1.symbol]
+            .join('+')
+            .toLowerCase()
+            .includes(poolFilter.text.toLowerCase())
+        );
+      }
+      if (poolFilter.sortBy) {
+        currentPools = currentPools.sort((a, b) => {
+          switch (poolFilter.sortBy) {
+            case 'liquidity':
+              return getPoolTVL(b) - getPoolTVL(a);
+            case 'volume':
+            case 'fees':
+            case 'apr':
+              return b[poolFilter.sortBy] - a[poolFilter.sortBy];
+            default:
+              return getPoolTVL(b) - getPoolTVL(a);
+          }
+        });
+      }
+      setFilteredPools(currentPools);
+    },
+    [getPoolTVL, poolFilter.sortBy, poolFilter.text]
+  );
+
+  useEffect(() => {
+    if (activePools && coinInPools) {
+      sortPoolsByFilter(activePools);
+    }
+  }, [activePools, coinInPools, sortPoolsByFilter]);
+
+  const getTotalPoolsTVL = useCallback(() => {
+    const result = coinInPools
+      ? activePools.reduce((total, pool) => {
+          return (total +=
+            pool.token0Reserve * coinInPools[pool.token0.symbol] +
+            pool.token1Reserve * coinInPools[pool.token1.symbol]);
+        }, 0)
+      : 0;
     return result;
   }, [activePools, coinInPools]);
 
@@ -76,7 +117,9 @@ const Pool = () => {
           <div className="">
             TVL <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-white tablet:text-2xl">$ {numberGroupFormat(getPoolTVL(), 3)}</div>
+          <div className="text-white tablet:text-2xl">
+            $ {numberGroupFormat(getTotalPoolsTVL(), 3)}
+          </div>
         </div>
         <div className="flex items-center gap-2 bg-gray_bg py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-gray_05">
           <div className="">
@@ -111,7 +154,7 @@ const Pool = () => {
 
   const renderTabContents = useCallback(() => {
     return tabs.map((tab) => {
-      let currentPools = activePools;
+      let currentPools = filteredPools;
       if (tab.id === '2') {
         currentPools = currentPools.filter((pool) => checkIfInvested(pool.id));
       }
@@ -130,7 +173,7 @@ const Pool = () => {
         children: <PoolTable activePools={currentPools} viewOwned={tab.id === '2'} />
       };
     });
-  }, [activePools, checkIfInvested, poolFilter.text, tabs]);
+  }, [filteredPools, checkIfInvested, poolFilter.text, tabs]);
 
   return (
     <div className="mt-[100px] flex flex-col tablet:mt-4">

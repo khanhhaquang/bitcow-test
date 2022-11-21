@@ -119,7 +119,7 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-white fill-item_black stroke-item_black py-6 px-5 font-Rany text-item_black dark:bg-color_bg_3 dark:fill-white dark:stroke-white dark:text-white tablet:w-full">
+    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-white fill-item_black stroke-item_black py-6 px-5 font-Rany text-item_black backdrop-blur-[15px] dark:bg-gray_bg dark:fill-white dark:stroke-white dark:text-white tablet:w-full">
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col">
         <div className="relative flex flex-col gap-[2px]">
@@ -131,7 +131,7 @@ const TokenSwap = () => {
             variant="icon"
             className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-white_gray_bg p-0 dark:border-color_bg_3 dark:bg-table_bg"
             onClick={onClickSwapToken}>
-            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] opacity-30 group-hover:opacity-100 dark:fill-white" />
+            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] group-dark:hover:opacity-100 dark:fill-white dark:opacity-30" />
           </Button>
           <div className="bg-white_gray_bg p-4 dark:bg-color_bg_2">
             <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
@@ -151,7 +151,7 @@ const TokenSwap = () => {
         )}
         <Button
           isLoading={isSubmitting}
-          className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white hover:opacity-90 disabled:bg-[#505050]"
+          className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg hover:opacity-90 disabled:bg-white_gray_01 disabled:text-white_gray_03 dark:text-white dark:disabled:bg-gray_01 dark:disabled:text-gray_03"
           disabled={activeWallet && (!isValid || !dirty)}
           onClick={!activeWallet ? openModal : submitForm}>
           {!activeWallet ? 'Connect to Wallet' : 'SWAP'}

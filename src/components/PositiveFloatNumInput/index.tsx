@@ -2,6 +2,9 @@ import classNames from 'classnames';
 import { forwardRef, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import invariant from 'tiny-invariant';
 
+import { Theme } from 'contexts/GlobalSettingProvider';
+import useGlobalSetting from 'hooks/useGlobalSetting';
+
 import { avoidScientificNotation, cutDecimals, numToGrouped } from './numberFormats';
 
 type PositiveFloatNumInputProps = {
@@ -49,6 +52,7 @@ const PositiveFloatNumInput = forwardRef<
     },
     ref
   ) => {
+    const { theme } = useGlobalSetting();
     invariant(min >= MIN_DEFAULT, 'Min prop value invalid');
     invariant(max <= MAX_DEFAULT, 'Max prop value invalid');
     invariant(
@@ -104,12 +108,13 @@ const PositiveFloatNumInput = forwardRef<
       if (suffixRef.current) {
         suffixRef.current.style.left = width + 'px';
         if (displayText) {
-          suffixRef.current.style.color = '#fff';
+          suffixRef.current.style.color = theme === Theme.Dark ? '#fff' : 'rgba(4, 18, 25, 1)';
         } else {
-          suffixRef.current.style.color = 'rgba(255, 255, 255, 0.5)';
+          suffixRef.current.style.color =
+            theme === Theme.Dark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(4, 18, 25, 0.3)';
         }
       }
-    }, [displayText, getTextWidth]);
+    }, [displayText, getTextWidth, theme]);
 
     useEffect(() => {
       if (suffix) {

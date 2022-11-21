@@ -22,7 +22,7 @@ const Option: React.FC<TOptionProps> = ({ onClick, label, icon }) => {
   return (
     <Button
       onClick={onClick ? onClick : undefined}
-      className="flex w-auto grow justify-start gap-2 !rounded-none border-[1px] border-white_gray_bg bg-white_gray_bg !py-3 !px-4 hover:!border-color_main dark:border-gray_008 dark:bg-color_bg_2 dark:hover:!bg-color_main"
+      className="flex w-auto grow justify-start gap-2 !rounded-none border-[1px] border-white_table bg-white_table !py-3 !px-4 hover:!border-color_main dark:border-gray_008 dark:bg-color_bg_2 dark:hover:!bg-color_main"
       variant="outlined">
       {getWalletIcon()}
       <div className="text-base">{label}</div>

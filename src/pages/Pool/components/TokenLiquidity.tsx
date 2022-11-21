@@ -65,16 +65,16 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
             <CoinIcon symbol={token.symbol} size={20} />
             <div className="">{token.symbol}</div>
           </div>
-          <div className="flex gap-2 border-l-[1px] border-gray_03 pl-2">
+          <div className="flex gap-2 border-l-[1px] border-white_gray_03 pl-2 dark:border-gray_03">
             <Button
-              className="h-5 w-[31px] rounded-none bg-[#272B30] p-1 text-xs text-gray_05 opacity-30 hover:opacity-100"
+              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-white_gray_05 dark:bg-[#272B30] dark:text-gray_05 dark:opacity-30 dark:hover:opacity-100"
               onClick={() => {
                 onAmountChange(uiBalance * 0.5);
               }}>
               Half
             </Button>
             <Button
-              className="h-5 w-[31px] rounded-none bg-[#272B30] p-1 text-xs text-gray_05 opacity-30 hover:opacity-100"
+              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-white_gray_05 dark:bg-[#272B30] dark:text-gray_05 dark:opacity-30 dark:hover:opacity-100"
               onClick={() => {
                 onAmountChange(uiBalance);
               }}>
@@ -88,7 +88,7 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
           maxDecimals={token?.decimals || 9}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
-          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl text-white"
+          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl text-white_gray_03 dark:text-white"
           inputAmount={values[type] || 0}
           onAmountChange={onAmountChange}
         />
@@ -99,12 +99,12 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
           'flex justify-between font-Rany text-gray_03'
         )}>
         {isReady && (
-          <small className="flex items-end text-sm text-gray_05">
+          <small className="flex items-end text-sm text-white_gray_05 dark:text-gray_05">
             Balance:
             <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, token)}</span>
           </small>
         )}
-        <small className="flex items-end text-sm text-gray_05">
+        <small className="flex items-end text-sm text-white_gray_05 dark:text-gray_05">
           ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, token)}</span>
         </small>
       </div>

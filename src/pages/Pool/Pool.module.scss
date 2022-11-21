@@ -30,16 +30,16 @@
   }
 }
 
-.radioGroup {
-  :global {
-    .ant-radio-button-wrapper {
-      @apply h-[40px] rounded-none border-gray_bg bg-gray_bg py-3 px-4 leading-[14px] text-gray_05 #{!important};
-      &.ant-radio-button-wrapper-checked {
-        @apply border-color_main bg-color_main text-white #{!important};
-      }
-    }
-    .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
-      @apply hidden;
-    }
-  }
-}
+// .radioGroup {
+//   :global {
+//     .ant-radio-button-wrapper {
+//       @apply h-[40px] rounded-none border-gray_bg bg-gray_bg py-3 px-4 leading-[14px] text-gray_05 #{!important};
+//       &.ant-radio-button-wrapper-checked {
+//         @apply border-color_main bg-color_main text-white #{!important};
+//       }
+//     }
+//     .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
+//       @apply hidden;
+//     }
+//   }
+// }

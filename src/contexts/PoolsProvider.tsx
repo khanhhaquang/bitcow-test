@@ -145,6 +145,18 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     [getPoolResources, obricSDK]
   );
 
+  const getPoolTVL = useCallback(
+    (pool: IPool) => {
+      let value = 0;
+      value = coinInPools
+        ? pool.token0Reserve * coinInPools[pool.token0.symbol] +
+          pool.token1Reserve * coinInPools[pool.token1.symbol]
+        : 0;
+      return value;
+    },
+    [coinInPools]
+  );
+
   const gatherPoolTokenInfo = useCallback(async () => {
     setFetching(true);
     let supportedCoins = {};
@@ -165,7 +177,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   }, [activePools, populateCoinRate]);
 
   useEffect(() => {
-    if (activePools && !fetching && (!coinInPools || Object.keys(coinInPools).length < 1)) {
+    if (activePools?.length && !fetching && (!coinInPools || Object.keys(coinInPools).length < 1)) {
       gatherPoolTokenInfo();
     }
   }, [activePools, coinInPools, fetching, gatherPoolTokenInfo]);
@@ -214,18 +226,6 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         value = balance * coinInPools[token.symbol];
       }
       return value ? numberGroupFormat(value, 3) : '0';
-    },
-    [coinInPools]
-  );
-
-  const getPoolTVL = useCallback(
-    (pool: IPool) => {
-      let value = 0;
-      value = coinInPools
-        ? pool.token0Reserve * coinInPools[pool.token0.symbol] +
-          pool.token1Reserve * coinInPools[pool.token1.symbol]
-        : 0;
-      return value;
     },
     [coinInPools]
   );

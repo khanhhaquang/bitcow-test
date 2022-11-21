@@ -6,6 +6,7 @@ import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
 import FooterMobileBg from 'resources/img/footerMobileBg.png';
+import FooterMobileWhiteBg from 'resources/img/footerMobileBgWhite.png';
 
 const { Footer } = Layout;
 
@@ -51,7 +52,12 @@ const PageFooter: React.FC = () => {
   return (
     <Fragment>
       <div className="hidden w-full tablet:block">
-        <img src={FooterMobileBg} alt="" className="h-full w-full object-cover" />
+        <img src={FooterMobileBg} alt="" className="hidden h-full w-full object-cover dark:block" />
+        <img
+          src={FooterMobileWhiteBg}
+          alt=""
+          className="block h-full w-full object-cover dark:hidden"
+        />
       </div>
       <Footer
         className={classNames('z-10 flex justify-between bg-transparent', {

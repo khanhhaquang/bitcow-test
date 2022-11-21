@@ -17,7 +17,7 @@ const SubTitle = ({ children }: { children: string }) => {
     <div className="mb-4 flex items-center gap-2">
       <div className="text-base">{children}</div>
       {/* <Tooltip title={children}>
-        <HintIcon className="opacity-30 hover:opacity-100" />
+        <HintIcon className="dark:opacity-30 dark:hover:opacity-100" />
       </Tooltip> */}
     </div>
   );
@@ -62,7 +62,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
               isConfine={true}
               placeholder="Custom"
               className={classNames(
-                'h-full w-full bg-white_gray_bg py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
+                'h-full w-full bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
               )}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
@@ -83,7 +83,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         <div className="flex w-fit items-center gap-x-4 tablet:h-10">
           <PositiveFloatNumInput
             className={classNames(
-              'bg-white_gray_bg py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
+              'bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
             )}
             inputAmount={values.trasactionDeadline}
             isConfine={true}

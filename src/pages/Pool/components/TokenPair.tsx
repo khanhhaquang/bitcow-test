@@ -14,7 +14,7 @@ const TokenPair: React.FC<TProps> = ({ token0, token1 }) => {
         <CoinIcon className="h-6 w-6 rounded-full" token={token0} />
         <CoinIcon className="-ml-[6px] h-6 w-6 rounded-full" token={token1} />
       </div>
-      <div className="text-base text-white tablet:whitespace-pre">
+      <div className="text-base text-item_black dark:text-white tablet:whitespace-pre">
         {token0.symbol}-{token1.symbol}
       </div>
     </div>

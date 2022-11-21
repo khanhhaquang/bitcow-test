@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { Input } from 'components/Antd';
 import { SearchIcon } from 'resources/icons';
 
-import styles from './SearchInput.module.scss';
+// import styles from './SearchInput.module.scss';
 
 interface IProps {
   onChange: (val: string) => void;
@@ -18,7 +18,7 @@ const SearchInput = ({ onChange, value, onSearch, className }: IProps) => {
   };
 
   return (
-    <div className={cx(styles.searchInput, className)}>
+    <div className={cx('searchInput', className)}>
       <Input
         suffix={<SearchIcon className="tablet:w-6" />}
         placeholder={'Search Pools'}

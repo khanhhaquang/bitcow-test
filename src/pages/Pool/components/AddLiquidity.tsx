@@ -57,15 +57,17 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
       onSubmit={onSubmit}>
       {(props) => {
         return (
-          <div className="w-full font-Rany text-white">
+          <div className="w-full font-Rany text-item_black dark:text-white">
             <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
               Add liquidity
             </div>
-            <hr className="hidden h-[1px] border-0 bg-color_list_hover tablet:my-0 tablet:block" />
+            <hr className="hidden h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0 tablet:block" />
             <div className="mt-5 flex w-full flex-col tablet:mt-6 tablet:px-5 tablet:pb-[110px]">
               <div className="relative flex flex-col items-center gap-2">
-                <div className="w-full bg-color_bg_2 p-4">
-                  <div className="mb-2 text-xs uppercase text-gray_05">Pay</div>
+                <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
+                  <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+                    Pay
+                  </div>
                   <TokenLiquidity
                     token={liquidityPool.token0}
                     type="xAmt"
@@ -73,8 +75,10 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                   />
                 </div>
                 <AddIcon className="h-[18px] w-[18px]" />
-                <div className="w-full bg-color_bg_2 p-4">
-                  <div className="mb-2 text-xs uppercase text-gray_05">Pay</div>
+                <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
+                  <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+                    Pay
+                  </div>
                   <TokenLiquidity
                     token={liquidityPool.token1}
                     type="yAmt"
@@ -83,11 +87,11 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 </div>
               </div>
             </div>
-            <div className="absolute left-0 -bottom-[92.5px] w-full bg-color_bg_3 tablet:bottom-0">
-              <div className="bg-gray_008 p-5">
+            <div className="absolute left-0 -bottom-[92.5px] w-full bg-white dark:bg-gray_bg tablet:bottom-0">
+              <div className="p-5">
                 <Button
                   isLoading={props.isSubmitting}
-                  className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white disabled:bg-[#272B30] disabled:bg-none disabled:text-gray_03"
+                  className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white disabled:bg-white_gray_01 disabled:bg-none disabled:text-white_gray_03 dark:disabled:bg-[#272B30] dark:disabled:text-gray_03"
                   disabled={!props.isValid || !props.dirty}
                   onClick={props.submitForm}>
                   ADD

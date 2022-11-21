@@ -3,7 +3,7 @@
 import cx from 'classnames';
 import { Select, SelectProps } from 'components/Antd';
 import { CaretIcon, CheckIcon } from 'resources/icons';
-import styles from './Select.module.scss';
+// import styles from './Select.module.scss';
 
 interface OptionProps {
   label: string;
@@ -18,8 +18,8 @@ interface TProps extends SelectProps {
 
 const SelectInput: React.FC<TProps> = ({ className, options, ...rest }) => {
   return (
-    <div className={cx(styles.select, className)}>
-      <Select suffixIcon={<CaretIcon className="fill-black" />} {...rest}>
+    <div className={cx('selectInput', className)}>
+      <Select suffixIcon={<CaretIcon className="fill-black dark:fill-white" />} {...rest}>
         {options.map((option) => {
           const { label, value, ...optRest } = option;
           return (

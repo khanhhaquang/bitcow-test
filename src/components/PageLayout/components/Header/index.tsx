@@ -1,27 +1,22 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { routes, TRoute } from 'App.routes';
+import { routes } from 'App.routes';
 import cx from 'classnames';
 import { useCallback, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import { Drawer, Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
+import ThemeToggler from 'components/ThemeToggler';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { LeftArrowIcon, LogoIcon, LogoMobileIcon, MenuIcon } from 'resources/icons';
 import LogoImg from 'resources/img/logo.png';
+import LogoBlackImg from 'resources/img/logoBlack.png';
 
 import styles from './Header.module.scss';
-import SideMenu from './SideMenu';
-import ThemeToggler from 'components/ThemeToggler';
 
 const { Header } = Layout;
-
-interface ISideMenuProps {
-  currentPageName: TRoute['name'];
-  onRouteSelected: () => void;
-}
 
 const PageHeader: React.FC = () => {
   const [currentPageName] = useCurrentPage();
@@ -37,7 +32,7 @@ const PageHeader: React.FC = () => {
           className={'group !bg-transparent'}>
           <Link
             to={path || '/'}
-            className="bold font-Furore text-lg !text-item_black group-hover:!text-color_main dark:!text-white">
+            className="bold font-Furore text-lg !text-item_black group-hover:!text-color_main dark:!text-white tablet:!text-white_gray_05">
             {name}
           </Link>
         </Menu.Item>
@@ -82,7 +77,8 @@ const PageHeader: React.FC = () => {
         <div className="flex flex-col items-start">
           <Link to="/" className={cx('mb-24 flex h-full items-center justify-center')}>
             <div className={cx('block w-[109px]')}>
-              <img src={LogoImg} className="h-full w-full" alt="Logo" />
+              <img src={LogoImg} className="hidden h-full w-full dark:block" alt="Logo" />
+              <img src={LogoBlackImg} className="block h-full w-full dark:hidden" alt="Logo" />
             </div>
           </Link>
           <Menu
@@ -153,7 +149,10 @@ const PageHeader: React.FC = () => {
           <div className="h-8">
             <WalletConnector />
           </div>
-          <Button className="h-8 w-8 p-0" variant="icon" onClick={() => setIsSideMenuOpen(true)}>
+          <Button
+            className="h-8 w-8 fill-item_black p-0 dark:fill-white"
+            variant="icon"
+            onClick={() => setIsSideMenuOpen(true)}>
             <MenuIcon />
           </Button>
         </div>

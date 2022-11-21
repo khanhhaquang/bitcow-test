@@ -1,0 +1,64 @@
+.selectInput {
+  @apply w-full;
+
+  .ant-select {
+    @apply h-[38px] w-full rounded-none border-[1px] border-white_color_list_hover ring-offset-0 ring-offset-transparent dark:border-[#272A2C] tablet:h-[52px] #{!important};
+
+    &:not(.ant-select-disabled):hover .ant-select-selector,
+    &:not(.ant-select-customize-input) .ant-select-selector {
+      @apply border-0 #{!important};
+    }
+    &:not(.ant-select-customize-input) {
+      .ant-select-selector {
+        @apply h-full rounded-none border-0 bg-white p-[10px] dark:bg-color_bg_2;
+        .ant-select-selection-item {
+          @apply bg-transparent text-right leading-[18px] text-item_black dark:text-white tablet:leading-[30px];
+        }
+      }
+    }
+  }
+
+  .ant-select-dropdown {
+    @apply bg-white dark:bg-color_bg_2;
+  }
+
+  ::placeholder {
+    @apply text-white_gray_05 dark:text-gray_05;
+  }
+  /* Edge */
+  ::-webkit-input-placeholder {
+    @apply text-white_gray_05 dark:text-gray_05;
+  }
+  /* Internet Explorer */
+  :-ms-input-placeholder {
+    @apply text-white_gray_05 dark:text-gray_05;
+  }
+}
+
+.ant-select-dropdown {
+  @apply bg-white dark:bg-color_bg_2 #{!important};
+
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    @apply bg-white text-item_black dark:bg-color_bg_2 dark:text-white;
+  }
+
+  .ant-select-item {
+    @apply text-white_gray_05 dark:text-gray_05;
+  }
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    @apply bg-white text-item_black dark:bg-color_bg_2 dark:text-white #{!important};
+    svg {
+      @apply block;
+    }
+  }
+
+  .ant-select-item-option-content {
+    @apply flex justify-between;
+    svg {
+      @apply hidden;
+      path {
+        @apply fill-item_black dark:fill-white #{!important};
+      }
+    }
+  }
+}

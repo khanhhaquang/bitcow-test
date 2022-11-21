@@ -28,11 +28,13 @@ module.exports = {
         table_row_bg: '#1E1E1E',
         table_bg: '#101010',
         item_black: '#041219',
+        white_gray_01: 'rgba(4, 18, 25, 0.1)',
         white_gray_03: 'rgba(4, 18, 25, 0.3)',
         white_gray_05: 'rgba(4, 18, 25, 0.5)',
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
         white_gray_bg: '#F0F1F6',
-        white_color_list_hover: '#EBEDF4'
+        white_color_list_hover: '#EBEDF4',
+        white_table: '#FAFAFA'
       },
       backgroundImage: {
         main: 'url(resources/img/mainBg.png)',

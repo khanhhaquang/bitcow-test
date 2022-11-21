@@ -36,3 +36,6 @@ export { ReactComponent as MenuIcon } from './menu.svg';
 export { ReactComponent as BottomBgIcon } from './accountDetailBottom.svg';
 export { ReactComponent as SunIcon } from './sun.svg';
 export { ReactComponent as MoonIcon } from './moon.svg';
+export { ReactComponent as MoonMobileIcon } from './moonMobile.svg';
+export { ReactComponent as PlusIcon } from './plus.svg';
+export { ReactComponent as MinusIcon } from './minus.svg';

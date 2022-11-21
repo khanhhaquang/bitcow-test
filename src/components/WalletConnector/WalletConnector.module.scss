@@ -6,7 +6,7 @@
         @apply p-4;
       }
       .ant-modal-close {
-        @apply top-0 right-0 opacity-30 hover:opacity-100;
+        @apply top-0 right-0 dark:opacity-30 dark:hover:opacity-100;
         .ant-modal-close-x svg {
           @apply absolute bottom-4 left-4;
         }
@@ -23,7 +23,7 @@
         @apply p-0 pt-5 #{!important};
       }
       .ant-modal-close {
-        @apply top-0 right-0 opacity-30 hover:opacity-100;
+        @apply top-0 right-0 dark:opacity-30 dark:hover:opacity-100;
         .ant-modal-close-x svg {
           @apply absolute bottom-3 left-3;
         }

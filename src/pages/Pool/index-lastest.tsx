@@ -16,7 +16,7 @@ import { IPool } from 'types/pool';
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
-// import styles from './Pool.module.scss';
+import styles from './Pool.module.scss';
 
 const filterOptions = [
   {
@@ -172,8 +172,8 @@ const Pool = () => {
   return (
     <div className="mt-[100px] flex flex-col tablet:mt-4">
       {renderHeader()}
-      <div className="border-[1px] border-white_table bg-white_table py-8 backdrop-blur-[15px] dark:border-[#272A2C] dark:bg-black dark:backdrop-blur-lg tablet:border-0 tablet:bg-white_gray_bg tablet:p-0">
-        <div className={cx('hidden tablet:block')}>
+      <div className="border-[1px] border-white bg-white py-8 backdrop-blur-[15px] dark:border-[#272A2C] dark:bg-black dark:backdrop-blur-lg tablet:border-0 tablet:bg-white_table tablet:p-0">
+        <div className={cx('hidden tablet:block', styles.radioGroup)}>
           <Radio.Group onChange={(e) => setActiveTab(e.target.value)} value={activeTab}>
             {tabs.map((tab) => (
               <Radio.Button value={tab.id} key={tab.id}>
@@ -184,7 +184,7 @@ const Pool = () => {
         </div>
         <Tabs
           activeKey={activeTab}
-          // className={styles.tabs}
+          className={styles.tabs}
           onChange={(key) => setActiveTab(key)}
           tabBarExtraContent={{
             right: (

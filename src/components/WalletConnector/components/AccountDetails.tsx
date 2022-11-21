@@ -63,14 +63,14 @@ const AccountDetails = () => {
             <div className="flex gap-2">
               {/* <Button
                 onClick={() => ''}
-                className="w-full fill-gray_05 p-0 opacity-30 hover:opacity-100">
+                className="w-full fill-gray_05 p-0 dark:opacity-30 dark:hover:opacity-100">
                 <Tooltip placement="top" title="View Tokenlist">
                   <ExportIcon />
                 </Tooltip>
               </Button> */}
               <Button
                 onClick={() => handleCopy(activeWallet?.toString())}
-                className="w-full fill-white_gray_05 p-0 opacity-30 hover:opacity-100 dark:fill-gray_05">
+                className="w-full fill-white_gray_05 p-0 dark:fill-gray_05 dark:opacity-30 dark:hover:opacity-100">
                 <Tooltip placement="top" title="Copy">
                   <CopyIcon />
                 </Tooltip>
@@ -111,7 +111,7 @@ const AccountDetails = () => {
             closeModal();
             disconnect();
           }}
-          className="flex h-full w-full gap-2 fill-white_gray_05 p-0 py-4 text-white_gray_05 opacity-30 hover:opacity-100 dark:fill-white dark:text-white">
+          className="flex h-full w-full gap-2 fill-white_gray_05 p-0 py-4 text-white_gray_05 dark:fill-white dark:text-white dark:opacity-30 dark:hover:opacity-100">
           <QuitIcon />
           <div className="text-base">Disconnect</div>
         </Button>

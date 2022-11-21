@@ -36,7 +36,7 @@
       @apply text-lg text-item_black dark:text-white;
     }
     .ant-notification-notice-close {
-      @apply h-6 w-6 opacity-30 hover:opacity-100;
+      @apply h-6 w-6 dark:opacity-30 dark:hover:opacity-100;
     }
     // .ant-notification-notice-description {
     //   @apply text-grey-700 body-medium;

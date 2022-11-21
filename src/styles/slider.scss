@@ -1,0 +1,13 @@
+.ant-slider {
+  .ant-slider-rail,
+  &:hover .ant-slider-rail {
+    @apply bg-white_gray_01 dark:bg-gray_01 #{!important};
+  }
+  .ant-slider-track,
+  &:hover .ant-slider-track {
+    @apply bg-item_black dark:bg-white #{!important};
+  }
+  .ant-slider-handle {
+    @apply h-4 w-4 border-item_black bg-white dark:border-white dark:bg-table_bg #{!important};
+  }
+}

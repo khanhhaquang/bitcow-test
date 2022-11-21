@@ -7,6 +7,7 @@ import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormat
 import useAptosWallet from 'hooks/useAptosWallet';
 import usePools from 'hooks/usePools';
 import { IPool } from 'types/pool';
+import { MinusIcon, PlusIcon } from 'resources/icons';
 
 interface ExpandedDataType {
   id: string;
@@ -57,25 +58,29 @@ const PoolRowDetail = ({ pool }: IProps) => {
   return (
     <Fragment>
       <div className="flex-col tablet:flex">
-        <div className="hidden gap-6 p-4 tablet:flex">
+        <div className="hidden gap-6 p-4 tablet:flex tablet:bg-white dark:tablet:bg-table_row_bg">
           <div className="flex flex-col">
             <span className="block text-xs">Volume {poolFilter.timeBasis}</span>
-            <span className="text-white">{numberGroupFormat(poolStats.volume, 3) || 0}</span>
+            <span className="text-item_black dark:text-white">
+              {numberGroupFormat(poolStats.volume, 3) || 0}
+            </span>
           </div>
           <div className="flex flex-col">
             <span className="block text-xs">Fees {poolFilter.timeBasis}</span>
-            <span className="text-white">{numberGroupFormat(poolStats.fees, 3) || 0}</span>
+            <span className="text-item_black dark:text-white">
+              {numberGroupFormat(poolStats.fees, 3) || 0}
+            </span>
           </div>
         </div>
-        <div className="flex gap-6 tablet:flex-col tablet:bg-gray_bg tablet:p-4">
+        <div className="flex gap-6 tablet:flex-col tablet:bg-white_table tablet:p-4 dark:tablet:bg-gray_bg">
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[240px] grow flex-col gap-4 tablet:w-[82px]">
               <span className="block text-xs">Your Liquidity</span>
               <div className="flex flex-col">
-                <span className="text-white">
+                <span className="text-item_black dark:text-white">
                   ${numberGroupFormat(getPoolTVL(pool) * (poolRecord?.share / 100), 3) || 0}
                 </span>
-                <span className="text-white">
+                <span className="text-item_black dark:text-white">
                   {numberGroupFormat(poolRecord?.liquidity, 6) || 0} LP
                 </span>
               </div>
@@ -86,7 +91,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
                 {poolRecord?.assetsPooled &&
                   Object.keys(poolRecord?.assetsPooled).map((key) => {
                     return (
-                      <div className="text-white" key={`pool-asset-${key}`}>
+                      <div className="text-item_black dark:text-white" key={`pool-asset-${key}`}>
                         {poolRecord?.assetsPooled[key]
                           ? numberGroupFormat(poolRecord?.assetsPooled[key], 6) || 0
                           : 0}{' '}
@@ -98,20 +103,24 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </div>
             <div className="flex grow flex-col gap-4">
               <span className="block text-xs">Your Share</span>
-              <span className="text-white">{numberGroupFormat(poolRecord?.share, 3) || 0} %</span>
+              <span className="text-item_black dark:text-white">
+                {numberGroupFormat(poolRecord?.share, 3) || 0} %
+              </span>
             </div>
           </div>
-          <div className="flex h-12 w-[240px] justify-end gap-4 tablet:w-full">
+          <div className="flex h-12 w-[292px] justify-end gap-4 tablet:w-full">
             <Button
-              className="w-full max-w-[108px] rounded-none bg-color_main text-base text-white hover:opacity-90 tablet:max-w-full"
+              className="flex w-full max-w-[134px] items-center gap-2 rounded-none bg-color_main fill-white text-base text-white hover:opacity-90 tablet:max-w-full"
               onClick={() => handleOnClick('add')}>
+              <PlusIcon />
               {activeWallet ? 'Deposit' : 'Connect Wallet'}
             </Button>
             {activeWallet && poolRecord?.liquidity > 0 && (
               <Button
-                className="w-full rounded-none border-[1px] border-color_main px-6 py-4 text-color_main hover:bg-gray_01"
+                className="flex w-full items-center gap-2 rounded-none border-[1px] border-color_main fill-color_main px-6 py-4 text-color_main hover:bg-gray_01"
                 variant="outlined"
                 onClick={() => handleOnClick('withdraw')}>
+                <MinusIcon />
                 Withdraw
               </Button>
             )}

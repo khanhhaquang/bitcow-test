@@ -46,7 +46,7 @@
 .drawer {
   :global {
     .ant-drawer-body {
-      @apply bg-gray_bg pb-10;
+      @apply px-6 pb-10 pt-[45px] #{!important};
     }
   }
 }

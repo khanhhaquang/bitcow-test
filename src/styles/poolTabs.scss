@@ -1,0 +1,29 @@
+.ant-tabs {
+  .ant-tabs-extra-content {
+    @apply w-1/3 tablet:w-full;
+  }
+  .ant-tabs-nav {
+    @apply mb-8 px-8 tablet:flex-col tablet:px-0 #{!important};
+    &::before {
+      @apply border-b-0 #{!important};
+    }
+  }
+  .ant-tabs-tab {
+    @apply tablet:hidden;
+    .ant-tabs-tab-btn {
+      @apply text-white_gray_05 dark:text-gray_05;
+    }
+    &.ant-tabs-tab-active .ant-tabs-tab-btn {
+      @apply text-color_main;
+    }
+    & {
+      @apply tablet:ml-0 #{!important};
+    }
+  }
+  .ant-tabs-nav-operations {
+    @apply tablet:hidden #{!important};
+  }
+  .ant-tabs-ink-bar {
+    @apply w-[62px] bg-color_main tablet:hidden #{!important};
+  }
+}

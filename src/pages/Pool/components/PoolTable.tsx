@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import cx from 'classnames';
 import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';
+import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import usePools from 'hooks/usePools';
 import { LessIcon, MoreIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
 import PoolRowDetail from './PoolRowDetail';
-import styles from './PoolTable.module.scss';
+// import styles from './PoolTable.module.scss';
 import TokenPair from './TokenPair';
-import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 
 interface TProps {
   activePools: IPool[];
@@ -40,13 +41,15 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">TVL</span>
-              <span className="tablet:text-white">${numberGroupFormat(tvl, 3) || 0}</span>
+              <span className="tablet:text-item_black dark:tablet:text-white">
+                ${numberGroupFormat(tvl, 3) || 0}
+              </span>
             </div>
           );
         },
         defaultSortOrder: 'descend',
         sorter: {
-          compare: (a, b) => a.liquidity - b.liquidity,
+          compare: (a, b) => getPoolTVL(a) - getPoolTVL(b),
           multiple: 2
         }
       },
@@ -87,7 +90,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">APR {poolFilter.timeBasis}</span>
-              <span className="tablet:text-white">{val}</span>
+              <span className="tablet:text-item_black dark:tablet:text-white">{val}</span>
             </div>
           );
         },
@@ -128,11 +131,12 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       columns={columns()}
       dataSource={activePools}
       pagination={false}
-      className={styles.poolTable}
+      className={cx('ant-pool-table')}
       onChange={handleChange}
       // tableLayout="fixed"
       rowKey={(record) => record.id}
       expandable={{
+        expandedRowClassName: () => 'expanded-pool',
         expandRowByClick: true,
         defaultExpandAllRows: viewOwned,
         expandedRowRender: (record) => {

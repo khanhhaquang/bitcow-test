@@ -57,9 +57,10 @@ const TokenSwap = () => {
           obricSDK.getQuote(fromToken.symbol, toToken.symbol, Number(fromUiAmt * 0.01)),
           obricSDK.getQuote(fromToken.symbol, toToken.symbol, Number(fromUiAmt))
         ]);
-        const impact = ((rate1Percent * 100 - rate) / (rate1Percent * 100)) * 100;
+        const impact =
+          ((rate1Percent.outAmt * 100 - rate.outAmt) / (rate1Percent.outAmt * 100)) * 100;
         setPriceImpact(impact);
-        setFieldValue('currencyTo.amount', rate);
+        setFieldValue('currencyTo.amount', rate.outAmt);
       }
     } catch (error) {
       if (error instanceof ApiError) {
@@ -151,7 +152,7 @@ const TokenSwap = () => {
         )}
         <Button
           isLoading={isSubmitting}
-          className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg hover:opacity-90 disabled:bg-white_gray_01 disabled:text-white_gray_03 dark:text-white dark:disabled:bg-gray_01 dark:disabled:text-gray_03"
+          className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white hover:opacity-90 disabled:bg-white_gray_01 disabled:text-white_gray_03 dark:disabled:bg-gray_01 dark:disabled:text-gray_03"
           disabled={activeWallet && (!isValid || !dirty)}
           onClick={!activeWallet ? openModal : submitForm}>
           {!activeWallet ? 'Connect to Wallet' : 'SWAP'}

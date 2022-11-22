@@ -40,10 +40,10 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   //   setFieldValue('privacySwap', swapInitState.swapSettings.privacySwap);
   // }, [setFieldValue]);
 
-  const onClickAuto = useCallback(() => {
-    const randomSlip = Math.round(Math.random() * 100 * 2) / 100;
-    setFieldValue('slipTolerance', randomSlip);
-  }, [setFieldValue]);
+  // const onClickAuto = useCallback(() => {
+  //   const randomSlip = Math.round(Math.random() * 100 * 2) / 100;
+  //   setFieldValue('slipTolerance', randomSlip);
+  // }, [setFieldValue]);
 
   return (
     <div className="w-full font-Rany text-item_black dark:text-white">
@@ -70,12 +70,12 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
               %
             </div>
           </div>
-          <Button
+          {/* <Button
             className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-white tablet:h-10"
             variant="outlined"
             onClick={onClickAuto}>
             Auto
-          </Button>
+          </Button> */}
         </div>
       </div>
       <div className="mt-6 tablet:mx-5">

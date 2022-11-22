@@ -50,30 +50,32 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   );
 
   const getFilteredTokenListWithBalance = useCallback(() => {
-    let currentTokenList = tokenList
-      ?.filter((token) => coinInPools[token.symbol])
-      .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
-      .map((t) => {
-        const tokenStore = (coinStore || {})[t.token_type.type];
-        const balance = !activeWallet
-          ? -1
-          : tokenStore
-          ? (tokenStore.data as CoinInfo).coin.value / Math.pow(10, t.decimals)
-          : 0;
-        return {
-          token: t,
-          balance
-        };
-      })
-      .sort((a, b) => b.balance - a.balance); // TODO: sort by values
+    if (coinInPools) {
+      let currentTokenList = tokenList
+        ?.filter((token) => coinInPools[token.symbol])
+        .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
+        .map((t) => {
+          const tokenStore = (coinStore || {})[t.token_type.type];
+          const balance = !activeWallet
+            ? -1
+            : tokenStore
+            ? (tokenStore.data as CoinInfo).coin.value / Math.pow(10, t.decimals)
+            : 0;
+          return {
+            token: t,
+            balance
+          };
+        })
+        .sort((a, b) => b.balance - a.balance); // TODO: sort by values
 
-    if (filter) {
-      currentTokenList = currentTokenList?.filter((token) => {
-        const keysForFilter = [token.token.name, token.token.symbol].join(',').toLowerCase();
-        return keysForFilter.includes(filter);
-      });
+      if (filter) {
+        currentTokenList = currentTokenList?.filter((token) => {
+          const keysForFilter = [token.token.name, token.token.symbol].join(',').toLowerCase();
+          return keysForFilter.includes(filter);
+        });
+      }
+      setTokenListBalance(currentTokenList);
     }
-    setTokenListBalance(currentTokenList);
   }, [activeWallet, coinInPools, coinStore, filter, tokenList]);
 
   useEffect(() => {

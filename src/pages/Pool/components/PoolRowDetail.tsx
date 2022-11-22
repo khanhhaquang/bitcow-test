@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import poolAction from 'modules/pool/actions';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -62,13 +64,15 @@ const PoolRowDetail = ({ pool }: IProps) => {
           <div className="flex flex-col">
             <span className="block text-xs">Volume {poolFilter.timeBasis}</span>
             <span className="text-item_black dark:text-white">
-              {numberGroupFormat(poolStats.volume, 3) || 0}
+              Coming soon
+              {/* {numberGroupFormat(poolStats.volume, 3) || 0} */}
             </span>
           </div>
           <div className="flex flex-col">
             <span className="block text-xs">Fees {poolFilter.timeBasis}</span>
             <span className="text-item_black dark:text-white">
-              {numberGroupFormat(poolStats.fees, 3) || 0}
+              Coming soon
+              {/* {numberGroupFormat(poolStats.fees, 3) || 0} */}
             </span>
           </div>
         </div>

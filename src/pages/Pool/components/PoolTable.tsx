@@ -57,7 +57,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         title: `Volume ${poolFilter.timeBasis}`,
         dataIndex: 'volume',
         render: (val) => {
-          return <div className="tablet:hidden">{val}</div>;
+          return <div className="tablet:hidden">Coming Soon</div>;
         },
         sorter: {
           compare: (a, b) => {
@@ -72,7 +72,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         title: `Fees ${poolFilter.timeBasis}`,
         dataIndex: 'fees',
         render: (val) => {
-          return <div className="tablet:hidden">{val}</div>;
+          return <div className="tablet:hidden">Coming Soon</div>;
         },
         sorter: {
           compare: (a, b) => {
@@ -90,7 +90,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">APR {poolFilter.timeBasis}</span>
-              <span className="tablet:text-item_black dark:tablet:text-white">{val}</span>
+              <span className="tablet:text-item_black dark:tablet:text-white">Coming Soon</span>
             </div>
           );
         },

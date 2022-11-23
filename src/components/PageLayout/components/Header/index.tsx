@@ -99,18 +99,15 @@ const PageHeader: React.FC = () => {
 
   return (
     <Header
-      className={cx(
-        'z-30 h-[72px] w-full border-gray_02 bg-transparent px-0 dark:border-b-[1px] tablet:h-[64px]',
-        {
-          'absolute top-0 z-10 h-[126px] bg-transparent tablet:h-[64px]': currentPageName === 'Home'
-        }
-      )}>
+      className={cx('z-30 h-[72px] w-full bg-transparent px-0 tablet:h-[64px]', {
+        'absolute top-0 z-10 h-[126px] bg-transparent tablet:h-[64px]': currentPageName === 'Home'
+      })}>
       <div className="relative top-0 left-0 mx-auto flex h-full items-center tablet:justify-between tablet:px-4">
         <div
           className={cx('h-full pl-[60px] tablet:pl-0', {
             'pl-20': currentPageName === 'Home'
           })}>
-          <Link to="/" className={cx('flex h-full items-center justify-center')}>
+          <Link to="/" className={cx('flex h-full items-center justify-center hover:-rotate-12')}>
             <div
               className={cx('hidden', {
                 'tablet:block': currentPageName !== 'Home'

@@ -21,6 +21,7 @@ export interface IPool {
   token0Reserve?: number;
   token1Reserve?: number;
   decimals?: number;
+  swapFee?: number;
 }
 
 export interface IPoolFilters {

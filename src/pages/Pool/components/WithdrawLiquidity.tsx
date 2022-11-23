@@ -28,8 +28,8 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const [pool, setPool] = useState<{ lp: number; coins: {} }>();
 
   const fetchRecord = useCallback(async () => {
-    const { lp, coins } = await getOwnedLiquidity(liquidityPool.id);
-    setPool({ lp, coins });
+    const { lp, myCoins } = await getOwnedLiquidity(liquidityPool.id);
+    setPool({ lp, coins: myCoins });
   }, [getOwnedLiquidity, liquidityPool.id]);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             Remove liquidity
           </div>
           <hr className="hidden h-[1px] border-0 bg-white_gray_bg dark:bg-color_list_hover tablet:my-0 tablet:block" />
-          <div className="mt-5 flex w-full flex-col items-center justify-center gap-2 tablet:mt-6 tablet:px-5 tablet:pb-[110px]">
+          <div className="mt-5 flex w-full flex-col items-center justify-center gap-2 tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
             <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
               <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
                 AVAILABLE FOR WITHDRAWAL
@@ -182,8 +182,8 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
               </Fragment>
             )}
           </div>
-          <div className="absolute left-0 -bottom-[92px] w-full bg-white dark:bg-gray_bg tablet:bottom-0">
-            <div className="p-5">
+          <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-gray_bg tablet:bottom-0">
+            <div className="p-5 pt-1">
               <Button
                 isLoading={props.isSubmitting}
                 className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white disabled:bg-white_gray_01 disabled:bg-none disabled:text-white_gray_03 dark:disabled:bg-[#272B30] dark:disabled:text-gray_03"

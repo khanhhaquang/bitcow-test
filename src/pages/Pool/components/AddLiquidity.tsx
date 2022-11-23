@@ -45,6 +45,32 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     yAmt: yup.number().positive()
   });
 
+  const renderDetails = useCallback(() => {
+    const details = [
+      {
+        label: 'Trade Fee',
+        value: liquidityPool.swapFee
+      },
+      {
+        label: 'Withdraw Fee',
+        value: '0.2%'
+      }
+    ];
+
+    return (
+      <div className={'flex flex-col gap-1'}>
+        {details.map((detail) => (
+          <div
+            className="flex justify-between text-xs text-item_black dark:text-white"
+            key={detail.label}>
+            <div className="">{detail.label}</div>
+            <div className="">{detail.value}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }, [liquidityPool.swapFee]);
+
   return (
     <Formik
       initialValues={{
@@ -62,7 +88,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
               Add liquidity
             </div>
             <hr className="hidden h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0 tablet:block" />
-            <div className="mt-5 flex w-full flex-col tablet:mt-6 tablet:px-5 tablet:pb-[110px]">
+            <div className="mt-5 flex w-full flex-col tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
               <div className="relative flex flex-col items-center gap-2">
                 <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
                   <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
@@ -86,9 +112,12 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                   />
                 </div>
               </div>
+              <div className={'mt-2 bg-white_table p-5 dark:bg-color_bg_2 tablet:px-4'}>
+                {renderDetails()}
+              </div>
             </div>
-            <div className="absolute left-0 -bottom-[92.5px] w-full bg-white dark:bg-gray_bg tablet:bottom-0">
-              <div className="p-5">
+            <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-gray_bg tablet:bottom-0">
+              <div className="p-5 pt-1">
                 <Button
                   isLoading={props.isSubmitting}
                   className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white disabled:bg-white_gray_01 disabled:bg-none disabled:text-white_gray_03 dark:disabled:bg-[#272B30] dark:disabled:text-gray_03"

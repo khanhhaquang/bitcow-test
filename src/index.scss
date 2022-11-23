@@ -28,6 +28,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+::placeholder {
+  @apply text-gray_03 #{!important};
+}
+/* Edge */
+::-webkit-input-placeholder {
+  @apply text-gray_03 #{!important};
+}
+/* Internet Explorer */
+:-ms-input-placeholder {
+  @apply text-gray_03 #{!important};
+}
+
 @layer components {
   svg.font-icon {
     display: inline-block;

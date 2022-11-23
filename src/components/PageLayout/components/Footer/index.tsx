@@ -62,7 +62,7 @@ const PageFooter: React.FC = () => {
       <Footer
         className={classNames('z-10 flex justify-between bg-transparent', {
           'py-10 px-20 tablet:pb-24 tablet:pt-5': currentPageName === 'Home',
-          'px-15 border-t-[1px] border-gray_02 py-5 tablet:border-none': currentPageName !== 'Home'
+          'px-15 py-5 tablet:border-none': currentPageName !== 'Home'
         })}>
         {currentPageName === 'Home' && (
           <Link to="/" className="flex h-full items-center justify-center tablet:hidden">

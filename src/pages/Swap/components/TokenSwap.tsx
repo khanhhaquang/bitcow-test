@@ -5,18 +5,18 @@
 import { ApiError } from 'aptos';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Tooltip } from 'components/Antd';
 import Button from 'components/Button';
 import Card from 'components/Card';
 import ObricModal from 'components/ObricModal';
 import useAptosWallet from 'hooks/useAptosWallet';
-import { CancelIcon, SettingIcon, SwapIcon } from 'resources/icons';
+import useTokenBalane from 'hooks/useTokenBalance';
+import { CancelIcon, SettingBlackIcon, SettingWhiteIcon, SwapIcon } from 'resources/icons';
 import { openErrorNotification } from 'utils/notifications';
 
 import CurrencyInput from './CurrencyInput';
-import CoinSelector from './CurrencyInput/CoinSelector';
 import SwapDetail from './SwapDetail';
 import SwapSetting from './SwapSetting';
 
@@ -33,6 +33,11 @@ const TokenSwap = () => {
   const swapRate = values.currencyTo?.amount;
   const [isPeriodicRefreshPaused, setIsPeriodicRefreshPaused] = useState(false);
   const [priceImpact, setPriceImpact] = useState(0);
+  const [uiBalance, isReady] = useTokenBalane(values.currencyFrom.token);
+  const sufficientBalance = useMemo(() => {
+    if (!activeWallet || (!uiBalance && isReady)) return false;
+    return uiBalance >= fromUiAmt;
+  }, [activeWallet, fromUiAmt, isReady, uiBalance]);
 
   useEffect(() => {
     if (obricSDK) {
@@ -108,13 +113,18 @@ const TokenSwap = () => {
     <Fragment>
       <Tooltip title="Setting">
         <button
-          className="absolute top-0 right-0 z-10 cursor-pointer fill-inherit stroke-inherit py-6 px-5"
+          className="absolute top-0  right-0 z-10 cursor-pointer fill-none stroke-none py-6 px-5"
           onClick={() => setIsSettingsOpen(true)}>
-          <SettingIcon />
+          <span className="block dark:hidden">
+            <SettingBlackIcon />
+          </span>
+          <span className="hidden dark:block">
+            <SettingWhiteIcon />
+          </span>
         </button>
       </Tooltip>
       <div className="relative flex w-full justify-start">
-        <h5 className="text-base font-bold text-inherit">Swap</h5>
+        <h5 className="text-lg font-bold text-inherit">Swap</h5>
       </div>
     </Fragment>
   );
@@ -124,17 +134,17 @@ const TokenSwap = () => {
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col">
         <div className="relative flex flex-col gap-[2px]">
-          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_2">
+          <div className="bg-white_gray_bg p-4 dark:bg-table_bg">
             <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
           </div>
           <Button
             variant="icon"
-            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-white_gray_bg p-0 dark:border-color_bg_3 dark:bg-table_bg"
+            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-white_gray_bg p-0 dark:border-gray_bg dark:bg-table_bg"
             onClick={onClickSwapToken}>
-            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] group-dark:hover:opacity-100 dark:fill-white dark:opacity-30" />
+            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] dark:fill-white dark:opacity-30 dark:group-hover:opacity-100" />
           </Button>
-          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_2">
+          <div className="bg-white_gray_bg p-4 dark:bg-table_bg">
             <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
               RECEIVE
             </div>
@@ -153,9 +163,9 @@ const TokenSwap = () => {
         <Button
           isLoading={isSubmitting}
           className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white hover:opacity-90 disabled:bg-white_gray_01 disabled:text-white_gray_03 dark:disabled:bg-gray_01 dark:disabled:text-gray_03"
-          disabled={activeWallet && (!isValid || !dirty)}
+          disabled={activeWallet && (!isValid || !dirty || !sufficientBalance)}
           onClick={!activeWallet ? openModal : submitForm}>
-          {!activeWallet ? 'Connect to Wallet' : 'SWAP'}
+          {!activeWallet ? 'Connect to Wallet' : sufficientBalance ? 'SWAP' : 'Insufficent Balance'}
         </Button>
       </div>
       <ObricModal

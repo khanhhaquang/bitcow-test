@@ -1,12 +1,11 @@
 .ant-tooltip {
   .ant-tooltip-content {
-    @apply border-[1px] border-gray_008;
     .ant-tooltip-arrow-content {
       --antd-arrow-background-color: transparent;
-      @apply border-[1px] border-gray_008 bg-white dark:bg-color_tooltip #{!important};
+      @apply bg-white dark:bg-color_border #{!important};
     }
     .ant-tooltip-inner {
-      @apply rounded-none border-[1px] border-gray_008 bg-white py-2 px-4 text-sm text-white_gray_05 dark:bg-color_tooltip dark:text-gray_05;
+      @apply rounded-none bg-white py-2 px-4 text-sm text-white_gray_05 dark:bg-color_border dark:text-color_text_2;
     }
   }
 }

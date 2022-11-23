@@ -6,10 +6,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        color_border: '#505050',
         color_main: '#FF6827',
         color_minor: '#FFCC4A',
         color_text_1: '#ffffff',
-        color_text_2: 'rgba(255, 255, 255, 0.5)',
         color_text_2: 'rgba(255, 255, 255, 0.5)',
         color_bg_1: '#000000',
         color_bg_2: '#0E1114',

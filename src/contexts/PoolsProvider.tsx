@@ -16,7 +16,9 @@ interface PoolsContextType {
   coinInPools: Record<string, any>;
   getTokenBalanceInUSD: (balance: number, token: RawCoinInfo) => string;
   getPoolTVL: (pool: IPool) => number;
-  getOwnedLiquidity: (address: string) => Promise<{ lp: number; coins: Record<string, any> }>;
+  getOwnedLiquidity: (
+    address: string
+  ) => Promise<{ lp: number; coins: Record<string, any>; myCoins: Record<string, any> }>;
   checkIfInvested: (address: string) => boolean;
   setPoolFilter: React.Dispatch<React.SetStateAction<IPoolFilters>>;
   poolFilter: IPoolFilters;
@@ -107,6 +109,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       let parsedPools: IPool[] = [];
       if (obricSDK) {
         const filteredPools = pools;
+        console.log('MMEEM>>', pools);
         parsedPools = await Promise.all(
           filteredPools.map(async (pool) => {
             const address = (pool.typeTag as StructTag).address.toString();
@@ -134,7 +137,8 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
               invested: true,
               token0Reserve,
               token1Reserve,
-              decimals
+              decimals,
+              swapFee: pool.swap_fee_per_million.toJsNumber()
             };
           })
         );
@@ -192,13 +196,14 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     async (poolAddress) => {
       let result = {
         lp: 0,
-        coins: {}
+        coins: {},
+        myCoins: {}
       };
       const poolInfo = activePools.find((pool) => pool.id === poolAddress);
       if (poolInfo) {
         const { token0, token1, token0Reserve, token1Reserve, liquidity, decimals } = poolInfo;
         result = {
-          lp: 0,
+          ...result,
           coins: {
             [token0.symbol]: token0Reserve,
             [token1.symbol]: token1Reserve
@@ -211,6 +216,10 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
             // eslint-disable-next-line @typescript-eslint/naming-convention
             const myLp = coinInfo?.coin?.value / Math.pow(10, decimals);
             result.lp = myLp;
+            result.myCoins = {
+              [token0.symbol]: liquidity ? (myLp / liquidity) * token0Reserve : 0,
+              [token1.symbol]: liquidity ? (myLp / liquidity) * token1Reserve : 0
+            };
           }
         }
       }

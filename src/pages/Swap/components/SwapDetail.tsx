@@ -110,7 +110,7 @@ const SwapDetail = ({
   }, [fromToken.symbol, minimumOutput, toToken.symbol, values.slipTolerance]);
 
   return (
-    <div className={classNames('mt-2 bg-white_table dark:bg-color_bg_2', styles.collapse)}>
+    <div className={classNames('mt-2 bg-white_table dark:bg-table_bg', styles.collapse)}>
       <Collapse
         ghost
         defaultActiveKey={['1']}

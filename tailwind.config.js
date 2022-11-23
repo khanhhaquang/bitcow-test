@@ -6,6 +6,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        color_text_3: 'var(--obric-color_text_3)',
+        color_text_2_light: 'rgba(4, 18, 25, 0.5)',
+        color_bg_gray: '#333333',
+        color_bg_input: '#101010',
         color_border: '#505050',
         color_main: '#FF6827',
         color_minor: '#FFCC4A',
@@ -18,23 +22,21 @@ module.exports = {
         color_tooltip: '#363B42',
         gray_01: 'rgba(255, 255, 255, 0.1)',
         gray_02: 'rgba(255, 255, 255, 0.2)',
-        gray_03: 'rgba(255, 255, 255, 0.3)',
-        gray_05: 'rgba(255, 255, 255, 0.5)',
         gray_004: 'rgba(255, 255, 255, 0.04)',
         gray_008: 'rgba(255, 255, 255, 0.08)',
         gray_016: 'rgba(255, 255, 255, 0.16)',
         color_error: '#FF6666',
-        gray_bg: '#333333',
         table_row_bg: '#1E1E1E',
-        table_bg: '#101010',
         item_black: '#041219',
         white_gray_01: 'rgba(4, 18, 25, 0.1)',
-        white_gray_03: 'rgba(4, 18, 25, 0.3)',
-        white_gray_05: 'rgba(4, 18, 25, 0.5)',
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
         white_gray_bg: '#F0F1F6',
         white_color_list_hover: '#EBEDF4',
         white_table: '#FAFAFA'
+      },
+      height: {
+        13: '3.25rem',
+        15: '3.75rem'
       },
       backgroundImage: {
         main: 'url(resources/img/mainBg.png)',

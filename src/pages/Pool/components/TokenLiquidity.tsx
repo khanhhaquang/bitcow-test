@@ -65,16 +65,16 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
             <CoinIcon symbol={token.symbol} size={20} />
             <div className="">{token.symbol}</div>
           </div>
-          <div className="flex gap-2 border-l-[1px] border-white_gray_03 pl-2 dark:border-gray_03">
+          <div className="flex gap-2 border-l-[1px] border-color_text_3">
             <Button
-              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-white_gray_05 dark:bg-[#272B30] dark:text-gray_05 dark:opacity-30 dark:hover:opacity-100"
+              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-color_text_2_light dark:bg-[#272B30] dark:text-color_text_2 dark:opacity-30 dark:hover:opacity-100"
               onClick={() => {
                 onAmountChange(uiBalance * 0.5);
               }}>
               Half
             </Button>
             <Button
-              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-white_gray_05 dark:bg-[#272B30] dark:text-gray_05 dark:opacity-30 dark:hover:opacity-100"
+              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-color_text_2_light dark:bg-[#272B30] dark:text-color_text_2 dark:opacity-30 dark:hover:opacity-100"
               onClick={() => {
                 onAmountChange(uiBalance);
               }}>
@@ -88,7 +88,7 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
           maxDecimals={token?.decimals || 9}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
-          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl text-white_gray_03 dark:text-white"
+          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl text-color_text_3 dark:text-white"
           inputAmount={values[type] || 0}
           onAmountChange={onAmountChange}
         />
@@ -96,15 +96,15 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
       <div
         className={cx(
           // styles.TokenLiquidity,
-          'flex justify-between font-Rany text-gray_03'
+          'flex justify-between font-Rany text-color_text_3'
         )}>
         {isReady && (
-          <small className="flex items-end text-sm text-white_gray_05 dark:text-gray_05">
+          <small className="flex items-end text-sm text-color_text_2_light dark:text-color_text_2">
             Balance:
             <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, token)}</span>
           </small>
         )}
-        <small className="flex items-end text-sm text-white_gray_05 dark:text-gray_05">
+        <small className="flex items-end text-sm text-color_text_2_light dark:text-color_text_2">
           ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, token)}</span>
         </small>
       </div>

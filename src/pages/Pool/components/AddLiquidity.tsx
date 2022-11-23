@@ -91,7 +91,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             <div className="mt-5 flex w-full flex-col tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
               <div className="relative flex flex-col items-center gap-2">
                 <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-                  <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+                  <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
                     Pay
                   </div>
                   <TokenLiquidity
@@ -102,7 +102,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 </div>
                 <AddIcon className="h-[18px] w-[18px]" />
                 <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-                  <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+                  <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
                     Pay
                   </div>
                   <TokenLiquidity
@@ -116,11 +116,11 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 {renderDetails()}
               </div>
             </div>
-            <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-gray_bg tablet:bottom-0">
+            <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-color_bg_gray tablet:bottom-0">
               <div className="p-5 pt-1">
                 <Button
                   isLoading={props.isSubmitting}
-                  className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white disabled:bg-white_gray_01 disabled:bg-none disabled:text-white_gray_03 dark:disabled:bg-[#272B30] dark:disabled:text-gray_03"
+                  variant="primary"
                   disabled={!props.isValid || !props.dirty}
                   onClick={props.submitForm}>
                   ADD

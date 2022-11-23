@@ -99,7 +99,7 @@ const SwapDetail = ({
       <div className={classNames('flex flex-col gap-1')}>
         {details.map((detail) => (
           <div
-            className="flex justify-between text-xs text-white_gray_05 dark:text-gray_05"
+            className="flex justify-between text-xs text-color_text_2_light dark:text-color_text_2"
             key={detail.label}>
             <div className="">{detail.label}</div>
             <div className="">{detail.value}</div>
@@ -110,7 +110,7 @@ const SwapDetail = ({
   }, [fromToken.symbol, minimumOutput, toToken.symbol, values.slipTolerance]);
 
   return (
-    <div className={classNames('mt-2 bg-white_table dark:bg-table_bg', styles.collapse)}>
+    <div className={classNames('mt-2 bg-white_table dark:bg-color_bg_input', styles.collapse)}>
       <Collapse
         ghost
         defaultActiveKey={['1']}

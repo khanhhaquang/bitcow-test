@@ -55,7 +55,7 @@ const AccountDetails = () => {
   return (
     <div className="flex flex-col">
       <div className="flex px-5 tablet:pt-5">
-        <div className="flex flex-col text-item_black dark:text-gray_05">
+        <div className="flex flex-col text-item_black dark:text-color_text_2">
           <div className="flex gap-4">
             <div className="text-lg text-item_black dark:text-white">
               {walletAddressEllipsis(activeWallet?.toString() || '')}
@@ -63,14 +63,14 @@ const AccountDetails = () => {
             <div className="flex gap-2">
               {/* <Button
                 onClick={() => ''}
-                className="w-full fill-gray_05 p-0 dark:opacity-30 dark:hover:opacity-100">
+                className="w-full fill-color_text_2 p-0 dark:opacity-30 dark:hover:opacity-100">
                 <Tooltip placement="top" title="View Tokenlist">
                   <ExportIcon />
                 </Tooltip>
               </Button> */}
               <Button
                 onClick={() => handleCopy(activeWallet?.toString())}
-                className="w-full fill-white_gray_05 p-0 dark:fill-gray_05 dark:opacity-30 dark:hover:opacity-100">
+                className="w-full fill-color_text_2_light p-0 dark:fill-color_text_2 dark:opacity-30 dark:hover:opacity-100">
                 <Tooltip placement="top" title="Copy">
                   <CopyIcon />
                 </Tooltip>
@@ -91,12 +91,12 @@ const AccountDetails = () => {
                 </div>
                 <div className="text-[20px]">{availableApt}</div>
               </div>
-              <small className="text-base text-gray_05">
+              <small className="text-base text-color_text_2">
                 ${getTokenBalanceInUSD(uiBalance, AptToken)}
               </small>
             </div>
-            <div className="absolute -top-[15px] -left-[15px] h-[30px] w-[30px] -rotate-45 bg-white dark:bg-gray_bg"></div>
-            <div className="absolute -top-[15px] -right-[15px] h-[30px] w-[30px] rotate-45 bg-white dark:bg-gray_bg"></div>
+            <div className="absolute -top-[15px] -left-[15px] h-[30px] w-[30px] -rotate-45 bg-white dark:bg-color_bg_gray"></div>
+            <div className="absolute -top-[15px] -right-[15px] h-[30px] w-[30px] rotate-45 bg-white dark:bg-color_bg_gray"></div>
             <div
               className={cx(
                 'absolute left-0 bottom-0 h-[54px] w-full backdrop-blur-[15px]',
@@ -111,7 +111,7 @@ const AccountDetails = () => {
             closeModal();
             disconnect();
           }}
-          className="flex h-full w-full gap-2 fill-white_gray_05 p-0 py-4 text-white_gray_05 dark:fill-white dark:text-white dark:opacity-30 dark:hover:opacity-100">
+          className="flex h-full w-full gap-2 fill-color_text_2_light p-0 py-4 text-color_text_2_light dark:fill-white dark:text-white dark:opacity-30 dark:hover:opacity-100">
           <QuitIcon />
           <div className="text-base">Disconnect</div>
         </Button>

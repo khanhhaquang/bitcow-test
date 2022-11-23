@@ -1,16 +1,20 @@
 .ant-modal {
   .ant-modal-content {
-    @apply bg-white dark:bg-gray_bg;
+    @apply bg-white dark:bg-color_bg_gray;
     .ant-modal-body {
-      @apply p-4;
+      @apply p-5;
     }
     .ant-modal-close {
-      @apply top-0 right-0 fill-white_gray_05 dark:fill-gray_05 dark:opacity-30 dark:hover:opacity-100;
+      @apply fill-color_text_2_light top-0 right-0 dark:fill-color_text_2 dark:opacity-50 dark:hover:opacity-100;
       .ant-modal-close-x svg {
         @apply absolute bottom-4 left-4;
       }
     }
   }
+}
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.9) !important;
 }
 
 // coin seletor modal
@@ -22,8 +26,8 @@
 .ant-drawer {
   .ant-drawer-body {
     .drawer-close-icon {
-      @apply cursor-pointer fill-white_gray_05 dark:fill-gray_05;
+      @apply fill-color_text_2_light cursor-pointer dark:fill-color_text_2;
     }
-    @apply bg-white p-0 dark:bg-gray_bg;
+    @apply bg-white p-0 dark:bg-color_bg_gray;
   }
 }

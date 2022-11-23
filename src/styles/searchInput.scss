@@ -1,7 +1,7 @@
 .searchInput {
   .ant-input,
   .ant-input-affix-wrapper {
-    @apply rounded-none bg-white text-white_gray_05  dark:bg-black dark:text-gray_05;
+    @apply text-color_text_2_light rounded-none bg-white  dark:bg-black dark:text-color_text_2;
   }
 
   .ant-input-affix-wrapper {

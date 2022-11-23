@@ -32,7 +32,7 @@ const PageHeader: React.FC = () => {
           className={'group !bg-transparent'}>
           <Link
             to={path || '/'}
-            className="bold font-Furore text-lg !text-item_black group-hover:!text-color_main dark:!text-white tablet:!text-white_gray_05">
+            className="bold font-Furore text-lg !text-item_black group-hover:!text-color_main dark:!text-white tablet:!text-color_text_2_light">
             {name}
           </Link>
         </Menu.Item>
@@ -146,10 +146,7 @@ const PageHeader: React.FC = () => {
           <div className="h-8">
             <WalletConnector />
           </div>
-          <Button
-            className="h-8 w-8 fill-item_black p-0 dark:fill-white"
-            variant="icon"
-            onClick={() => setIsSideMenuOpen(true)}>
+          <Button className="h-8 w-8" variant="icon" onClick={() => setIsSideMenuOpen(true)}>
             <MenuIcon />
           </Button>
         </div>

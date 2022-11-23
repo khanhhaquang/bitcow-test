@@ -29,15 +29,15 @@ code {
 }
 
 ::placeholder {
-  @apply text-gray_03 #{!important};
+  @apply text-color_text_3 #{!important};
 }
 /* Edge */
 ::-webkit-input-placeholder {
-  @apply text-gray_03 #{!important};
+  @apply text-color_text_3 #{!important};
 }
 /* Internet Explorer */
 :-ms-input-placeholder {
-  @apply text-gray_03 #{!important};
+  @apply text-color_text_3 #{!important};
 }
 
 @layer components {
@@ -76,5 +76,13 @@ code {
 
   .scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-grey-500;
+  }
+}
+
+:root {
+  --obric-color_text_3: rgba(4, 18, 25, 0.3);
+
+  &.dark {
+    --obric-color_text_3: rgba(255, 255, 255, 0.3);
   }
 }

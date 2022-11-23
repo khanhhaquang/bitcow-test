@@ -82,7 +82,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 <CoinIcon symbol={key} size={20} />
                 <div className="text-[18px]">{key}</div>
               </div>
-              <div className="text-sm text-white_gray_05 dark:text-gray_05">
+              <div className="text-sm text-color_text_2_light dark:text-color_text_2">
                 {percent ? (pool.coins[key] * percent) / 100 : pool.coins[key]}
               </div>
             </div>
@@ -111,7 +111,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           <hr className="hidden h-[1px] border-0 bg-white_gray_bg dark:bg-color_list_hover tablet:my-0 tablet:block" />
           <div className="mt-5 flex w-full flex-col items-center justify-center gap-2 tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
             <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-              <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+              <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
                 AVAILABLE FOR WITHDRAWAL
               </div>
               <div className="mt-4 flex flex-col gap-4">{renderCoinRow()}</div>
@@ -129,14 +129,14 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     <Button
                       key={option}
                       onClick={() => onAmountChange(option, props)}
-                      className="hover-bg-item_black h-6 grow rounded-none bg-white_gray_01 text-sm text-white_gray_05 hover:text-white dark:bg-gray_01 dark:text-gray_05 dark:hover:bg-gray_03 dark:hover:text-gray_05">
+                      className="hover-bg-item_black h-6 grow rounded-none bg-white_gray_01 text-sm text-color_text_2_light hover:bg-item_black hover:text-white dark:bg-gray_01 dark:text-color_text_2 dark:hover:bg-color_text_3 dark:hover:text-color_text_2">
                       {option}%
                     </Button>
                   ))}
                 </div>
                 <div
                   className={
-                    'relative flex grow font-Rany text-gray_03 tablet:w-full tablet:items-end'
+                    'relative flex grow font-Rany text-color_text_3 tablet:w-full tablet:items-end'
                   }>
                   <PositiveFloatNumInput
                     ref={inputRef}
@@ -148,11 +148,11 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     inputAmount={props.values.percent || 0}
                     onAmountChange={(a) => onAmountChange(a, props)}
                     suffix={isTablet ? '%' : null}
-                    suffixClassname="text-3xl text-white_gray_03 dark:text-gray_05 absolute left-[54px] pl-3 z-[1] top-6"
+                    suffixClassname="text-3xl text-color_text_3 absolute left-[54px] pl-3 z-[1] top-6"
                   />
                   <div
                     className={cx('mt-6 grow text-3xl tablet:hidden', {
-                      'text-white_gray_03 dark:text-gray_05': props.values.percent <= 0,
+                      'text-color_text_3': props.values.percent <= 0,
                       'text-item_black dark:text-white': props.values.percent > 0
                     })}>
                     %
@@ -172,7 +172,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
               <Fragment>
                 <LeftArrowIcon className="rotate-90 fill-white" />
                 <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-                  <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+                  <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
                     AMOUNT TO RECEIVE
                   </div>
                   <div className="mt-4 flex flex-col gap-4">
@@ -182,11 +182,11 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
               </Fragment>
             )}
           </div>
-          <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-gray_bg tablet:bottom-0">
+          <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-color_bg_gray tablet:bottom-0">
             <div className="p-5 pt-1">
               <Button
                 isLoading={props.isSubmitting}
-                className="w-full rounded-none bg-color_main font-Furore text-[18px] text-white disabled:bg-white_gray_01 disabled:bg-none disabled:text-white_gray_03 dark:disabled:bg-[#272B30] dark:disabled:text-gray_03"
+                variant="primary"
                 disabled={!props.isValid || !props.dirty}
                 onClick={props.submitForm}>
                 Remove Liquidity

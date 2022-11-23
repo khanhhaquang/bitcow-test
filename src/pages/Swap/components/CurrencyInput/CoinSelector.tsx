@@ -89,7 +89,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
         <hr className="my-4 h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0" />
         <div className="relative tablet:mx-5 tablet:mt-6 tablet:mb-4">
           <Input
-            className="w-full !border-[1px] !border-white_table bg-white_table py-5 px-4 text-base text-item_black dark:!border-gray_008 dark:bg-color_bg_2 dark:text-gray_05 tablet:py-[18px] tablet:text-base tablet:leading-4"
+            className="w-full !border-[1px] !border-white_table bg-white_table py-5 px-4 text-base text-item_black dark:!border-gray_008 dark:bg-color_bg_2 dark:text-color_text_2 tablet:py-[18px] tablet:text-base tablet:leading-4"
             value={filter}
             onChange={(e) => setFilter(e.target.value.toLowerCase())}
             placeholder="Search name or paste address"

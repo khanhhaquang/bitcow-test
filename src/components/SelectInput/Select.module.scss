@@ -24,15 +24,15 @@
     }
 
     ::placeholder {
-      @apply text-gray_05;
+      @apply text-color_text_2;
     }
     /* Edge */
     ::-webkit-input-placeholder {
-      @apply text-gray_05;
+      @apply text-color_text_2;
     }
     /* Internet Explorer */
     :-ms-input-placeholder {
-      @apply text-gray_05;
+      @apply text-color_text_2;
     }
   }
 }
@@ -46,7 +46,7 @@
     }
 
     .ant-select-item {
-      @apply text-gray_05;
+      @apply text-color_text_2;
     }
     .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
       @apply bg-color_bg_2 text-white #{!important};

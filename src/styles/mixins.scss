@@ -10,24 +10,24 @@
     }
 
     input {
-      @apply px-0 text-right text-base font-extrabold text-item_black dark:text-gray_03;
+      @apply px-0 text-right text-base font-extrabold text-item_black dark:text-color_text_3;
       box-shadow: none;
 
       &:read-only {
-        @apply text-[14px] font-bold text-item_black dark:text-gray_03;
+        @apply text-[14px] font-bold text-item_black dark:text-color_text_3;
       }
     }
 
     ::placeholder {
-      @apply text-gray_03;
+      @apply text-color_text_3;
     }
     /* Edge */
     ::-webkit-input-placeholder {
-      @apply text-gray_03;
+      @apply text-color_text_3;
     }
     /* Internet Explorer */
     :-ms-input-placeholder {
-      @apply text-gray_03;
+      @apply text-color_text_3;
     }
   }
 }

@@ -54,7 +54,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
       <div className="mt-6 tablet:mx-5">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">
-          <div className="relative flex w-full items-center tablet:h-10">
+          <div className="relative flex h-10 w-full items-center">
             <PositiveFloatNumInput
               inputAmount={values.slipTolerance}
               min={0}
@@ -62,11 +62,14 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
               isConfine={true}
               placeholder="Custom"
               className={classNames(
-                'h-full w-full bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
+                'h-full w-full bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_input dark:text-white'
               )}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
-            <div className={'absolute right-3 text-base text-white_gray_05 dark:text-gray_05'}>
+            <div
+              className={
+                'absolute right-3 text-base text-color_text_2_light dark:text-color_text_2'
+              }>
               %
             </div>
           </div>
@@ -80,10 +83,10 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
       </div>
       <div className="mt-6 tablet:mx-5">
         <SubTitle>Transaction Deadline</SubTitle>
-        <div className="flex w-fit items-center gap-x-4 tablet:h-10">
+        <div className="flex h-10 w-fit items-center gap-x-4">
           <PositiveFloatNumInput
             className={classNames(
-              'bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_2 dark:text-white'
+              'h-full bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_input dark:text-white'
             )}
             inputAmount={values.trasactionDeadline}
             isConfine={true}
@@ -118,9 +121,9 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         />
       </div> */}
       {/* Mobile */}
-      <div className="hidden bg-gray_008 p-4 tablet:block">
+      <div className="hidden bg-color_bg_gray p-4 tablet:block">
         <Button
-          className="h-10 w-full rounded-none bg-color_main font-Furore text-lg text-white disabled:bg-color_bg_3"
+          variant="primary"
           // disabled={activeWallet && (!isValid || !dirty)}
           onClick={onConfirm}>
           SAVE
@@ -128,7 +131,8 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
       </div>
       {/* Desktop */}
       <Button
-        className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white disabled:bg-color_bg_3 tablet:hidden"
+        className="mt-5 tablet:hidden"
+        variant="primary"
         // disabled={activeWallet && (!isValid || !dirty)}
         onClick={onConfirm}>
         SAVE

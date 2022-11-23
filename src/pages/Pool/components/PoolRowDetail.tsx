@@ -76,7 +76,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </span>
           </div>
         </div>
-        <div className="flex gap-6 tablet:flex-col tablet:bg-white_table tablet:p-4 dark:tablet:bg-gray_bg">
+        <div className="flex gap-6 tablet:flex-col tablet:bg-white_table tablet:p-4 dark:tablet:bg-color_bg_gray">
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[240px] grow flex-col gap-4 tablet:w-[82px]">
               <span className="block text-xs">Your Liquidity</span>
@@ -127,7 +127,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </Button>
             {activeWallet && poolRecord?.liquidity > 0 && (
               <Button
-                className="flex w-full items-center gap-2 rounded-none border-[1px] border-color_main fill-color_main px-6 py-4 text-color_main hover:bg-gray_01"
+                className="flex w-full items-center gap-2"
                 variant="outlined"
                 onClick={() => handleOnClick('withdraw')}>
                 <MinusIcon />

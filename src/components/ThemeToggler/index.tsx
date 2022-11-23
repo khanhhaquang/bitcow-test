@@ -19,7 +19,7 @@ const ThemeToggler = () => {
         <div className={'relative flex w-[87px] cursor-pointer items-center'} onClick={toggleTheme}>
           <div
             className={cx(
-              'h-[30px] w-full rounded-[30px] bg-white_table px-3 py-2 text-sm leading-[14px] dark:bg-table_bg',
+              'h-[30px] w-full rounded-[30px] bg-white_table px-3 py-2 text-sm leading-[14px] dark:bg-color_bg_input',
               {
                 'text-left text-white': theme === Theme.Dark,
                 'text-right text-item_black': theme === Theme.Light

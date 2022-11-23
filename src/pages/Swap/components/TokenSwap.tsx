@@ -130,22 +130,24 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-white fill-item_black stroke-item_black py-6 px-5 font-Rany text-item_black backdrop-blur-[15px] dark:bg-gray_bg dark:fill-white dark:stroke-white dark:text-white tablet:w-full">
+    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-white fill-item_black stroke-none py-6 px-5 font-Rany text-item_black backdrop-blur-[15px] dark:bg-color_bg_gray dark:fill-white dark:text-white tablet:w-full">
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col">
         <div className="relative flex flex-col gap-[2px]">
-          <div className="bg-white_gray_bg p-4 dark:bg-table_bg">
-            <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">Pay</div>
+          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_input">
+            <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
+              Pay
+            </div>
             <CurrencyInput actionType="currencyFrom" />
           </div>
           <Button
             variant="icon"
-            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-white_gray_bg p-0 dark:border-gray_bg dark:bg-table_bg"
+            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-white_gray_bg p-0 dark:border-color_bg_gray dark:bg-color_bg_input"
             onClick={onClickSwapToken}>
-            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] dark:fill-white dark:opacity-30 dark:group-hover:opacity-100" />
+            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] dark:fill-white dark:opacity-50 dark:group-hover:opacity-100" />
           </Button>
-          <div className="bg-white_gray_bg p-4 dark:bg-table_bg">
-            <div className="mb-2 text-xs uppercase text-white_gray_05 dark:text-gray_05">
+          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_input">
+            <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
               RECEIVE
             </div>
             <CurrencyInput actionType="currencyTo" />
@@ -162,7 +164,8 @@ const TokenSwap = () => {
         )}
         <Button
           isLoading={isSubmitting}
-          className="mt-5 w-full rounded-none bg-color_main font-Furore text-lg text-white hover:opacity-90 disabled:bg-white_gray_01 disabled:text-white_gray_03 dark:disabled:bg-gray_01 dark:disabled:text-gray_03"
+          className="mt-5"
+          variant="primary"
           disabled={activeWallet && (!isValid || !dirty || !sufficientBalance)}
           onClick={!activeWallet ? openModal : submitForm}>
           {!activeWallet ? 'Connect to Wallet' : sufficientBalance ? 'SWAP' : 'Insufficent Balance'}

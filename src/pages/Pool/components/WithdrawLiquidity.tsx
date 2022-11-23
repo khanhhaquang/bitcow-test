@@ -13,6 +13,7 @@ import useAptosWallet from 'hooks/useAptosWallet';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
 import usePools from 'hooks/usePools';
+import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { WithdrawLiquidity as WithdrawLiquidityProps } from 'pages/Pool/types';
 import { LeftArrowIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
@@ -26,6 +27,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const { isTablet } = useBreakpoint('tablet');
   const { getOwnedLiquidity } = usePools();
   const [pool, setPool] = useState<{ lp: number; coins: {} }>();
+  const [tokenAmountFormatter] = useTokenAmountFormatter();
 
   const fetchRecord = useCallback(async () => {
     const { lp, myCoins } = await getOwnedLiquidity(liquidityPool.id);
@@ -76,6 +78,8 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     (percent?: number) => {
       if (pool) {
         return Object.keys(pool?.coins).map((key) => {
+          const token =
+            liquidityPool.token0.symbol === key ? liquidityPool.token0 : liquidityPool.token1;
           return (
             <div className="flex w-full items-center justify-between" key={key}>
               <div className="flex items-center gap-2">
@@ -83,14 +87,17 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 <div className="text-[18px]">{key}</div>
               </div>
               <div className="text-sm text-color_text_2_light dark:text-color_text_2">
-                {percent ? (pool.coins[key] * percent) / 100 : pool.coins[key]}
+                {tokenAmountFormatter(
+                  percent ? (pool.coins[key] * percent) / 100 : pool.coins[key],
+                  token
+                )}
               </div>
             </div>
           );
         });
       }
     },
-    [pool]
+    [liquidityPool.token0, liquidityPool.token1, pool, tokenAmountFormatter]
   );
 
   return (

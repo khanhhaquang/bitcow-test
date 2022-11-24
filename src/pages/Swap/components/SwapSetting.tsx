@@ -46,7 +46,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   // }, [setFieldValue]);
 
   return (
-    <div className="w-full font-Rany text-item_black dark:text-white">
+    <div className="w-full font-Rany text-color_text_1">
       <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
         Transaction Settings
       </div>
@@ -62,16 +62,11 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
               isConfine={true}
               placeholder="Custom"
               className={classNames(
-                'h-full w-full bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_input dark:text-white'
+                'h-full w-full bg-white_table py-3 px-4 text-color_text_1 dark:bg-color_bg_input'
               )}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
-            <div
-              className={
-                'absolute right-3 text-base text-color_text_2_light dark:text-color_text_2'
-              }>
-              %
-            </div>
+            <div className={'absolute right-3 text-base text-color_text_2'}>%</div>
           </div>
           {/* <Button
             className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-white tablet:h-10"
@@ -86,7 +81,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         <div className="flex h-10 w-fit items-center gap-x-4">
           <PositiveFloatNumInput
             className={classNames(
-              'h-full bg-white_table py-3 px-4 text-item_black dark:bg-color_bg_input dark:text-white'
+              'h-full bg-white_table py-3 px-4 text-color_text_1 dark:bg-color_bg_input'
             )}
             inputAmount={values.trasactionDeadline}
             isConfine={true}
@@ -121,7 +116,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         />
       </div> */}
       {/* Mobile */}
-      <div className="hidden bg-color_bg_gray p-4 tablet:block">
+      <div className="hidden bg-color_bg_panel p-4 tablet:block">
         <Button
           variant="primary"
           // disabled={activeWallet && (!isValid || !dirty)}

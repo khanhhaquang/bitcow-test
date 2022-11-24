@@ -5,9 +5,9 @@
   }
   .ant-slider-track,
   &:hover .ant-slider-track {
-    @apply bg-item_black dark:bg-white #{!important};
+    @apply bg-color_text_1 #{!important};
   }
   .ant-slider-handle {
-    @apply h-4 w-4 border-item_black bg-white dark:border-white dark:bg-color_bg_input #{!important};
+    @apply h-4 w-4 border-color_text_1 bg-white dark:bg-color_bg_input #{!important};
   }
 }

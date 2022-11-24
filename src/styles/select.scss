@@ -12,7 +12,7 @@
       .ant-select-selector {
         @apply h-full rounded-none border-0 bg-white p-[10px] dark:bg-color_bg_2;
         .ant-select-selection-item {
-          @apply bg-transparent text-right leading-[18px] text-item_black dark:text-white tablet:leading-[30px];
+          @apply bg-transparent text-right leading-[18px] text-color_text_1 tablet:leading-[30px];
         }
       }
     }
@@ -23,15 +23,15 @@
   }
 
   ::placeholder {
-    @apply text-color_text_2_light dark:text-color_text_2;
+    @apply text-color_text_2;
   }
   /* Edge */
   ::-webkit-input-placeholder {
-    @apply text-color_text_2_light dark:text-color_text_2;
+    @apply text-color_text_2;
   }
   /* Internet Explorer */
   :-ms-input-placeholder {
-    @apply text-color_text_2_light dark:text-color_text_2;
+    @apply text-color_text_2;
   }
 }
 
@@ -39,14 +39,14 @@
   @apply bg-white dark:bg-color_bg_2 #{!important};
 
   .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
-    @apply bg-white text-item_black dark:bg-color_bg_2 dark:text-white;
+    @apply bg-white text-color_text_1 dark:bg-color_bg_2;
   }
 
   .ant-select-item {
-    @apply text-color_text_2_light dark:text-color_text_2;
+    @apply text-color_text_2;
   }
   .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-    @apply bg-white text-item_black dark:bg-color_bg_2 dark:text-white #{!important};
+    @apply bg-white text-color_text_1 dark:bg-color_bg_2 #{!important};
     svg {
       @apply block;
     }
@@ -57,7 +57,7 @@
     svg {
       @apply hidden;
       path {
-        @apply fill-item_black dark:fill-white #{!important};
+        @apply fill-color_text_1 #{!important};
       }
     }
   }

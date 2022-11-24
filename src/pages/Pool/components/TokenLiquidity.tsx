@@ -67,14 +67,14 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
           </div>
           <div className="flex gap-2 border-l-[1px] border-color_text_3">
             <Button
-              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-color_text_2_light dark:bg-[#272B30] dark:text-color_text_2 dark:opacity-30 dark:hover:opacity-100"
+              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-color_text_2 dark:bg-[#272B30] dark:opacity-30 dark:hover:opacity-100"
               onClick={() => {
                 onAmountChange(uiBalance * 0.5);
               }}>
               Half
             </Button>
             <Button
-              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-color_text_2_light dark:bg-[#272B30] dark:text-color_text_2 dark:opacity-30 dark:hover:opacity-100"
+              className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-color_text_2 dark:bg-[#272B30] dark:opacity-30 dark:hover:opacity-100"
               onClick={() => {
                 onAmountChange(uiBalance);
               }}>
@@ -99,12 +99,12 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
           'flex justify-between font-Rany text-color_text_3'
         )}>
         {isReady && (
-          <small className="flex items-end text-sm text-color_text_2_light dark:text-color_text_2">
+          <small className="flex items-end text-sm text-color_text_2">
             Balance:
             <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, token)}</span>
           </small>
         )}
-        <small className="flex items-end text-sm text-color_text_2_light dark:text-color_text_2">
+        <small className="flex items-end text-sm text-color_text_2">
           ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, token)}</span>
         </small>
       </div>

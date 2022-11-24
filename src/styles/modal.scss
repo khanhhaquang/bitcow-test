@@ -1,11 +1,11 @@
 .ant-modal {
   .ant-modal-content {
-    @apply bg-white dark:bg-color_bg_gray;
+    @apply bg-color_bg_panel;
     .ant-modal-body {
       @apply p-5;
     }
     .ant-modal-close {
-      @apply fill-color_text_2_light top-0 right-0 dark:fill-color_text_2 dark:opacity-50 dark:hover:opacity-100;
+      @apply top-0 right-0 fill-color_text_2 dark:opacity-50 dark:hover:opacity-100;
       .ant-modal-close-x svg {
         @apply absolute bottom-4 left-4;
       }
@@ -26,8 +26,8 @@
 .ant-drawer {
   .ant-drawer-body {
     .drawer-close-icon {
-      @apply fill-color_text_2_light cursor-pointer dark:fill-color_text_2;
+      @apply cursor-pointer fill-color_text_2;
     }
-    @apply bg-white p-0 dark:bg-color_bg_gray;
+    @apply bg-color_bg_panel p-0;
   }
 }

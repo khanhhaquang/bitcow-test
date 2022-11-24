@@ -36,7 +36,7 @@ const WalletConnector = () => {
     }
     return (
       <div
-        className="flex items-center justify-center bg-white px-4 py-3 font-Rany text-lg text-item_black dark:bg-gray_008 dark:text-white tablet:h-full tablet:p-[10px]"
+        className="flex items-center justify-center bg-white px-4 py-3 font-Rany text-lg text-color_text_1 dark:bg-gray_008 tablet:h-full tablet:p-[10px]"
         onClick={openModal}>
         {walletAddressEllipsis(activeWallet.toString() || '')}
       </div>

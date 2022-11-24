@@ -7209,12 +7209,12 @@ object.values@^1.1.0, object.values@^1.1.5:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
-obric@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/obric/-/obric-1.0.1.tgz#a10686cee42382085650995af8b5cf6f7de67e81"
-  integrity sha512-vaB/YjTiP6N+JiIrCsHbOIRx5UWBQzF9B9yiqM5VJSr5lS/CVSmArTSv95/XegnaxLBQVVtbfIi3ZubPFw7nqw==
+obric@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/obric/-/obric-1.0.2.tgz#d27d5abc97766061eab1b36b279f3b9e55fb77b2"
+  integrity sha512-nhhTdsQ+PSxUqOv6LekgVQM16DKb8FNx3nhtSs3cACFBsN+MZ3Jw2VR41alivA6fCEs+On0KaA4bkpoAyZwX7w==
   dependencies:
-    "@manahippo/coin-list" "^1.0.20"
+    "@manahippo/coin-list" "^2.0.6"
     "@manahippo/move-to-ts" "^0.4.3"
     aptos "1.3.15"
     big-integer "^1.6.51"

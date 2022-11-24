@@ -84,17 +84,17 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
 
   const renderHeaderSearch = useMemo(() => {
     return (
-      <div className="flex flex-col gap-2 font-Rany text-item_black dark:text-white tablet:gap-0">
+      <div className="flex flex-col gap-2 font-Rany text-color_text_1 tablet:gap-0">
         <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">Select a token</div>
         <hr className="my-4 h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0" />
         <div className="relative tablet:mx-5 tablet:mt-6 tablet:mb-4">
           <Input
-            className="w-full !border-[1px] !border-white_table bg-white_table py-5 px-4 text-base text-item_black dark:!border-gray_008 dark:bg-color_bg_2 dark:text-color_text_2 tablet:py-[18px] tablet:text-base tablet:leading-4"
+            className="w-full !border-[1px] !border-white_table bg-white_table py-5 px-4 text-base text-color_text_2 dark:!border-gray_008 dark:bg-color_bg_2 tablet:py-[18px] tablet:text-base tablet:leading-4"
             value={filter}
             onChange={(e) => setFilter(e.target.value.toLowerCase())}
             placeholder="Search name or paste address"
           />
-          <SearchIcon className="absolute top-1/2 right-[14px] -translate-y-1/2 fill-item_black dark:fill-[#D9D9D9]" />
+          <SearchIcon className="absolute top-1/2 right-[14px] -translate-y-1/2 fill-color_text_1" />
         </div>
         <div className="mt-2 mb-2 flex flex-wrap gap-2 tablet:px-5">
           {commonCoins.map((coin) => (

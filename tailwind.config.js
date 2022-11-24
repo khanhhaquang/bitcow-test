@@ -6,15 +6,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        item_black: '#041219',
+        color_text_1: 'var(--obric-color_text_1)',
+        color_text_2: 'var(--obric-color_text_2)',
         color_text_3: 'var(--obric-color_text_3)',
-        color_text_2_light: 'rgba(4, 18, 25, 0.5)',
-        color_bg_gray: '#333333',
+        color_text_4: 'rgba(255, 255, 255, 0.6)',
+        color_bg_panel: 'var(--obric-color_bg_panel)',
         color_bg_input: '#101010',
         color_border: '#505050',
         color_main: '#FF6827',
         color_minor: '#FFCC4A',
-        color_text_1: '#ffffff',
-        color_text_2: 'rgba(255, 255, 255, 0.5)',
         color_bg_1: '#000000',
         color_bg_2: '#0E1114',
         color_bg_3: '#272B30',
@@ -27,7 +28,6 @@ module.exports = {
         gray_016: 'rgba(255, 255, 255, 0.16)',
         color_error: '#FF6666',
         table_row_bg: '#1E1E1E',
-        item_black: '#041219',
         white_gray_01: 'rgba(4, 18, 25, 0.1)',
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
         white_gray_bg: '#F0F1F6',

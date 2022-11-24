@@ -60,9 +60,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     return (
       <div className={'flex flex-col gap-1'}>
         {details.map((detail) => (
-          <div
-            className="flex justify-between text-xs text-item_black dark:text-white"
-            key={detail.label}>
+          <div className="flex justify-between text-xs text-color_text_1" key={detail.label}>
             <div className="">{detail.label}</div>
             <div className="">{detail.value}</div>
           </div>
@@ -83,7 +81,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
       onSubmit={onSubmit}>
       {(props) => {
         return (
-          <div className="w-full font-Rany text-item_black dark:text-white">
+          <div className="w-full font-Rany text-color_text_1">
             <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
               Add liquidity
             </div>
@@ -91,9 +89,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             <div className="mt-5 flex w-full flex-col tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
               <div className="relative flex flex-col items-center gap-2">
                 <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-                  <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
-                    Pay
-                  </div>
+                  <div className="mb-2 text-xs uppercase text-color_text_2">Pay</div>
                   <TokenLiquidity
                     token={liquidityPool.token0}
                     type="xAmt"
@@ -102,9 +98,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 </div>
                 <AddIcon className="h-[18px] w-[18px]" />
                 <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-                  <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
-                    Pay
-                  </div>
+                  <div className="mb-2 text-xs uppercase text-color_text_2">Pay</div>
                   <TokenLiquidity
                     token={liquidityPool.token1}
                     type="yAmt"
@@ -116,7 +110,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 {renderDetails()}
               </div>
             </div>
-            <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-color_bg_gray tablet:bottom-0">
+            <div className="absolute left-0 -bottom-[76px] w-full bg-color_bg_panel tablet:bottom-0">
               <div className="p-5 pt-1">
                 <Button
                   isLoading={props.isSubmitting}

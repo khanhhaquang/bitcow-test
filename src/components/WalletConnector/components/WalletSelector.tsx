@@ -51,7 +51,7 @@ const WalletSelector: React.FC = () => {
   }, [wallets, select, closeModal]);
 
   return (
-    <div className="font-Rany text-item_black dark:text-white">
+    <div className="font-Rany text-color_text_1">
       <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">Connect wallet</div>
       <hr className="my-4 h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0" />
       <div className="mb-4 text-lg tablet:px-5 tablet:pt-6">Select Wallet</div>

@@ -21,7 +21,7 @@ const ExternalLink = ({ href, children }: { href: string; children: any }) => {
       target="_blank"
       rel="noreferrer"
       href={href}
-      className="flex fill-color_text_2_light hover:!fill-color_main dark:fill-color_text_2">
+      className="flex fill-color_text_2 hover:!fill-color_main">
       {children}
     </a>
   );

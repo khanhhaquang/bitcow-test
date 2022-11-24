@@ -86,7 +86,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 <CoinIcon symbol={key} size={20} />
                 <div className="text-[18px]">{key}</div>
               </div>
-              <div className="text-sm text-color_text_2_light dark:text-color_text_2">
+              <div className="text-sm text-color_text_2">
                 {tokenAmountFormatter(
                   percent ? (pool.coins[key] * percent) / 100 : pool.coins[key],
                   token
@@ -111,14 +111,14 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
       validationSchema={validationSchema}
       onSubmit={onSubmit}>
       {(props) => (
-        <div className="w-full font-Rany text-item_black dark:text-white">
+        <div className="w-full font-Rany text-color_text_1">
           <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
             Remove liquidity
           </div>
           <hr className="hidden h-[1px] border-0 bg-white_gray_bg dark:bg-color_list_hover tablet:my-0 tablet:block" />
           <div className="mt-5 flex w-full flex-col items-center justify-center gap-2 tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
             <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-              <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
+              <div className="mb-2 text-xs uppercase text-color_text_2">
                 AVAILABLE FOR WITHDRAWAL
               </div>
               <div className="mt-4 flex flex-col gap-4">{renderCoinRow()}</div>
@@ -136,7 +136,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     <Button
                       key={option}
                       onClick={() => onAmountChange(option, props)}
-                      className="hover-bg-item_black h-6 grow rounded-none bg-white_gray_01 text-sm text-color_text_2_light hover:bg-item_black hover:text-white dark:bg-gray_01 dark:text-color_text_2 dark:hover:bg-color_text_3 dark:hover:text-color_text_2">
+                      className="h-6 grow rounded-none bg-white_gray_01 text-sm text-color_text_2 hover:bg-color_text_1 hover:text-white dark:bg-gray_01 dark:hover:bg-color_text_3 dark:hover:text-color_text_2">
                       {option}%
                     </Button>
                   ))}
@@ -151,7 +151,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     max={100}
                     maxDecimals={2}
                     placeholder="0.00"
-                    className="relative z-[2] mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl text-item_black dark:text-white tablet:text-left"
+                    className="relative z-[2] mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl text-color_text_1 tablet:text-left"
                     inputAmount={props.values.percent || 0}
                     onAmountChange={(a) => onAmountChange(a, props)}
                     suffix={isTablet ? '%' : null}
@@ -160,7 +160,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                   <div
                     className={cx('mt-6 grow text-3xl tablet:hidden', {
                       'text-color_text_3': props.values.percent <= 0,
-                      'text-item_black dark:text-white': props.values.percent > 0
+                      'text-color_text_1': props.values.percent > 0
                     })}>
                     %
                   </div>
@@ -177,11 +177,9 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             </div>
             {props.values.percent > 0 && (
               <Fragment>
-                <LeftArrowIcon className="rotate-90 fill-white" />
+                <LeftArrowIcon className="rotate-90 fill-color_text_1" />
                 <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-                  <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
-                    AMOUNT TO RECEIVE
-                  </div>
+                  <div className="mb-2 text-xs uppercase text-color_text_2">AMOUNT TO RECEIVE</div>
                   <div className="mt-4 flex flex-col gap-4">
                     {renderCoinRow(props.values.percent)}
                   </div>
@@ -189,7 +187,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
               </Fragment>
             )}
           </div>
-          <div className="absolute left-0 -bottom-[76px] w-full bg-white dark:bg-color_bg_gray tablet:bottom-0">
+          <div className="absolute left-0 -bottom-[76px] w-full bg-color_bg_panel tablet:bottom-0">
             <div className="p-5 pt-1">
               <Button
                 isLoading={props.isSubmitting}

@@ -13,7 +13,7 @@ const CommonCoinButton: React.FC<TProps> = ({ coin, onClickToken }) => {
   return (
     <Button
       onClick={onClickToken}
-      className="flex gap-2 !rounded-none !border-[1px] !border-white_color_list_hover p-2 text-item_black hover:bg-white_gray_bg dark:!border-gray_008 dark:text-white dark:hover:bg-gray_008 tablet:text-sm tablet:leading-[14px]">
+      className="flex gap-2 !rounded-none !border-[1px] !border-white_color_list_hover p-2 text-color_text_1 hover:bg-white_gray_bg dark:!border-gray_008 dark:hover:bg-gray_008 tablet:text-sm tablet:leading-[14px]">
       <CoinIcon token={coin} className="tablet:max-w-5 tablet:max-h-5" />
       {coin.symbol}
     </Button>

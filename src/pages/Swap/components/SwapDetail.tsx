@@ -73,9 +73,7 @@ const SwapDetail = ({
     return (
       <div className={classNames('flex flex-col gap-1')}>
         {details.map((detail) => (
-          <div
-            className="flex justify-between text-xs text-item_black dark:text-white"
-            key={detail.label}>
+          <div className="flex justify-between text-xs text-color_text_1" key={detail.label}>
             <div className="">{detail.label}</div>
             <div className={detail.className}>{detail.value}</div>
           </div>
@@ -98,9 +96,7 @@ const SwapDetail = ({
     return (
       <div className={classNames('flex flex-col gap-1')}>
         {details.map((detail) => (
-          <div
-            className="flex justify-between text-xs text-color_text_2_light dark:text-color_text_2"
-            key={detail.label}>
+          <div className="flex justify-between text-xs text-color_text_2" key={detail.label}>
             <div className="">{detail.label}</div>
             <div className="">{detail.value}</div>
           </div>
@@ -118,17 +114,14 @@ const SwapDetail = ({
         expandIcon={({ isActive }) => (
           <div>
             <MoreIcon
-              className={cx(
-                'fill-item_black dark:fill-white',
-                isActive ? '-rotate-180' : '-rotate-90'
-              )}
+              className={cx('fill-color_text_1', isActive ? '-rotate-180' : '-rotate-90')}
             />
           </div>
         )}>
         <Panel
-          header={<div className="text-item_black dark:text-white">{swapRate}</div>}
+          header={<div className="text-color_text_1">{swapRate}</div>}
           key="1"
-          className="text-item_black dark:text-white">
+          className="text-color_text_1">
           {renderOutput()}
           <hr className="my-4 h-[1px] w-full border-0 bg-white_gray_008 dark:bg-gray_008" />
           {renderDetails()}

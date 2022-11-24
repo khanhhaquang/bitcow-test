@@ -63,28 +63,28 @@ const PoolRowDetail = ({ pool }: IProps) => {
         <div className="hidden gap-6 p-4 tablet:flex tablet:bg-white dark:tablet:bg-table_row_bg">
           <div className="flex flex-col">
             <span className="block text-xs">Volume {poolFilter.timeBasis}</span>
-            <span className="text-item_black dark:text-white">
+            <span className="text-color_text_1">
               Coming soon
               {/* {numberGroupFormat(poolStats.volume, 3) || 0} */}
             </span>
           </div>
           <div className="flex flex-col">
             <span className="block text-xs">Fees {poolFilter.timeBasis}</span>
-            <span className="text-item_black dark:text-white">
+            <span className="text-color_text_1">
               Coming soon
               {/* {numberGroupFormat(poolStats.fees, 3) || 0} */}
             </span>
           </div>
         </div>
-        <div className="flex gap-6 tablet:flex-col tablet:bg-white_table tablet:p-4 dark:tablet:bg-color_bg_gray">
+        <div className="flex gap-6 tablet:flex-col tablet:bg-color_bg_panel tablet:p-4">
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[240px] grow flex-col gap-4 tablet:w-[82px]">
               <span className="block text-xs">Your Liquidity</span>
               <div className="flex flex-col">
-                <span className="text-item_black dark:text-white">
+                <span className="text-color_text_1">
                   ${numberGroupFormat(getPoolTVL(pool) * (poolRecord?.share / 100), 3) || 0}
                 </span>
-                <span className="text-item_black dark:text-white">
+                <span className="text-color_text_1">
                   {numberGroupFormat(poolRecord?.liquidity, 6) || 0} LP
                 </span>
               </div>
@@ -95,7 +95,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
                 {poolRecord?.assetsPooled &&
                   Object.keys(poolRecord?.assetsPooled).map((key) => {
                     return (
-                      <div className="text-item_black dark:text-white" key={`pool-asset-${key}`}>
+                      <div className="text-color_text_1" key={`pool-asset-${key}`}>
                         {poolRecord?.assetsPooled[key]
                           ? numberGroupFormat(poolRecord?.assetsPooled[key], 6) || 0
                           : 0}{' '}
@@ -107,7 +107,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </div>
             <div className="flex grow flex-col gap-4">
               <span className="block text-xs">Your Share</span>
-              <span className="text-item_black dark:text-white">
+              <span className="text-color_text_1">
                 {numberGroupFormat(poolRecord?.share, 3) || 0} %
               </span>
             </div>

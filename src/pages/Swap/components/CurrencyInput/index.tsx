@@ -89,7 +89,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           // styles.currencyInput,
           'flex justify-between font-Rany text-color_text_3'
         )}>
-        <small className="flex items-end text-sm text-color_text_2_light dark:text-color_text_2">
+        <small className="flex items-end text-sm text-color_text_2">
           Balance:
           <span
             className={classNames('ml-1', {

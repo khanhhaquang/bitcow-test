@@ -109,7 +109,6 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       let parsedPools: IPool[] = [];
       if (obricSDK) {
         const filteredPools = pools;
-        console.log('MMEEM>>', pools);
         parsedPools = await Promise.all(
           filteredPools.map(async (pool) => {
             const address = (pool.typeTag as StructTag).address.toString();

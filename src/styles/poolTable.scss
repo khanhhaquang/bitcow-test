@@ -9,13 +9,13 @@
   }
 
   .ant-table {
-    @apply relative bg-white_table px-8 text-color_text_2_light dark:bg-color_bg_input dark:text-white tablet:p-0;
+    @apply relative bg-white_table px-8 text-color_text_2 dark:bg-color_bg_input dark:text-white tablet:p-0;
 
     .ant-table-cell {
       &:before {
         @apply hidden #{!important};
       }
-      @apply border-white bg-white text-color_text_2_light dark:border-black dark:bg-color_bg_input dark:text-color_text_2;
+      @apply border-white bg-white text-color_text_2 dark:border-black dark:bg-color_bg_input;
 
       .ant-table-column-sorters {
         @apply justify-start gap-2;
@@ -64,7 +64,7 @@
       .ant-table-cell {
         @apply rounded-none border-b-0 border-t-0 bg-white dark:bg-table_row_bg;
         &.ant-table-row-expand-icon-cell {
-          @apply fill-item_black dark:fill-white;
+          @apply fill-color_text_1;
         }
       }
     }
@@ -86,7 +86,7 @@
 }
 
 .ant-radio-button-wrapper {
-  @apply h-[40px] rounded-none border-white bg-white py-3 px-4 leading-[14px] text-color_text_2_light dark:border-color_bg_gray dark:bg-color_bg_gray dark:text-color_text_2 #{!important};
+  @apply h-[40px] rounded-none border-color_bg_panel bg-color_bg_panel py-3 px-4 leading-[14px] text-color_text_2 #{!important};
   &.ant-radio-button-wrapper-checked {
     @apply border-color_main bg-color_main text-white #{!important};
   }

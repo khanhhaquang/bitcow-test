@@ -130,26 +130,22 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-white fill-item_black stroke-none py-6 px-5 font-Rany text-item_black backdrop-blur-[15px] dark:bg-color_bg_gray dark:fill-white dark:text-white tablet:w-full">
+    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-color_bg_panel fill-color_text_1 stroke-none py-6 px-5 font-Rany text-color_text_1 backdrop-blur-[15px] tablet:w-full">
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col">
         <div className="relative flex flex-col gap-[2px]">
           <div className="bg-white_gray_bg p-4 dark:bg-color_bg_input">
-            <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
-              Pay
-            </div>
+            <div className="mb-2 text-xs uppercase text-color_text_2">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
           </div>
           <Button
             variant="icon"
-            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-white bg-white_gray_bg p-0 dark:border-color_bg_gray dark:bg-color_bg_input"
+            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-color_bg_panel bg-white_gray_bg p-0 dark:bg-color_bg_input"
             onClick={onClickSwapToken}>
             <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] dark:fill-white dark:opacity-50 dark:group-hover:opacity-100" />
           </Button>
           <div className="bg-white_gray_bg p-4 dark:bg-color_bg_input">
-            <div className="mb-2 text-xs uppercase text-color_text_2_light dark:text-color_text_2">
-              RECEIVE
-            </div>
+            <div className="mb-2 text-xs uppercase text-color_text_2">RECEIVE</div>
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>

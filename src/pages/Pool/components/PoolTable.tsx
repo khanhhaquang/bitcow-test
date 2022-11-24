@@ -41,9 +41,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">TVL</span>
-              <span className="tablet:text-item_black dark:tablet:text-white">
-                ${numberGroupFormat(tvl, 3) || 0}
-              </span>
+              <span className="tablet:text-color_text_1">${numberGroupFormat(tvl, 3) || 0}</span>
             </div>
           );
         },
@@ -90,7 +88,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">APR {poolFilter.timeBasis}</span>
-              <span className="tablet:text-item_black dark:tablet:text-white">Coming Soon</span>
+              <span className="tablet:text-color_text_1">Coming Soon</span>
             </div>
           );
         },

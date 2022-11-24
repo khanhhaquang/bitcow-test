@@ -5,7 +5,7 @@
       @apply bg-white dark:bg-color_border #{!important};
     }
     .ant-tooltip-inner {
-      @apply text-color_text_2_light rounded-none bg-white py-2 px-4 text-sm dark:bg-color_border dark:text-color_text_2;
+      @apply rounded-none bg-white py-2 px-4 text-sm text-color_text_2 dark:bg-color_border;
     }
   }
 }

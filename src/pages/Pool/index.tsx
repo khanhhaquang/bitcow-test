@@ -111,23 +111,21 @@ const Pool = () => {
 
   const renderHeader = () => (
     <div className="mb-8 flex justify-between tablet:flex-col">
-      <div className="font-Furore text-2xl text-item_black dark:text-white tablet:text-lg">
-        Pools
-      </div>
-      <div className="flex gap-2 text-color_text_2_light dark:text-color_text_2 tablet:mt-4">
-        <div className="flex items-center gap-2 bg-white px-6 py-[18px] dark:bg-color_bg_gray tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2_light dark:tablet:text-color_text_2">
+      <div className="font-Furore text-2xl text-color_text_1 tablet:text-lg">Pools</div>
+      <div className="flex gap-2 text-color_text_2 tablet:mt-4">
+        <div className="flex items-center gap-2 bg-color_bg_panel px-6 py-[18px] tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
           <div className="">
             TVL <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-item_black dark:text-white tablet:text-2xl">
+          <div className="text-color_text_1 tablet:text-2xl">
             $ {numberGroupFormat(getTotalPoolsTVL(), 3)}
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-white py-[18px] px-6 dark:bg-color_bg_gray tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2_light dark:tablet:text-color_text_2">
+        <div className="flex items-center gap-2 bg-color_bg_panel py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
           <div className="">
             Volume24H <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-item_black dark:text-white tablet:text-2xl">-</div>
+          <div className="text-color_text_1 tablet:text-2xl">-</div>
         </div>
       </div>
     </div>
@@ -193,7 +191,7 @@ const Pool = () => {
                 <div className="hidden gap-2 tablet:flex">
                   <SelectInput
                     className={
-                      "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2_light before:content-['Sort_by'] dark:before:text-color_text_2 tablet:before:top-[14px]"
+                      "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Sort_by'] tablet:before:top-[14px]"
                     }
                     value={poolFilter.sortBy}
                     options={SortOptions()}
@@ -201,7 +199,7 @@ const Pool = () => {
                   />
                   <SelectInput
                     className={
-                      "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2_light before:content-['Time_Basis'] dark:before:text-color_text_2 tablet:before:top-[14px]"
+                      "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Time_Basis'] tablet:before:top-[14px]"
                     }
                     value={poolFilter.timeBasis}
                     options={filterOptions}
@@ -211,7 +209,7 @@ const Pool = () => {
                 {/* Desktop */}
                 <SelectInput
                   className={
-                    "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2_light before:content-['Time_Basis'] dark:before:text-color_text_2 tablet:hidden"
+                    "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Time_Basis'] tablet:hidden"
                   }
                   value={poolFilter.timeBasis}
                   options={filterOptions}

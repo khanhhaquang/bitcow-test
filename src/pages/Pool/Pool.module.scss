@@ -29,17 +29,3 @@
     }
   }
 }
-
-// .radioGroup {
-//   :global {
-//     .ant-radio-button-wrapper {
-//       @apply h-[40px] rounded-none border-color_bg_gray bg-color_bg_gray py-3 px-4 leading-[14px] text-color_text_2 #{!important};
-//       &.ant-radio-button-wrapper-checked {
-//         @apply border-color_main bg-color_main text-white #{!important};
-//       }
-//     }
-//     .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
-//       @apply hidden;
-//     }
-//   }
-// }

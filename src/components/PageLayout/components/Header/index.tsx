@@ -32,7 +32,7 @@ const PageHeader: React.FC = () => {
           className={'group !bg-transparent'}>
           <Link
             to={path || '/'}
-            className="bold font-Furore text-lg !text-item_black group-hover:!text-color_main dark:!text-white tablet:!text-color_text_2_light">
+            className="bold font-Furore text-lg !text-color_text_1 group-hover:!text-color_main tablet:!text-color_text_2">
             {name}
           </Link>
         </Menu.Item>

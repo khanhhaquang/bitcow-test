@@ -19,10 +19,10 @@ const ThemeToggler = () => {
         <div className={'relative flex w-[87px] cursor-pointer items-center'} onClick={toggleTheme}>
           <div
             className={cx(
-              'h-[30px] w-full rounded-[30px] bg-white_table px-3 py-2 text-sm leading-[14px] dark:bg-color_bg_input',
+              'h-[30px] w-full rounded-[30px] bg-white_table px-3 py-2 text-sm leading-[14px] text-color_text_1 dark:bg-color_bg_input',
               {
-                'text-left text-white': theme === Theme.Dark,
-                'text-right text-item_black': theme === Theme.Light
+                'text-left': theme === Theme.Dark,
+                'text-right': theme === Theme.Light
               }
             )}>
             {theme === Theme.Dark ? 'Light' : 'Dark'}
@@ -40,9 +40,9 @@ const ThemeToggler = () => {
         </div>
       ) : (
         <Button
-          className={cx('h-10 w-10 rounded-full p-0', {
-            'fill-white hover:bg-gray_016': theme === Theme.Dark,
-            'shadow-none bg-transparent fill-item_black hover:shadow-md': theme === Theme.Light
+          className={cx('h-10 w-10 rounded-full fill-color_text_1 p-0', {
+            'hover:bg-gray_016': theme === Theme.Dark,
+            'shadow-none bg-transparent hover:shadow-md': theme === Theme.Light
           })}
           onClick={toggleTheme}>
           {theme === Theme.Dark ? <SunIcon /> : <MoonIcon />}

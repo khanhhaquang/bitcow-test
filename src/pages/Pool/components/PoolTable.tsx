@@ -21,9 +21,49 @@ interface TProps {
 
 const PoolTable = ({ activePools, viewOwned }: TProps) => {
   const { isTablet } = useBreakpoint('tablet');
-  const { getPoolTVL, poolFilter } = usePools();
+  const { getPoolTVL, poolFilter, getPoolStatsByTimebasis, setPoolFilter } = usePools();
+
+  // dirty handle mobile sort order as fields are hidden and not controlled by antd table
+  const getSortOrder = useCallback(
+    (field, activeSorter) => {
+      if (field === 'liquidity') {
+        let sortingFields = ['liquidity'];
+        if (isTablet) {
+          sortingFields.push('volume', 'fees', 'operation');
+        }
+        if (sortingFields.includes(activeSorter.field)) {
+          return activeSorter.order;
+        }
+      }
+      return null;
+    },
+    [isTablet]
+  );
+
+  // dirty handle mobile sort function as fields are hidden and not controlled by antd table
+  const getSorter = useCallback(
+    (field, activeSorter) => {
+      if (field === 'liquidity') {
+        let sortingLogics: Record<string, any> = {
+          liquidity: (a, b) => getPoolTVL(a) - getPoolTVL(b)
+        };
+        if (isTablet) {
+          sortingLogics = {
+            ...sortingLogics,
+            volume: (a, b) => getPoolTVL(a) - getPoolTVL(b),
+            fees: (a, b) => getPoolStatsByTimebasis(a).fees - getPoolStatsByTimebasis(b).fees,
+            operation: (a, b) => getPoolTVL(a) - getPoolTVL(b)
+          };
+        }
+        return sortingLogics[activeSorter.field];
+      }
+      return null;
+    },
+    [getPoolStatsByTimebasis, getPoolTVL, isTablet]
+  );
 
   const columns: () => ColumnsType<IPool> = useCallback(() => {
+    const activeSorter = poolFilter.sortBy[poolFilter.sortBy.length - 1];
     let cols = [
       {
         title: 'Trading Pair',
@@ -46,8 +86,9 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           );
         },
         defaultSortOrder: 'descend',
+        sortOrder: getSortOrder('liquidity', activeSorter),
         sorter: {
-          compare: (a, b) => getPoolTVL(a) - getPoolTVL(b),
+          compare: getSorter('liquidity', activeSorter),
           multiple: 2
         }
       },
@@ -57,6 +98,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         render: (val) => {
           return <div className="tablet:hidden">Coming Soon</div>;
         },
+        sortOrder: activeSorter.field === 'volume' ? activeSorter.order : null,
         sorter: {
           compare: (a, b) => {
             if (typeof a.volume === 'number' && typeof b.volume === 'number') {
@@ -69,15 +111,13 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       {
         title: `Fees ${poolFilter.timeBasis}`,
         dataIndex: 'fees',
-        render: (val) => {
-          return <div className="tablet:hidden">Coming Soon</div>;
+        render: (val, record: IPool) => {
+          const { fees } = getPoolStatsByTimebasis(record);
+          return <div className="tablet:hidden">{numberGroupFormat(fees, 3) || 'Coming soon'}</div>;
         },
+        sortOrder: activeSorter.field === 'fees' ? activeSorter.order : null,
         sorter: {
-          compare: (a, b) => {
-            if (typeof a.fees === 'number' && typeof b.fees === 'number') {
-              return a.fees - b.fees;
-            }
-          },
+          compare: (a, b) => getPoolStatsByTimebasis(a).fees - getPoolStatsByTimebasis(b).fees,
           multiple: 2
         }
       },
@@ -92,6 +132,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
             </div>
           );
         },
+        sortOrder: activeSorter.field === 'apr' ? activeSorter.order : null,
         sorter: {
           compare: (a, b) => {
             if (typeof a.apr === 'number' && typeof b.apr === 'number') {
@@ -118,10 +159,30 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     }
 
     return cols;
-  }, [getPoolTVL, isTablet, poolFilter.timeBasis]);
+  }, [getPoolStatsByTimebasis, getPoolTVL, getSortOrder, getSorter, isTablet, poolFilter]);
 
   const handleChange: TableProps<IPool>['onChange'] = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
+    if (Array.isArray(sorter)) {
+      const sortBy = sorter.map((sort) => ({
+        field: sort.field as string,
+        order: sort.order
+      }));
+      setPoolFilter((prevState) => ({
+        ...prevState,
+        sortBy
+      }));
+    } else if (sorter.field) {
+      setPoolFilter((prevState) => ({
+        ...prevState,
+        sortBy: [
+          {
+            field: sorter.field as string,
+            order: sorter.order
+          }
+        ]
+      }));
+    }
   };
 
   return (
@@ -132,6 +193,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       className={cx('ant-pool-table')}
       onChange={handleChange}
       // tableLayout="fixed"
+      sortDirections={['descend', 'ascend']}
       rowKey={(record) => record.id}
       expandable={{
         expandedRowClassName: () => 'expanded-pool',

@@ -34,8 +34,7 @@ const filterOptions = [
 ];
 
 const Pool = () => {
-  const { activePools, checkIfInvested, coinInPools, setPoolFilter, poolFilter, getPoolTVL } =
-    usePools();
+  const { activePools, checkIfInvested, coinInPools, setPoolFilter, poolFilter } = usePools();
   const [activeTab, setActiveTab] = useState('1');
   const dispatch = useDispatch();
   const [filteredPools, setFilteredPools] = useState(activePools);
@@ -52,23 +51,9 @@ const Pool = () => {
             .includes(poolFilter.text.toLowerCase())
         );
       }
-      if (poolFilter.sortBy) {
-        currentPools = currentPools.sort((a, b) => {
-          switch (poolFilter.sortBy) {
-            case 'liquidity':
-              return getPoolTVL(b) - getPoolTVL(a);
-            case 'volume':
-            case 'fees':
-            case 'apr':
-              return b[poolFilter.sortBy] - a[poolFilter.sortBy];
-            default:
-              return getPoolTVL(b) - getPoolTVL(a);
-          }
-        });
-      }
       setFilteredPools(currentPools);
     },
-    [getPoolTVL, poolFilter.sortBy, poolFilter.text]
+    [poolFilter.text]
   );
 
   useEffect(() => {
@@ -130,6 +115,18 @@ const Pool = () => {
       </div>
     </div>
   );
+
+  const onUpdateSorter = (val: string) => {
+    setPoolFilter((prevState) => ({
+      ...prevState,
+      sortBy: [
+        {
+          field: val,
+          order: 'descend'
+        }
+      ]
+    }));
+  };
 
   const onUpdateFilter = (val: string, field: string) => {
     setPoolFilter((prevState) => ({
@@ -193,9 +190,9 @@ const Pool = () => {
                     className={
                       "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Sort_by'] tablet:before:top-[14px]"
                     }
-                    value={poolFilter.sortBy}
+                    value={poolFilter.sortBy[poolFilter.sortBy.length - 1].field}
                     options={SortOptions()}
-                    onChange={(val) => onUpdateFilter(val, 'sortBy')}
+                    onChange={(val) => onUpdateSorter(val)}
                   />
                   <SelectInput
                     className={

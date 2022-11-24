@@ -27,7 +27,10 @@ export interface IPool {
 export interface IPoolFilters {
   text: string;
   timeBasis: string;
-  sortBy: string;
+  sortBy: {
+    field: string;
+    order: 'ascend' | 'descend' | null;
+  }[];
 }
 
 export interface LiquidityModal {

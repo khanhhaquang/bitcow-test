@@ -44,7 +44,12 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   const [poolFilter, setPoolFilter] = useState<IPoolFilters>({
     text: '',
     timeBasis: '7D',
-    sortBy: 'liquidity'
+    sortBy: [
+      {
+        field: 'liquidity',
+        order: 'descend'
+      }
+    ]
   });
 
   const checkIfInvested = useCallback(
@@ -240,18 +245,35 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
 
   const getPoolStatsByTimebasis = useCallback(
     (pool: IPool) => {
-      const denominator = {
-        '24H': 24,
-        '7D': 24 * 7,
-        '30D': 24 * 30
+      let stats = {
+        volume: 0,
+        fees: 0,
+        apr: 0
       };
-      return {
-        volume: pool.volume / denominator[poolFilter.timeBasis] || 0,
-        fees: pool.fees / denominator[poolFilter.timeBasis] || 0,
-        apr: pool.apr / denominator[poolFilter.timeBasis] || 0
-      };
+      if (obricSDK && coinInPools) {
+        const { timeBasis } = poolFilter;
+        // const denominator = {
+        //   '24H': 24,
+        //   '7D': 24 * 7,
+        //   '30D': 24 * 30
+        // };
+        if (timeBasis === '24H') {
+          const tokens = [pool.token0, pool.token1];
+          const fees = obricSDK
+            .getPrev24HourFees(tokens[0].symbol, tokens[1].symbol)
+            .reduce((total, fee, index) => {
+              return (total += fee * coinInPools[tokens[index].symbol]);
+            }, 0);
+          stats = {
+            volume: 0,
+            fees,
+            apr: 0
+          };
+        }
+      }
+      return stats;
     },
-    [poolFilter.timeBasis]
+    [coinInPools, obricSDK, poolFilter]
   );
 
   return (

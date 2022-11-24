@@ -71,8 +71,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
           <div className="flex flex-col">
             <span className="block text-xs">Fees {poolFilter.timeBasis}</span>
             <span className="text-color_text_1">
-              Coming soon
-              {/* {numberGroupFormat(poolStats.fees, 3) || 0} */}
+              {numberGroupFormat(poolStats.fees, 3) || 'Coming soon'}
             </span>
           </div>
         </div>

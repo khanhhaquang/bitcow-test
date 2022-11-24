@@ -113,7 +113,11 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         dataIndex: 'fees',
         render: (val, record: IPool) => {
           const { fees } = getPoolStatsByTimebasis(record);
-          return <div className="tablet:hidden">{numberGroupFormat(fees, 3) || 'Coming soon'}</div>;
+          return (
+            <div className="tablet:hidden">
+              {numberGroupFormat(fees, 3) ? `$${numberGroupFormat(fees, 3)}` : 'Coming soon'}
+            </div>
+          );
         },
         sortOrder: activeSorter.field === 'fees' ? activeSorter.order : null,
         sorter: {

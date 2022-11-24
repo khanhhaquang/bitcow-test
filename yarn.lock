@@ -1668,10 +1668,10 @@
     eventemitter3 "^4.0.7"
     js-sha3 "^0.8.0"
 
-"@manahippo/coin-list@1.0.21":
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/@manahippo/coin-list/-/coin-list-1.0.21.tgz#be2e438fcde1e976e647f5c279b6a3d5331e24fb"
-  integrity sha512-7IGNJYr35hs5FR6P8f/5eA2iNJgnHPcdKVzuDroWXeRO+T+wJ7g9c/QSiL0y0tLZr0Z12InxB2CnflLRzN3ESw==
+"@manahippo/coin-list@^1.0.20":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@manahippo/coin-list/-/coin-list-1.0.22.tgz#d86c3cf86afa7775d3b8e36177fc21ea8b33c029"
+  integrity sha512-u/ycealxJz9VSFFAWgLfjSf3yLssn76VkKfWjDe/rYJ9mX5kEnHFRKHuddw8Z4UBUm0yeWgy+Cf1JP/ufJrm8A==
   dependencies:
     "@manahippo/move-to-ts" "0.4.4"
     aptos "1.3.15"
@@ -1679,10 +1679,10 @@
     commander "^9.3.0"
     yaml "^2.1.1"
 
-"@manahippo/coin-list@^1.0.20":
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/@manahippo/coin-list/-/coin-list-1.0.22.tgz#d86c3cf86afa7775d3b8e36177fc21ea8b33c029"
-  integrity sha512-u/ycealxJz9VSFFAWgLfjSf3yLssn76VkKfWjDe/rYJ9mX5kEnHFRKHuddw8Z4UBUm0yeWgy+Cf1JP/ufJrm8A==
+"@manahippo/coin-list@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@manahippo/coin-list/-/coin-list-2.0.6.tgz#ea7943064f60eef6f354001d629c6fa7f0cae820"
+  integrity sha512-0WxwPJ/SyS4hZ6K5DK6Gxyo3LuBHpjhoUanub0jqpS6cSD07j6GVjCr7KK5pwZs3Kh4cPjRtVpA6OQW3cWpumg==
   dependencies:
     "@manahippo/move-to-ts" "0.4.4"
     aptos "1.3.15"

@@ -98,6 +98,7 @@ code {
   --obric-color_text_btn: #ffffff;
   --obric-color_border: #ebedf4;
   --obric-color_list_hover: #f0f1f6;
+  --obric-color_disabled: rgba(4, 18, 25, 0.1);
 
   &.dark {
     --obric-color_main_2: #ffffff;
@@ -111,5 +112,6 @@ code {
     --obric-color_text_3: rgba(255, 255, 255, 0.3);
     --obric-color_border: rgba(255, 255, 255, 0.1);
     --obric-color_list_hover: rgba(255, 255, 255, 0.1);
+    --obric-color_disabled: rgba(255, 255, 255, 0.1);
   }
 }

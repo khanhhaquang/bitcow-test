@@ -38,7 +38,7 @@ const Button: React.FC<TProps> = (props) => {
           'fill-color_text_1 !p-0': variant === 'icon',
           'rounded-none border-[1px] border-color_main fill-color_main px-6 py-4 text-color_main hover:bg-gray_01':
             variant === 'outlined',
-          'bg-white_gray_01 text-color_text_3 dark:bg-gray_01': disabled,
+          'bg-color_disabled text-color_text_3': disabled,
           [styles.loading]: isLoading
         },
         className

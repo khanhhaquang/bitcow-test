@@ -108,10 +108,10 @@ const PositiveFloatNumInput = forwardRef<
       if (suffixRef.current) {
         suffixRef.current.style.left = width + 'px';
         if (displayText) {
-          suffixRef.current.style.color = theme === Theme.Dark ? '#fff' : 'rgba(4, 18, 25, 1)';
+          suffixRef.current.style.color = theme === Theme.Dark ? '#fff' : '#041219';
         } else {
           suffixRef.current.style.color =
-            theme === Theme.Dark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(4, 18, 25, 0.3)';
+            theme === Theme.Dark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(4, 18, 25, 0.3)';
         }
       }
     }, [displayText, getTextWidth, theme]);

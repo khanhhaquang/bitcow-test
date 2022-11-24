@@ -141,26 +141,23 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     </Button>
                   ))}
                 </div>
-                <div
-                  className={
-                    'relative flex grow font-Rany text-color_text_3 tablet:w-full tablet:items-end'
-                  }>
+                <div className={'relative flex grow font-Rany tablet:w-full tablet:items-end'}>
                   <PositiveFloatNumInput
                     ref={inputRef}
                     min={0.01}
                     max={100}
                     maxDecimals={2}
                     placeholder="0.00"
-                    className="relative z-[2] mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl text-color_text_1 tablet:text-left"
+                    className="relative z-[2] mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl tablet:text-left"
                     inputAmount={props.values.percent || 0}
                     onAmountChange={(a) => onAmountChange(a, props)}
                     suffix={isTablet ? '%' : null}
-                    suffixClassname="text-3xl text-color_text_3 absolute left-[54px] pl-3 z-[1] top-6"
+                    suffixClassname="text-3xl text-color_main_2 absolute left-[54px] pl-3 z-[1] top-6"
                   />
                   <div
                     className={cx('mt-6 grow text-3xl tablet:hidden', {
                       'text-color_text_3': props.values.percent <= 0,
-                      'text-color_text_1': props.values.percent > 0
+                      'text-color_main_2': props.values.percent > 0
                     })}>
                     %
                   </div>

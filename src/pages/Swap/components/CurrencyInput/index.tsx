@@ -79,7 +79,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           maxDecimals={values[actionType]?.token?.decimals || 9}
           isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
-          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl font-bold text-color_text_3"
+          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl font-bold"
           inputAmount={selectedCurrency?.amount || 0}
           onAmountChange={onAmountChange}
         />

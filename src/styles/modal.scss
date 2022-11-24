@@ -5,7 +5,7 @@
       @apply p-5;
     }
     .ant-modal-close {
-      @apply top-0 right-0 fill-color_text_2 dark:opacity-50 dark:hover:opacity-100;
+      @apply top-0 right-0 fill-color_text_2 hover:fill-color_text_1;
       .ant-modal-close-x svg {
         @apply absolute bottom-4 left-4;
       }

@@ -18,7 +18,7 @@ const CoinSelectButton = ({
   return (
     <div
       className={classNames(
-        'flex w-fit cursor-pointer items-center gap-2 bg-white fill-color_text_1 p-2 text-lg  font-bold dark:bg-gray_004',
+        'flex w-fit cursor-pointer items-center gap-2 bg-color_bg_token fill-color_text_1 p-2 text-lg  font-bold',
         {
           'pointer-events-none cursor-not-allowed': isDisabled
         },
@@ -27,7 +27,7 @@ const CoinSelectButton = ({
       onClick={onClick}>
       {token?.symbol ? (
         <div className="flex items-center gap-2">
-          <CoinIcon token={token} />
+          <CoinIcon token={token} size={20} />
           {token.symbol}
         </div>
       ) : (

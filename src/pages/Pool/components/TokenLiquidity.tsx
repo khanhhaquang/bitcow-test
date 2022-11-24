@@ -88,7 +88,7 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
           maxDecimals={token?.decimals || 9}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
-          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl text-color_text_3 dark:text-white"
+          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl"
           inputAmount={values[type] || 0}
           onAmountChange={onAmountChange}
         />

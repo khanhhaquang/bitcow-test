@@ -81,7 +81,9 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">TVL</span>
-              <span className="tablet:text-color_text_1">${numberGroupFormat(tvl, 3) || 0}</span>
+              <span className="whitespace-pre tablet:text-color_text_1">
+                ${numberGroupFormat(tvl, 3) || 0}
+              </span>
             </div>
           );
         },
@@ -196,7 +198,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       pagination={false}
       className={cx('ant-pool-table')}
       onChange={handleChange}
-      // tableLayout="fixed"
+      tableLayout="fixed"
       sortDirections={['descend', 'ascend']}
       rowKey={(record) => record.id}
       expandable={{

@@ -32,6 +32,10 @@
 
     .ant-table-thead {
       @apply tablet:hidden;
+      .ant-table-cell:first-of-type {
+        min-width: 240px;
+        width: 30%;
+      }
       .ant-table-cell {
         @apply border-b-[24px] border-color_bg_table;
       }

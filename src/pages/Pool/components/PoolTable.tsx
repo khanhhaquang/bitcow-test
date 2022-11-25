@@ -201,6 +201,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       tableLayout="fixed"
       sortDirections={['descend', 'ascend']}
       rowKey={(record) => record.id}
+      showSorterTooltip={false}
       expandable={{
         expandedRowClassName: () => 'expanded-pool',
         expandRowByClick: true,

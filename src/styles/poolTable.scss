@@ -5,7 +5,7 @@
     @apply absolute top-0 z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
   }
   &::after {
-    @apply absolute top-[52px] z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
+    @apply absolute top-[50px] z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
   }
 
   .ant-table {

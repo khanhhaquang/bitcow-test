@@ -58,6 +58,13 @@ export const numberGroupFormat = (amount: number, decimals = 2) => {
   return amount > 0 ? numToGrouped(cutDecimals(avoidScientificNotation(amount), decimals)) : '';
 };
 
+export const numberCompactFormat = (num: number, decimals = 2) => {
+  return Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    maximumFractionDigits: decimals
+  }).format(num);
+};
+
 export const numberOfAbbr = (amount: number, decimals = 0) => {
   const grades = [
     { dec: 9, abbr: 'B' },

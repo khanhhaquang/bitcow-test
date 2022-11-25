@@ -86,6 +86,9 @@ code {
   --obric-color_minor_2: #ff4d4d;
   --obric-color_gradient: linear-gradient(121.75deg, #ff6827 0%, #ff9900 100%);
   --obric-color_bg_1: #f0f1f6;
+  --obric-color_bg_table: #fafafa;
+  --obric-color_bg_hover: #f0f1f6;
+  --obric-color_bg_row: #ffffff;
   --obric-color_bg_input: #f0f1f6;
   --obric-color_bg_panel: #ffffff;
   --obric-color_mask: rgba(0, 0, 0, 0.9);
@@ -97,12 +100,16 @@ code {
   --obric-color_text_link: #ffcb45;
   --obric-color_text_btn: #ffffff;
   --obric-color_border: #ebedf4;
+  --obric-color_border_2: #ebedf4;
   --obric-color_list_hover: #f0f1f6;
   --obric-color_disabled: rgba(4, 18, 25, 0.1);
 
   &.dark {
     --obric-color_main_2: #ffffff;
     --obric-color_bg_1: #000000;
+    --obric-color_bg_hover: rgba(255, 255, 255, 0.1);
+    --obric-color_bg_table: #101010;
+    --obric-color_bg_row: #1e1e1e;
     --obric-color_bg_input: #101010;
     --obric-color_bg_panel: #333333;
     --obric-color_bg_tooltip: #505050;
@@ -111,6 +118,7 @@ code {
     --obric-color_text_2: rgba(255, 255, 255, 0.5);
     --obric-color_text_3: rgba(255, 255, 255, 0.3);
     --obric-color_border: rgba(255, 255, 255, 0.1);
+    --obric-color_border_2: #272a2c;
     --obric-color_list_hover: rgba(255, 255, 255, 0.1);
     --obric-color_disabled: rgba(255, 255, 255, 0.1);
   }

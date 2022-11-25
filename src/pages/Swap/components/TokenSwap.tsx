@@ -12,6 +12,7 @@ import Button from 'components/Button';
 import Card from 'components/Card';
 import ObricModal from 'components/ObricModal';
 import useAptosWallet from 'hooks/useAptosWallet';
+import { useBreakpoint } from 'hooks/useBreakpoint';
 import useTokenBalane from 'hooks/useTokenBalance';
 import { CancelIcon, SettingBlackIcon, SettingWhiteIcon, SwapIcon } from 'resources/icons';
 import { openErrorNotification } from 'utils/notifications';
@@ -31,6 +32,7 @@ const TokenSwap = () => {
   const toToken = values.currencyTo?.token;
   const fromUiAmt = values.currencyFrom?.amount;
   const swapRate = values.currencyTo?.amount;
+  const { isTablet } = useBreakpoint('tablet');
   const [isPeriodicRefreshPaused, setIsPeriodicRefreshPaused] = useState(false);
   const [priceImpact, setPriceImpact] = useState(0);
   const [uiBalance, isReady] = useTokenBalane(values.currencyFrom.token);
@@ -109,9 +111,21 @@ const TokenSwap = () => {
     });
   }, [values, setFieldValue]);
 
+  const buttonCaption = useMemo(() => {
+    if (!activeWallet) {
+      return 'Connect to Wallet';
+    } else if ((!uiBalance && isReady) || !fromUiAmt) {
+      return 'SWAP';
+    } else if (!sufficientBalance) {
+      return 'Insufficent Balance';
+    } else {
+      return 'SWAP';
+    }
+  }, [activeWallet, fromUiAmt, isReady, sufficientBalance, uiBalance]);
+
   const renderCardHeader = () => (
     <Fragment>
-      <Tooltip title="Setting">
+      <Tooltip title="Setting" zIndex={isTablet ? -1 : 10} openClassName="tablet:hidden">
         <button
           className="absolute top-0  right-0 z-10 cursor-pointer fill-none stroke-none py-6 px-5"
           onClick={() => setIsSettingsOpen(true)}>
@@ -130,9 +144,9 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-color_bg_panel fill-color_text_1 stroke-none py-6 px-5 font-Rany text-color_text_1 backdrop-blur-[15px] tablet:w-full">
+    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-color_bg_panel fill-color_text_1 stroke-none py-6 px-5 font-Rany text-color_text_1 backdrop-blur-[15px] tablet:w-full tablet:p-4 tablet:pt-5">
       {renderCardHeader()}
-      <div className="mt-5 flex w-full flex-col">
+      <div className="mt-5 flex w-full flex-col tablet:mt-4">
         <div className="relative flex flex-col gap-[2px]">
           <div className="bg-white_gray_bg p-4 dark:bg-color_bg_input">
             <div className="mb-2 text-xs uppercase text-color_text_2">Pay</div>
@@ -142,7 +156,7 @@ const TokenSwap = () => {
             variant="icon"
             className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-color_bg_panel bg-white_gray_bg p-0 dark:bg-color_bg_input"
             onClick={onClickSwapToken}>
-            <SwapIcon className="fill-[rgba(0, 0, 0, 0.5)] dark:fill-white dark:opacity-50 dark:group-hover:opacity-100" />
+            <SwapIcon className="fill-color_text_2 group-hover:fill-color_text_1 tablet:fill-color_text_1" />
           </Button>
           <div className="bg-white_gray_bg p-4 dark:bg-color_bg_input">
             <div className="mb-2 text-xs uppercase text-color_text_2">RECEIVE</div>
@@ -164,7 +178,7 @@ const TokenSwap = () => {
           variant="primary"
           disabled={activeWallet && (!isValid || !dirty || !sufficientBalance)}
           onClick={!activeWallet ? openModal : submitForm}>
-          {!activeWallet ? 'Connect to Wallet' : sufficientBalance ? 'SWAP' : 'Insufficent Balance'}
+          {buttonCaption}
         </Button>
       </div>
       <ObricModal

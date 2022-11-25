@@ -2,24 +2,26 @@
   @apply w-full;
 
   .ant-select {
-    @apply h-[38px] w-full rounded-none border-[1px] border-white_color_list_hover ring-offset-0 ring-offset-transparent dark:border-[#272A2C] tablet:h-[52px] #{!important};
+    @apply h-[38px] w-full rounded-none border-[1px] border-color_border_2 ring-offset-0 ring-offset-transparent tablet:h-[52px] #{!important};
 
     &:not(.ant-select-disabled):hover .ant-select-selector,
     &:not(.ant-select-customize-input) .ant-select-selector {
+      box-shadow: none !important;
       @apply border-0 #{!important};
     }
     &:not(.ant-select-customize-input) {
       .ant-select-selector {
-        @apply h-full rounded-none border-0 bg-white p-[10px] dark:bg-color_bg_2;
+        @apply h-full rounded-none border-0 bg-color_bg_table p-[10px];
         .ant-select-selection-item {
           @apply bg-transparent text-right leading-[18px] text-color_text_1 tablet:leading-[30px];
         }
       }
     }
-  }
-
-  .ant-select-dropdown {
-    @apply bg-white dark:bg-color_bg_2;
+    &.ant-select-open {
+      .ant-select-selector {
+        @apply bg-color_bg_row #{!important};
+      }
+    }
   }
 
   ::placeholder {
@@ -36,7 +38,7 @@
 }
 
 .ant-select-dropdown {
-  @apply bg-white dark:bg-color_bg_2 #{!important};
+  @apply border-[1px] border-color_border_2 bg-color_bg_row shadow-dropdown #{!important};
 
   .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
     @apply bg-white text-color_text_1 dark:bg-color_bg_2;

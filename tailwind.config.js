@@ -9,8 +9,10 @@ module.exports = {
         gray_01: 'rgba(255, 255, 255, 0.1)',
         gray_05: 'rgba(255, 255, 255, 0.5)',
         white_gray_01: 'rgba(4, 18, 25, 0.1)',
+        white_gray_bg: '#F0F1F6',
+        white_table: '#FAFAFA',
         color_main_2: 'var(--obric-color_main_2)',
-        color_list_hover: 'var(--obric-obric-color_list_hover)',
+        color_list_hover: 'var(--obric-color_list_hover)',
         color_disabled: 'var(--obric-color_disabled)',
         color_bg_token: 'var(--obric-color_bg_token)',
         color_border: 'var(--obric-color_border)',
@@ -19,14 +21,18 @@ module.exports = {
         color_text_3: 'var(--obric-color_text_3)',
         color_text_4: 'rgba(255, 255, 255, 0.6)',
         color_bg_panel: 'var(--obric-color_bg_panel)',
+        color_bg_1: 'var(--obric--color_bg_1)',
+        color_bg_table: 'var(--obric-color_bg_table)',
+        color_bg_hover: 'var(--obric-color_bg_hover)',
+        color_bg_row: 'var(--obric-color_bg_row)',
         color_bg_input: 'var(--obric-color_bg_input)',
-        color_border: '#505050',
+        color_mask: 'var(--obric-color_mask)',
+        color_bg_tooltip: 'var(--obric-color_bg_tooltip)',
+        color_border_2: 'var(--obric-color_border_2)',
         color_main: '#FF6827',
         color_minor: '#FFCC4A',
-        color_bg_1: '#000000',
         color_bg_2: '#0E1114',
         color_bg_3: '#272B30',
-        color_mask: 'rgba(0, 0, 0, 0.9)',
         color_tooltip: '#363B42',
         gray_02: 'rgba(255, 255, 255, 0.2)',
         gray_004: 'rgba(255, 255, 255, 0.04)',
@@ -35,9 +41,7 @@ module.exports = {
         color_error: '#FF6666',
         table_row_bg: '#1E1E1E',
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
-        white_gray_bg: '#F0F1F6',
-        white_color_list_hover: '#EBEDF4',
-        white_table: '#FAFAFA'
+        white_color_list_hover: '#EBEDF4'
       },
       height: {
         13: '3.25rem',
@@ -67,7 +71,6 @@ module.exports = {
     },
     backgroundColor: (theme) => ({
       ...theme('colors'),
-      color_bg_1: '#000000',
       color_bg_2: '#0E1114',
       color_bg_3: '#272B30',
       color_mask: 'rgba(0, 0, 0, 0.9)',
@@ -79,7 +82,8 @@ module.exports = {
       md: '0px 4px 8px rgba(0, 0, 0, 0.25)',
       figma: '8px 8px 0px #2D2D2D',
       main1: '0px 4px 35px rgba(0, 0, 0, 0.05)',
-      home: '-4px 8px 32px rgba(211, 207, 230, 0.4)'
+      home: '-4px 8px 32px rgba(211, 207, 230, 0.4)',
+      dropdown: '0px 4px 8px rgba(0, 0, 0, 0.1)'
     },
     fontFamily: {
       Furore: 'Furore, sans-serif',

@@ -6,7 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Radio, Tabs } from 'components/Antd';
 import ObricModal from 'components/ObricModal';
-import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
+import {
+  numberCompactFormat,
+  numberGroupFormat
+} from 'components/PositiveFloatNumInput/numberFormats';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import usePools from 'hooks/usePools';
@@ -16,6 +19,7 @@ import { IPool } from 'types/pool';
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
+import { useBreakpoint } from 'hooks/useBreakpoint';
 // import styles from './Pool.module.scss';
 
 const filterOptions = [
@@ -39,6 +43,7 @@ const Pool = () => {
   const dispatch = useDispatch();
   const [filteredPools, setFilteredPools] = useState(activePools);
   const liquidityModal = useSelector(getLiquidityModal);
+  const { isTablet } = useBreakpoint('tablet');
 
   const sortPoolsByFilter = useCallback(
     (poolsToSort: IPool[]) => {
@@ -97,13 +102,16 @@ const Pool = () => {
   const renderHeader = () => (
     <div className="mb-8 flex justify-between tablet:flex-col">
       <div className="font-Furore text-2xl text-color_text_1 tablet:text-lg">Pools</div>
-      <div className="flex gap-2 text-color_text_2 tablet:mt-4">
+      <div className="flex gap-2 text-lg leading-4 text-color_text_2 tablet:mt-4">
         <div className="flex items-center gap-2 bg-color_bg_panel px-6 py-[18px] tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
           <div className="">
             TVL <span className="tablet:hidden">:</span>
           </div>
           <div className="text-color_text_1 tablet:text-2xl">
-            $ {numberGroupFormat(getTotalPoolsTVL(), 3)}
+            ${' '}
+            {isTablet
+              ? numberCompactFormat(getTotalPoolsTVL())
+              : numberGroupFormat(getTotalPoolsTVL(), 3)}
           </div>
         </div>
         <div className="flex items-center gap-2 bg-color_bg_panel py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
@@ -167,7 +175,7 @@ const Pool = () => {
   return (
     <div className="mt-[100px] flex flex-col tablet:mt-4">
       {renderHeader()}
-      <div className="border-[1px] border-white_table bg-white_table py-8 backdrop-blur-[15px] dark:border-[#272A2C] dark:bg-black dark:backdrop-blur-lg tablet:border-0 tablet:bg-white_gray_bg tablet:p-0">
+      <div className="border-[1px] border-white_table bg-color_bg_table py-8 backdrop-blur-[15px] dark:border-[#272A2C] dark:backdrop-blur-lg tablet:border-0 tablet:bg-color_bg_1 tablet:p-0">
         <div className={cx('hidden tablet:block')}>
           <Radio.Group onChange={(e) => setActiveTab(e.target.value)} value={activeTab}>
             {tabs.map((tab) => (

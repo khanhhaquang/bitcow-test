@@ -65,7 +65,7 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
             <CoinIcon symbol={token.symbol} size={20} />
             <div className="">{token.symbol}</div>
           </div>
-          <div className="flex gap-2 border-l-[1px] border-color_text_3">
+          <div className="flex gap-2 border-l-[1px] border-color_text_3 pl-2">
             <Button
               className="h-5 w-[31px] rounded-none bg-white_gray_01 p-1 text-xs text-color_text_2 dark:bg-[#272B30] dark:opacity-30 dark:hover:opacity-100"
               onClick={() => {

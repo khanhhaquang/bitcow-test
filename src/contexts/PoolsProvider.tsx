@@ -43,7 +43,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   const { poolStore } = useCoinStore();
   const [poolFilter, setPoolFilter] = useState<IPoolFilters>({
     text: '',
-    timeBasis: '7D',
+    timeBasis: '24H',
     sortBy: [
       {
         field: 'liquidity',

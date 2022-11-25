@@ -13,8 +13,9 @@
   }
 }
 
+.ant-drawer-mask,
 .ant-modal-mask {
-  background-color: rgba(0, 0, 0, 0.9) !important;
+  @apply bg-color_mask #{!important};
 }
 
 // coin seletor modal

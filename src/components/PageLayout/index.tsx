@@ -21,7 +21,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         'relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat',
         {
           'bg-primary': currentPageName === 'Home',
-          'bg-whiteBg dark:bg-black dark:bg-darkBg': currentPageName !== 'Home'
+          'bg-whiteBg dark:bg-black dark:bg-darkBg tablet:!bg-none': currentPageName !== 'Home'
         }
       )}>
       <Header />

@@ -2,20 +2,20 @@
   @apply relative w-full;
 
   &::before {
-    @apply absolute top-0 z-10 h-[1px] w-full bg-white_table dark:bg-gray_008 tablet:hidden #{!important};
+    @apply absolute top-0 z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
   }
   &::after {
-    @apply absolute top-[52px] z-10 h-[1px] w-full bg-white_table dark:bg-gray_008 tablet:hidden #{!important};
+    @apply absolute top-[52px] z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
   }
 
   .ant-table {
-    @apply relative bg-white_table px-8 text-color_text_2 dark:bg-color_bg_input dark:text-white tablet:p-0;
+    @apply relative bg-color_bg_table px-8 text-color_text_2 dark:text-white tablet:p-0;
 
     .ant-table-cell {
       &:before {
         @apply hidden #{!important};
       }
-      @apply border-white bg-white text-color_text_2 dark:border-black dark:bg-color_bg_input;
+      @apply border-white bg-color_bg_table text-base leading-4 text-color_text_2 dark:border-black;
 
       .ant-table-column-sorters {
         @apply justify-start gap-2;
@@ -33,7 +33,7 @@
     .ant-table-thead {
       @apply tablet:hidden;
       .ant-table-cell {
-        @apply border-b-[24px] border-white_table dark:border-black;
+        @apply border-b-[24px] border-color_bg_table;
       }
     }
 
@@ -41,30 +41,40 @@
       .ant-table {
         @apply px-0;
       }
-      .ant-table-row-level-0 {
+      .ant-table-row.ant-table-row-level-0 {
         .ant-table-cell {
           @apply cursor-pointer;
         }
         &:not(:first-of-type) {
           .ant-table-cell {
-            @apply border-t-[16px] border-white_table dark:border-black tablet:border-white_gray_bg dark:tablet:border-black;
+            @apply border-t-[16px] border-color_bg_table tablet:border-white_gray_bg dark:tablet:border-black;
           }
         }
         & + .expanded-pool {
           .ant-table-cell {
-            @apply dark:bg-gray_008 #{!important};
+            @apply bg-color_bg_row #{!important};
+          }
+        }
+        &:hover {
+          .ant-table-cell {
+            @apply bg-color_bg_hover tablet:bg-color_bg_table dark:tablet:bg-color_bg_row #{!important};
+          }
+          & + .expanded-pool {
+            .ant-table-cell {
+              @apply bg-color_bg_hover #{!important};
+            }
           }
         }
       }
       .ant-table-expanded-row-level-1 {
         > .ant-table-cell {
-          @apply cursor-default border-t-[1px] border-gray_008 tablet:p-0;
+          @apply cursor-default border-t-[1px] border-color_border tablet:p-0;
         }
       }
       .ant-table-cell {
-        @apply rounded-none border-b-0 border-t-0 bg-white dark:bg-table_row_bg;
+        @apply rounded-none border-b-0 border-t-0 bg-color_bg_row tablet:bg-color_bg_table tablet:p-4 dark:tablet:bg-color_bg_row;
         &.ant-table-row-expand-icon-cell {
-          @apply fill-color_text_1;
+          @apply fill-color_text_1 tablet:pl-1;
         }
       }
     }

@@ -49,7 +49,7 @@ const WalletConnector = () => {
         renderActiveBtn()
       ) : (
         <div
-          className="flex h-full w-full items-center justify-center border-[1px] border-color_main bg-color_main px-[22px] py-[13px] font-Furore text-sm text-white dark:bg-transparent dark:bg-button_gradient tablet:h-full tablet:p-[10px]"
+          className="flex h-full w-full items-center justify-center border-[1px] border-color_main bg-color_main px-[22px] py-[13px] font-Furore text-lg text-white dark:bg-transparent dark:bg-button_gradient tablet:h-full tablet:p-[10px] tablet:text-base"
           onClick={openModal}>
           {'Connect Wallet'}
         </div>

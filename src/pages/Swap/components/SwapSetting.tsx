@@ -61,9 +61,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
               max={10}
               isConfine={true}
               placeholder="Custom"
-              className={classNames(
-                'h-full w-full bg-white_table py-3 px-4 text-color_text_1 dark:bg-color_bg_input'
-              )}
+              className={classNames('h-full w-full bg-color_bg_input py-3 px-4 text-color_text_1')}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
             <div className={'absolute right-3 text-base text-color_text_2'}>%</div>
@@ -80,9 +78,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         <SubTitle>Transaction Deadline</SubTitle>
         <div className="flex h-10 w-fit items-center gap-x-4">
           <PositiveFloatNumInput
-            className={classNames(
-              'h-full bg-white_table py-3 px-4 text-color_text_1 dark:bg-color_bg_input'
-            )}
+            className={classNames('h-full bg-color_bg_input py-3 px-4 text-color_text_1')}
             inputAmount={values.trasactionDeadline}
             isConfine={true}
             placeholder="0"

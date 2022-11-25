@@ -11,7 +11,7 @@
   .ant-tabs-tab {
     @apply tablet:hidden;
     .ant-tabs-tab-btn {
-      @apply text-color_text_2;
+      @apply text-lg leading-4 text-color_text_2;
     }
     &.ant-tabs-tab-active .ant-tabs-tab-btn {
       @apply text-color_main;

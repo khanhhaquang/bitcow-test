@@ -18,7 +18,7 @@ const CoinSelectButton = ({
   return (
     <div
       className={classNames(
-        'flex w-fit cursor-pointer items-center gap-2 bg-color_bg_token fill-color_text_1 p-2 text-lg  font-bold',
+        'flex w-fit cursor-pointer items-center gap-2 bg-color_bg_token fill-color_text_1 p-2 text-lg font-bold  leading-4',
         {
           'pointer-events-none cursor-not-allowed': isDisabled
         },

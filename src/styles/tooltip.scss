@@ -2,10 +2,10 @@
   .ant-tooltip-content {
     .ant-tooltip-arrow-content {
       --antd-arrow-background-color: transparent;
-      @apply bg-white dark:bg-color_border #{!important};
+      @apply bg-color_bg_tooltip #{!important};
     }
     .ant-tooltip-inner {
-      @apply rounded-none bg-white py-2 px-4 text-sm text-color_text_2 dark:bg-color_border;
+      @apply rounded-none bg-color_bg_tooltip py-2 px-4 text-sm text-color_text_2;
     }
   }
 }

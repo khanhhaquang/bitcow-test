@@ -5,11 +5,15 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Button from 'components/Button';
-import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
+import {
+  numberCompactFormat,
+  numberGroupFormat
+} from 'components/PositiveFloatNumInput/numberFormats';
 import useAptosWallet from 'hooks/useAptosWallet';
 import usePools from 'hooks/usePools';
 import { IPool } from 'types/pool';
 import { MinusIcon, PlusIcon } from 'resources/icons';
+import { useBreakpoint } from 'hooks/useBreakpoint';
 
 interface ExpandedDataType {
   id: string;
@@ -27,6 +31,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
   const { activeWallet, openModal } = useAptosWallet();
   const { getOwnedLiquidity, getPoolTVL, poolFilter, getPoolStatsByTimebasis } = usePools();
   const [poolRecord, setPoolRecord] = useState<ExpandedDataType>();
+  const { isTablet } = useBreakpoint('tablet');
 
   const poolStats = useMemo(() => getPoolStatsByTimebasis(pool), [getPoolStatsByTimebasis, pool]);
 
@@ -57,19 +62,45 @@ const PoolRowDetail = ({ pool }: IProps) => {
     [activeWallet, dispatch, openModal, pool]
   );
 
+  const owndedLiquidity = useMemo(() => {
+    const liquidity = getPoolTVL(pool) * (poolRecord?.share / 100);
+    if (isTablet) {
+      return numberCompactFormat(liquidity, 1);
+    }
+    return numberGroupFormat(liquidity, 3);
+  }, [getPoolTVL, isTablet, pool, poolRecord?.share]);
+
+  const assetsPooled = useMemo(() => {
+    return (
+      poolRecord?.assetsPooled &&
+      Object.keys(poolRecord?.assetsPooled).map((key) => {
+        const val = poolRecord?.assetsPooled[key];
+        return (
+          <div className="text-color_text_1" key={`pool-asset-${key}`}>
+            {val ? (isTablet ? numberCompactFormat(val) : numberGroupFormat(val, 6) || 0) : 0} {key}
+          </div>
+        );
+      })
+    );
+  }, [isTablet, poolRecord?.assetsPooled]);
+
   return (
     <Fragment>
       <div className="flex-col tablet:flex">
-        <div className="hidden gap-6 p-4 tablet:flex tablet:bg-white dark:tablet:bg-table_row_bg">
+        <div className="hidden gap-6 p-4 tablet:flex tablet:bg-color_bg_table dark:tablet:bg-color_bg_row">
           <div className="flex flex-col">
-            <span className="block text-xs">Volume {poolFilter.timeBasis}</span>
+            <span className="block text-sm leading-3 tablet:text-xs">
+              Volume {poolFilter.timeBasis}
+            </span>
             <span className="text-color_text_1">
               Coming soon
               {/* {numberGroupFormat(poolStats.volume, 3) || 0} */}
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="block text-xs">Fees {poolFilter.timeBasis}</span>
+            <span className="block text-sm leading-3 tablet:text-xs">
+              Fees {poolFilter.timeBasis}
+            </span>
             <span className="text-color_text_1">
               {numberGroupFormat(poolStats.fees, 3)
                 ? `$${numberGroupFormat(poolStats.fees, 3)}`
@@ -79,35 +110,21 @@ const PoolRowDetail = ({ pool }: IProps) => {
         </div>
         <div className="flex gap-6 tablet:flex-col tablet:bg-color_bg_panel tablet:p-4">
           <div className="flex grow gap-6 tablet:w-full">
-            <div className="flex w-[240px] grow flex-col gap-4 tablet:w-[82px]">
-              <span className="block text-xs">Your Liquidity</span>
+            <div className="flex w-[210px] grow flex-col gap-4 tablet:w-[82px]">
+              <span className="block text-sm leading-3 tablet:text-xs">Your Liquidity</span>
               <div className="flex flex-col">
-                <span className="text-color_text_1">
-                  ${numberGroupFormat(getPoolTVL(pool) * (poolRecord?.share / 100), 3) || 0}
-                </span>
+                <span className="text-color_text_1">${owndedLiquidity || 0}</span>
                 <span className="text-color_text_1">
                   {numberGroupFormat(poolRecord?.liquidity, 6) || 0} LP
                 </span>
               </div>
             </div>
             <div className="flex grow flex-col gap-4">
-              <span className="block text-xs">Assets Pooled</span>
-              <div className="flex flex-col">
-                {poolRecord?.assetsPooled &&
-                  Object.keys(poolRecord?.assetsPooled).map((key) => {
-                    return (
-                      <div className="text-color_text_1" key={`pool-asset-${key}`}>
-                        {poolRecord?.assetsPooled[key]
-                          ? numberGroupFormat(poolRecord?.assetsPooled[key], 6) || 0
-                          : 0}{' '}
-                        {key}
-                      </div>
-                    );
-                  })}
-              </div>
+              <span className="block text-sm leading-3 tablet:text-xs">Assets Pooled</span>
+              <div className="flex flex-col">{assetsPooled}</div>
             </div>
             <div className="flex grow flex-col gap-4">
-              <span className="block text-xs">Your Share</span>
+              <span className="block text-sm leading-3 tablet:text-xs">Your Share</span>
               <span className="text-color_text_1">
                 {numberGroupFormat(poolRecord?.share, 3) || 0} %
               </span>

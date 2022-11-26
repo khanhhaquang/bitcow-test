@@ -53,9 +53,9 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         if (isTablet) {
           sortingLogics = {
             ...sortingLogics,
-            volume: (a, b) => getPoolTVL(a) - getPoolTVL(b),
+            volume: (a, b) => getPoolStatsByTimebasis(a).volume - getPoolStatsByTimebasis(b).volume,
             fees: (a, b) => getPoolStatsByTimebasis(a).fees - getPoolStatsByTimebasis(b).fees,
-            operation: (a, b) => getPoolTVL(a) - getPoolTVL(b)
+            apr: (a, b) => getPoolStatsByTimebasis(a).apr - getPoolStatsByTimebasis(b).apr
           };
         }
         return sortingLogics[activeSorter.field];
@@ -112,11 +112,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         },
         sortOrder: activeSorter.field === 'volume' ? activeSorter.order : null,
         sorter: {
-          compare: (a, b) => {
-            if (typeof a.volume === 'number' && typeof b.volume === 'number') {
-              return a.volume - b.volume;
-            }
-          },
+          compare: (a, b) => getPoolStatsByTimebasis(a).volume - getPoolStatsByTimebasis(b).volume,
           multiple: 2
         }
       },
@@ -155,11 +151,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         },
         sortOrder: activeSorter.field === 'apr' ? activeSorter.order : null,
         sorter: {
-          compare: (a, b) => {
-            if (typeof a.apr === 'number' && typeof b.apr === 'number') {
-              return a.apr - b.apr;
-            }
-          },
+          compare: (a, b) => getPoolStatsByTimebasis(a).apr - getPoolStatsByTimebasis(b).apr,
           multiple: 2
         }
       },

@@ -92,15 +92,15 @@ const PoolRowDetail = ({ pool }: IProps) => {
             <span className="block text-sm leading-3 tablet:text-xs">
               Volume {poolFilter.timeBasis}
             </span>
-            <span className="text-color_text_1">{numberGroupFormat(poolStats.volume, 3) || 0}</span>
+            <span className="text-color_text_1">{numberCompactFormat(poolStats.volume) || 0}</span>
           </div>
           <div className="flex flex-col">
             <span className="block text-sm leading-3 tablet:text-xs">
               Fees {poolFilter.timeBasis}
             </span>
             <span className="text-color_text_1">
-              {numberGroupFormat(poolStats.fees, 3)
-                ? `$${numberGroupFormat(poolStats.fees, 3)}`
+              {numberCompactFormat(poolStats.fees)
+                ? `$${numberCompactFormat(poolStats.fees)}`
                 : 'Coming soon'}
             </span>
           </div>
@@ -109,7 +109,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[210px] grow flex-col gap-4 tablet:w-[82px]">
               <span className="block text-sm leading-3 tablet:text-xs">Your Liquidity</span>
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-1">
                 <span className="text-color_text_1">${owndedLiquidity || 0}</span>
                 <span className="text-color_text_1">
                   {numberGroupFormat(poolRecord?.liquidity, 6) || 0} LP
@@ -118,7 +118,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </div>
             <div className="flex grow flex-col gap-4">
               <span className="block text-sm leading-3 tablet:text-xs">Assets Pooled</span>
-              <div className="flex flex-col">{assetsPooled}</div>
+              <div className="flex flex-col gap-1">{assetsPooled}</div>
             </div>
             <div className="flex grow flex-col gap-4">
               <span className="block text-sm leading-3 tablet:text-xs">Your Share</span>

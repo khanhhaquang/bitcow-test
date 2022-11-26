@@ -130,7 +130,7 @@ const Pool = () => {
         </div>
         <div className="flex items-center gap-2 bg-color_bg_panel py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
           <div className="">
-            Volume24H <span className="tablet:hidden">:</span>
+            Volume 24H <span className="tablet:hidden">:</span>
           </div>
           <div className="text-color_text_1 tablet:text-2xl">
             ${' '}

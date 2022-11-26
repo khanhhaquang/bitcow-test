@@ -49,7 +49,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     const details = [
       {
         label: 'Trade Fee',
-        value: liquidityPool.swapFee
+        value: ((liquidityPool.swapFee / 1000000) * 100).toFixed(2) + '%'
       },
       {
         label: 'Withdraw Fee',

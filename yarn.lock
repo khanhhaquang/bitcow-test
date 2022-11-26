@@ -1668,17 +1668,6 @@
     eventemitter3 "^4.0.7"
     js-sha3 "^0.8.0"
 
-"@manahippo/coin-list@^1.0.20":
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/@manahippo/coin-list/-/coin-list-1.0.22.tgz#d86c3cf86afa7775d3b8e36177fc21ea8b33c029"
-  integrity sha512-u/ycealxJz9VSFFAWgLfjSf3yLssn76VkKfWjDe/rYJ9mX5kEnHFRKHuddw8Z4UBUm0yeWgy+Cf1JP/ufJrm8A==
-  dependencies:
-    "@manahippo/move-to-ts" "0.4.4"
-    aptos "1.3.15"
-    big-integer "^1.6.51"
-    commander "^9.3.0"
-    yaml "^2.1.1"
-
 "@manahippo/coin-list@^2.0.6":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@manahippo/coin-list/-/coin-list-2.0.6.tgz#ea7943064f60eef6f354001d629c6fa7f0cae820"
@@ -7209,10 +7198,10 @@ object.values@^1.1.0, object.values@^1.1.5:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
-obric@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/obric/-/obric-1.0.2.tgz#d27d5abc97766061eab1b36b279f3b9e55fb77b2"
-  integrity sha512-nhhTdsQ+PSxUqOv6LekgVQM16DKb8FNx3nhtSs3cACFBsN+MZ3Jw2VR41alivA6fCEs+On0KaA4bkpoAyZwX7w==
+obric@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/obric/-/obric-1.0.3.tgz#dd74b278aab2b36991f9392cae276b4f9410a426"
+  integrity sha512-BK1LJAHvLEwxTZxCODd2VAJ74xMP5+HWBU+vcVmy1xtzZGOt+rubDgsoKMpm4Y8jc1XpZmTuucdNyL4dJl/DWA==
   dependencies:
     "@manahippo/coin-list" "^2.0.6"
     "@manahippo/move-to-ts" "^0.4.3"

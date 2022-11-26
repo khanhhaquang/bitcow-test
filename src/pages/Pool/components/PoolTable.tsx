@@ -4,7 +4,10 @@ import cx from 'classnames';
 import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';
-import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
+import {
+  numberCompactFormat,
+  numberGroupFormat
+} from 'components/PositiveFloatNumInput/numberFormats';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import usePools from 'hooks/usePools';
 import { LessIcon, MoreIcon } from 'resources/icons';
@@ -82,7 +85,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">TVL</span>
               <span className="whitespace-pre tablet:text-color_text_1">
-                ${numberGroupFormat(tvl, 3) || 0}
+                ${numberCompactFormat(tvl, 1) || 0}
               </span>
             </div>
           );
@@ -97,8 +100,15 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       {
         title: `Volume ${poolFilter.timeBasis}`,
         dataIndex: 'volume',
-        render: (val) => {
-          return <div className="tablet:hidden">Coming Soon</div>;
+        render: (val, record: IPool) => {
+          const { volume } = getPoolStatsByTimebasis(record);
+          return (
+            <div className="tablet:hidden">
+              {numberCompactFormat(volume, 1)
+                ? `$${numberCompactFormat(volume, 1)}`
+                : 'Coming soon'}
+            </div>
+          );
         },
         sortOrder: activeSorter.field === 'volume' ? activeSorter.order : null,
         sorter: {
@@ -117,7 +127,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           const { fees } = getPoolStatsByTimebasis(record);
           return (
             <div className="tablet:hidden">
-              {numberGroupFormat(fees, 3) ? `$${numberGroupFormat(fees, 3)}` : 'Coming soon'}
+              {numberCompactFormat(fees, 3) ? `$${numberCompactFormat(fees, 3)}` : 'Coming soon'}
             </div>
           );
         },
@@ -130,11 +140,16 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       {
         title: `APR ${poolFilter.timeBasis}`,
         dataIndex: 'apr',
-        render: (val) => {
+        render: (val, record: IPool) => {
+          const { apr } = getPoolStatsByTimebasis(record);
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">APR {poolFilter.timeBasis}</span>
-              <span className="tablet:text-color_text_1">Coming Soon</span>
+              <span className="tablet:text-color_text_1">
+                {numberGroupFormat(apr * 100, 3)
+                  ? `${numberGroupFormat(apr * 100, 1)}%`
+                  : 'Coming soon'}
+              </span>
             </div>
           );
         },

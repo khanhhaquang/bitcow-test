@@ -264,10 +264,16 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
             .reduce((total, fee, index) => {
               return (total += fee * coinInPools[tokens[index].symbol]);
             }, 0);
+          const volume = obricSDK
+            .getPrev24HourVolume(tokens[0].symbol, tokens[1].symbol)
+            .reduce((total, vol, index) => {
+              return (total += vol * coinInPools[tokens[index].symbol]);
+            }, 0);
+          const tvl = getPoolTVL(pool);
           stats = {
-            volume: 0,
+            volume,
             fees,
-            apr: 0
+            apr: (fees * 365) / tvl
           };
         }
       }

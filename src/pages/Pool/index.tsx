@@ -6,10 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Radio, Tabs } from 'components/Antd';
 import ObricModal from 'components/ObricModal';
-import {
-  numberCompactFormat,
-  numberGroupFormat
-} from 'components/PositiveFloatNumInput/numberFormats';
+import { numberCompactFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import usePools from 'hooks/usePools';
@@ -38,7 +35,14 @@ const filterOptions = [
 ];
 
 const Pool = () => {
-  const { activePools, checkIfInvested, coinInPools, setPoolFilter, poolFilter } = usePools();
+  const {
+    activePools,
+    checkIfInvested,
+    coinInPools,
+    setPoolFilter,
+    poolFilter,
+    getPoolStatsByTimebasis
+  } = usePools();
   const [activeTab, setActiveTab] = useState('1');
   const dispatch = useDispatch();
   const [filteredPools, setFilteredPools] = useState(activePools);
@@ -78,6 +82,16 @@ const Pool = () => {
     return result;
   }, [activePools, coinInPools]);
 
+  const getTotalPoolsVolume = useCallback(() => {
+    const result = coinInPools
+      ? activePools.reduce((total, pool) => {
+          const { volume } = getPoolStatsByTimebasis(pool);
+          return (total += volume);
+        }, 0)
+      : 0;
+    return result;
+  }, [activePools, coinInPools]);
+
   const SortOptions = useCallback(() => {
     return [
       {
@@ -111,14 +125,19 @@ const Pool = () => {
             ${' '}
             {isTablet
               ? numberCompactFormat(getTotalPoolsTVL())
-              : numberGroupFormat(getTotalPoolsTVL(), 3)}
+              : numberCompactFormat(getTotalPoolsTVL(), 1)}
           </div>
         </div>
         <div className="flex items-center gap-2 bg-color_bg_panel py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
           <div className="">
             Volume24H <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-color_text_1 tablet:text-2xl">-</div>
+          <div className="text-color_text_1 tablet:text-2xl">
+            ${' '}
+            {isTablet
+              ? numberCompactFormat(getTotalPoolsVolume())
+              : numberCompactFormat(getTotalPoolsVolume(), 1)}
+          </div>
         </div>
       </div>
     </div>

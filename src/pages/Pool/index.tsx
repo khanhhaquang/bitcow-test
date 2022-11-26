@@ -23,7 +23,7 @@ const filterOptions = [
   {
     label: '24H',
     value: '24H'
-  },
+  } /*,
   {
     label: '7D',
     value: '7D'
@@ -31,7 +31,7 @@ const filterOptions = [
   {
     label: '30D',
     value: '30D'
-  }
+  }*/
 ];
 
 const Pool = () => {

@@ -2,9 +2,8 @@ import {
   WalletProvider,
   AptosWalletAdapter,
   MartianWalletAdapter,
-  // FewchaWalletAdapter,
   PontemWalletAdapter,
-  SpikaWalletAdapter
+  RiseWalletAdapter
 } from '@manahippo/aptos-wallet-adapter';
 import { configureStore } from '@reduxjs/toolkit';
 import reducer from 'modules/rootReducer';
@@ -40,9 +39,8 @@ const Providers: React.FC<TProps> = (props: TProps) => {
     () => [
       new MartianWalletAdapter(),
       new AptosWalletAdapter(),
-      // new FewchaWalletAdapter(),
       new PontemWalletAdapter(),
-      new SpikaWalletAdapter()
+      new RiseWalletAdapter()
     ],
     []
   );

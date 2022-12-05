@@ -202,6 +202,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     <Table
       columns={columns()}
       dataSource={activePools}
+      loading={!activePools.length}
       pagination={false}
       className={cx('ant-pool-table')}
       onChange={handleChange}

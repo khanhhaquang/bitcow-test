@@ -108,3 +108,7 @@
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {
   @apply hidden;
 }
+
+.ant-spin-dot-item {
+  @apply bg-color_main;
+}

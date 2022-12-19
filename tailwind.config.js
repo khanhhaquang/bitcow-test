@@ -50,6 +50,7 @@ module.exports = {
       backgroundImage: {
         main: 'url(resources/img/mainBg.png)',
         darkBg: 'url(resources/img/bg.png)',
+        darkDesktopBg: 'url(resources/img/desktopBg.png)',
         whiteBg: 'url(resources/img/whiteBg.png);',
         button_gradient:
           'linear-gradient(264.61deg, rgba(255, 104, 39, 0.44) 0.36%, #FF6827 21.67%, #FF6827 100%)',

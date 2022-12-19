@@ -8,6 +8,12 @@
     @apply absolute top-[50px] z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
   }
 
+  &.ant-table-loading {
+    &::after {
+      @apply hidden #{!important};
+    }
+  }
+
   .ant-table {
     @apply relative bg-color_bg_table px-8 text-color_text_2 dark:text-white tablet:p-0;
 
@@ -111,4 +117,12 @@
 
 .ant-spin-dot-item {
   @apply bg-color_main;
+}
+
+.ant-spin-nested-loading > div > .ant-spin .ant-spin-dot {
+  @apply top-0 left-0 m-0 #{!important};
+}
+
+.ant-spin-blur {
+  @apply opacity-0 #{!important};
 }

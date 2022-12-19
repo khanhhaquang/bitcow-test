@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import cx from 'classnames';
+import Lottie from 'lottie-react';
 import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';
@@ -8,13 +9,16 @@ import {
   numberCompactFormat,
   numberGroupFormat
 } from 'components/PositiveFloatNumInput/numberFormats';
+import { Theme } from 'contexts/GlobalSettingProvider';
 import { useBreakpoint } from 'hooks/useBreakpoint';
+import useGlobalSetting from 'hooks/useGlobalSetting';
 import usePools from 'hooks/usePools';
+import tableLoadingDark from 'resources/animation/tableLoadingDark.json';
+import tableLoadingLight from 'resources/animation/tableLoadingLight.json';
 import { LessIcon, MoreIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
 
 import PoolRowDetail from './PoolRowDetail';
-// import styles from './PoolTable.module.scss';
 import TokenPair from './TokenPair';
 
 interface TProps {
@@ -25,6 +29,9 @@ interface TProps {
 const PoolTable = ({ activePools, viewOwned }: TProps) => {
   const { isTablet } = useBreakpoint('tablet');
   const { getPoolTVL, poolFilter, getPoolStatsByTimebasis, setPoolFilter } = usePools();
+  const { theme } = useGlobalSetting();
+
+  const loading = !activePools.length;
 
   // dirty handle mobile sort order as fields are hidden and not controlled by antd table
   const getSortOrder = useCallback(
@@ -202,9 +209,22 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     <Table
       columns={columns()}
       dataSource={activePools}
-      loading={!activePools.length}
+      loading={{
+        spinning: loading,
+        indicator: (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2">
+            <div className="block w-[200px]">
+              <Lottie
+                className="h-full w-full"
+                animationData={theme === Theme.Dark ? tableLoadingDark : tableLoadingLight}
+              />
+            </div>
+            <div className="-mt-16 text-sm leading-3 text-color_text_2">No Data</div>
+          </div>
+        )
+      }}
       pagination={false}
-      className={cx('ant-pool-table')}
+      className={cx('ant-pool-table', { 'ant-table-loading': loading })}
       onChange={handleChange}
       tableLayout="fixed"
       sortDirections={['descend', 'ascend']}

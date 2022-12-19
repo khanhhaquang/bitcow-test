@@ -32,7 +32,7 @@ const PageHeader: React.FC = () => {
           className={'group !bg-transparent'}>
           <Link
             to={path || '/'}
-            className="bold font-Furore text-lg !text-color_text_1 group-hover:!text-color_main tablet:!text-color_text_2">
+            className="bold text-base font-medium !text-color_text_1 group-hover:!text-color_main tablet:font-Furore tablet:!text-color_text_2">
             {name}
           </Link>
         </Menu.Item>
@@ -56,7 +56,7 @@ const PageHeader: React.FC = () => {
           </Menu>
         </div>
         <div className="flex h-full items-center justify-center gap-4 px-20">
-          <div className="flex h-full cursor-pointer items-center justify-center">
+          <div className="flex h-10 w-[158px] cursor-pointer items-center justify-center">
             {<WalletConnector />}
           </div>
           <ThemeToggler />
@@ -102,7 +102,7 @@ const PageHeader: React.FC = () => {
       className={cx('z-30 h-[72px] w-full bg-transparent px-0 tablet:h-[64px]', {
         'absolute top-0 z-10 h-[126px] bg-transparent tablet:h-[64px]': currentPageName === 'Home'
       })}>
-      <div className="relative top-0 left-0 mx-auto flex h-full items-center tablet:justify-between tablet:px-4">
+      <div className="relative top-0 left-0 mx-auto flex h-full items-center tablet:justify-between tablet:border-b-[1px] tablet:border-gray_02 tablet:px-4">
         <div
           className={cx('h-full pl-[60px] tablet:pl-0', {
             'pl-20': currentPageName === 'Home'
@@ -118,7 +118,7 @@ const PageHeader: React.FC = () => {
               className={cx('block', {
                 'tablet:hidden': currentPageName !== 'Home'
               })}>
-              <LogoIcon className="w-[120px] fill-black dark:fill-white" />
+              <LogoIcon height={30} width={150} className="fill-black dark:fill-white" />
             </div>
           </Link>
         </div>

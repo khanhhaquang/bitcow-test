@@ -1,10 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { motion } from 'framer-motion';
-import commonActions from 'modules/common/actions';
-import { getShowWalletConnector } from 'modules/common/reducer';
 import { Fragment, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import ObricModal from 'components/ObricModal';
 import { walletAddressEllipsis } from 'components/utils/utility';
@@ -21,8 +18,8 @@ const WalletConnector = () => {
   const renderActiveBtn = useCallback(() => {
     if (pendingTx) {
       return (
-        <div className="flex items-center justify-center bg-color_main fill-white px-4 py-3 font-Rany text-lg text-white dark:fill-black dark:text-black tablet:h-full tablet:p-[10px]">
-          Pending
+        <div className="flex h-full items-center justify-center bg-color_main fill-white px-5 py-3 font-Rany text-base leading-4 text-white tablet:p-[10px]">
+          1 Pending
           <motion.div
             animate={{ rotate: 360 }}
             transition={{
@@ -36,7 +33,7 @@ const WalletConnector = () => {
     }
     return (
       <div
-        className="flex items-center justify-center bg-white px-4 py-3 font-Rany text-lg text-color_text_1 dark:bg-gray_008 tablet:h-full tablet:p-[10px]"
+        className="flex h-full items-center justify-center bg-white px-5 py-3 font-Rany text-base leading-4 text-color_text_1 dark:bg-gray_008 tablet:p-[10px]"
         onClick={openModal}>
         {walletAddressEllipsis(activeWallet.toString() || '')}
       </div>
@@ -49,7 +46,7 @@ const WalletConnector = () => {
         renderActiveBtn()
       ) : (
         <div
-          className="flex h-full w-full items-center justify-center border-[1px] border-color_main bg-color_main px-[22px] py-[13px] font-Furore text-lg text-white dark:bg-transparent dark:bg-button_gradient tablet:h-full tablet:p-[10px] tablet:text-base"
+          className="flex h-full w-full items-center justify-center border-[1px] border-color_main bg-color_main px-5 py-3 font-Rany text-base font-medium leading-4 text-white dark:bg-transparent dark:bg-button_gradient tablet:h-full tablet:p-[10px] tablet:font-Furore tablet:text-base"
           onClick={openModal}>
           {'Connect Wallet'}
         </div>

@@ -9,6 +9,7 @@ import ObricModal from 'components/ObricModal';
 import { numberCompactFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
+import { useBreakpoint } from 'hooks/useBreakpoint';
 import usePools from 'hooks/usePools';
 import { CancelIcon } from 'resources/icons';
 import { IPool } from 'types/pool';
@@ -16,7 +17,6 @@ import { IPool } from 'types/pool';
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
-import { useBreakpoint } from 'hooks/useBreakpoint';
 // import styles from './Pool.module.scss';
 
 const filterOptions = [

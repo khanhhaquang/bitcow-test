@@ -15,6 +15,7 @@ import LogoImg from 'resources/img/logo.png';
 import LogoBlackImg from 'resources/img/logoBlack.png';
 
 import styles from './Header.module.scss';
+import { StarWhiteIcon } from 'resources/icons/landingPage';
 
 const { Header } = Layout;
 
@@ -65,8 +66,12 @@ const PageHeader: React.FC = () => {
     ) : (
       <NavLink
         to="swap"
-        className="ml-auto flex h-full items-center justify-end border-l-[1px] border-gray_02 bg-transparent px-20 font-Furore text-2xl text-color_main hover:text-color_main">
+        className="relative ml-auto flex h-full items-center justify-end border-l-[1px] border-color_border bg-transparent px-20 font-Furore text-2xl text-color_main hover:text-color_main">
         {'Launch App'}
+        <div className="absolute -left-4 -bottom-4 desktop:block tablet:hidden">
+          {/* <img src={StarWhite} alt="" /> */}
+          <StarWhiteIcon className="z-10 fill-color_main dark:fill-[#D9D9D9]" />
+        </div>
       </NavLink>
     );
   };
@@ -75,7 +80,10 @@ const PageHeader: React.FC = () => {
     return (
       <div className="flex h-full flex-col justify-between">
         <div className="flex flex-col items-start">
-          <Link to="/" className={cx('mb-24 flex h-full items-center justify-center')}>
+          <Link
+            to="/"
+            onClick={() => setIsSideMenuOpen(false)}
+            className={cx('mb-24 flex h-full items-center justify-center')}>
             <div className={cx('block w-[109px]')}>
               <img src={LogoImg} className="hidden h-full w-full dark:block" alt="Logo" />
               <img src={LogoBlackImg} className="block h-full w-full dark:hidden" alt="Logo" />
@@ -102,11 +110,15 @@ const PageHeader: React.FC = () => {
       className={cx('z-30 h-[72px] w-full bg-transparent px-0 tablet:h-[64px]', {
         'absolute top-0 z-10 h-[126px] bg-transparent tablet:h-[64px]': currentPageName === 'Home'
       })}>
-      <div className="relative top-0 left-0 mx-auto flex h-full items-center tablet:justify-between tablet:border-b-[1px] tablet:border-gray_02 tablet:px-4">
-        <div
-          className={cx('h-full pl-[60px] tablet:pl-0', {
-            'pl-20': currentPageName === 'Home'
-          })}>
+      <div
+        className={cx(
+          'relative top-0 left-0 mx-auto flex h-full items-center  tablet:border-b-[1px] tablet:border-color_border tablet:px-4',
+          {
+            'tablet:justify-between': currentPageName !== 'Home',
+            'tablet:justify-center': currentPageName === 'Home'
+          }
+        )}>
+        <div className={cx('h-full pl-[60px] tablet:pl-0')}>
           <Link to="/" className={cx('flex h-full items-center justify-center hover:-rotate-12')}>
             <div
               className={cx('hidden', {
@@ -118,7 +130,11 @@ const PageHeader: React.FC = () => {
               className={cx('block', {
                 'tablet:hidden': currentPageName !== 'Home'
               })}>
-              <LogoIcon height={30} width={150} className="fill-black dark:fill-white" />
+              <LogoIcon
+                height={30}
+                width={currentPageName !== 'Home' ? 150 : 174}
+                className="fill-black dark:fill-white"
+              />
             </div>
           </Link>
         </div>
@@ -132,24 +148,26 @@ const PageHeader: React.FC = () => {
         </div>
         {/* Mobile - Home Page */}
         {currentPageName === 'Home' && (
-          <div className="fixed bottom-0 z-30 hidden w-full tablet:block">
+          <div className="fixed bottom-0 left-0 z-30 hidden w-full tablet:block">
             <NavLink
               to="swap"
-              className="flex w-full items-center justify-center gap-2 bg-color_main py-5 font-Furore text-base !text-black">
+              className="flex w-full items-center justify-center gap-2 bg-color_main py-[18px] font-Furore text-base !text-white">
               {'Launch App'}
-              <LeftArrowIcon className="fill-black" width={24} height={24} />
+              <LeftArrowIcon className="fill-white" width={24} height={24} />
             </NavLink>
           </div>
         )}
         {/* Mobile - non home page */}
-        <div className="hidden items-center gap-2 tablet:flex">
-          <div className="h-8">
-            <WalletConnector />
+        {currentPageName !== 'Home' && (
+          <div className="hidden items-center gap-2 tablet:flex">
+            <div className="h-8">
+              <WalletConnector />
+            </div>
+            <Button className="h-8 w-8" variant="icon" onClick={() => setIsSideMenuOpen(true)}>
+              <MenuIcon />
+            </Button>
           </div>
-          <Button className="h-8 w-8" variant="icon" onClick={() => setIsSideMenuOpen(true)}>
-            <MenuIcon />
-          </Button>
-        </div>
+        )}
       </div>
       <Drawer
         open={isSideMenuOpen}

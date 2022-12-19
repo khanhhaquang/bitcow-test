@@ -20,7 +20,8 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       className={classNames(
         'relative min-h-screen overflow-hidden bg-cover bg-center bg-no-repeat',
         {
-          'bg-primary': currentPageName === 'Home',
+          'bg-white bg-landingBgWhite dark:bg-black dark:!bg-landingBgDark tablet:!bg-none tablet:dark:!bg-none':
+            currentPageName === 'Home',
           'bg-whiteBg dark:bg-black dark:!bg-darkDesktopBg dark:tablet:!bg-darkBg':
             currentPageName !== 'Home'
         }
@@ -31,7 +32,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           {children}
         </div>
       </Content>
-      <Footer />
+      {currentPageName !== 'Home' && <Footer />}
     </Layout>
   );
 };

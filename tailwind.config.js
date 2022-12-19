@@ -48,7 +48,8 @@ module.exports = {
         15: '3.75rem'
       },
       backgroundImage: {
-        main: 'url(resources/img/mainBg.png)',
+        landingBgDark: 'url(resources/img/landingPage/dark-bg.png)',
+        landingBgWhite: 'url(resources/img/landingPage/white-bg.png)',
         darkBg: 'url(resources/img/bg.png)',
         darkDesktopBg: 'url(resources/img/desktopBg.png)',
         whiteBg: 'url(resources/img/whiteBg.png);',

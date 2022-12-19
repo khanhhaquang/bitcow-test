@@ -1,8 +1,8 @@
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 
+import Home from 'pages/Home';
 import Pool from 'pages/Pool';
 import Swap from 'pages/Swap';
-// import Home from 'pages/Home';
 // import Faucet from 'pages/Faucet';
 // import { useSelector } from 'react-redux';
 // import { getIsResourcesNotFound } from 'modules/common/reducer';
@@ -14,12 +14,12 @@ export type TRoute = RouteObject & {
 };
 
 export const routes: TRoute[] = [
-  // {
-  //   path: '',
-  //   name: 'Home',
-  //   element: <Home />,
-  //   hidden: true
-  // },
+  {
+    path: '',
+    name: 'Home',
+    element: <Home />,
+    hidden: true
+  },
   {
     path: 'swap',
     name: 'Swap',

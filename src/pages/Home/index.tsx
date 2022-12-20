@@ -103,12 +103,14 @@ const Home = () => {
                 LAUNCH APP
                 <LeftArrowIcon className="fill-white tablet:h-[18px] tablet:w-[18px]" />
               </NavLink>
-              <NavLink
-                to="swap"
+              <a
+                href="https://obricxyz.gitbook.io/smart/"
+                target="_blank"
+                rel="noreferrer"
                 className="flex items-center gap-2 rounded-none border-[1px] border-color_main py-[18px] px-6 font-Furore text-base text-color_main hover:bg-gray_02 hover:text-color_main tablet:grow tablet:px-5 tablet:py-[14px] tablet:text-sm tablet:leading-3">
                 READ DOCS
                 <DocsIcon className="fill-color_main tablet:h-[18px] tablet:w-[18px]" />
-              </NavLink>
+              </a>
             </div>
             <div className="block tablet:hidden">
               {renderTradeStats()}

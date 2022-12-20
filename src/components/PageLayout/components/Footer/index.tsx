@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom';
 
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
+import { DiscordIcon, DocFilledIcon, LogoIcon, TwitterIcon } from 'resources/icons';
 import FooterMobileBg from 'resources/img/footerMobileBg.png';
 import FooterMobileWhiteBg from 'resources/img/footerMobileBgWhite.png';
 
 const { Footer } = Layout;
 
 const URLs = {
+  doc: 'https://obricxyz.gitbook.io/smart/',
   discord: 'https://discord.gg/TNXY8Xd7bH',
   twitter: 'https://twitter.com/poor_obric'
 };
@@ -33,6 +34,9 @@ const SocialBtnGroups = () => {
       {/* <ExternalLink href={URLs.medium}>
         <MediumIcon />
       </ExternalLink> */}
+      <ExternalLink href={URLs.doc}>
+        <DocFilledIcon />
+      </ExternalLink>
       <ExternalLink href={URLs.discord}>
         <DiscordIcon />
       </ExternalLink>

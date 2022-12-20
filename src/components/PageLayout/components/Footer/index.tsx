@@ -46,7 +46,11 @@ const SocialBtnGroups = () => {
   );
 };
 
-const PageFooter: React.FC = () => {
+interface TProps {
+  className?: string;
+}
+
+const PageFooter: React.FC<TProps> = ({ className }) => {
   const [currentPageName] = useCurrentPage();
 
   return (
@@ -60,10 +64,14 @@ const PageFooter: React.FC = () => {
         />
       </div>
       <Footer
-        className={classNames('z-10 flex justify-between bg-transparent', {
-          'py-10 px-20 tablet:pb-24 tablet:pt-5': currentPageName === 'Home',
-          'px-15 py-5 tablet:border-none': currentPageName !== 'Home'
-        })}>
+        className={classNames(
+          'z-10 flex justify-between bg-transparent',
+          {
+            'py-10 px-20 tablet:pb-24 tablet:pt-5': currentPageName === 'Home',
+            'px-15 py-5 tablet:border-none': currentPageName !== 'Home'
+          },
+          className
+        )}>
         {currentPageName === 'Home' && (
           <Link to="/" className="flex h-full items-center justify-center tablet:hidden">
             <LogoIcon className="w-[120px]" />

@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import SpriteAnimator from 'react-responsive-spritesheet';
 import { NavLink } from 'react-router-dom';
 
+import Footer from 'components/PageLayout/components/Footer';
 import { Theme } from 'contexts/GlobalSettingProvider';
 import useGlobalSetting from 'hooks/useGlobalSetting';
 import { LeftArrowIcon, DocsIcon } from 'resources/icons';
@@ -82,10 +83,7 @@ const Home = () => {
     <Fragment>
       <hr className="absolute left-0 top-[126px] block w-full border-color_border tablet:hidden" />
       <div className="flex justify-between gap-12 bg-cover bg-center bg-no-repeat px-20 pt-[126px] tablet:flex-col tablet:justify-center tablet:gap-0 tablet:px-4 tablet:pb-20 tablet:pt-16 tablet:text-center">
-        {/* <div className="absolute top-[110px] right-[309px] desktop:block tablet:hidden">
-          <StarWhiteIcon className="z-10 fill-color_main dark:fill-[#D9D9D9]" />
-        </div> */}
-        <div className="relative w-1/3 grow pt-[140px] pb-16 tablet:w-full tablet:pt-[60px] tablet:pb-8">
+        <div className="relative w-1/3 grow pb-36 pt-[140px] tablet:w-full tablet:pt-[60px] tablet:pb-8">
           <div className="absolute -top-4 -right-[84px] z-10 desktop:block tablet:hidden">
             <img src={OrangeStarWith3lines} alt="" className="hidden dark:block" />
             <img src={ObricRedStartWith3lines} alt="" className="block dark:hidden" />
@@ -117,6 +115,7 @@ const Home = () => {
               {renderPoweredBy()}
             </div>
           </LazyShow>
+          <Footer className="absolute bottom-0 -left-20 block w-[100vw] tablet:hidden" />
         </div>
         <div className="w-1/3 grow pt-[140px] tablet:w-full tablet:pt-0">
           <SpriteAnimator

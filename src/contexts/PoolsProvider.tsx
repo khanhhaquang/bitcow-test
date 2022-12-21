@@ -27,6 +27,8 @@ interface PoolsContextType {
     fees: number;
     apr: number;
   };
+  getTotalPoolsTVL: () => number;
+  getTotalPoolsVolume: () => number;
 }
 
 interface TProviderProps {
@@ -282,6 +284,27 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     [coinInPools, obricSDK, poolFilter]
   );
 
+  const getTotalPoolsTVL = useCallback(() => {
+    const result = coinInPools
+      ? activePools.reduce((total, pool) => {
+          return (total +=
+            pool.token0Reserve * coinInPools[pool.token0.symbol] +
+            pool.token1Reserve * coinInPools[pool.token1.symbol]);
+        }, 0)
+      : 0;
+    return result;
+  }, [activePools, coinInPools]);
+
+  const getTotalPoolsVolume = useCallback(() => {
+    const result = coinInPools
+      ? activePools.reduce((total, pool) => {
+          const { volume } = getPoolStatsByTimebasis(pool);
+          return (total += volume);
+        }, 0)
+      : 0;
+    return result;
+  }, [activePools, coinInPools]);
+
   return (
     <PoolsContext.Provider
       value={{
@@ -293,7 +316,9 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         getPoolTVL,
         poolFilter,
         setPoolFilter,
-        getPoolStatsByTimebasis
+        getPoolStatsByTimebasis,
+        getTotalPoolsTVL,
+        getTotalPoolsVolume
       }}>
       {children}
     </PoolsContext.Provider>

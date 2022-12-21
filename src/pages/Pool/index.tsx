@@ -41,7 +41,8 @@ const Pool = () => {
     coinInPools,
     setPoolFilter,
     poolFilter,
-    getPoolStatsByTimebasis
+    getTotalPoolsTVL,
+    getTotalPoolsVolume
   } = usePools();
   const [activeTab, setActiveTab] = useState('1');
   const dispatch = useDispatch();
@@ -70,27 +71,6 @@ const Pool = () => {
       sortPoolsByFilter(activePools);
     }
   }, [activePools, coinInPools, sortPoolsByFilter]);
-
-  const getTotalPoolsTVL = useCallback(() => {
-    const result = coinInPools
-      ? activePools.reduce((total, pool) => {
-          return (total +=
-            pool.token0Reserve * coinInPools[pool.token0.symbol] +
-            pool.token1Reserve * coinInPools[pool.token1.symbol]);
-        }, 0)
-      : 0;
-    return result;
-  }, [activePools, coinInPools]);
-
-  const getTotalPoolsVolume = useCallback(() => {
-    const result = coinInPools
-      ? activePools.reduce((total, pool) => {
-          const { volume } = getPoolStatsByTimebasis(pool);
-          return (total += volume);
-        }, 0)
-      : 0;
-    return result;
-  }, [activePools, coinInPools]);
 
   const SortOptions = useCallback(() => {
     return [

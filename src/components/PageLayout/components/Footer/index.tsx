@@ -59,7 +59,7 @@ const PageFooter: React.FC<TProps> = ({ className }) => {
 
   return (
     <Fragment>
-      <div className="hidden w-full tablet:block">
+      <div className={classNames('hidden w-full', { 'tablet:block': currentPageName !== 'Home' })}>
         <img src={FooterMobileBg} alt="" className="hidden h-full w-full object-cover dark:block" />
         <img
           src={FooterMobileWhiteBg}

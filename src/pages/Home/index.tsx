@@ -124,7 +124,7 @@ const Home = () => {
             image={theme === Theme.Dark ? SpriteSheetDark : SpriteSheetWhite}
             widthFrame={800}
             heightFrame={800}
-            steps={theme === Theme.Dark ? 91 : 92}
+            steps={theme === Theme.Dark ? 182 : 92}
             fps={60}
             autoplay
             loop

@@ -1,3 +1,4 @@
+import useCurrentPage from 'hooks/useCurrentPage';
 import { createContext, ReactNode, useCallback, useEffect } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -21,6 +22,7 @@ const GlobalSettingContext = createContext<GlobalSettingContextType>(
 );
 
 const GlobalSettingProvider: React.FC<TProviderProps> = ({ children }) => {
+  const [currentPageName] = useCurrentPage();
   const [theme, setTheme] = useLocalStorage<Theme>('obric-theme', Theme.Dark);
 
   const loadTheme = useCallback(() => {
@@ -36,6 +38,12 @@ const GlobalSettingProvider: React.FC<TProviderProps> = ({ children }) => {
   useEffect(() => {
     loadTheme();
   }, [theme]);
+
+  useEffect(() => {
+    if (currentPageName === 'Home' && theme !== Theme.Dark) {
+      setTheme(Theme.Dark);
+    }
+  }, [currentPageName, setTheme, theme]);
 
   return (
     <GlobalSettingContext.Provider

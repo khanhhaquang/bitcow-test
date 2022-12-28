@@ -39,26 +39,26 @@ const Home = () => {
         <div className="flex flex-col tablet:w-full tablet:flex-col-reverse tablet:gap-2 tablet:bg-gray_008 tablet:py-4">
           <div className="flex gap-2 tablet:justify-center">
             <div className="text-lg font-light tablet:text-sm">Total Trading Volume</div>
-            <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_minor tablet:text-xs">
+            {/* <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_minor tablet:text-xs">
               1.88%
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center gap-4 tablet:justify-center">
             <div className="font-Furore text-2xl text-color_text_1 tablet:text-2xl">{tvl}</div>
-            <LeftArrowIcon className="-rotate-45 fill-color_minor" />
+            {/* <LeftArrowIcon className="-rotate-45 fill-color_minor" /> */}
           </div>
         </div>
         <hr className="mx-6 block h-[60px] w-[1px] border-0 bg-color_disabled tablet:hidden" />
         <div className="flex flex-col tablet:w-full tablet:flex-col-reverse tablet:gap-2 tablet:bg-gray_008 tablet:py-4">
           <div className="flex gap-2 tablet:justify-center">
             <div className="text-lg font-light tablet:text-sm">24 Hour Trading Volume</div>
-            <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_main tablet:text-xs">
+            {/* <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_main tablet:text-xs">
               1.88%
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center gap-4 tablet:justify-center">
             <div className="font-Furore text-2xl text-color_text_1 tablet:text-2xl">{vol24hr}</div>
-            <LeftArrowIcon className="rotate-45 fill-color_main" />
+            {/* <LeftArrowIcon className="rotate-45 fill-color_main" /> */}
           </div>
         </div>
       </div>

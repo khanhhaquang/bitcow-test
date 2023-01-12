@@ -38,7 +38,7 @@ const Home = () => {
       <div className="mt-[200px] flex font-Rany text-color_text_2 tablet:mt-0 tablet:flex-col tablet:gap-2">
         <div className="flex flex-col tablet:w-full tablet:flex-col-reverse tablet:gap-2 tablet:bg-gray_008 tablet:py-4">
           <div className="flex gap-2 tablet:justify-center">
-            <div className="text-lg font-light tablet:text-sm">Total Trading Volume</div>
+            <div className="text-lg font-light tablet:text-sm">Total Value Locked</div>
             {/* <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_minor tablet:text-xs">
               1.88%
             </div> */}
@@ -51,7 +51,7 @@ const Home = () => {
         <hr className="mx-6 block h-[60px] w-[1px] border-0 bg-color_disabled tablet:hidden" />
         <div className="flex flex-col tablet:w-full tablet:flex-col-reverse tablet:gap-2 tablet:bg-gray_008 tablet:py-4">
           <div className="flex gap-2 tablet:justify-center">
-            <div className="text-lg font-light tablet:text-sm">24 Hour Trading Volume</div>
+            <div className="text-lg font-light tablet:text-sm">24 Hour Volume</div>
             {/* <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_main tablet:text-xs">
               1.88%
             </div> */}
@@ -124,7 +124,7 @@ const Home = () => {
             </div>
             <div className="block tablet:hidden">
               {renderTradeStats()}
-              {renderPoweredBy()}
+              {/* {renderPoweredBy()} */}
             </div>
           </LazyShow>
           <Footer className="absolute bottom-0 -left-20 block w-[100vw] tablet:hidden" />

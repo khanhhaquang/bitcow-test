@@ -1,23 +1,24 @@
 import { Fragment, useMemo } from 'react';
-import SpriteAnimator from 'react-responsive-spritesheet';
+// import SpriteAnimator from 'react-responsive-spritesheet';
 import { NavLink } from 'react-router-dom';
 
 import Footer from 'components/PageLayout/components/Footer';
+import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import { Theme } from 'contexts/GlobalSettingProvider';
 import useGlobalSetting from 'hooks/useGlobalSetting';
 import usePools from 'hooks/usePools';
 import { LeftArrowIcon, DocsIcon } from 'resources/icons';
 import AptosLogo from 'resources/img/landingPage/aptos_logo.png';
 import AptosLogoWhite from 'resources/img/landingPage/aptos_logo_white.png';
+import image from 'resources/img/landingPage/img.png';
 import ObricRedStartWith3lines from 'resources/img/landingPage/obricRedStartWith3lines.svg';
 import OrangeStarWith3lines from 'resources/img/landingPage/orangeStarWith3lines.svg';
 import PythLogo from 'resources/img/landingPage/pyth_logo.png';
 import PythLogoWhite from 'resources/img/landingPage/pyth_logo_white.png';
-import SpriteSheetDark from 'resources/img/landingPage/spritesheetDark.png';
-import SpriteSheetWhite from 'resources/img/landingPage/spritesheetWhite.png';
+// import SpriteSheetDark from 'resources/img/landingPage/spritesheetDark.png';
+// import SpriteSheetWhite from 'resources/img/landingPage/spritesheetWhite.png';
 
 import LazyShow from './components/LazyShow';
-import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 
 const Home = () => {
   const { theme } = useGlobalSetting();
@@ -129,8 +130,9 @@ const Home = () => {
           </LazyShow>
           <Footer className="absolute bottom-0 -left-20 block w-[100vw] tablet:hidden" />
         </div>
-        <div className="w-1/3 grow pt-[80px] tablet:w-full tablet:pt-0">
-          <SpriteAnimator
+        <div className="w-1/2 grow pt-[80px] tablet:w-full tablet:pt-0">
+          <img src={image} alt="" className="w-full object-contain" />
+          {/* <SpriteAnimator
             image={theme === Theme.Dark ? SpriteSheetDark : SpriteSheetWhite}
             widthFrame={800}
             heightFrame={800}
@@ -138,7 +140,7 @@ const Home = () => {
             fps={60}
             autoplay
             loop
-          />
+          /> */}
         </div>
         <div className="hidden tablet:block">
           {renderTradeStats()}

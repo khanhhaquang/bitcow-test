@@ -7,7 +7,7 @@ import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormat
 import { Theme } from 'contexts/GlobalSettingProvider';
 import useGlobalSetting from 'hooks/useGlobalSetting';
 import usePools from 'hooks/usePools';
-import { LeftArrowIcon, DocsIcon } from 'resources/icons';
+import { LeftArrowIcon } from 'resources/icons';
 import AptosLogo from 'resources/img/landingPage/aptos_logo.png';
 import AptosLogoWhite from 'resources/img/landingPage/aptos_logo_white.png';
 import image from 'resources/img/landingPage/img.png';
@@ -114,6 +114,7 @@ const Home = () => {
                 LAUNCH APP
                 <LeftArrowIcon className="fill-white tablet:h-[18px] tablet:w-[18px]" />
               </NavLink>
+              {/*
               <a
                 href="https://obricxyz.gitbook.io/smart/"
                 target="_blank"
@@ -121,7 +122,7 @@ const Home = () => {
                 className="flex items-center gap-2 rounded-none border-[1px] border-color_main py-[18px] px-6 font-Furore text-base text-color_main hover:bg-gray_02 hover:text-color_main tablet:grow tablet:px-5 tablet:py-[14px] tablet:text-sm tablet:leading-3">
                 READ DOCS
                 <DocsIcon className="fill-color_main tablet:h-[18px] tablet:w-[18px]" />
-              </a>
+              </a>*/}
             </div>
             <div className="block tablet:hidden">
               {renderTradeStats()}

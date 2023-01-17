@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { DiscordIcon, DocFilledIcon, LogoIcon, TwitterIcon } from 'resources/icons';
+import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
 import FooterMobileBg from 'resources/img/footerMobileBg.png';
 import FooterMobileWhiteBg from 'resources/img/footerMobileBgWhite.png';
 
@@ -33,10 +33,10 @@ const SocialBtnGroups = () => {
     <div className="flex items-center gap-10 tablet:w-full tablet:justify-center">
       {/* <ExternalLink href={URLs.medium}>
         <MediumIcon />
-      </ExternalLink> */}
+      </ExternalLink>
       <ExternalLink href={URLs.doc}>
         <DocFilledIcon />
-      </ExternalLink>
+      </ExternalLink> */}
       <ExternalLink href={URLs.discord}>
         <DiscordIcon />
       </ExternalLink>

@@ -128,7 +128,6 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </div>
           </div>
           <div className="flex h-12 w-[292px] justify-end gap-4 tablet:w-full">
-            {/*
             <Button
               className="flex w-full max-w-[134px] items-center gap-2 rounded-none bg-color_main fill-white text-base text-white hover:opacity-90 tablet:max-w-full"
               onClick={() => handleOnClick('add')}>
@@ -140,7 +139,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
               ) : (
                 'Connect Wallet'
               )}
-            </Button>*/}
+            </Button>
             {activeWallet && poolRecord?.liquidity > 0 && (
               <Button
                 className="flex w-full items-center gap-2"

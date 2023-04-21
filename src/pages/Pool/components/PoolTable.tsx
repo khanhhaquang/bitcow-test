@@ -6,8 +6,8 @@ import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';
 import {
-  numberCompactFormat,
-  numberGroupFormat
+  numberCompactFormat
+  //numberGroupFormat
 } from 'components/PositiveFloatNumInput/numberFormats';
 import { Theme } from 'contexts/GlobalSettingProvider';
 import { useBreakpoint } from 'hooks/useBreakpoint';
@@ -141,6 +141,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         }
       },
       {
+        /*
         title: `APR ${poolFilter.timeBasis}`,
         dataIndex: 'apr',
         render: (val, record: IPool) => {
@@ -161,6 +162,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           compare: (a, b) => getPoolStatsByTimebasis(a).apr - getPoolStatsByTimebasis(b).apr,
           multiple: 2
         }
+      */
       },
       {
         title: '',

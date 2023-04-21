@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { DiscordIcon, LogoIcon, TwitterIcon } from 'resources/icons';
+import { DiscordIcon, DocFilledIcon, LogoIcon, TwitterIcon } from 'resources/icons';
 import FooterMobileBg from 'resources/img/footerMobileBg.png';
 import FooterMobileWhiteBg from 'resources/img/footerMobileBgWhite.png';
 
@@ -40,9 +40,9 @@ const SocialBtnGroups = () => {
       <ExternalLink href={URLs.discord}>
         <DiscordIcon />
       </ExternalLink>
-      {/* <ExternalLink href={URLs.docs}>
-        <TelegramIcon />
-      </ExternalLink> */}
+      <ExternalLink href={URLs.doc}>
+        <DocFilledIcon />
+      </ExternalLink>
       <ExternalLink href={URLs.twitter}>
         <TwitterIcon />
       </ExternalLink>

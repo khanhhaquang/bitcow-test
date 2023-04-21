@@ -150,7 +150,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
               <span className="hidden text-xs tablet:block">APR {poolFilter.timeBasis}</span>
               <span className="tablet:text-color_text_1">
                 {numberGroupFormat(apr * 100, 3)
-                  ? 'Coming soon' /*`${numberGroupFormat(apr * 100, 1)}%`*/
+                  ? `${numberGroupFormat(apr * 100, 1)}%`
                   : 'Coming soon'}
               </span>
             </div>

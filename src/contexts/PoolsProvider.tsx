@@ -66,17 +66,24 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     [poolStore]
   );
 
+  const [cachedResourceInfo, setCachedResourceInfo] = useState({
+    address: null,
+    lpResources: []
+  });
+
   const getPoolResources = useCallback(
-    async (address, poolName) => {
+    async (address: string, poolName) => {
       if (obricSDK) {
-        const lpResources = await obricSDK.aptosClient.getAccountResources(address);
-        const lpPair = lpResources.find(
-          (resource) => resource.type === poolName.replace(/CoinStore/g, 'CoinInfo')
-        );
+        const lpResources =
+          cachedResourceInfo.address === address
+            ? cachedResourceInfo.lpResources
+            : await obricSDK.aptosClient.getAccountResources(address);
+        setCachedResourceInfo({ address, lpResources });
+        const lpPair = lpResources.find((resource) => resource.type === poolName);
         return lpPair;
       }
     },
-    [obricSDK]
+    [obricSDK, cachedResourceInfo]
   );
 
   const fetchCoinPrice = useCallback(async (ids: string[]) => {

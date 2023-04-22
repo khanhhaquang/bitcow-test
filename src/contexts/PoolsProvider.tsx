@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { RawCoinInfo } from '@manahippo/coin-list';
+import { coinInfoToRaw, RawCoinInfo } from '@manahippo/coin-list';
 import { StructTag } from '@manahippo/move-to-ts';
 import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
@@ -40,7 +40,7 @@ const PoolsContext = createContext<PoolsContextType>({} as PoolsContextType);
 const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   const { obricSDK, liquidityPools } = useAptosWallet();
   const [activePools, setActivePools] = useState<IPool[]>([]);
-  const [coinInPools, setCoinInPools] = useState<Record<string, number>>();
+  const [coinPrices, setCoinPrices] = useState<Record<string, number>>();
   const [fetching, setFetching] = useState(false);
   const { poolStore } = useCoinStore();
   const [poolFilter, setPoolFilter] = useState<IPoolFilters>({
@@ -79,10 +79,10 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     [obricSDK]
   );
 
-  const fetchCoinVolume = useCallback(async (token: RawCoinInfo) => {
+  const fetchCoinPrice = useCallback(async (ids: string[]) => {
     try {
       const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${token.coingecko_id}&vs_currencies=USD`
+        `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=USD`
       );
       return await response?.json();
     } catch (err) {
@@ -92,23 +92,24 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
 
   const populateCoinRate = useCallback(
     async (supportedCoins: Record<string, RawCoinInfo>): Promise<Record<string, number>> => {
-      const currentCoins = {};
-      await Promise.all(
-        Object.keys(supportedCoins).map(async (key) => {
-          const token = supportedCoins[key];
-          if (!currentCoins[token.symbol]) {
-            const data = await fetchCoinVolume(token);
-            let rate = 0;
-            if (data) {
-              rate = data[Object.keys(data)[0]]?.usd;
-            }
-            currentCoins[token.symbol] = rate;
+      const collectedPrices = {};
+      const coingeckoIds = Object.entries(supportedCoins).map((entry) => entry[1].coingecko_id);
+      const nonemptyIds = coingeckoIds.filter((id) => id !== '');
+      const prices = await fetchCoinPrice(nonemptyIds);
+      Object.keys(supportedCoins).map(async (symbol) => {
+        const coinInfo = supportedCoins[symbol];
+        if (!collectedPrices[coinInfo.symbol]) {
+          const data = prices[coinInfo.coingecko_id];
+          let rate = 0;
+          if (data) {
+            rate = data.usd;
           }
-        })
-      );
-      return currentCoins;
+          collectedPrices[coinInfo.symbol] = rate;
+        }
+      });
+      return collectedPrices;
     },
-    [fetchCoinVolume]
+    [fetchCoinPrice]
   );
 
   const parsePoolData = useCallback(
@@ -158,13 +159,13 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   const getPoolTVL = useCallback(
     (pool: IPool) => {
       let value = 0;
-      value = coinInPools
-        ? pool.token0Reserve * coinInPools[pool.token0.symbol] +
-          pool.token1Reserve * coinInPools[pool.token1.symbol]
+      value = coinPrices
+        ? pool.token0Reserve * coinPrices[pool.token0.symbol] +
+          pool.token1Reserve * coinPrices[pool.token1.symbol]
         : 0;
       return value;
     },
-    [coinInPools]
+    [coinPrices]
   );
 
   const gatherPoolTokenInfo = useCallback(async () => {
@@ -182,15 +183,15 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     });
 
     const supportedCoinRate = await populateCoinRate(supportedCoins);
-    setCoinInPools(supportedCoinRate);
+    setCoinPrices(supportedCoinRate);
     setFetching(false);
   }, [activePools, populateCoinRate]);
 
   useEffect(() => {
-    if (activePools?.length && !fetching && (!coinInPools || Object.keys(coinInPools).length < 1)) {
+    if (activePools?.length && !fetching && (!coinPrices || Object.keys(coinPrices).length < 1)) {
       gatherPoolTokenInfo();
     }
-  }, [activePools, coinInPools, fetching, gatherPoolTokenInfo]);
+  }, [activePools, coinPrices, fetching, gatherPoolTokenInfo]);
 
   useEffect(() => {
     if (obricSDK && liquidityPools?.length && !activePools.length) {
@@ -237,12 +238,12 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   const getTokenBalanceInUSD = useCallback(
     (balance: number, token: RawCoinInfo) => {
       let value = 0;
-      if (coinInPools && token && coinInPools[token.symbol]) {
-        value = balance * coinInPools[token.symbol];
+      if (coinPrices && token && coinPrices[token.symbol]) {
+        value = balance * coinPrices[token.symbol];
       }
       return value ? numberGroupFormat(value, 3) : '0';
     },
-    [coinInPools]
+    [coinPrices]
   );
 
   const getPoolStatsByTimebasis = useCallback(
@@ -252,7 +253,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         fees: 0,
         apr: 0
       };
-      if (obricSDK && coinInPools) {
+      if (obricSDK && coinPrices) {
         const { timeBasis } = poolFilter;
         // const denominator = {
         //   '24H': 24,
@@ -264,12 +265,12 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
           const fees = obricSDK
             .getPrev24HourFees(tokens[0].symbol, tokens[1].symbol)
             .reduce((total, fee, index) => {
-              return (total += fee * coinInPools[tokens[index].symbol]);
+              return (total += fee * coinPrices[tokens[index].symbol]);
             }, 0);
           const volume = obricSDK
             .getPrev24HourVolume(tokens[0].symbol, tokens[1].symbol)
             .reduce((total, vol, index) => {
-              return (total += vol * coinInPools[tokens[index].symbol]);
+              return (total += vol * coinPrices[tokens[index].symbol]);
             }, 0);
           const tvl = getPoolTVL(pool);
           stats = {
@@ -281,35 +282,35 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       }
       return stats;
     },
-    [coinInPools, obricSDK, poolFilter]
+    [coinPrices, obricSDK, poolFilter]
   );
 
   const getTotalPoolsTVL = useCallback(() => {
-    const result = coinInPools
+    const result = coinPrices
       ? activePools.reduce((total, pool) => {
           return (total +=
-            pool.token0Reserve * coinInPools[pool.token0.symbol] +
-            pool.token1Reserve * coinInPools[pool.token1.symbol]);
+            pool.token0Reserve * coinPrices[pool.token0.symbol] +
+            pool.token1Reserve * coinPrices[pool.token1.symbol]);
         }, 0)
       : 0;
     return result;
-  }, [activePools, coinInPools]);
+  }, [activePools, coinPrices]);
 
   const getTotalPoolsVolume = useCallback(() => {
-    const result = coinInPools
+    const result = coinPrices
       ? activePools.reduce((total, pool) => {
           const { volume } = getPoolStatsByTimebasis(pool);
           return (total += volume);
         }, 0)
       : 0;
     return result;
-  }, [activePools, coinInPools]);
+  }, [activePools, coinPrices]);
 
   return (
     <PoolsContext.Provider
       value={{
         activePools,
-        coinInPools,
+        coinInPools: coinPrices,
         getOwnedLiquidity,
         checkIfInvested,
         getTokenBalanceInUSD,

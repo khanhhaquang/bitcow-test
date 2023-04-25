@@ -1,8 +1,9 @@
-import { createReducer, createSelector } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 // import { sortBy } from 'lodash';
 import { RootState } from 'modules/rootReducer';
+import { IPool } from 'obric';
 
-import { IPool, LiquidityModal } from 'types/pool';
+import { LiquidityModal } from 'types/pool';
 
 import actions from './actions';
 
@@ -52,39 +53,3 @@ export const getIsFetchingPoolList = (state: RootState) => state.pool.isFetching
 export const getIsFetchedPoolList = (state: RootState) => state.pool.isFetched;
 export const getLiquidityModal = (state: RootState) => state.pool.liquidityModal;
 export const getPoolList = (state: RootState) => state.pool.poolList;
-// export const getPoolFilters = (state: RootState) => state.pool.filters;
-
-export const getPoolSummary = createSelector(getPoolList, (poolList) => {
-  const totalValueLocked = poolList.reduce((totalValue, pool) => {
-    return totalValue + parseFloat(pool.totalValueLockedUSD);
-  }, 0);
-  const total24Vol = poolList.reduce((totalValue, pool) => {
-    return totalValue + parseFloat(pool.volumeUSD);
-  }, 0);
-  return {
-    totalValueLocked,
-    total24Vol
-  };
-});
-
-// export const getFilteredPoolList = createSelector(
-//   getPoolFilters,
-//   getPoolList,
-//   (filters, poolList) => {
-//     let filteredList: IPool[] = poolList;
-//     if (filters.sortBy) filteredList = sortBy(filteredList, filters.sortBy);
-//     if (!filters.search) return filteredList;
-//     filteredList = filteredList.filter((pool) => {
-//       const keysToFilter = [
-//         pool.token0.symbol,
-//         pool.token1.symbol,
-//         pool.token0.name,
-//         pool.token1.name
-//       ]
-//         .join(',')
-//         .toLowerCase();
-//       return keysToFilter.includes(filters.search);
-//     });
-//     return filteredList;
-//   }
-// );

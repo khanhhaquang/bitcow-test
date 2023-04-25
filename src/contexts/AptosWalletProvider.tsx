@@ -4,8 +4,9 @@ import { NetworkInfo, useWallet, Wallet } from '@manahippo/aptos-wallet-adapter'
 import { RawCoinInfo } from '@manahippo/coin-list';
 import { AptosClient, HexString, Types } from 'aptos';
 import { MoveResource, UserTransaction } from 'aptos/src/generated';
-import { SDK as ObricSDK } from 'obric';
+import { IPool, SDK as ObricSDK } from 'obric';
 import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
+import { SSTradingPair } from 'obric/dist/obric/ssswap2';
 import { createContext, FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import useNetworkConfiguration from 'hooks/useNetworkConfiguration';
@@ -28,7 +29,7 @@ interface AptosWalletContextType {
   walletResource: MoveResource[];
   obricSDK: ObricSDK;
   pendingTx: boolean;
-  liquidityPools: PieceSwapPoolInfo[];
+  liquidityPools: IPool[];
   requestSwap: (params: {
     fromToken: RawCoinInfo;
     toToken: RawCoinInfo;
@@ -72,10 +73,10 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [activeNetwork, setActiveNetwork] = useState<NetworkInfo>();
   const [selectedWallet, setSelectedWallet] = useState<Wallet>();
   const [open, setOpen] = useState(false);
-  const [walletResource, setWalletResource] = useState<MoveResource[]>();
+  const [walletResource, setWalletResource] = useState<MoveResource[]>([]);
   const [tokenList, setTokenList] = useState<RawCoinInfo[]>();
   const [tokenInfo, setTokenInfo] = useState<Record<string, RawCoinInfo[]>>();
-  const [liquidityPools, setLiquidityPools] = useState<PieceSwapPoolInfo[]>();
+  const [liquidityPools, setLiquidityPools] = useState<IPool[]>();
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const [pendingTx, setPendingTx] = useState<boolean>(false);
 
@@ -100,7 +101,7 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const fetchCoinList = useCallback(async () => {
     if (obricSDK) {
-      const list = obricSDK.coinList.coinList;
+      const list = obricSDK.coinList.getCoinInfoList();
       const tokens = obricSDK.coinList.symbolToCoinInfo;
       setTokenList(list);
       setTokenInfo(tokens);
@@ -110,8 +111,9 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
   const fetchActiveWalletResources = useCallback(async () => {
     if (obricSDK) {
       const resources = await obricSDK?.aptosClient.getAccountResources(activeWallet);
-      const txHistory = await obricSDK?.aptosClient.getAccountTransactions(activeWallet);
+      //const txHistory = await obricSDK?.aptosClient.getAccountTransactions(activeWallet);
 
+      console.log(`Updating to ${resources.length} wallet resources`);
       setWalletResource(resources);
     }
   }, [activeWallet, obricSDK]);
@@ -124,8 +126,10 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const fetchPools = useCallback(async () => {
     if (obricSDK) {
-      const pools = await obricSDK.pools;
-      setLiquidityPools(pools);
+      const result: IPool[] = [];
+      const v1Pools = obricSDK.aptosV1Pools;
+      const v2Pools = obricSDK.aptosV2Pools;
+      setLiquidityPools(result.concat(v1Pools).concat(v2Pools));
     }
   }, [obricSDK]);
 
@@ -231,7 +235,7 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
       try {
         if (!activeWallet) throw new Error('Please connect wallet first');
         if (obricSDK) {
-          const payload = await obricSDK.addLiquidityPayload(
+          const payload = await obricSDK.addLiquidityPayloadV1(
             xToken.symbol,
             yToken.symbol,
             xAmt,
@@ -279,7 +283,7 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
       try {
         if (!activeWallet) throw new Error('Please connect wallet first');
         if (obricSDK) {
-          const payload = await obricSDK.withdrawLiquidityPayload(
+          const payload = await obricSDK.withdrawLiquidityPayloadV1(
             xToken.symbol,
             yToken.symbol,
             amt

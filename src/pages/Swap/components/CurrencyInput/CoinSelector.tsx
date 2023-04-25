@@ -22,7 +22,7 @@ interface TProps {
 const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
   const { tokenList, activeWallet } = useAptosWallet();
-  const { coinInPools } = usePools();
+  const { coinPrices: coinInPools } = usePools();
   const commonCoins = tokenList.filter((token) => {
     return ['APT', 'USDT', 'USDC'].includes(token.symbol);
   });

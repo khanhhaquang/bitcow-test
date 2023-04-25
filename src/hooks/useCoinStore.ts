@@ -34,7 +34,7 @@ const useCoinStore = () => {
         } = structType;
         const tokenType = token as StructTag;
         if (module === 'coin' && name === 'CoinStore') {
-          if (tokenType.module === 'piece_swap') {
+          if (['piece_swap', 'ssswap2'].includes(tokenType.module)) {
             const poolIdentifier = tokenType.getFullname();
             poolResources[poolIdentifier] = resource;
             poolResources[poolIdentifier].data = {

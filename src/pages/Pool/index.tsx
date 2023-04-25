@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import poolAction from 'modules/pool/actions';
 import { getLiquidityModal } from 'modules/pool/reducer';
+import { IPool } from 'obric';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -12,7 +13,6 @@ import SelectInput from 'components/SelectInput';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import usePools from 'hooks/usePools';
 import { CancelIcon } from 'resources/icons';
-import { IPool } from 'types/pool';
 
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
@@ -38,7 +38,7 @@ const Pool = () => {
   const {
     activePools,
     checkIfInvested,
-    coinInPools,
+    coinPrices: coinInPools,
     setPoolFilter,
     poolFilter,
     getTotalPoolsTVL,
@@ -55,7 +55,7 @@ const Pool = () => {
       let currentPools = poolsToSort;
       if (poolFilter.text) {
         currentPools = currentPools.filter((pool) =>
-          [pool.address, pool.token0.symbol, pool.token1.symbol]
+          [pool.token0.symbol, pool.token1.symbol]
             .join('+')
             .toLowerCase()
             .includes(poolFilter.text.toLowerCase())
@@ -160,7 +160,7 @@ const Pool = () => {
     return tabs.map((tab) => {
       let currentPools = filteredPools;
       if (tab.id === '2') {
-        currentPools = currentPools.filter((pool) => checkIfInvested(pool.id));
+        currentPools = currentPools.filter((pool) => checkIfInvested(pool));
       }
 
       return {

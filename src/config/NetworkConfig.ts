@@ -21,7 +21,7 @@ export const TESTNET_CONFIG = new NetworkConfiguration(
 
 export const MAINNET_CONFIG = new NetworkConfiguration(
   'mainnet',
-  'https://fullnode.mainnet.aptoslabs.com/v1',
+  'https://aptos-mainnet.nodereal.io/v1/a082c9e26c0d41bc8edcea7197decf5d',
   ''
 );
 

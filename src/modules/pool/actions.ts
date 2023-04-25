@@ -1,5 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
-import { IPool, IPoolFilters, LiquidityModal } from 'types/pool';
+import { IPool } from 'obric';
+
+import { IPoolFilters, LiquidityModal } from 'types/pool';
 
 const SET_IS_FETCHING = createAction<boolean>('pool/SET_IS_FETCHING');
 const TOGGLE_LIQUIDITY_MODAL = createAction<LiquidityModal>('pool/TOGGLE_LIQUIDITY_MODAL');

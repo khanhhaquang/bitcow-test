@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
+import { IPool } from 'obric';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
@@ -16,7 +17,6 @@ import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { WithdrawLiquidity as WithdrawLiquidityProps } from 'pages/Pool/types';
 import { LeftArrowIcon } from 'resources/icons';
-import { IPool } from 'types/pool';
 import { openErrorNotification } from 'utils/notifications';
 
 const percentageOptions = [25, 50, 75, 100];
@@ -26,13 +26,18 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const { requestWithdrawLiquidity } = useAptosWallet();
   const { isTablet } = useBreakpoint('tablet');
   const { getOwnedLiquidity } = usePools();
-  const [pool, setPool] = useState<{ lp: number; coins: {} }>();
+  const [pool, setPool] = useState<{ v1lp: number; v2xlp: number; v2ylp: number; coins: {} }>();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
 
-  const fetchRecord = useCallback(async () => {
-    const { lp, myCoins } = await getOwnedLiquidity(liquidityPool.id);
-    setPool({ lp, coins: myCoins });
-  }, [getOwnedLiquidity, liquidityPool.id]);
+  const fetchRecord = useCallback(() => {
+    const userLiq = getOwnedLiquidity(liquidityPool);
+    setPool({
+      v1lp: userLiq.v1lpAmount,
+      v2xlp: userLiq.v2xlpAmount,
+      v2ylp: userLiq.v2ylpAmount,
+      coins: userLiq.assetsPooled
+    });
+  }, [getOwnedLiquidity, liquidityPool]);
 
   useEffect(() => {
     fetchRecord();
@@ -47,7 +52,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
         const result = await requestWithdrawLiquidity({
           xToken,
           yToken,
-          amt: pool.lp * (percent / 100)
+          amt: pool.v1lp * (percent / 100)
         });
         if (result) {
           formikHelper.resetForm();

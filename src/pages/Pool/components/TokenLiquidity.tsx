@@ -2,6 +2,7 @@ import { RawCoinInfo } from '@manahippo/coin-list';
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
+import { IPool } from 'obric';
 import { useCallback, useEffect } from 'react';
 
 // import { Popover } from 'antd';
@@ -13,7 +14,6 @@ import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import useTokenBalane from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
-import { IPool } from 'types/pool';
 
 interface TProps {
   token: RawCoinInfo;
@@ -38,10 +38,9 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
   const onAmountChange = useDebouncedCallback(
     useCallback(
       (a: number) => {
-        const { token0Reserve, token1Reserve } = liquidityPool;
         let pairType = '';
         let pairValue = 0;
-        const ratio = token0Reserve / token1Reserve;
+        const ratio = liquidityPool.reserve0 / liquidityPool.reserve1;
         if (type === 'xAmt') {
           pairType = 'yAmt';
           pairValue = a / ratio;

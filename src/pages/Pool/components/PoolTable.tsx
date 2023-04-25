@@ -2,6 +2,7 @@
 
 import cx from 'classnames';
 import Lottie from 'lottie-react';
+import { IPool } from 'obric';
 import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';
@@ -16,7 +17,6 @@ import usePools from 'hooks/usePools';
 import tableLoadingDark from 'resources/animation/tableLoadingDark.json';
 import tableLoadingLight from 'resources/animation/tableLoadingLight.json';
 import { LessIcon, MoreIcon } from 'resources/icons';
-import { IPool } from 'types/pool';
 
 import PoolRowDetail from './PoolRowDetail';
 import TokenPair from './TokenPair';
@@ -81,6 +81,13 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         dataIndex: 'token0',
         render: (val, record, index) => {
           return <TokenPair token0={record.token0} token1={record.token1} />;
+        }
+      },
+      {
+        title: 'Type',
+        dataIndex: 'poolType',
+        render: (val, record) => {
+          return <div className="tablet:hidden">{record.poolType}</div>;
         }
       },
       {
@@ -230,7 +237,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       onChange={handleChange}
       tableLayout="fixed"
       sortDirections={['descend', 'ascend']}
-      rowKey={(record) => record.id}
+      rowKey={(record) => record.typename}
       showSorterTooltip={false}
       expandable={{
         expandedRowClassName: () => 'expanded-pool',

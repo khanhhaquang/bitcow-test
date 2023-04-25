@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import poolAction from 'modules/pool/actions';
+import { IPool, IUserLiquidity } from 'obric';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -10,16 +11,15 @@ import {
   numberGroupFormat
 } from 'components/PositiveFloatNumInput/numberFormats';
 import useAptosWallet from 'hooks/useAptosWallet';
-import usePools from 'hooks/usePools';
-import { IPool } from 'types/pool';
-import { MinusIcon, PlusIcon } from 'resources/icons';
 import { useBreakpoint } from 'hooks/useBreakpoint';
+import usePools from 'hooks/usePools';
+import { MinusIcon, PlusIcon } from 'resources/icons';
 
 interface ExpandedDataType {
-  id: string;
-  liquidity: number;
+  typename: string;
+  lpAmount: number;
   assetsPooled: Record<string, number>;
-  share: number;
+  liquidityShare: number;
 }
 
 interface IProps {
@@ -29,22 +29,22 @@ interface IProps {
 const PoolRowDetail = ({ pool }: IProps) => {
   const dispatch = useDispatch();
   const { activeWallet, openModal } = useAptosWallet();
-  const { getOwnedLiquidity, getPoolTVL, poolFilter, getPoolStatsByTimebasis } = usePools();
-  const [poolRecord, setPoolRecord] = useState<ExpandedDataType>();
+  const {
+    getOwnedLiquidity,
+    getOwnedLiquidityShare,
+    getPoolTVL,
+    poolFilter,
+    getPoolStatsByTimebasis
+  } = usePools();
+  const [ownedLiquidity, setOwnedLiquidity] = useState<IUserLiquidity>();
   const { isTablet } = useBreakpoint('tablet');
 
   const poolStats = useMemo(() => getPoolStatsByTimebasis(pool), [getPoolStatsByTimebasis, pool]);
 
-  const fetchRecord = useCallback(async () => {
-    const { lp, coins } = await getOwnedLiquidity(pool.id);
-    const poolData = {
-      id: pool.id,
-      liquidity: lp,
-      assetsPooled: coins,
-      share: pool.liquidity ? (lp / pool.liquidity) * 100 : 0
-    };
-    setPoolRecord(poolData);
-  }, [getOwnedLiquidity, pool.id, pool.liquidity]);
+  const fetchRecord = useCallback(() => {
+    const userLiq = getOwnedLiquidity(pool);
+    setOwnedLiquidity(userLiq);
+  }, [getOwnedLiquidity, pool]);
 
   useEffect(() => {
     fetchRecord();
@@ -62,19 +62,23 @@ const PoolRowDetail = ({ pool }: IProps) => {
     [activeWallet, dispatch, openModal, pool]
   );
 
-  const owndedLiquidity = useMemo(() => {
-    const liquidity = getPoolTVL(pool) * (poolRecord?.share / 100);
+  const ownedLiquidityShare = useMemo(() => {
+    return getOwnedLiquidityShare(pool);
+  }, [getOwnedLiquidityShare, pool]);
+
+  const owndedLiquidityUsdValue = useMemo(() => {
+    const liquidity = getPoolTVL(pool) * ownedLiquidityShare;
     if (isTablet) {
       return numberCompactFormat(liquidity, 1);
     }
     return numberGroupFormat(liquidity, 3);
-  }, [getPoolTVL, isTablet, pool, poolRecord?.share]);
+  }, [ownedLiquidityShare, getPoolTVL, isTablet, pool]);
 
   const assetsPooled = useMemo(() => {
     return (
-      poolRecord?.assetsPooled &&
-      Object.keys(poolRecord?.assetsPooled).map((key) => {
-        const val = poolRecord?.assetsPooled[key];
+      ownedLiquidity?.assetsPooled &&
+      Object.keys(ownedLiquidity?.assetsPooled).map((key) => {
+        const val = ownedLiquidity?.assetsPooled[key];
         return (
           <div className="text-color_text_1" key={`pool-asset-${key}`}>
             {val ? (isTablet ? numberCompactFormat(val) : numberGroupFormat(val, 6) || 0) : 0} {key}
@@ -82,7 +86,21 @@ const PoolRowDetail = ({ pool }: IProps) => {
         );
       })
     );
-  }, [isTablet, poolRecord?.assetsPooled]);
+  }, [isTablet, ownedLiquidity?.assetsPooled]);
+
+  const isV1 = pool.poolType === 'V1';
+
+  const userLiquidityLine1 = useMemo(() => {
+    if (isV1) {
+      return `${numberGroupFormat(ownedLiquidity?.v1lpAmount, 6) || 0} LP`;
+    } else {
+      return `${numberGroupFormat(ownedLiquidity?.v2xlpAmount, 6) || 0} XLP`;
+    }
+  }, [ownedLiquidity, isV1]);
+
+  const userLiquidityLine2 = useMemo(() => {
+    return isV1 ? '' : `${numberGroupFormat(ownedLiquidity?.v2ylpAmount, 6) || 0} YLP`;
+  }, [ownedLiquidity, isV1]);
 
   return (
     <Fragment>
@@ -110,10 +128,8 @@ const PoolRowDetail = ({ pool }: IProps) => {
             <div className="flex w-[210px] grow flex-col gap-4 tablet:w-[82px]">
               <span className="block text-sm leading-3 tablet:text-xs">Your Liquidity</span>
               <div className="flex flex-col gap-1">
-                <span className="text-color_text_1">${owndedLiquidity || 0}</span>
-                <span className="text-color_text_1">
-                  {numberGroupFormat(poolRecord?.liquidity, 6) || 0} LP
-                </span>
+                <span className="text-color_text_1">{userLiquidityLine1}</span>
+                <span className="text-color_text_1">{userLiquidityLine2}</span>
               </div>
             </div>
             <div className="flex grow flex-col gap-4">
@@ -123,24 +139,27 @@ const PoolRowDetail = ({ pool }: IProps) => {
             <div className="flex grow flex-col gap-4">
               <span className="block text-sm leading-3 tablet:text-xs">Your Share</span>
               <span className="text-color_text_1">
-                {numberGroupFormat(poolRecord?.share, 3) || 0} %
+                {numberGroupFormat(ownedLiquidityShare * 100, 3) || 0} %
               </span>
+              <span className="text-color_text_1">${owndedLiquidityUsdValue}</span>
             </div>
           </div>
           <div className="flex h-12 w-[292px] justify-end gap-4 tablet:w-full">
-            <Button
-              className="flex w-full max-w-[134px] items-center gap-2 rounded-none bg-color_main fill-white text-base text-white hover:opacity-90 tablet:max-w-full"
-              onClick={() => handleOnClick('add')}>
-              {activeWallet ? (
-                <Fragment>
-                  <PlusIcon />
-                  Deposit
-                </Fragment>
-              ) : (
-                'Connect Wallet'
-              )}
-            </Button>
-            {activeWallet && poolRecord?.liquidity > 0 && (
+            {isV1 && (
+              <Button
+                className="flex w-full max-w-[134px] items-center gap-2 rounded-none bg-color_main fill-white text-base text-white hover:opacity-90 tablet:max-w-full"
+                onClick={() => handleOnClick('add')}>
+                {activeWallet ? (
+                  <Fragment>
+                    <PlusIcon />
+                    Deposit
+                  </Fragment>
+                ) : (
+                  'Connect Wallet'
+                )}
+              </Button>
+            )}
+            {isV1 && activeWallet && ownedLiquidity?.invested && (
               <Button
                 className="flex w-full items-center gap-2"
                 variant="outlined"

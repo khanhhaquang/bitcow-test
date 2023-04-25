@@ -1,5 +1,6 @@
 import { Formik, FormikHelpers } from 'formik';
 import poolAction from 'modules/pool/actions';
+import { IPool } from 'obric';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
@@ -8,7 +9,6 @@ import Button from 'components/Button';
 import useAptosWallet from 'hooks/useAptosWallet';
 import { AddLiquidity as AddLiquidityProps } from 'pages/Pool/types';
 import { AddIcon } from 'resources/icons';
-import { IPool } from 'types/pool';
 import { openErrorNotification } from 'utils/notifications';
 
 import TokenLiquidity from './TokenLiquidity';
@@ -49,7 +49,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     const details = [
       {
         label: 'Trade Fee',
-        value: ((liquidityPool.swapFee / 1000000) * 100).toFixed(2) + '%'
+        value: (liquidityPool.swapFeeMillionth * 100).toFixed(2) + '%'
       },
       {
         label: 'Withdraw Fee',
@@ -67,7 +67,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
         ))}
       </div>
     );
-  }, [liquidityPool.swapFee]);
+  }, [liquidityPool.swapFeeMillionth]);
 
   return (
     <Formik

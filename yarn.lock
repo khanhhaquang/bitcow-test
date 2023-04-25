@@ -7756,8 +7756,10 @@ object.values@^1.1.0, object.values@^1.1.5:
     define-properties "^1.1.4"
     es-abstract "^1.20.4"
 
-"obric@file:../obric-dex/sdk/":
-  version "2.1.2"
+obric@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/obric/-/obric-2.2.0.tgz#f124a3b35b3f63aa58de565ca070e80ff43b82b9"
+  integrity sha512-0yj23oTlsrviu8lYeI8zCvuWVrmpUj45qrha5VZy8JOlePMj64Spg/U7yQ/jKWfn2Ij1XteREG5AWzHSW0XIng==
   dependencies:
     "@manahippo/coin-list" "4.1.6"
     "@manahippo/hippo-sdk" "5.0.6"

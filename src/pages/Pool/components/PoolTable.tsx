@@ -87,7 +87,11 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         title: 'Type',
         dataIndex: 'poolType',
         render: (val, record) => {
-          return <div className="tablet:hidden">{record.poolType}</div>;
+          return (
+            <div className="tablet:hidden">
+              {record.poolType.startsWith('V3') ? 'V3' : record.poolType}
+            </div>
+          );
         }
       },
       {

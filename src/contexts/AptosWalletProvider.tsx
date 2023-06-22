@@ -129,7 +129,8 @@ const AptosWalletProvider: FC<TProviderProps> = ({ children }) => {
       const result: IPool[] = [];
       const v1Pools = obricSDK.aptosV1Pools;
       const v2Pools = obricSDK.aptosV2Pools;
-      setLiquidityPools(result.concat(v1Pools).concat(v2Pools));
+      const v3PoolsAbel = obricSDK.aptosV3AbelPool;
+      setLiquidityPools(result.concat(v1Pools).concat(v2Pools).concat(v3PoolsAbel));
     }
   }, [obricSDK]);
 

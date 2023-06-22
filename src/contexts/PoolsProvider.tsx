@@ -146,6 +146,10 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         const value0 = price0 * userLiq.assetsPooled[pool.token0.symbol];
         const value1 = price1 * userLiq.assetsPooled[pool.token1.symbol];
         return (value0 + value1) / getPoolTVL(pool);
+      } else if (pool.poolType === 'V3 Abel') {
+        const price1 = coinPrices[pool.token1.symbol];
+        const value1 = price1 * userLiq.assetsPooled[pool.token1.symbol];
+        return value1 / getPoolTVL(pool);
       } else {
         return 0;
       }

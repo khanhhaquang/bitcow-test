@@ -91,16 +91,20 @@ const PoolRowDetail = ({ pool }: IProps) => {
   const isV1 = pool.poolType === 'V1';
 
   const userLiquidityLine1 = useMemo(() => {
-    if (isV1) {
+    if (pool.poolType === 'V1') {
       return `${numberGroupFormat(ownedLiquidity?.v1lpAmount, 6) || 0} LP`;
-    } else {
+    } else if (pool.poolType === 'V2') {
       return `${numberGroupFormat(ownedLiquidity?.v2xlpAmount, 6) || 0} XLP`;
+    } else if (pool.poolType === 'V3 Abel') {
+      return `${numberGroupFormat(ownedLiquidity?.v3lpAmount, 6) || 0} LP`;
     }
-  }, [ownedLiquidity, isV1]);
+  }, [ownedLiquidity]);
 
   const userLiquidityLine2 = useMemo(() => {
-    return isV1 ? '' : `${numberGroupFormat(ownedLiquidity?.v2ylpAmount, 6) || 0} YLP`;
-  }, [ownedLiquidity, isV1]);
+    if (pool.poolType === 'V2') {
+      return `${numberGroupFormat(ownedLiquidity?.v2ylpAmount, 6) || 0} YLP`;
+    }
+  }, [ownedLiquidity]);
 
   return (
     <Fragment>

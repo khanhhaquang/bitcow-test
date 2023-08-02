@@ -3,19 +3,18 @@
 import { routes } from 'App.routes';
 import cx from 'classnames';
 import { useCallback, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { Drawer, Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
 import ThemeToggler from 'components/ThemeToggler';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { LeftArrowIcon, LogoIcon, LogoMobileIcon, MenuIcon } from 'resources/icons';
+import { LogoIcon, LogoMobileIcon, MenuIcon } from 'resources/icons';
 import LogoImg from 'resources/img/logo.png';
 import LogoBlackImg from 'resources/img/logoBlack.png';
 
 import styles from './Header.module.scss';
-import { StarWhiteIcon } from 'resources/icons/landingPage';
 
 const { Header } = Layout;
 
@@ -63,17 +62,7 @@ const PageHeader: React.FC = () => {
           <ThemeToggler />
         </div>
       </div>
-    ) : (
-      <NavLink
-        to="swap"
-        className="relative ml-auto flex h-full items-center justify-end border-l-[1px] border-color_border bg-transparent px-20 font-Furore text-2xl text-color_main hover:text-color_main">
-        {'Launch App'}
-        <div className="absolute -left-4 -bottom-4 desktop:block tablet:hidden">
-          {/* <img src={StarWhite} alt="" /> */}
-          <StarWhiteIcon className="z-10 fill-color_main dark:fill-[#D9D9D9]" />
-        </div>
-      </NavLink>
-    );
+    ) : null;
   };
 
   const rednerMobileMenu = () => {
@@ -146,17 +135,6 @@ const PageHeader: React.FC = () => {
           })}>
           {renderDesktop()}
         </div>
-        {/* Mobile - Home Page */}
-        {currentPageName === 'Home' && (
-          <div className="fixed bottom-0 left-0 z-30 hidden w-full tablet:block">
-            <NavLink
-              to="swap"
-              className="flex w-full items-center justify-center gap-2 bg-color_main py-[18px] font-Furore text-base !text-white">
-              {'Launch App'}
-              <LeftArrowIcon className="fill-white" width={24} height={24} />
-            </NavLink>
-          </div>
-        )}
         {/* Mobile - non home page */}
         {currentPageName !== 'Home' && (
           <div className="hidden items-center gap-2 tablet:flex">

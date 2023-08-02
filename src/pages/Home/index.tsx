@@ -11,8 +11,6 @@ import { DocsIcon, LeftArrowIcon } from 'resources/icons';
 import AptosLogo from 'resources/img/landingPage/aptos_logo.png';
 import AptosLogoWhite from 'resources/img/landingPage/aptos_logo_white.png';
 import image from 'resources/img/landingPage/img.png';
-import ObricRedStartWith3lines from 'resources/img/landingPage/obricRedStartWith3lines.svg';
-import OrangeStarWith3lines from 'resources/img/landingPage/orangeStarWith3lines.svg';
 import PythLogo from 'resources/img/landingPage/pyth_logo.png';
 import PythLogoWhite from 'resources/img/landingPage/pyth_logo_white.png';
 // import SpriteSheetDark from 'resources/img/landingPage/spritesheetDark.png';
@@ -92,13 +90,8 @@ const Home = () => {
 
   return (
     <Fragment>
-      <hr className="absolute left-0 top-[126px] block w-full border-color_border tablet:hidden" />
       <div className="flex justify-between gap-12 bg-cover bg-center bg-no-repeat px-20 pt-[126px] tablet:flex-col tablet:justify-center tablet:gap-0 tablet:px-4 tablet:pb-20 tablet:pt-16 tablet:text-center">
         <div className="relative w-1/3 grow pb-36 pt-[100px] tablet:w-full tablet:pt-[60px] tablet:pb-8">
-          <div className="absolute -top-4 -right-[84px] z-10 desktop:block tablet:hidden">
-            <img src={OrangeStarWith3lines} alt="" className="hidden dark:block" />
-            <img src={ObricRedStartWith3lines} alt="" className="block dark:hidden" />
-          </div>
           <hr className="absolute top-0 right-0 h-full w-[1px] border-0 bg-color_border desktop:block tablet:hidden" />
           <LazyShow>
             <div className="font-Furore text-5xl uppercase leading-[60px] text-color_text_1 tablet:text-2xl tablet:leading-7">

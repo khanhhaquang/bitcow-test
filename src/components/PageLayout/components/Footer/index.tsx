@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { DiscordIcon, DocFilledIcon, LogoIcon, TwitterIcon } from 'resources/icons';
+import { DiscordIcon, DocFilledIcon, TwitterIcon } from 'resources/icons';
 import FooterMobileBg from 'resources/img/footerMobileBg.png';
 import FooterMobileWhiteBg from 'resources/img/footerMobileBgWhite.png';
 
@@ -76,11 +75,6 @@ const PageFooter: React.FC<TProps> = ({ className }) => {
           },
           className
         )}>
-        {currentPageName === 'Home' && (
-          <Link to="/" className="flex h-full items-center justify-center tablet:hidden">
-            <LogoIcon className="w-[120px]" />
-          </Link>
-        )}
         {currentPageName !== 'Home' && <div className="block grow tablet:hidden" />}
         <SocialBtnGroups />
         {/* {currentPageName !== 'Home' && (

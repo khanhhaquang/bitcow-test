@@ -4,22 +4,13 @@ import { NavLink } from 'react-router-dom';
 
 import Footer from 'components/PageLayout/components/Footer';
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
-import { Theme } from 'contexts/GlobalSettingProvider';
-import useGlobalSetting from 'hooks/useGlobalSetting';
 import usePools from 'hooks/usePools';
 import { DocsIcon, LeftArrowIcon } from 'resources/icons';
-import AptosLogo from 'resources/img/landingPage/aptos_logo.png';
-import AptosLogoWhite from 'resources/img/landingPage/aptos_logo_white.png';
 import image from 'resources/img/landingPage/img.png';
-import PythLogo from 'resources/img/landingPage/pyth_logo.png';
-import PythLogoWhite from 'resources/img/landingPage/pyth_logo_white.png';
-// import SpriteSheetDark from 'resources/img/landingPage/spritesheetDark.png';
-// import SpriteSheetWhite from 'resources/img/landingPage/spritesheetWhite.png';
 
 import LazyShow from './components/LazyShow';
 
 const Home = () => {
-  const { theme } = useGlobalSetting();
   const { getTotalPoolsTVL, getTotalPoolsVolume } = usePools();
 
   const tvl = useMemo(() => {
@@ -64,30 +55,6 @@ const Home = () => {
     );
   };
 
-  const renderPoweredBy = () => (
-    <div className="mt-[84px] flex items-center text-color_text_2 tablet:mt-16 tablet:mb-5 tablet:justify-center">
-      <div className="flex gap-2">
-        Built on{' '}
-        <img
-          width={62}
-          height={20}
-          src={theme === Theme.Dark ? AptosLogo : AptosLogoWhite}
-          alt="aptos"
-        />
-      </div>
-      <hr className="mx-2 h-[12px] w-[1px] border-0 bg-color_disabled" />
-      <div className="flex gap-2">
-        Powered by{' '}
-        <img
-          width={62}
-          height={20}
-          src={theme === Theme.Dark ? PythLogo : PythLogoWhite}
-          alt="pyth"
-        />
-      </div>
-    </div>
-  );
-
   return (
     <Fragment>
       <div className="flex justify-between gap-12 bg-cover bg-center bg-no-repeat px-20 pt-[126px] tablet:flex-col tablet:justify-center tablet:gap-0 tablet:px-4 tablet:pb-20 tablet:pt-16 tablet:text-center">
@@ -123,7 +90,7 @@ const Home = () => {
           </LazyShow>
           <Footer className="absolute bottom-0 -left-20 block w-[100vw] tablet:hidden" />
         </div>
-        <div className="w-1/2 grow pt-[80px] tablet:w-full tablet:pt-0">
+        <div className="w-1/2 grow pt-[80px] tablet:hidden">
           <img src={image} alt="" className="w-full object-contain" />
           {/* <SpriteAnimator
             image={theme === Theme.Dark ? SpriteSheetDark : SpriteSheetWhite}
@@ -135,10 +102,7 @@ const Home = () => {
             loop
           /> */}
         </div>
-        <div className="hidden tablet:block">
-          {renderTradeStats()}
-          {renderPoweredBy()}
-        </div>
+        <div className="hidden tablet:block"> {renderTradeStats()} </div>
       </div>
     </Fragment>
   );

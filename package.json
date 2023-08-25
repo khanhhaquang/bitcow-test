@@ -20,7 +20,7 @@
     "lodash": "^4.17.21",
     "lottie-react": "^2.3.1",
     "normalize.css": "^8.0.1",
-    "obric": "4.1.5",
+    "obric": "4.1.9",
     "rc-virtual-list": "^3.4.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

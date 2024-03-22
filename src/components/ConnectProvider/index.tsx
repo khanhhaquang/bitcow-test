@@ -1,14 +1,9 @@
 'use client';
 
-import {
-  BtcConnectors,
-  EIP6963Wallet,
-  EvmConnectors,
-  EvmConnectProvider
-} from '@particle-network/evm-connectkit';
 import { initializeConnector } from '@web3-react/core';
 
 import { accountContracts } from '../../config';
+import { BtcConnectors, EIP6963Wallet, EvmConnectors, EvmConnectProvider } from '../../wallet';
 
 // import VConsole from 'vconsole';
 //

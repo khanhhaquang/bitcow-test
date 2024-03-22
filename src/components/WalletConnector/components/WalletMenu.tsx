@@ -1,6 +1,6 @@
-import { useEvmConnectContext } from '@particle-network/evm-connectkit';
-
 import Button from 'components/Button';
+
+import { useEvmConnectContext } from '../../../wallet';
 
 const WalletMenu: React.FC = () => {
   const { disconnect } = useEvmConnectContext();

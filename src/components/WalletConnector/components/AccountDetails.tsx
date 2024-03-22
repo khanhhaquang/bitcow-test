@@ -1,4 +1,3 @@
-import { useEvmConnectContext } from '@particle-network/evm-connectkit';
 import cx from 'classnames';
 import { BTC } from 'obric-merlin/dist/configs';
 import { useState } from 'react';
@@ -14,6 +13,8 @@ import { CopyIcon, QuitIcon } from 'resources/icons';
 import { copyToClipboard } from 'utils/copy';
 
 import styles from './AccountDetails.module.scss';
+
+import { useEvmConnectContext } from '../../../wallet';
 
 let timer: NodeJS.Timeout;
 

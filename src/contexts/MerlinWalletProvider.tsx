@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEvmConnectContext, Wallet, WalletType } from '@particle-network/evm-connectkit';
+
 import { Eip1193Provider, ethers } from 'ethers';
 import {
   BaseToken,
   BaseToken as Token,
   BN,
   IPool,
-  isWBTC,
   Quote,
   Sdk as ObricSDK,
   TxOption,
@@ -21,6 +20,8 @@ import {
   openTxErrorNotification,
   openTxSuccessNotification
 } from 'utils/notifications';
+
+import { useEvmConnectContext, Wallet } from '../wallet';
 
 interface MerlinWalletContextType {
   wallet?: Wallet;
@@ -47,6 +48,7 @@ const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinW
 
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const { wallet, openModal, closeModal } = useEvmConnectContext();
+  console.log('openModal', openModal);
   const [obricSDK, setObricSDK] = useState<ObricSDK>();
 
   const [shouldRefresh, setShouldRefresh] = useState(false);
@@ -114,7 +116,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const fetchPools = useCallback(async () => {
     console.log('fetch pools');
-    await obricSDK.reload();
+    // await obricSDK.reload();
     setLiquidityPools([...obricSDK.pools]);
   }, [obricSDK]);
 

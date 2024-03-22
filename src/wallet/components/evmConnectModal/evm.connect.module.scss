@@ -1,0 +1,103 @@
+.evmConnectModal {
+  gap: 12px;
+
+  .title {
+    font-size: 18px;
+    margin-bottom: 4px;
+    font-weight: bold;
+  }
+
+  .closeBtn {
+    cursor: pointer;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+  }
+
+  .backBtn {
+    cursor: pointer;
+    position: absolute;
+    top: 16px;
+    left: 16px;
+  }
+
+  .walletsAndTitle{
+    width: 100%;
+    height: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .walletTypeTitle{
+    flex-grow: 1;
+    text-align: left;
+    font-size: 14px;
+    line-height: 42px;
+  }
+
+  .wallets {
+    width: 100%;
+    height: auto;
+    display: flex;
+  }
+
+  .separate{
+    border-width: 0px 0px 1px;
+    border-image: initial;
+    border-color: rgb(204, 204, 204);
+    border-style: solid;
+    width: 100%;
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
+
+  .connecting {
+    height: 204px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .connectingIconContainer {
+      position: relative;
+
+      .retryContainer {
+        background: #4b5563;
+        border-radius: 50%;
+        padding: 4px;
+        cursor: pointer;
+        position: absolute;
+        bottom: -12px;
+        right: -12px;
+
+        .retryIcon {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
+    .connectingIcon {
+      width: 60px;
+      height: 60px;
+      border-radius: 4px;
+    }
+
+    .connection {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .acceptRequest {
+      font-size: 14px;
+      margin-top: 6px;
+      text-align: center;
+      white-space: pre-wrap;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .btnDownload {
+      margin-top: 20px;
+    }
+  }
+
+}

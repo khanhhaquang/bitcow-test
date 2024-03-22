@@ -1,9 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// import SwapDetail from './SwapDetail';
-// import { DEX_TYPE_NAME, RouteAndQuote } from '@manahippo/hippo-sdk/dist/aggregator/types';
-import { ApiError } from 'aptos';
-import classNames from 'classnames';
+
 import { useFormikContext } from 'formik';
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -79,22 +76,10 @@ const TokenSwap = () => {
         setFieldValue('currencyTo.amount', undefined);
       }
     } catch (error) {
-      // todo check this error
-      if (error instanceof ApiError) {
-        // let detail = `${error.status} : ${error.errorCode} : ${error.vmErrorCode} : ${error.message}`;
-        let detail = error.message;
-        const msg = JSON.parse(error.message);
-        if (msg.message === 'Generic Error') {
-          detail = 'Too many requests. You need to wait 60s and try again';
-          setIsPeriodicRefreshPaused(true);
-        }
-        if (fromUiAmt) openErrorNotification({ detail, title: 'Fetch API error' });
-      } else {
-        openErrorNotification({
-          detail: error?.message || JSON.stringify(error),
-          title: 'Fetch swap routes error'
-        });
-      }
+      openErrorNotification({
+        detail: error?.message || JSON.stringify(error),
+        title: 'Fetch swap routes error'
+      });
 
       setFieldValue('currencyFrom', {
         ...values.currencyFrom,

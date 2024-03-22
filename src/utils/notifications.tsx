@@ -1,4 +1,3 @@
-import { MaybeHexString } from 'aptos';
 import { ReactNode } from 'react';
 
 import { notification } from 'components/Antd';
@@ -43,7 +42,7 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
 export const openErrorNotification = (args: INotificationArgs) =>
   openNotification({ type: 'error', ...args });
 
-export const openTxSuccessNotification = (txHash: MaybeHexString, content: string) => {
+export const openTxSuccessNotification = (txHash: string, content: string) => {
   const detail = (
     <p>
       <div>{content}</div>
@@ -57,7 +56,7 @@ export const openTxSuccessNotification = (txHash: MaybeHexString, content: strin
   return openNotification({ detail, title: 'Transaction Success' });
 };
 
-export const openTxErrorNotification = (txHash: MaybeHexString, content: string) => {
+export const openTxErrorNotification = (txHash: string, content: string) => {
   const detail = (
     <p>
       <div>{content}</div>

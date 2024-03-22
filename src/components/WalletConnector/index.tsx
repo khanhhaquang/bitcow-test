@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEvmConnectContext } from '@particle-network/evm-connectkit';
 import { motion } from 'framer-motion';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 
 import ObricModal from 'components/ObricModal';
 import { walletAddressEllipsis } from 'components/utils/utility';
@@ -14,9 +13,7 @@ import styles from './WalletConnector.module.scss';
 
 const WalletConnector = () => {
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
-  const { openWalletModal, closeWalletModal, pendingTx, wallet } = useMerlinWallet();
-
-  const { disconnect } = useEvmConnectContext();
+  const { openWalletModal, pendingTx, wallet } = useMerlinWallet();
 
   const renderActiveBtn = useCallback(() => {
     if (pendingTx) {
@@ -41,7 +38,7 @@ const WalletConnector = () => {
         {walletAddressEllipsis(wallet?.accounts[0].evm || '')}
       </div>
     );
-  }, [wallet, pendingTx, disconnect]);
+  }, [wallet, pendingTx]);
   return (
     <Fragment>
       {wallet ? (
@@ -49,7 +46,10 @@ const WalletConnector = () => {
       ) : (
         <div
           className="flex h-full w-full items-center justify-center border-[1px] border-color_main bg-color_main px-5 py-3 font-Rany text-base font-medium leading-4 text-white dark:bg-transparent dark:bg-button_gradient tablet:h-full tablet:p-[10px] tablet:font-Furore tablet:text-base"
-          onClick={openWalletModal}>
+          onClick={() => {
+            console.log('openWalletModal');
+            openWalletModal();
+          }}>
           {'Connect Wallet'}
         </div>
       )}

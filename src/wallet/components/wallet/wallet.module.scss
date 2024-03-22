@@ -1,0 +1,27 @@
+.wallet {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  box-sizing: border-box;
+  cursor: pointer;
+  align-items: center;
+  padding-top: 12px;
+  border-radius: 3px;
+
+  &:hover {
+    background: hsla(0, 0%, 100%, 0.05);
+  }
+
+  .walletIcon {
+    height: 42px;
+    width: 42px;
+    border-radius: 4px;
+  }
+
+  .walletName {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 12px;
+    line-height: 42px;
+  }
+}

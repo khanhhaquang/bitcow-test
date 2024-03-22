@@ -17,7 +17,20 @@ module.exports = {
         ...config.resolve,
         fallback: {
           buffer: require.resolve('buffer'),
-          stream: require.resolve("stream-browserify")
+          stream: require.resolve("stream-browserify"),
+          assert: require.resolve("assert"),
+          // crypto: require.resolve("crypto-browserify"),
+          url: require.resolve("url"),
+          path: require.resolve("path-browserify"),
+          os: require.resolve("os-browserify/browser"),
+          zlib: require.resolve("browserify-zlib"),
+          http: require.resolve("stream-http"),
+          https: require.resolve("https-browserify"),
+          vm: require.resolve("vm-browserify"),
+          fs: false,
+          net: false,
+          tls:false,
+          crypto:false
         }
       };
 

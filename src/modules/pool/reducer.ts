@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 // import { sortBy } from 'lodash';
 import { RootState } from 'modules/rootReducer';
-import { IPool } from 'obric';
+import { IPool } from 'obric-merlin';
 
 import { LiquidityModal } from 'types/pool';
 

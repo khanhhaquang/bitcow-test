@@ -1,36 +1,25 @@
-import { useWallet } from '@manahippo/aptos-wallet-adapter';
+import { BaseToken } from 'obric-merlin';
 import { useMemo } from 'react';
-import invariant from 'tiny-invariant';
-import { RawCoinInfo } from '@manahippo/coin-list';
-import useAptosWallet from './useAptosWallet';
-import useCoinStore, { CoinInfo } from './useCoinStore';
+
+import useMerlinWallet from './useMerlinWallet';
 
 export type Balance = number | null;
 
-const useTokenBalane = (token: RawCoinInfo | undefined): [Balance, boolean] => {
-  const { obricSDK } = useAptosWallet();
-  const { coinStore } = useCoinStore();
-  // const { getTokenInfoByFullName, getTokenStoreByFullName } = useHippoClient();
-  const { connected } = useWallet();
+const useTokenBalance = (token: BaseToken | undefined): [Balance, boolean] => {
+  const { tokenBalances } = useMerlinWallet();
 
-  const inputTokenBalance = useMemo(() => {
-    if (token && connected && obricSDK && coinStore) {
-      const fullName = token.token_type.type;
-      const tokenInfo = obricSDK.coinList.getCoinInfoByFullName(fullName);
-      invariant(tokenInfo, `Can't find token info of symbol ${token.symbol}`);
-      const tokenStore = coinStore[fullName];
-      if (!tokenStore) return 0;
-      return tokenStore
-        ? (tokenStore.data as CoinInfo).coin.value / Math.pow(10, tokenInfo.decimals)
-        : 0;
+  const balance = useMemo(() => {
+    console.log('tokenBalances', tokenBalances);
+    if (tokenBalances && token) {
+      return tokenBalances[token.address];
     } else {
-      return null;
+      return undefined;
     }
-  }, [coinStore, connected, obricSDK, token]);
+  }, [token, tokenBalances]);
 
-  const isReady = typeof inputTokenBalance === 'number';
+  const isReady = typeof balance === 'number' && balance !== 0;
 
-  return [inputTokenBalance, isReady];
+  return [balance, isReady];
 };
 
-export default useTokenBalane;
+export default useTokenBalance;

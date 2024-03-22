@@ -1,19 +1,22 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useEvmConnectContext } from '@particle-network/evm-connectkit';
 import { motion } from 'framer-motion';
-import { Fragment, useCallback } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 
 import ObricModal from 'components/ObricModal';
 import { walletAddressEllipsis } from 'components/utils/utility';
-import useAptosWallet from 'hooks/useAptosWallet';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import { CancelIcon, LoadingIcon } from 'resources/icons';
 
 import AccountDetails from './components/AccountDetails';
-import WalletSelector from './components/WalletSelector';
 import styles from './WalletConnector.module.scss';
 
 const WalletConnector = () => {
-  const { activeWallet, openModal, open, closeModal, pendingTx } = useAptosWallet();
+  const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
+  const { openWalletModal, closeWalletModal, pendingTx, wallet } = useMerlinWallet();
+
+  const { disconnect } = useEvmConnectContext();
 
   const renderActiveBtn = useCallback(() => {
     if (pendingTx) {
@@ -34,31 +37,29 @@ const WalletConnector = () => {
     return (
       <div
         className="flex h-full items-center justify-center bg-white px-5 py-3 font-Rany text-base leading-4 text-color_text_1 dark:bg-gray_008 tablet:p-[10px]"
-        onClick={openModal}>
-        {walletAddressEllipsis(activeWallet.toString() || '')}
+        onClick={() => setDetailModalOpen(true)}>
+        {walletAddressEllipsis(wallet?.accounts[0].evm || '')}
       </div>
     );
-  }, [activeWallet, openModal, pendingTx]);
-
+  }, [wallet, pendingTx, disconnect]);
   return (
     <Fragment>
-      {activeWallet ? (
+      {wallet ? (
         renderActiveBtn()
       ) : (
         <div
           className="flex h-full w-full items-center justify-center border-[1px] border-color_main bg-color_main px-5 py-3 font-Rany text-base font-medium leading-4 text-white dark:bg-transparent dark:bg-button_gradient tablet:h-full tablet:p-[10px] tablet:font-Furore tablet:text-base"
-          onClick={openModal}>
+          onClick={openWalletModal}>
           {'Connect Wallet'}
         </div>
       )}
       <ObricModal
-        onCancel={closeModal}
+        onCancel={() => setDetailModalOpen(false)}
         className=""
-        wrapClassName={activeWallet ? styles.walletDetail : styles.walletsModal}
-        open={open}
-        // mobileHeight={activeWallet ? 466 : 400}
+        wrapClassName={wallet ? styles.walletDetail : styles.walletsModal}
+        open={detailModalOpen}
         closeIcon={<CancelIcon />}>
-        {activeWallet ? <AccountDetails /> : <WalletSelector />}
+        {<AccountDetails onClose={() => setDetailModalOpen(false)} />}
       </ObricModal>
     </Fragment>
   );

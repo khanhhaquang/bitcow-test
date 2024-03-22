@@ -1,8 +1,7 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { IPool } from 'obric';
+import { BaseToken, IPool } from 'obric-merlin';
 import { useCallback, useEffect } from 'react';
 
 // import { Popover } from 'antd';
@@ -12,11 +11,11 @@ import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
 import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
-import useTokenBalane from 'hooks/useTokenBalance';
+import useTokenBalance from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
 
 interface TProps {
-  token: RawCoinInfo;
+  token: BaseToken;
   type: 'xAmt' | 'yAmt';
   isDisableAmountInput?: boolean;
   liquidityPool: IPool;
@@ -27,7 +26,7 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
   const [tokenAmountFormatter] = useTokenAmountFormatter();
   const { getTokenBalanceInUSD } = usePools();
 
-  const [uiBalance, isReady] = useTokenBalane(token);
+  const [uiBalance, isReady] = useTokenBalance(token);
 
   useEffect(() => {
     validateField('xAmt');

@@ -1,4 +1,4 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
+import { BaseToken, Quote } from 'obric-merlin';
 
 export interface TokenInfo {
   symbol: any;
@@ -14,13 +14,14 @@ export interface ISwapSettings {
   expertMode: boolean;
   disableIndirect: boolean;
   privacySwap: boolean;
+  quote?: Quote;
   currencyFrom?: {
-    token?: RawCoinInfo;
+    token?: BaseToken;
     amount?: number;
     balance: number;
   };
   currencyTo?: {
-    token?: RawCoinInfo;
+    token?: BaseToken;
     amount?: number;
     balance: number;
   };

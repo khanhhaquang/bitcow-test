@@ -1,6 +1,7 @@
-import useCurrentPage from 'hooks/useCurrentPage';
 import { createContext, ReactNode, useCallback, useEffect } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+
+import useCurrentPage from 'hooks/useCurrentPage';
 
 export enum Theme {
   Light = 'Light',
@@ -37,7 +38,7 @@ const GlobalSettingProvider: React.FC<TProviderProps> = ({ children }) => {
 
   useEffect(() => {
     loadTheme();
-  }, [theme]);
+  }, [theme, loadTheme]);
 
   useEffect(() => {
     if (currentPageName === 'Home' && theme !== Theme.Dark) {

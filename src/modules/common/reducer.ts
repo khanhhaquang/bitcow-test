@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { RootState } from 'modules/rootReducer';
+
 import actions from './actions';
 
 interface CommonState {

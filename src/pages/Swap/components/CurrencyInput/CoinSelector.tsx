@@ -1,11 +1,10 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
 import { useFormikContext } from 'formik';
+import { BaseToken } from 'obric-merlin';
 import VirtualList from 'rc-virtual-list';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Input, List } from 'components/Antd';
-import useAptosWallet from 'hooks/useAptosWallet';
-import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import { ISwapSettings } from 'pages/Swap/types';
 import { SearchIcon } from 'resources/icons';
@@ -21,17 +20,16 @@ interface TProps {
 
 const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
-  const { tokenList, activeWallet } = useAptosWallet();
+  const { tokenList, tokenBalances } = useMerlinWallet();
   const { coinPrices: coinInPools } = usePools();
   const commonCoins = tokenList.filter((token) => {
     return ['APT', 'USDT', 'USDC'].includes(token.symbol);
   });
   const [filter, setFilter] = useState<string>('');
-  const { coinStore } = useCoinStore();
   const [tokenListBalance, setTokenListBalance] = useState<TokenBalance[]>();
 
   const onSelectToken = useCallback(
-    (token: RawCoinInfo) => {
+    (token: BaseToken) => {
       const otherActionType: TProps['actionType'] =
         actionType === 'currencyFrom' ? 'currencyTo' : 'currencyFrom';
       if (token.symbol === values[otherActionType]?.token?.symbol) {
@@ -50,17 +48,12 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   );
 
   const getFilteredTokenListWithBalance = useCallback(() => {
+    console.log('tokenBalances', tokenBalances);
     if (coinInPools) {
       let currentTokenList = tokenList
-        ?.filter((token) => coinInPools[token.symbol])
         .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
         .map((t) => {
-          const tokenStore = (coinStore || {})[t.token_type.type];
-          const balance = !activeWallet
-            ? -1
-            : tokenStore
-            ? (tokenStore.data as CoinInfo).coin.value / Math.pow(10, t.decimals)
-            : 0;
+          const balance = tokenBalances ? tokenBalances[t.address] : -1;
           return {
             token: t,
             balance
@@ -74,9 +67,10 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
           return keysForFilter.includes(filter);
         });
       }
+      console.log('currentTokenList', currentTokenList);
       setTokenListBalance(currentTokenList);
     }
-  }, [activeWallet, coinInPools, coinStore, filter, tokenList]);
+  }, [coinInPools, filter, tokenList, tokenBalances]);
 
   useEffect(() => {
     getFilteredTokenListWithBalance();
@@ -113,7 +107,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
     return (
       <List
         className="max-h-[354px] overflow-y-scroll border-0 bg-color_bg_input py-2 no-scrollbar tablet:mx-5 tablet:mb-6"
-        rowKey={(item) => `list-row-${(item as RawCoinInfo).symbol}`}>
+        rowKey={(item) => `list-row-${(item as BaseToken).symbol}`}>
         <VirtualList
           data={tokenListBalance || []}
           itemKey={(item) => `list-item-${item.token.symbol}`}>

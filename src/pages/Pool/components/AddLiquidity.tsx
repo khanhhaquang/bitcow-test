@@ -1,12 +1,12 @@
 import { Formik, FormikHelpers } from 'formik';
 import poolAction from 'modules/pool/actions';
-import { IPool } from 'obric';
+import { IPool } from 'obric-merlin';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import Button from 'components/Button';
-import useAptosWallet from 'hooks/useAptosWallet';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import { AddLiquidity as AddLiquidityProps } from 'pages/Pool/types';
 import { AddIcon } from 'resources/icons';
 import { openErrorNotification } from 'utils/notifications';
@@ -14,18 +14,13 @@ import { openErrorNotification } from 'utils/notifications';
 import TokenLiquidity from './TokenLiquidity';
 
 const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
-  const { requestAddLiquidity } = useAptosWallet();
+  const { requestAddLiquidity } = useMerlinWallet();
   const dispatch = useDispatch();
   const onSubmit = useCallback(
     async (values: AddLiquidityProps, formikHelper: FormikHelpers<AddLiquidityProps>) => {
       const { xToken, yToken, xAmt, yAmt } = values;
       if (xToken && yToken && xAmt && yAmt) {
-        const result = await requestAddLiquidity({
-          xToken,
-          yToken,
-          xAmt,
-          yAmt
-        });
+        const result = await requestAddLiquidity(liquidityPool, xAmt);
         if (result) {
           formikHelper.resetForm();
           dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null));
@@ -35,7 +30,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
         openErrorNotification({ detail: 'Invalid input for Adding Liquidity' });
       }
     },
-    [dispatch, requestAddLiquidity]
+    [dispatch, requestAddLiquidity, liquidityPool]
   );
 
   const validationSchema = yup.object({
@@ -67,7 +62,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
         ))}
       </div>
     );
-  }, [liquidityPool.swapFeeMillionth]);
+  }, [liquidityPool]);
 
   return (
     <Formik

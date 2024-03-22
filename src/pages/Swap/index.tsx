@@ -3,11 +3,12 @@
 import { Types } from 'aptos';
 import { Formik, FormikHelpers } from 'formik';
 import { getSwapSettings } from 'modules/swap/reducer';
-import { useCallback } from 'react';
+import { Quote } from 'obric-merlin';
+import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
-import useAptosWallet from 'hooks/useAptosWallet';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import { openErrorNotification } from 'utils/notifications';
 
 import TokenSwap from './components/TokenSwap';
@@ -25,21 +26,21 @@ const validationSchema = yup.object({
 
 const Swap: React.FC = () => {
   const swapSettings = useSelector(getSwapSettings);
-  const { requestSwap } = useAptosWallet();
-
+  const { requestSwap } = useMerlinWallet();
   const onSubmitSwap = useCallback(
     async (values: ISwapSettings, formikHelper: FormikHelpers<ISwapSettings>) => {
       const fromToken = values.currencyFrom?.token;
       const toToken = values.currencyTo?.token;
+      const quote = values.quote;
       const inputAmt = values.currencyFrom?.amount;
       const minOutputAmt = values.currencyTo?.amount * (1 - values.slipTolerance / 100);
-      if (fromToken && toToken && inputAmt && minOutputAmt) {
+      if (fromToken && toToken && inputAmt && minOutputAmt && quote) {
         const options: Partial<Types.SubmitTransactionRequest> = {
           expiration_timestamp_secs:
             '' + (Math.floor(Date.now() / 1000) + values.trasactionDeadline * 60)
           // max_gas_amount: '' + values.maxGasFee
         };
-        const result = await requestSwap({ fromToken, toToken, inputAmt, minOutputAmt, options });
+        const result = await requestSwap(quote, quote.outAmt);
         if (result) {
           // formikHelper.setFieldValue('currencyFrom', {
           //   ...values.currencyFrom,

@@ -1,23 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useWallet } from '@manahippo/aptos-wallet-adapter';
+
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { getTokenList } from 'modules/swap/reducer';
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import CoinIcon from 'components/CoinIcon';
 import ObricModal from 'components/ObricModal';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
-import useAptosWallet from 'hooks/useAptosWallet';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
-import useTokenBalane from 'hooks/useTokenBalance';
+import useTokenBalance from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
-import { CancelIcon, CaretIcon } from 'resources/icons';
+import { CancelIcon } from 'resources/icons';
 
 import CoinSelectButton from './CoinSelectButton';
 import CoinSelector from './CoinSelector';
@@ -31,7 +28,7 @@ interface TProps {
 }
 
 const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = false }) => {
-  const { tokenList } = useAptosWallet();
+  const { tokenList } = useMerlinWallet();
   const { getTokenBalanceInUSD } = usePools();
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
   const [isCoinSelectorVisible, setIsCoinSelectorVisible] = useState(false);
@@ -39,7 +36,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
 
   const selectedCurrency = values[actionType];
   const selectedToken = selectedCurrency?.token;
-  const [uiBalance, isReady] = useTokenBalane(selectedToken);
+  const [uiBalance, isReady] = useTokenBalance(selectedToken);
   const isCoinSelectorDisabled = !tokenList || tokenList.length === 0;
 
   const inputRef = useRef<HTMLInputElement>(null);

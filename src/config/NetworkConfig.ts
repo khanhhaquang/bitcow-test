@@ -1,28 +1,20 @@
 export class NetworkConfiguration {
-  constructor(
-    public name: string,
-    public fullNodeUrl: string,
-    public faucetUrl: string,
-    public isMainNet = false
-  ) {}
+  constructor(public name: string, public fullNodeUrl: string, public explorerUrl: string) {}
 }
 
-export const LOCAL_CONFIG = new NetworkConfiguration(
-  'localhost',
-  'http://0.0.0.0:8080',
-  'http://0.0.0.0:8000'
-);
+export const LOCAL_CONFIG = new NetworkConfiguration('localhost', 'http://0.0.0.0:8080', '');
 
 export const TESTNET_CONFIG = new NetworkConfiguration(
   'testnet',
-  'https://fullnode.testnet.aptoslabs.com/v1',
-  'https://faucet.testnet.aptoslabs.com'
+  'https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH',
+  // 'https://testnet-rpc.merlinchain.io',
+  'https://scan.merlinchain.io/'
 );
 
 export const MAINNET_CONFIG = new NetworkConfiguration(
   'mainnet',
-  'https://aptos-mainnet.nodereal.io/v1/a082c9e26c0d41bc8edcea7197decf5d',
-  ''
+  'https://rpc.merlinchain.io',
+  'https://testnet-scan.merlinchain.io/'
 );
 
 export const CONFIGS = {

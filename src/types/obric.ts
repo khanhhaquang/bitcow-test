@@ -1,6 +1,10 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
 import { Types } from 'aptos';
-
+import { BaseToken } from 'obric-merlin';
+export type TxData = {
+  to: string;
+  value: string;
+  data: string;
+};
 export type TTransaction = {
   // type: 'signTransaction' | 'signAndSubmit';
   transaction: Types.SubmitTransactionRequest;
@@ -9,6 +13,6 @@ export type TTransaction = {
 };
 
 export interface TokenBalance {
-  token: RawCoinInfo;
+  token: BaseToken;
   balance: number;
 }

@@ -1,8 +1,9 @@
+import { useEvmConnectContext } from '@particle-network/evm-connectkit';
+
 import Button from 'components/Button';
-import { useWallet } from '@manahippo/aptos-wallet-adapter';
 
 const WalletMenu: React.FC = () => {
-  const { disconnect } = useWallet();
+  const { disconnect } = useEvmConnectContext();
   return (
     <div className="flex w-full p-2">
       <Button

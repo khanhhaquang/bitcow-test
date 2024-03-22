@@ -26,7 +26,7 @@ type PositiveFloatNumInputProps = {
 
 const MIN_DEFAULT = 0;
 const MAX_DEFAULT = Number.MAX_SAFE_INTEGER;
-const MAX_DECIMALS_DEFAULT = 9;
+const MAX_DECIMALS_DEFAULT = 18;
 
 // eslint-disable-next-line react/display-name
 const PositiveFloatNumInput = forwardRef<

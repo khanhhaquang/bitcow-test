@@ -1,11 +1,10 @@
-// import { TokenInfo } from '@manahippo/hippo-sdk/dist/generated/coin_registry/coin_registry';
-import { RawCoinInfo } from '@manahippo/coin-list';
+import { BaseToken } from 'obric-merlin';
 
 import Button from 'components/Button';
 import CoinIcon from 'components/CoinIcon';
 
 interface TProps {
-  coin: RawCoinInfo;
+  coin: BaseToken;
   onClickToken: () => void;
 }
 

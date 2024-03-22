@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
-import { IPool } from 'obric';
+import { IPool } from 'obric-merlin';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
@@ -10,9 +10,9 @@ import Button from 'components/Button';
 import CoinIcon from 'components/CoinIcon';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import SliderInput from 'components/SliderInput';
-import useAptosWallet from 'hooks/useAptosWallet';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { WithdrawLiquidity as WithdrawLiquidityProps } from 'pages/Pool/types';
@@ -23,18 +23,16 @@ const percentageOptions = [25, 50, 75, 100];
 
 const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const dispatch = useDispatch();
-  const { requestWithdrawLiquidity } = useAptosWallet();
+  const { requestWithdrawLiquidity } = useMerlinWallet();
   const { isTablet } = useBreakpoint('tablet');
   const { getOwnedLiquidity } = usePools();
-  const [pool, setPool] = useState<{ v1lp: number; v2xlp: number; v2ylp: number; coins: {} }>();
+  const [pool, setPool] = useState<{ lp: number; coins: {} }>();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
 
   const fetchRecord = useCallback(() => {
     const userLiq = getOwnedLiquidity(liquidityPool);
     setPool({
-      v1lp: userLiq.v1lpAmount,
-      v2xlp: userLiq.v2xlpAmount,
-      v2ylp: userLiq.v2ylpAmount,
+      lp: userLiq.lpAmount,
       coins: userLiq.assetsPooled
     });
   }, [getOwnedLiquidity, liquidityPool]);
@@ -49,11 +47,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     async (values: WithdrawLiquidityProps, formikHelper: FormikHelpers<WithdrawLiquidityProps>) => {
       const { xToken, yToken, percent } = values;
       if (xToken && yToken && percent && pool) {
-        const result = await requestWithdrawLiquidity({
-          xToken,
-          yToken,
-          amt: pool.v1lp * (percent / 100)
-        });
+        const result = await requestWithdrawLiquidity(liquidityPool, (pool.lp * percent) / 100);
         if (result) {
           formikHelper.resetForm();
           dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null));
@@ -63,7 +57,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
         openErrorNotification({ detail: 'Invalid input for withdrawing Liquidity' });
       }
     },
-    [dispatch, pool, requestWithdrawLiquidity]
+    [dispatch, pool, requestWithdrawLiquidity, liquidityPool]
   );
 
   const validationSchema = yup.object({

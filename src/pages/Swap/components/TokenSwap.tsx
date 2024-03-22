@@ -11,9 +11,9 @@ import { Tooltip } from 'components/Antd';
 import Button from 'components/Button';
 import Card from 'components/Card';
 import ObricModal from 'components/ObricModal';
-import useAptosWallet from 'hooks/useAptosWallet';
 import { useBreakpoint } from 'hooks/useBreakpoint';
-import useTokenBalane from 'hooks/useTokenBalance';
+import useMerlinWallet from 'hooks/useMerlinWallet';
+import useTokenBalance from 'hooks/useTokenBalance';
 import { CancelIcon, SettingBlackIcon, SettingWhiteIcon, SwapIcon } from 'resources/icons';
 import { openErrorNotification } from 'utils/notifications';
 
@@ -26,7 +26,7 @@ import { ISwapSettings } from '../types';
 const TokenSwap = () => {
   const { values, setFieldValue, submitForm, isSubmitting, isValid, dirty } =
     useFormikContext<ISwapSettings>();
-  const { activeWallet, openModal, obricSDK } = useAptosWallet();
+  const { wallet, openWalletModal, obricSDK } = useMerlinWallet();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
   const toToken = values.currencyTo?.token;
@@ -35,41 +35,51 @@ const TokenSwap = () => {
   const { isTablet } = useBreakpoint('tablet');
   const [isPeriodicRefreshPaused, setIsPeriodicRefreshPaused] = useState(false);
   const [priceImpact, setPriceImpact] = useState(0);
-  const [uiBalance, isReady] = useTokenBalane(values.currencyFrom.token);
+  const [uiBalance, isReady] = useTokenBalance(values.currencyFrom.token);
   const sufficientBalance = useMemo(() => {
-    if (!activeWallet || (!uiBalance && isReady)) return false;
+    if (!wallet || (!uiBalance && isReady)) return false;
     return uiBalance >= fromUiAmt;
-  }, [activeWallet, fromUiAmt, isReady, uiBalance]);
+  }, [wallet, fromUiAmt, isReady, uiBalance]);
 
   useEffect(() => {
     if (obricSDK) {
       if (!values.currencyFrom?.token) {
-        setFieldValue('currencyFrom.token', obricSDK.coinList.getCoinInfoBySymbol('USDC')[0]);
+        setFieldValue('currencyFrom.token', obricSDK.coinList.getTokenBySymbol('USDC'));
       }
       if (!values.currencyTo?.token) {
-        setFieldValue('currencyTo.token', obricSDK.coinList.getCoinInfoBySymbol('zUSDC')[0]);
+        setFieldValue('currencyTo.token', obricSDK.coinList.getTokenBySymbol('USDT'));
       }
     }
   }, [fromToken, obricSDK, setFieldValue, toToken, values.currencyFrom, values.currencyTo]);
 
   const lastFetchTs = useRef(0);
 
-  const fetchSwapRate = useCallback(async () => {
+  const fetchSwapRate = useCallback(() => {
     try {
       const now = Date.now();
       lastFetchTs.current = now;
 
       if (obricSDK && fromToken && toToken && fromUiAmt) {
-        const [rate1Percent, rate] = await Promise.all([
-          obricSDK.getQuote(fromToken.symbol, toToken.symbol, Number(fromUiAmt * 0.01)),
-          obricSDK.getQuote(fromToken.symbol, toToken.symbol, Number(fromUiAmt))
-        ]);
-        const impact =
-          ((rate1Percent.outAmt * 100 - rate.outAmt) / (rate1Percent.outAmt * 100)) * 100;
-        setPriceImpact(impact);
-        setFieldValue('currencyTo.amount', rate.outAmt);
+        const rate = obricSDK.getQuote(fromToken, toToken, Number(fromUiAmt));
+        if (rate) {
+          setFieldValue('quote', rate);
+          setFieldValue('currencyTo.amount', rate.outAmt);
+          const rate1Percent = obricSDK.getQuote(fromToken, toToken, Number(fromUiAmt * 0.01));
+          if (rate1Percent) {
+            const impact =
+              ((rate1Percent.outAmt * 100 - rate.outAmt) / (rate1Percent.outAmt * 100)) * 100;
+            setPriceImpact(impact);
+          } else {
+            setPriceImpact(undefined);
+          }
+        }
+      } else {
+        setPriceImpact(undefined);
+        setFieldValue('quote', undefined);
+        setFieldValue('currencyTo.amount', undefined);
       }
     } catch (error) {
+      // todo check this error
       if (error instanceof ApiError) {
         // let detail = `${error.status} : ${error.errorCode} : ${error.vmErrorCode} : ${error.message}`;
         let detail = error.message;
@@ -112,7 +122,7 @@ const TokenSwap = () => {
   }, [values, setFieldValue]);
 
   const buttonCaption = useMemo(() => {
-    if (!activeWallet) {
+    if (!wallet) {
       return 'Connect to Wallet';
     } else if ((!uiBalance && isReady) || !fromUiAmt) {
       return 'SWAP';
@@ -121,7 +131,7 @@ const TokenSwap = () => {
     } else {
       return 'SWAP';
     }
-  }, [activeWallet, fromUiAmt, isReady, sufficientBalance, uiBalance]);
+  }, [wallet, fromUiAmt, isReady, sufficientBalance, uiBalance]);
 
   const renderCardHeader = () => (
     <Fragment>
@@ -176,8 +186,8 @@ const TokenSwap = () => {
           isLoading={isSubmitting}
           className="mt-5"
           variant="primary"
-          disabled={activeWallet && (!isValid || !dirty || !sufficientBalance)}
-          onClick={!activeWallet ? openModal : submitForm}>
+          disabled={wallet && (!isValid || !dirty || !sufficientBalance)}
+          onClick={!wallet ? openWalletModal : submitForm}>
           {buttonCaption}
         </Button>
       </div>

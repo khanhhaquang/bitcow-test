@@ -1,20 +1,20 @@
-import { RawCoinInfo as CoinInfo } from '@manahippo/coin-list';
+import { BaseToken } from 'obric-merlin';
 import { useMemo } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 
-import useAptosWallet from './useAptosWallet';
+import useMerlinWallet from './useMerlinWallet';
 
 const useTokenAmountFormatter = () => {
-  const { obricSDK } = useAptosWallet();
+  const { obricSDK } = useMerlinWallet();
 
   const formatter = useMemo(
     () =>
-      (amount: number | undefined | null, token: CoinInfo | undefined): string => {
+      (amount: number | undefined | null, token: BaseToken | undefined): string => {
         if (!obricSDK || typeof amount !== 'number' || amount <= 0 || !token) return '0';
-        const tokenInfo = obricSDK.coinList.getCoinInfoByFullName(token.token_type.type);
-        if (!tokenInfo) return '0';
-        const decimals = tokenInfo.decimals;
+
+        if (!token) return '0';
+        const decimals = token.decimals;
         return numberGroupFormat(amount, decimals);
       },
     [obricSDK]

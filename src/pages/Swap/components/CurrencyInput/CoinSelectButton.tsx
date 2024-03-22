@@ -1,5 +1,5 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
 import classNames from 'classnames';
+import { BaseToken } from 'obric-merlin';
 
 import CoinIcon from 'components/CoinIcon';
 import { CaretIcon } from 'resources/icons';
@@ -11,7 +11,7 @@ const CoinSelectButton = ({
   onClick = () => {}
 }: {
   className?: string;
-  token: RawCoinInfo | undefined;
+  token: BaseToken | undefined;
   isDisabled?: Boolean;
   onClick?: () => void;
 }) => {

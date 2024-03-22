@@ -2,7 +2,7 @@
 
 import cx from 'classnames';
 import Lottie from 'lottie-react';
-import { IPool } from 'obric';
+import { IPool } from 'obric-merlin';
 import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';
@@ -241,7 +241,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       onChange={handleChange}
       tableLayout="fixed"
       sortDirections={['descend', 'ascend']}
-      rowKey={(record) => record.typename}
+      rowKey={(record) => record.poolAddress}
       showSorterTooltip={false}
       expandable={{
         expandedRowClassName: () => 'expanded-pool',

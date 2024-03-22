@@ -1,6 +1,6 @@
+import { routes, TRoute } from 'App.routes';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { routes, TRoute } from 'App.routes';
 
 const useCurrentPage = () => {
   const { pathname } = useLocation();

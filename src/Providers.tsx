@@ -1,19 +1,13 @@
-import {
-  WalletProvider,
-  AptosWalletAdapter,
-  MartianWalletAdapter,
-  PontemWalletAdapter,
-  RiseWalletAdapter
-} from '@manahippo/aptos-wallet-adapter';
 import { configureStore } from '@reduxjs/toolkit';
 import reducer from 'modules/rootReducer';
-import { useMemo } from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { logger } from 'redux-logger';
 
 import ErrorBoundary from 'components/ErrorBoundary';
-import { AptosWalletProvider } from 'contexts/AptosWalletProvider';
+import { MerlinWalletProvider } from 'contexts/MerlinWalletProvider';
 import { PoolsProvider } from 'contexts/PoolsProvider';
+
+import ConnectProvider from './components/ConnectProvider';
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
@@ -34,30 +28,15 @@ type TProps = {
 };
 
 const Providers: React.FC<TProps> = (props: TProps) => {
-  const wallets = useMemo(
-    () => [
-      new MartianWalletAdapter(),
-      new AptosWalletAdapter(),
-      new PontemWalletAdapter(),
-      new RiseWalletAdapter()
-    ],
-    []
-  );
-
   return (
     <ErrorBoundary>
-      <WalletProvider
-        wallets={wallets}
-        autoConnect
-        onError={(error: Error) => {
-          console.log('wallet errors: ', error);
-        }}>
-        <AptosWalletProvider>
+      <ConnectProvider walletConnectProjectId={'a6cc11517a10f6f12953fd67b1eb67e7'}>
+        <MerlinWalletProvider>
           <PoolsProvider>
             <ReduxProvider store={store}>{props.children}</ReduxProvider>
           </PoolsProvider>
-        </AptosWalletProvider>
-      </WalletProvider>
+        </MerlinWalletProvider>
+      </ConnectProvider>
     </ErrorBoundary>
   );
 };

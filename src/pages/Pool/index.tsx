@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import poolAction from 'modules/pool/actions';
 import { getLiquidityModal } from 'modules/pool/reducer';
-import { IPool } from 'obric';
+import { IPool } from 'obric-merlin';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 

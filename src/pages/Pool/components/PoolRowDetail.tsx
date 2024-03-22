@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import poolAction from 'modules/pool/actions';
-import { IPool, IUserLiquidity } from 'obric';
+import { IUserLiquidity, IPool } from 'obric-merlin';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -10,8 +10,8 @@ import {
   numberCompactFormat,
   numberGroupFormat
 } from 'components/PositiveFloatNumInput/numberFormats';
-import useAptosWallet from 'hooks/useAptosWallet';
 import { useBreakpoint } from 'hooks/useBreakpoint';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import { MinusIcon, PlusIcon } from 'resources/icons';
 
@@ -28,7 +28,7 @@ interface IProps {
 
 const PoolRowDetail = ({ pool }: IProps) => {
   const dispatch = useDispatch();
-  const { activeWallet, openModal } = useAptosWallet();
+  const { wallet, openWalletModal } = useMerlinWallet();
   const {
     getOwnedLiquidity,
     getOwnedLiquidityShare,
@@ -52,14 +52,14 @@ const PoolRowDetail = ({ pool }: IProps) => {
 
   const handleOnClick = useCallback(
     (type: 'add' | 'withdraw') => {
-      if (!activeWallet) {
-        openModal();
+      if (!wallet) {
+        openWalletModal();
       } else {
         dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL({ type, pool }));
       }
       return null;
     },
-    [activeWallet, dispatch, openModal, pool]
+    [wallet, dispatch, openWalletModal, pool]
   );
 
   const ownedLiquidityShare = useMemo(() => {
@@ -91,20 +91,12 @@ const PoolRowDetail = ({ pool }: IProps) => {
   const isV1 = pool.poolType === 'V1';
 
   const userLiquidityLine1 = useMemo(() => {
-    if (pool.poolType === 'V1') {
-      return `${numberGroupFormat(ownedLiquidity?.v1lpAmount, 6) || 0} LP`;
-    } else if (pool.poolType === 'V2') {
-      return `${numberGroupFormat(ownedLiquidity?.v2xlpAmount, 6) || 0} XLP`;
-    } else if (pool.poolType === 'V3 Abel') {
-      return `${numberGroupFormat(ownedLiquidity?.v3lpAmount, 6) || 0} LP`;
-    }
+    return `${numberGroupFormat(ownedLiquidity?.lpAmount, 6) || 0} LP`;
   }, [ownedLiquidity]);
 
   const userLiquidityLine2 = useMemo(() => {
-    if (pool.poolType === 'V2') {
-      return `${numberGroupFormat(ownedLiquidity?.v2ylpAmount, 6) || 0} YLP`;
-    }
-  }, [ownedLiquidity]);
+    return '';
+  }, []);
 
   return (
     <Fragment>
@@ -153,7 +145,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
               <Button
                 className="flex w-full max-w-[134px] items-center gap-2 rounded-none bg-color_main fill-white text-base text-white hover:opacity-90 tablet:max-w-full"
                 onClick={() => handleOnClick('add')}>
-                {activeWallet ? (
+                {wallet ? (
                   <Fragment>
                     <PlusIcon />
                     Deposit
@@ -163,7 +155,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
                 )}
               </Button>
             )}
-            {isV1 && activeWallet && ownedLiquidity?.invested && (
+            {isV1 && wallet && ownedLiquidity?.invested && (
               <Button
                 className="flex w-full items-center gap-2"
                 variant="outlined"

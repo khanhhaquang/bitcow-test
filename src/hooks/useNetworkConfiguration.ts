@@ -1,6 +1,6 @@
 import { CONFIGS, NetworkConfiguration } from 'config/NetworkConfig';
 
-let aptosRPC = '';
+let merlinRPC = '';
 
 const useNetworkConfiguration = () => {
   const currentNetworkEnv = process.env.REACT_APP_CURRENT_NETWORK;
@@ -16,12 +16,12 @@ const useNetworkConfiguration = () => {
   } else {
     throw new Error('Invalid network env');
   }
-  if (!aptosRPC) aptosRPC = network.fullNodeUrl;
+  if (!merlinRPC) merlinRPC = network.fullNodeUrl;
   // if (rpcEndpoint) {
   //   network.fullNodeUrl = rpcEndpoint;
   // } else {
   // }
-  network.fullNodeUrl = aptosRPC;
+  network.fullNodeUrl = merlinRPC;
 
   return { networkCfg: network };
 };

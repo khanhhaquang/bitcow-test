@@ -47,7 +47,9 @@ export const openTxSuccessNotification = (txHash: MaybeHexString, content: strin
   const detail = (
     <p>
       <div>{content}</div>
-      <TextLink href={`https://explorer.aptoslabs.com/txn/${txHash}`} className="!text-color_main">
+      <TextLink
+        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
+        className="!text-color_main">
         View on Explorer
       </TextLink>
     </p>
@@ -59,7 +61,9 @@ export const openTxErrorNotification = (txHash: MaybeHexString, content: string)
   const detail = (
     <p>
       <div>{content}</div>
-      <TextLink href={`https://explorer.aptoslabs.com/txn/${txHash}`} className="text-color_main">
+      <TextLink
+        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
+        className="text-color_main">
         View on Explorer
       </TextLink>
     </p>

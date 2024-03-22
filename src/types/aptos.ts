@@ -1,8 +1,7 @@
+import { Wallet } from '@particle-network/evm-connectkit';
 import { AptosAccount, AptosAccountObject, HexString } from 'aptos';
 
-export type AptosAccountState = AptosAccount | undefined;
-
-export type ActiveAptosWallet = HexString | undefined;
+export type ActiveWallet = Wallet;
 
 export type AptosWalletObject = {
   walletName: string;

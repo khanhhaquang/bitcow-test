@@ -1,22 +1,14 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { RawCoinInfo } from '@manahippo/coin-list';
-import { StructTag } from '@manahippo/move-to-ts';
-import { IPool, IUserLiquidity } from 'obric';
-import { PieceSwapPoolInfo } from 'obric/dist/obric/piece_swap';
-import { SSTradingPair } from 'obric/dist/obric/ssswap2';
+import { IPool, IUserLiquidity, BaseToken as Token } from 'obric-merlin';
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
-import useAptosWallet from 'hooks/useAptosWallet';
-import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import { IPoolFilters } from 'types/pool';
-import { openErrorNotification } from 'utils/notifications';
 
 interface PoolsContextType {
   activePools: IPool[];
   coinPrices: Record<string, number>;
-  getTokenBalanceInUSD: (balance: number, token: RawCoinInfo) => string;
+  getTokenBalanceInUSD: (balance: number, token: Token) => string;
   getPoolTVL: (pool: IPool) => number;
   getOwnedLiquidity: (pool: IPool) => IUserLiquidity;
   getOwnedLiquidityShare: (pool: IPool) => number;
@@ -39,11 +31,10 @@ interface TProviderProps {
 const PoolsContext = createContext<PoolsContextType>({} as PoolsContextType);
 
 const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
-  const { obricSDK, liquidityPools, walletResource } = useAptosWallet();
+  const { obricSDK, liquidityPools, userPoolLpAmount } = useMerlinWallet();
   const [activePools, setActivePools] = useState<IPool[]>([]);
   const [coinPrices, setCoinPrices] = useState<Record<string, number>>();
   const [fetching, setFetching] = useState(false);
-  const { poolStore } = useCoinStore();
   const [poolFilter, setPoolFilter] = useState<IPoolFilters>({
     text: '',
     timeBasis: '24H',
@@ -55,37 +46,18 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     ]
   });
 
-  const fetchCoinPrice = useCallback(async (ids: string[]) => {
-    try {
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=USD`
-      );
-      return await response?.json();
-    } catch (err) {
-      openErrorNotification({ detail: 'Fail to fetch data from Coingecko' });
-    }
-  }, []);
-
   const populateCoinRate = useCallback(
-    async (supportedCoins: Record<string, RawCoinInfo>): Promise<Record<string, number>> => {
+    async (supportedCoins: Record<string, Token>): Promise<Record<string, number>> => {
       const collectedPrices = {};
-      const coingeckoIds = Object.entries(supportedCoins).map((entry) => entry[1].coingecko_id);
-      const nonemptyIds = coingeckoIds.filter((id) => id !== '');
-      const prices = await fetchCoinPrice(nonemptyIds);
       Object.keys(supportedCoins).map(async (symbol) => {
         const coinInfo = supportedCoins[symbol];
         if (!collectedPrices[coinInfo.symbol]) {
-          const data = prices[coinInfo.coingecko_id];
-          let rate = 0;
-          if (data) {
-            rate = data.usd;
-          }
-          collectedPrices[coinInfo.symbol] = rate;
+          collectedPrices[coinInfo.symbol] = 1;
         }
       });
       return collectedPrices;
     },
-    [fetchCoinPrice]
+    []
   );
 
   const getPoolTVL = useCallback(
@@ -130,42 +102,37 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
 
   const getOwnedLiquidity = useCallback(
     (pool: IPool) => {
-      return pool.getUserLiquidity(walletResource);
+      if (userPoolLpAmount) {
+        const userLpAmount = userPoolLpAmount[pool.poolAddress];
+        return pool.getUserLiquidity(userLpAmount);
+      }
     },
-    [walletResource]
+    [userPoolLpAmount]
   );
 
   const getOwnedLiquidityShare = useCallback(
     (pool: IPool) => {
-      const userLiq = getOwnedLiquidity(pool);
-      if (pool.poolType === 'V1') {
-        return userLiq.v1lpAmount / pool.totalV1LP;
-      } else if (pool.poolType === 'V2') {
-        const price0 = coinPrices[pool.token0.symbol];
-        const price1 = coinPrices[pool.token1.symbol];
-        const value0 = price0 * userLiq.assetsPooled[pool.token0.symbol];
-        const value1 = price1 * userLiq.assetsPooled[pool.token1.symbol];
-        return (value0 + value1) / getPoolTVL(pool);
-      } else if (pool.poolType === 'V3 Abel') {
-        const price1 = coinPrices[pool.token1.symbol];
-        const value1 = price1 * userLiq.assetsPooled[pool.token1.symbol];
-        return value1 / getPoolTVL(pool);
+      if (userPoolLpAmount) {
+        const userLpAmount = userPoolLpAmount[pool.poolAddress];
+        return pool.getUserLiquidity(userLpAmount).liquidityShare;
       } else {
         return 0;
       }
     },
-    [coinPrices, getOwnedLiquidity, getPoolTVL]
+    [userPoolLpAmount]
   );
 
   const checkIfInvested = useCallback(
     (pool: IPool) => {
-      return getOwnedLiquidity(pool).invested;
+      if (userPoolLpAmount) {
+        return getOwnedLiquidity(pool).invested;
+      }
     },
-    [getOwnedLiquidity]
+    [getOwnedLiquidity, userPoolLpAmount]
   );
 
   const getTokenBalanceInUSD = useCallback(
-    (balance: number, token: RawCoinInfo) => {
+    (balance: number, token: Token) => {
       let value = 0;
       if (coinPrices && token && coinPrices[token.symbol]) {
         value = balance * coinPrices[token.symbol];
@@ -195,7 +162,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
           const tvl = pool.tvlUsd(price0, price1);
           const fees = pool.feesUsd(price0, price1);
           stats = {
-            volume: pool.volumeUsd(price0, price1),
+            volume: pool.volumeUsd(),
             fees,
             apr: (fees * 365) / tvl
           };

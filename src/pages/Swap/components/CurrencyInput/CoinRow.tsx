@@ -1,17 +1,19 @@
 // import { TokenInfo } from '@manahippo/hippo-sdk/dist/generated/coin_registry/coin_registry';
-import { useWallet } from '@manahippo/aptos-wallet-adapter';
+
 import { Skeleton } from 'antd';
 
 import CoinIcon from 'components/CoinIcon';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { TokenBalance } from 'types/obric';
 
+import useMerlinWallet from '../../../../hooks/useMerlinWallet';
+
 interface TProps {
   item: TokenBalance;
 }
 
 const CoinRow: React.FC<TProps> = ({ item }) => {
-  const { connected } = useWallet();
+  const { wallet } = useMerlinWallet();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
   return (
     <div className="flex h-[48px] w-full items-center justify-between gap-2 px-4 font-Rany text-color_text_2">
@@ -23,10 +25,8 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
         </div>
       </div>
       <small className="text-base font-bold">
-        {connected && item.balance < 0 && (
-          <Skeleton.Button className="!h-4 !w-10 !min-w-0" active />
-        )}
-        {(!connected || item.balance >= 0) && tokenAmountFormatter(item.balance, item.token)}
+        {wallet && item.balance < 0 && <Skeleton.Button className="!h-4 !w-10 !min-w-0" active />}
+        {(!wallet || item.balance >= 0) && tokenAmountFormatter(item.balance, item.token)}
       </small>
     </div>
   );

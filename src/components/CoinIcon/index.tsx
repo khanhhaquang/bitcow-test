@@ -1,28 +1,28 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
 import classNames from 'classnames';
+import { BaseToken } from 'obric-merlin';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';
-import useAptosWallet from 'hooks/useAptosWallet';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 
 interface TProps {
   className?: string;
   symbol?: string;
-  token?: RawCoinInfo;
+  token?: BaseToken;
   size?: number;
 }
 
 // Use size instead of className to set the size of images
 const CoinIcon: React.FC<TProps> = ({ size = 24, className, symbol, token }) => {
-  const { tokenInfo } = useAptosWallet();
+  const { symbolToToken } = useMerlinWallet();
   const [isLoaded, setIsLoaded] = useState(false);
   const logoSrc = useMemo(() => {
-    if (token) return token?.logo_url;
+    if (token) return token?.logoUrl;
     if (symbol) {
-      const tok = tokenInfo && tokenInfo[symbol][0];
-      return tok?.logo_url;
+      const tok = symbolToToken[symbol];
+      return tok?.logoUrl;
     }
-  }, [symbol, token, tokenInfo]);
+  }, [symbol, token, symbolToToken]);
   const isAPT = token?.symbol === 'APT' || symbol === 'APT';
   const onImgError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = '';

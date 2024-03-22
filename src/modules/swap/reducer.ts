@@ -1,7 +1,9 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
 import { createReducer } from '@reduxjs/toolkit';
 import { RootState } from 'modules/rootReducer';
+import { BaseToken } from 'obric-merlin';
+
 import { ISwapSettings } from 'pages/Swap/types';
+
 // import { ITokenInfo } from 'types/tokenList';
 import actions from './actions';
 
@@ -9,7 +11,7 @@ interface SwapState {
   isFetching: boolean;
   isFetched: boolean;
   error: any;
-  tokenList: RawCoinInfo[];
+  tokenList: BaseToken[];
   swapSettings: ISwapSettings;
 }
 

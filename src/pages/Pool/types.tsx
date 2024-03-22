@@ -1,14 +1,14 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
+import { BaseToken } from 'obric-merlin';
 
 export interface AddLiquidity {
-  xToken: RawCoinInfo;
-  yToken: RawCoinInfo;
+  xToken: BaseToken;
+  yToken: BaseToken;
   xAmt: number;
   yAmt: number;
 }
 
 export interface WithdrawLiquidity {
-  xToken: RawCoinInfo;
-  yToken: RawCoinInfo;
+  xToken: BaseToken;
+  yToken: BaseToken;
   percent: number;
 }

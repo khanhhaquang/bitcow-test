@@ -18,7 +18,7 @@ function useOnScreen(ref, rootMargin = '0px') {
     // return () => {
     //   observer.unobserve(ref.current);
     // };
-  }, []);
+  }, [ref, rootMargin]);
 
   return isIntersecting;
 }

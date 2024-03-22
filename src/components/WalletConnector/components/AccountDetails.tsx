@@ -1,16 +1,15 @@
-import { useWallet } from '@manahippo/aptos-wallet-adapter';
-import { RawCoinInfo } from '@manahippo/coin-list';
+import { useEvmConnectContext } from '@particle-network/evm-connectkit';
 import cx from 'classnames';
-import { useMemo, useState } from 'react';
+import { BTC } from 'obric-merlin/dist/configs';
+import { useState } from 'react';
 
 import { Tooltip } from 'components/Antd';
 import Button from 'components/Button';
 import CoinIcon from 'components/CoinIcon';
 import { walletAddressEllipsis } from 'components/utils/utility';
-import useAptosWallet from 'hooks/useAptosWallet';
-import useCoinStore, { CoinInfo } from 'hooks/useCoinStore';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
-import useTokenBalane from 'hooks/useTokenBalance';
+import useTokenBalance from 'hooks/useTokenBalance';
 import { CopyIcon, QuitIcon } from 'resources/icons';
 import { copyToClipboard } from 'utils/copy';
 
@@ -18,25 +17,13 @@ import styles from './AccountDetails.module.scss';
 
 let timer: NodeJS.Timeout;
 
-const AccountDetails = () => {
-  const { activeWallet, selectedWallet, closeModal, obricSDK } = useAptosWallet();
+const AccountDetails = ({ onClose }: { onClose: () => void }) => {
+  const { wallet } = useMerlinWallet();
+  const { disconnect } = useEvmConnectContext();
   const { getTokenBalanceInUSD } = usePools();
   const [copied, setCopied] = useState(false);
-  const { disconnect } = useWallet();
-  const { coinStore } = useCoinStore();
-  const [AptToken, availableApt] = useMemo(() => {
-    let aptToken: RawCoinInfo;
-    let balance = 0;
-    if (obricSDK && coinStore) {
-      aptToken = obricSDK.coinList.getCoinInfoBySymbol('APT')[0];
-      const aptCoin = coinStore[aptToken.token_type.type] || 0;
-      if (aptCoin) {
-        balance = (aptCoin.data as CoinInfo).coin.value / Math.pow(10, aptToken.decimals);
-      }
-    }
-    return [aptToken, balance];
-  }, [coinStore, obricSDK]);
-  const [uiBalance] = useTokenBalane(AptToken);
+  const btcToken = BTC;
+  const [uiBalance] = useTokenBalance(btcToken);
 
   const handleCopy = (text) => {
     copyToClipboard(text, () => {
@@ -58,7 +45,7 @@ const AccountDetails = () => {
         <div className="flex flex-col text-color_text_2">
           <div className="flex gap-4">
             <div className="text-lg text-color_text_1">
-              {walletAddressEllipsis(activeWallet?.toString() || '')}
+              {walletAddressEllipsis(wallet?.accounts[0].evm)}
             </div>
             <div className="flex gap-2">
               {/* <Button
@@ -69,7 +56,7 @@ const AccountDetails = () => {
                 </Tooltip>
               </Button> */}
               <Button
-                onClick={() => handleCopy(activeWallet?.toString())}
+                onClick={() => handleCopy(wallet?.accounts[0].evm)}
                 className="w-full fill-color_text_2 p-0 dark:opacity-30 dark:hover:opacity-100">
                 <Tooltip placement="top" title="Copy">
                   <CopyIcon />
@@ -77,7 +64,7 @@ const AccountDetails = () => {
               </Button>
             </div>
           </div>
-          <div className="text-xs uppercase">{selectedWallet.adapter.name}</div>
+          <div className="text-xs uppercase">{wallet?.metadata.name}</div>
         </div>
       </div>
       <div className="w-full px-5">
@@ -86,13 +73,13 @@ const AccountDetails = () => {
             <div className="flex w-full flex-col items-end">
               <div className="flex h-[24px] w-full items-center justify-between text-white">
                 <div className="flex items-center gap-2 text-[20px]">
-                  <CoinIcon size={24} token={AptToken} />
-                  <div className="">{AptToken?.name}</div>
+                  <CoinIcon size={24} token={btcToken} />
+                  <div className="">{btcToken.name}</div>
                 </div>
-                <div className="text-[20px]">{availableApt}</div>
+                <div className="text-[20px]">{uiBalance}</div>
               </div>
               <small className="text-base text-color_text_4">
-                ${getTokenBalanceInUSD(uiBalance, AptToken)}
+                ${getTokenBalanceInUSD(uiBalance, btcToken)}
               </small>
             </div>
             <div className="absolute -top-[15px] -left-[15px] h-[30px] w-[30px] -rotate-45 bg-color_bg_panel"></div>
@@ -108,7 +95,7 @@ const AccountDetails = () => {
       <div className="border-t-[1px] border-white_color_list_hover dark:border-gray_008">
         <Button
           onClick={() => {
-            closeModal();
+            onClose();
             disconnect();
           }}
           className="flex h-full w-full gap-2 fill-color_text_2 p-0 py-4 text-color_text_2 dark:opacity-30 dark:hover:opacity-100">

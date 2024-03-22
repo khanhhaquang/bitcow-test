@@ -1,7 +1,7 @@
-import { RawCoinInfo } from '@manahippo/coin-list';
 import classNames from 'classnames';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { BaseToken } from 'obric-merlin';
 import { useCallback, useMemo } from 'react';
 
 import { Collapse } from 'components/Antd';
@@ -22,8 +22,8 @@ const SwapDetail = ({
   impact
 }: {
   swapRateQuote: number;
-  fromToken: RawCoinInfo;
-  toToken: RawCoinInfo;
+  fromToken: BaseToken;
+  toToken: BaseToken;
   fromUiAmt: number;
   impact: number;
 }) => {

@@ -1,4 +1,5 @@
-import { IPool } from 'obric';
+import { IPool } from 'obric-merlin';
+
 export interface IPoolToken {
   id: string;
   symbol: string;

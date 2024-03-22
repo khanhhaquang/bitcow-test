@@ -9,7 +9,6 @@ const useTokenBalance = (token: BaseToken | undefined): [Balance, boolean] => {
   const { tokenBalances } = useMerlinWallet();
 
   const balance = useMemo(() => {
-    console.log('tokenBalances', tokenBalances);
     if (tokenBalances && token) {
       return tokenBalances[token.address];
     } else {

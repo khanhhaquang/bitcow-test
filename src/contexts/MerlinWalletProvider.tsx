@@ -12,6 +12,7 @@ import {
   TxOption,
   UserLpAmount
 } from 'obric-merlin';
+import { SWAP_ROUTER } from 'obric-merlin/dist/constant';
 import { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import useNetworkConfiguration from 'hooks/useNetworkConfiguration';
@@ -32,7 +33,6 @@ interface MerlinWalletContextType {
   tokenList: BaseToken[];
   symbolToToken: Record<string, BaseToken>;
   tokenBalances: Record<string, number>;
-  allowances: Record<string, BN>;
   userPoolLpAmount: Record<string, UserLpAmount>;
   pendingTx: boolean;
   requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
@@ -48,7 +48,6 @@ const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinW
 
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const { wallet, openModal, closeModal } = useEvmConnectContext();
-  console.log('openModal', openModal);
   const [obricSDK, setObricSDK] = useState<ObricSDK>();
 
   const [shouldRefresh, setShouldRefresh] = useState(false);
@@ -58,7 +57,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [tokenList, setTokenList] = useState<Token[]>();
   const [symbolToToken, setSymbolToToken] = useState<Record<string, Token>>();
   const [tokenBalances, setTokenBalances] = useState<Record<string, number>>();
-  const [allowances, setAllowances] = useState<Record<string, BN>>();
   const [liquidityPools, setLiquidityPools] = useState<IPool[]>();
   const [userPoolLpAmount, setUserPoolLpAmount] = useState<Record<string, UserLpAmount>>();
 
@@ -115,43 +113,27 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, [setObricSdkSigner]);
 
   const fetchPools = useCallback(async () => {
-    console.log('fetch pools');
-    // await obricSDK.reload();
+    await obricSDK.reload();
     setLiquidityPools([...obricSDK.pools]);
   }, [obricSDK]);
 
-  const fetchAllowances = useCallback(async () => {
-    console.log('fetch allowances');
-    setAllowances(await obricSDK.coinList.getAllowances());
-  }, [obricSDK]);
-
   const fetchTokenBalances = useCallback(async () => {
-    console.log('fetchTokenBalances');
     const balances = await obricSDK.coinList.getBalances();
     setTokenBalances(balances);
   }, [obricSDK]);
 
   const fetchUserPoolLpAmount = useCallback(async () => {
-    console.log(fetchUserPoolLpAmount);
     setUserPoolLpAmount(await obricSDK.getUserPoolLpAmount());
   }, [obricSDK]);
 
   const refreshSDKState = useCallback(async () => {
     if (obricSDK && shouldRefresh) {
       fetchPools();
-      fetchAllowances();
       fetchTokenBalances();
       fetchUserPoolLpAmount();
       setShouldRefresh(false);
     }
-  }, [
-    obricSDK,
-    shouldRefresh,
-    fetchAllowances,
-    fetchTokenBalances,
-    fetchPools,
-    fetchUserPoolLpAmount
-  ]);
+  }, [obricSDK, shouldRefresh, fetchTokenBalances, fetchPools, fetchUserPoolLpAmount]);
 
   useEffect(() => {
     if (shouldRefresh) {
@@ -168,29 +150,27 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, []);
 
   const checkApprove = useCallback(
-    async (token: BaseToken) => {
+    async (token: BaseToken, spender: string) => {
       // todo
       try {
-        if (allowances) {
-          const result = await obricSDK.coinList.approve(token, allowances);
-          if (result === undefined) {
-            return true;
-          } else if (result === null) {
-            openErrorNotification({ detail: `Fail approve to ${token.symbol}` });
-            return false;
-          } else if (result.status === 0) {
-            openTxErrorNotification(result.hash, `Fail approve to ${token.symbol}`);
-            return false;
-          } else {
-            return true;
-          }
+        const result = await obricSDK.coinList.approve(token, spender);
+        if (result === undefined) {
+          return true;
+        } else if (result === null) {
+          openErrorNotification({ detail: `Fail approve to ${token.symbol}` });
+          return false;
+        } else if (result.status === 0) {
+          openTxErrorNotification(result.hash, `Fail approve to ${token.symbol}`);
+          return false;
+        } else {
+          return true;
         }
       } catch (e: any) {
         checkTransactionError(e);
         return false;
       }
     },
-    [obricSDK, allowances, checkTransactionError]
+    [obricSDK, checkTransactionError]
   );
   const requestSwap = useCallback(
     async (quote, minOutputAmt) => {
@@ -201,7 +181,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       // todo check transaction result detail
       if (obricSDK) {
         setPendingTx(true);
-        if (!(await checkApprove(fromToken))) {
+        if (!(await checkApprove(fromToken, SWAP_ROUTER))) {
           setPendingTx(false);
           success = false;
           return success;
@@ -241,8 +221,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         if (!wallet) throw new Error('Please connect wallet first');
         if (obricSDK) {
           setPendingTx(true);
-          if ((await checkApprove(pool.xToken)) && (await checkApprove(pool.yToken))) {
-            const result = await pool.deposit(xAmount);
+          if (
+            (await checkApprove(pool.xToken, pool.poolAddress)) &&
+            (await checkApprove(pool.yToken, pool.poolAddress))
+          ) {
+            const result = await pool.depositV1(xAmount);
             if (result.status === 1) {
               openTxSuccessNotification(
                 result.hash,
@@ -311,7 +294,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         tokenList,
         symbolToToken,
         tokenBalances,
-        allowances,
         userPoolLpAmount,
         pendingTx,
         requestSwap,

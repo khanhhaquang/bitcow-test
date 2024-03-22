@@ -34,7 +34,7 @@ const Swap: React.FC = () => {
       const inputAmt = values.currencyFrom?.amount;
       const minOutputAmt = values.currencyTo?.amount * (1 - values.slipTolerance / 100);
       if (fromToken && toToken && inputAmt && minOutputAmt && quote) {
-        const result = await requestSwap(quote, quote.outAmt);
+        const result = await requestSwap(quote, quote.outAmt * 0.99999);
         if (result) {
           // formikHelper.setFieldValue('currencyFrom', {
           //   ...values.currencyFrom,

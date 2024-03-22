@@ -6,8 +6,8 @@ export const LOCAL_CONFIG = new NetworkConfiguration('localhost', 'http://0.0.0.
 
 export const TESTNET_CONFIG = new NetworkConfiguration(
   'testnet',
-  'https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH',
-  // 'https://testnet-rpc.merlinchain.io',
+  // 'https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH',
+  'https://testnet-rpc.merlinchain.io',
   'https://scan.merlinchain.io/'
 );
 

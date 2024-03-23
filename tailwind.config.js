@@ -41,7 +41,12 @@ module.exports = {
         color_error: '#FF6666',
         table_row_bg: '#1E1E1E',
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
-        white_color_list_hover: '#EBEDF4'
+        white_color_list_hover: '#EBEDF4',
+
+        bc: {
+          white: 'var(--bitcow-text-white)',
+          light: 'var(--bitcow-text-light)',
+        }
       },
       height: {
         13: '3.25rem',
@@ -52,7 +57,7 @@ module.exports = {
         landingBgWhite: 'url(resources/img/landingPage/white-bg.png)',
         darkBg: 'url(resources/img/bg.png)',
         darkDesktopBg: 'url(resources/img/desktopBg.png)',
-        whiteBg: 'url(resources/img/whiteBg.png);',
+        whiteBg: 'url(resources/img/whiteBg.svg);',
         button_gradient:
           'linear-gradient(264.61deg, rgba(255, 104, 39, 0.44) 0.36%, #FF6827 21.67%, #FF6827 100%)',
         color_minor_1: 'linear-gradient(90deg, #B0FF4A 0%, #70F0E1 100%);',

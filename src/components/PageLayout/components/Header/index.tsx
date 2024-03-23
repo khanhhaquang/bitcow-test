@@ -7,12 +7,11 @@ import { Link } from 'react-router-dom';
 
 import { Drawer, Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
-import ThemeToggler from 'components/ThemeToggler';
+// import ThemeToggler from 'components/ThemeToggler';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { LogoIcon, LogoMobileIcon, MenuIcon } from 'resources/icons';
-import LogoImg from 'resources/img/logo.png';
-import LogoBlackImg from 'resources/img/logoBlack.png';
+import { MenuIcon } from 'resources/icons';
+import LogoBitCow from 'resources/img/logoBitCow.png';
 
 import styles from './Header.module.scss';
 
@@ -32,7 +31,7 @@ const PageHeader: React.FC = () => {
           className={'group !bg-transparent'}>
           <Link
             to={path || '/'}
-            className="bold text-base font-medium !text-color_text_1 group-hover:!text-color_main tablet:font-Furore tablet:!text-color_text_2">
+            className="text-[24px] font-normal uppercase leading-none !text-bc-light group-hover:!text-bc-white tablet:font-Furore tablet:!text-color_text_2">
             {name}
           </Link>
         </Menu.Item>
@@ -59,7 +58,9 @@ const PageHeader: React.FC = () => {
           <div className="flex h-10 w-[158px] cursor-pointer items-center justify-center">
             {<WalletConnector />}
           </div>
+          {/*
           <ThemeToggler />
+            */}
         </div>
       </div>
     ) : null;
@@ -74,8 +75,7 @@ const PageHeader: React.FC = () => {
             onClick={() => setIsSideMenuOpen(false)}
             className={cx('mb-24 flex h-full items-center justify-center')}>
             <div className={cx('block w-[109px]')}>
-              <img src={LogoImg} className="hidden h-full w-full dark:block" alt="Logo" />
-              <img src={LogoBlackImg} className="block h-full w-full dark:hidden" alt="Logo" />
+              <img src={LogoBitCow} className="block h-full w-full" alt="Logo" />
             </div>
           </Link>
           <Menu
@@ -89,7 +89,9 @@ const PageHeader: React.FC = () => {
             {renderNavItems()}
           </Menu>
         </div>
+        {/*
         <ThemeToggler />
+            */}
       </div>
     );
   };
@@ -113,17 +115,13 @@ const PageHeader: React.FC = () => {
               className={cx('hidden', {
                 'tablet:block': currentPageName !== 'Home'
               })}>
-              <LogoMobileIcon className="w-8" />
+              <img src={LogoBitCow} className="block h-auto w-12" alt="Logo" />
             </div>
             <div
               className={cx('block', {
                 'tablet:hidden': currentPageName !== 'Home'
               })}>
-              <LogoIcon
-                height={30}
-                width={currentPageName !== 'Home' ? 150 : 174}
-                className="fill-black dark:fill-white"
-              />
+              <img src={LogoBitCow} className="block h-auto w-[81px]" alt="Logo" />
             </div>
           </Link>
         </div>

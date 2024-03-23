@@ -22,8 +22,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {
           'bg-white bg-landingBgWhite dark:bg-black dark:!bg-landingBgDark tablet:!bg-none tablet:dark:!bg-none':
             currentPageName === 'Home',
-          'bg-whiteBg dark:bg-black dark:!bg-darkDesktopBg dark:tablet:!bg-darkBg':
-            currentPageName !== 'Home'
+          'bg-whiteBg': currentPageName !== 'Home'
         }
       )}>
       <Header />

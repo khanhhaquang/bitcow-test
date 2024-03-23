@@ -24,7 +24,7 @@ const GlobalSettingContext = createContext<GlobalSettingContextType>(
 
 const GlobalSettingProvider: React.FC<TProviderProps> = ({ children }) => {
   const [currentPageName] = useCurrentPage();
-  const [theme, setTheme] = useLocalStorage<Theme>('obric-theme', Theme.Dark);
+  const [theme, setTheme] = useLocalStorage<Theme>('obric-theme', Theme.Light);
 
   const loadTheme = useCallback(() => {
     const darkMode = theme === Theme.Dark;

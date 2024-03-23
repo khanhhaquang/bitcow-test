@@ -4,17 +4,17 @@
     .ant-menu-item.ant-menu-item-selected {
       @apply bg-transparent #{!important}; // remove blue background
       a {
-        @apply relative text-color_main #{!important};
+        @apply relative text-bc-white #{!important};
         &::after {
           position: absolute;
-          right: -16px;
-          bottom: 0;
-          margin-left: 8.5px;
+          right: -19px;
+          bottom: 3px;
           content: '';
-          background-image: url('../../../../resources/icons/triangle.svg');
-          background-size: 6px 6px;
-          height: 6px;
-          width: 6px;
+          background-image: url('../../../../resources/icons/downArrow.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+          height: 12px;
+          width: 15px;
         }
       }
     }

@@ -151,7 +151,7 @@ const PageHeader: React.FC = () => {
         )}
         {/* Mobile - home page */}
         {currentPageName === 'Home' && (
-          <div className="flex h-full items-center">
+          <div className="hidden h-full items-center tablet:flex">
             <PixelButton
               className=""
               width={177}

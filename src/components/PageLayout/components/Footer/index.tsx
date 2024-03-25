@@ -7,9 +7,9 @@ import { DocsIcon, TwitterIcon } from 'resources/icons';
 const { Footer } = Layout;
 
 const URLs = {
-  doc: 'https://obricxyz.gitbook.io/smart/',
-  discord: 'https://discord.gg/TNXY8Xd7bH',
-  twitter: 'https://twitter.com/poor_obric'
+  doc: '',
+  discord: '',
+  twitter: 'https://twitter.com/bitCow_AMM'
 };
 
 const ExternalLink = ({ href, children }: { href: string; children: any }) => {

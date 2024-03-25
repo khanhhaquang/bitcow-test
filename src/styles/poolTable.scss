@@ -1,13 +1,6 @@
 .ant-pool-table {
   @apply relative w-full;
 
-  &::before {
-    @apply absolute top-0 z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
-  }
-  &::after {
-    @apply absolute top-[50px] z-10 h-[1px] w-full bg-color_border tablet:hidden #{!important};
-  }
-
   &.ant-table-loading {
     &::after {
       @apply hidden #{!important};
@@ -15,13 +8,13 @@
   }
 
   .ant-table {
-    @apply relative bg-color_bg_table px-8 text-color_text_2 dark:text-white tablet:p-0;
+    @apply relative bg-transparent text-bc-white tablet:p-0;
 
     .ant-table-cell {
       &:before {
         @apply hidden #{!important};
       }
-      @apply border-white bg-color_bg_table text-base leading-4 text-color_text_2 dark:border-black;
+      @apply border-white bg-transparent text-base leading-4 text-bc-white;
 
       .ant-table-column-sorters {
         @apply justify-start gap-2;
@@ -33,7 +26,7 @@
 
     .ant-table-column-sorter-up.active,
     .ant-table-column-sorter-down.active {
-      @apply text-color_main;
+      @apply text-bc-gold;
     }
 
     .ant-table-thead {
@@ -43,7 +36,7 @@
         width: 30%;
       }
       .ant-table-cell {
-        @apply border-b-[24px] border-color_bg_table;
+        @apply border-b-[24px] border-transparent text-bc-white-80;
       }
     }
 
@@ -51,46 +44,50 @@
       .ant-table {
         @apply px-0;
       }
+      tr:nth-child(odd of .ant-table-row.ant-table-row-level-0) {
+        @apply bg-bc-grey-transparent;
+        & + .expanded-pool {
+          .ant-table-cell {
+            @apply bg-bc-grey-transparent #{!important};
+          }
+        }
+      }
       .ant-table-row.ant-table-row-level-0 {
+        td {
+          @apply border-t border-b border-transparent;
+          &:first-of-type {
+            @apply border-l;
+          }
+          &:last-of-type {
+            @apply border-r;
+          }
+        }
+        &:has(+ .expanded-pool:not([style*="display: none"])) {
+          td {
+            @apply border-bc-white-40;
+          }
+        }
         .ant-table-cell {
           @apply cursor-pointer;
         }
-        &:not(:first-of-type) {
-          .ant-table-cell {
-            @apply border-t-[16px] border-color_bg_table tablet:border-white_gray_bg dark:tablet:border-black;
-          }
+        &:hover td {
+          @apply border-bc-white-40;
         }
+
         & + .expanded-pool {
           .ant-table-cell {
-            @apply bg-color_bg_row #{!important};
-          }
-        }
-        &:hover {
-          .ant-table-cell {
-            @apply bg-color_bg_hover tablet:bg-color_bg_table dark:tablet:bg-color_bg_row #{!important};
-          }
-          & + .expanded-pool {
-            .ant-table-cell {
-              @apply bg-color_bg_hover #{!important};
-            }
+            @apply bg-transparent #{!important};
           }
         }
       }
       .ant-table-expanded-row-level-1 {
         > .ant-table-cell {
-          @apply cursor-default border-t-[1px] border-color_border tablet:p-0;
+          @apply cursor-default border-l border-r border-b border-bc-white-40 tablet:p-0;
         }
       }
       .ant-table-cell {
-        @apply rounded-none border-b-0 border-t-0 bg-color_bg_row tablet:bg-color_bg_table tablet:p-4 dark:tablet:bg-color_bg_row;
-        &.ant-table-row-expand-icon-cell {
-          @apply fill-color_text_1 tablet:pl-1;
-        }
+        @apply rounded-none border-b-0 border-t-0 bg-transparent tablet:bg-color_bg_table tablet:p-4;
       }
-    }
-
-    .ant-table-tbody > tr > td > .ant-table-wrapper:only-child .ant-table {
-      @apply border-t-[1px] border-color_text_3;
     }
 
     .ant-table-tbody > tr > td > .ant-table-wrapper:only-child .ant-table,
@@ -106,7 +103,7 @@
 }
 
 .ant-radio-button-wrapper {
-  @apply h-[40px] rounded-none border-color_bg_panel bg-color_bg_panel py-3 px-4 leading-[14px] text-color_text_2 #{!important};
+  @apply h-[40px] rounded-none border-color_bg_panel bg-transparent py-3 px-4 leading-[14px] text-color_text_2 #{!important};
   &.ant-radio-button-wrapper-checked {
     @apply border-color_main bg-color_main text-white #{!important};
   }

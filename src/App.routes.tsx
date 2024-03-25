@@ -1,6 +1,6 @@
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 
-import Home from 'pages/Home';
+import Home from 'pages/Home2';
 import Pool from 'pages/Pool';
 import Swap from 'pages/Swap';
 // import Faucet from 'pages/Faucet';

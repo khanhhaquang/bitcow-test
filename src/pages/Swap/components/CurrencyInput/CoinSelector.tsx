@@ -78,17 +78,18 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
 
   const renderHeaderSearch = useMemo(() => {
     return (
-      <div className="flex flex-col gap-2 font-Rany text-color_text_1 tablet:gap-0">
+      <div className="flex flex-col gap-2  tablet:gap-0">
         <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">Select a token</div>
-        <hr className="my-4 h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0" />
+        <hr className="my-4 h-[1px] border-0 bg-bc-white-20 tablet:my-0" />
         <div className="relative tablet:mx-5 tablet:mt-6 tablet:mb-4">
           <Input
-            className="h-15 w-full !border-0 bg-color_bg_input py-5 px-4 text-base leading-4 text-color_text_2 tablet:py-[18px] tablet:text-base tablet:leading-4"
+            className="h-15 w-full !bg-bc-input py-5 px-4 text-base leading-4 text-bc-white outline-none tablet:py-[18px] tablet:text-base tablet:leading-4"
             value={filter}
+            bordered={false}
             onChange={(e) => setFilter(e.target.value.toLowerCase())}
             placeholder="Search name or paste address"
           />
-          <SearchIcon className="absolute top-1/2 right-[14px] -translate-y-1/2 fill-color_text_1" />
+          <SearchIcon className="absolute top-1/2 right-[14px] -translate-y-1/2 fill-bc-white-60" />
         </div>
         <div className="mt-2 mb-2 flex flex-wrap gap-2 tablet:px-5">
           {commonCoins.map((coin) => (
@@ -106,14 +107,14 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const renderTokenList = useMemo(() => {
     return (
       <List
-        className="max-h-[354px] overflow-y-scroll border-0 bg-color_bg_input py-2 no-scrollbar tablet:mx-5 tablet:mb-6"
+        className="max-h-[354px] overflow-y-scroll border-2 border-bc-orange bg-bc-grey-transparent2 no-scrollbar tablet:mx-5 tablet:mb-6"
         rowKey={(item) => `list-row-${(item as BaseToken).symbol}`}>
         <VirtualList
           data={tokenListBalance || []}
           itemKey={(item) => `list-item-${item.token.symbol}`}>
           {(item) => (
             <List.Item
-              className="cursor-pointer !border-0 !px-0 !py-2 hover:bg-gray_05 dark:hover:bg-color_bg_token"
+              className="cursor-pointer !border-0 !px-0 !py-2 hover:bg-bc-white-10"
               onClick={() => onSelectToken(item.token)}>
               <CoinRow item={item} />
             </List.Item>
@@ -124,7 +125,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   }, [tokenListBalance, onSelectToken]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 bg-bc-swap p-5 text-bc-white">
       {renderHeaderSearch}
       {renderTokenList}
     </div>

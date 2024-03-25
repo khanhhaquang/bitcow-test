@@ -1,10 +1,13 @@
 .searchInput {
   .ant-input,
   .ant-input-affix-wrapper {
-    @apply rounded-none bg-color_bg_table text-color_text_2;
+    @apply rounded-none bg-bc-grey-transparent2 text-bc-white px-4 py-2;
   }
 
   .ant-input-affix-wrapper {
-    @apply h-[38px] border-white_color_list_hover dark:border-[#272A2C] tablet:h-[52px];
+    @apply h-[38px] border border-bc-grey-transparent tablet:h-[52px];
+    input {
+      @apply bg-transparent;
+    }
   }
 }

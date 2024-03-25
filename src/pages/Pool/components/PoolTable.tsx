@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import cx from 'classnames';
-import Lottie from 'lottie-react';
 import { IPool } from 'obric-merlin';
 import { useCallback } from 'react';
 
@@ -10,13 +9,9 @@ import {
   numberCompactFormat
   //numberGroupFormat
 } from 'components/PositiveFloatNumInput/numberFormats';
-import { Theme } from 'contexts/GlobalSettingProvider';
 import { useBreakpoint } from 'hooks/useBreakpoint';
-import useGlobalSetting from 'hooks/useGlobalSetting';
 import usePools from 'hooks/usePools';
-import tableLoadingDark from 'resources/animation/tableLoadingDark.json';
-import tableLoadingLight from 'resources/animation/tableLoadingLight.json';
-import { LessIcon, MoreIcon } from 'resources/icons';
+import { ReactComponent as PoolUnfoldIcon } from 'resources/icons/poolUnfold.svg';
 
 import PoolRowDetail from './PoolRowDetail';
 import TokenPair from './TokenPair';
@@ -29,7 +24,6 @@ interface TProps {
 const PoolTable = ({ activePools, viewOwned }: TProps) => {
   const { isTablet } = useBreakpoint('tablet');
   const { getPoolTVL, poolFilter, getPoolStatsByTimebasis, setPoolFilter } = usePools();
-  const { theme } = useGlobalSetting();
 
   const loading = !activePools.length;
 
@@ -151,8 +145,8 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           multiple: 2
         }
       },
+      /*
       {
-        /*
         title: `APR ${poolFilter.timeBasis}`,
         dataIndex: 'apr',
         render: (val, record: IPool) => {
@@ -173,7 +167,6 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           compare: (a, b) => getPoolStatsByTimebasis(a).apr - getPoolStatsByTimebasis(b).apr,
           multiple: 2
         }
-      */
       },
       {
         title: '',
@@ -183,6 +176,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return <div className="flex w-12"></div>;
         }
       },
+      */
       Table.EXPAND_COLUMN
     ];
 
@@ -225,14 +219,9 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       loading={{
         spinning: loading,
         indicator: (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2">
-            <div className="block w-[200px]">
-              <Lottie
-                className="h-full w-full"
-                animationData={theme === Theme.Dark ? tableLoadingDark : tableLoadingLight}
-              />
-            </div>
-            <div className="-mt-16 text-sm leading-3 text-color_text_2">No Data</div>
+          <div className="flex h-full w-full flex-col items-center justify-center gap-1 bg-bc-grey-transparent">
+            <img src="/images/noData.png" alt="No Data" width={151} height={130} />
+            <div className="text-lg text-bc-white-80">No Data...</div>
           </div>
         )
       }}
@@ -251,15 +240,18 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return <PoolRowDetail pool={record} />;
         },
         expandIcon: ({ expanded, onExpand, record }) => {
+          return <PoolUnfoldIcon className={cx({ 'rotate-180': expanded })} />;
+          /*
           return expanded ? (
             <div onClick={(e) => onExpand(record, e)}>
-              <LessIcon />
+              <PoolUnfoldIcon className={cx({ 'rotate-180': expanded })} />
             </div>
           ) : (
             <div onClick={(e) => onExpand(record, e)}>
-              <MoreIcon />
+              <PoolUnfoldIcon />
             </div>
           );
+          */
         },
         rowExpandable: () => true
       }}

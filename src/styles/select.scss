@@ -2,7 +2,7 @@
   @apply w-full;
 
   .ant-select {
-    @apply h-[38px] w-full rounded-none border-[1px] border-color_border_2 ring-offset-0 ring-offset-transparent tablet:h-[52px] #{!important};
+    @apply h-[38px] w-full rounded-none ring-offset-0 ring-offset-transparent tablet:h-[52px] #{!important};
 
     &:not(.ant-select-disabled):hover .ant-select-selector,
     &:not(.ant-select-customize-input) .ant-select-selector {
@@ -11,44 +11,32 @@
     }
     &:not(.ant-select-customize-input) {
       .ant-select-selector {
-        @apply h-full rounded-none border-0 bg-color_bg_table p-[10px];
+        @apply h-full rounded-none bg-bc-grey-transparent2 p-[10px];
         .ant-select-selection-item {
-          @apply bg-transparent text-right leading-[18px] text-color_text_1 tablet:leading-[30px];
+          @apply bg-transparent text-right leading-[18px] text-bc-white tablet:leading-[30px];
         }
       }
     }
     &.ant-select-open {
       .ant-select-selector {
-        @apply bg-color_bg_row #{!important};
+        @apply bg-bc-grey-transparent2 #{!important};
       }
     }
-  }
-
-  ::placeholder {
-    @apply text-color_text_2;
-  }
-  /* Edge */
-  ::-webkit-input-placeholder {
-    @apply text-color_text_2;
-  }
-  /* Internet Explorer */
-  :-ms-input-placeholder {
-    @apply text-color_text_2;
   }
 }
 
 .ant-select-dropdown {
-  @apply border-[1px] border-color_border_2 bg-color_bg_row shadow-dropdown #{!important};
+  @apply bg-bc-orange #{!important};
 
   .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
-    @apply bg-white text-color_text_1 dark:bg-color_bg_2;
+    @apply bg-bc-grey-transparent text-bc-white;
   }
 
   .ant-select-item {
-    @apply text-color_text_2;
+    @apply text-bc-white;
   }
   .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-    @apply bg-white text-color_text_1 dark:bg-color_bg_2 #{!important};
+    @apply bg-bc-grey-transparent text-bc-white #{!important};
     svg {
       @apply block;
     }
@@ -59,7 +47,7 @@
     svg {
       @apply hidden;
       path {
-        @apply fill-color_text_1 #{!important};
+        @apply fill-bc-white #{!important};
       }
     }
   }

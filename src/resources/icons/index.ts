@@ -3,6 +3,7 @@ export { ReactComponent as LogoMobileIcon } from './logoMobile.svg';
 export { ReactComponent as CancelIcon } from './cancel.svg';
 export { ReactComponent as SettingBlackIcon } from './settingBlack.svg';
 export { ReactComponent as SettingWhiteIcon } from './settingWhite.svg';
+export { ReactComponent as SettingsIcon } from './settings.svg';
 export { ReactComponent as CaretIcon } from './caret.svg';
 export { ReactComponent as SwapIcon } from './swap.svg';
 export { ReactComponent as HintIcon } from './hint.svg';

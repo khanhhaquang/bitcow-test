@@ -2,10 +2,7 @@ import classNames from 'classnames';
 import { Fragment } from 'react';
 
 import { Layout } from 'components/Antd';
-import useCurrentPage from 'hooks/useCurrentPage';
-import { DiscordIcon, DocFilledIcon, TwitterIcon } from 'resources/icons';
-import FooterMobileBg from 'resources/img/footerMobileBg.png';
-import FooterMobileWhiteBg from 'resources/img/footerMobileBgWhite.png';
+import { DocsIcon, TwitterIcon } from 'resources/icons';
 
 const { Footer } = Layout;
 
@@ -35,15 +32,15 @@ const SocialBtnGroups = () => {
       </ExternalLink>
       <ExternalLink href={URLs.doc}>
         <DocFilledIcon />
-      </ExternalLink> */}
+      </ExternalLink>
       <ExternalLink href={URLs.discord}>
         <DiscordIcon />
-      </ExternalLink>
-      <ExternalLink href={URLs.doc}>
-        <DocFilledIcon />
-      </ExternalLink>
+      </ExternalLink>  */}
       <ExternalLink href={URLs.twitter}>
         <TwitterIcon />
+      </ExternalLink>
+      <ExternalLink href={URLs.doc}>
+        <DocsIcon className="text-white" />
       </ExternalLink>
     </div>
   );
@@ -54,34 +51,21 @@ interface TProps {
 }
 
 const PageFooter: React.FC<TProps> = ({ className }) => {
-  const [currentPageName] = useCurrentPage();
-
   return (
     <Fragment>
-      <div className={classNames('hidden w-full', { 'tablet:block': currentPageName !== 'Home' })}>
-        <img src={FooterMobileBg} alt="" className="hidden h-full w-full object-cover dark:block" />
-        <img
-          src={FooterMobileWhiteBg}
-          alt=""
-          className="block h-full w-full object-cover dark:hidden"
-        />
-      </div>
       <Footer
         className={classNames(
-          'z-10 flex justify-between bg-transparent',
-          {
-            'py-10 px-20 tablet:pb-24 tablet:pt-5': currentPageName === 'Home',
-            'px-15 py-5 tablet:border-none': currentPageName !== 'Home'
-          },
+          'z-10 flex justify-between bg-transparent tablet:flex-col-reverse tablet:items-center tablet:gap-y-2 tablet:pb-12 tablet:pt-24',
           className
         )}>
-        {currentPageName !== 'Home' && <div className="block grow tablet:hidden" />}
+        <img
+          className="mr-auto tablet:mr-0"
+          src="/images/copyright.png"
+          width={306}
+          height={25}
+          alt="copyright"
+        />
         <SocialBtnGroups />
-        {/* {currentPageName !== 'Home' && (
-          <div className="block flex h-full cursor-pointer items-center justify-center font-Furore text-lg text-color_main tablet:hidden">
-            {'Contact us'}
-          </div>
-        )} */}
       </Footer>
     </Fragment>
   );

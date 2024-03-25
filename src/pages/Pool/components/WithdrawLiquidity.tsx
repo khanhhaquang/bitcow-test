@@ -2,12 +2,13 @@ import cx from 'classnames';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
 import { IPool } from 'obric-merlin';
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import Button from 'components/Button';
 import CoinIcon from 'components/CoinIcon';
+import PixelButton from 'components/PixelButton';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import SliderInput from 'components/SliderInput';
 import { useBreakpoint } from 'hooks/useBreakpoint';
@@ -16,7 +17,7 @@ import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { WithdrawLiquidity as WithdrawLiquidityProps } from 'pages/Pool/types';
-import { LeftArrowIcon } from 'resources/icons';
+import { ReactComponent as RmLiqIcon } from 'resources/icons/rmLiq.svg';
 import { openErrorNotification } from 'utils/notifications';
 
 const percentageOptions = [25, 50, 75, 100];
@@ -85,7 +86,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 <CoinIcon symbol={key} size={20} />
                 <div className="text-[18px]">{key}</div>
               </div>
-              <div className="text-sm text-color_text_2">
+              <div className="text-sm">
                 {tokenAmountFormatter(
                   percent ? (pool.coins[key] * percent) / 100 : pool.coins[key],
                   token
@@ -110,17 +111,14 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
       validationSchema={validationSchema}
       onSubmit={onSubmit}>
       {(props) => (
-        <div className="w-full font-Rany text-color_text_1">
+        <div className="w-full bg-bc-pool p-5 text-bc-white">
           <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
             Remove liquidity
           </div>
-          <hr className="hidden h-[1px] border-0 bg-white_gray_bg dark:bg-color_list_hover tablet:my-0 tablet:block" />
-          <div className="mt-5 flex w-full flex-col items-center justify-center gap-2 tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
-            <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-              <div className="mb-2 text-xs uppercase text-color_text_2">
-                AVAILABLE FOR WITHDRAWAL
-              </div>
-              <div className="mt-4 flex flex-col gap-4">{renderCoinRow()}</div>
+          <div className="mt-5 flex w-full flex-col items-center justify-center gap-3 tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
+            <div className="w-full border-2 border-bc-blue bg-bc-grey-transparent p-4">
+              <div className="mb-2 text-xs text-bc-white-60">Available to Withdraw</div>
+              <div className="mt-4 flex flex-col gap-y-2">{renderCoinRow()}</div>
               <SliderInput
                 className="mx-0 mt-6 mb-0 tablet:hidden"
                 min={0}
@@ -135,12 +133,12 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     <Button
                       key={option}
                       onClick={() => onAmountChange(option, props)}
-                      className="h-6 grow rounded-none bg-white_gray_01 text-sm text-color_text_2 hover:bg-color_text_1 hover:text-white dark:bg-gray_01 dark:hover:bg-color_text_3 dark:hover:text-color_text_2">
+                      className="h-6 grow rounded-none bg-bc-white-20 text-sm text-bc-white-80 hover:text-bc-white">
                       {option}%
                     </Button>
                   ))}
                 </div>
-                <div className={'relative flex grow font-Rany tablet:w-full tablet:items-end'}>
+                <div className={'relative flex grow  tablet:w-full tablet:items-end'}>
                   <PositiveFloatNumInput
                     ref={inputRef}
                     min={0.01}
@@ -151,12 +149,12 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     inputAmount={props.values.percent || 0}
                     onAmountChange={(a) => onAmountChange(a, props)}
                     suffix={isTablet ? '%' : null}
-                    suffixClassname="text-3xl text-color_main_2 absolute left-[54px] pl-3 z-[1] top-6"
+                    suffixClassname="text-3xl text-bc-white absolute left-[54px] pl-3 z-[1] top-6"
                   />
                   <div
                     className={cx('mt-6 grow text-3xl tablet:hidden', {
-                      'text-color_text_3': props.values.percent <= 0,
-                      'text-color_main_2': props.values.percent > 0
+                      'text-bc-white-60': props.values.percent <= 0,
+                      'text-bc-white': props.values.percent > 0
                     })}>
                     %
                   </div>
@@ -172,27 +170,28 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
               </div>
             </div>
             {props.values.percent > 0 && (
-              <Fragment>
-                <LeftArrowIcon className="rotate-90 fill-color_text_1" />
-                <div className="w-full bg-white_gray_bg p-4 dark:bg-color_bg_2">
-                  <div className="mb-2 text-xs uppercase text-color_text_2">AMOUNT TO RECEIVE</div>
+              <>
+                <RmLiqIcon className="" />
+                <div className="w-full border-2 border-bc-blue bg-bc-grey-transparent p-4">
+                  <div className="mb-2 text-xs text-bc-white-60">Amount to receive</div>
                   <div className="mt-4 flex flex-col gap-4">
                     {renderCoinRow(props.values.percent)}
                   </div>
                 </div>
-              </Fragment>
+              </>
             )}
           </div>
-          <div className="absolute left-0 -bottom-[76px] w-full bg-color_bg_panel tablet:bottom-0">
-            <div className="p-5 pt-1">
-              <Button
-                isLoading={props.isSubmitting}
-                variant="primary"
-                disabled={!props.isValid || !props.dirty}
-                onClick={props.submitForm}>
-                Remove Liquidity
-              </Button>
-            </div>
+          <div className="flex w-full justify-center pt-6">
+            <PixelButton
+              width={319}
+              height={48}
+              borderWidth={4}
+              className="text-2xl uppercase"
+              onClick={props.submitForm}
+              isLoading={props.isSubmitting}
+              disabled={!props.isValid || !props.dirty}>
+              Remove Liquidity
+            </PixelButton>
           </div>
         </div>
       )}

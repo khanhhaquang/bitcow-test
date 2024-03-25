@@ -1,13 +1,13 @@
 .ant-slider {
   .ant-slider-rail,
   &:hover .ant-slider-rail {
-    @apply bg-white_gray_01 dark:bg-gray_01 #{!important};
+    @apply bg-bc-white-40 #{!important};
   }
   .ant-slider-track,
   &:hover .ant-slider-track {
-    @apply bg-color_text_1 #{!important};
+    @apply bg-bc-white #{!important};
   }
   .ant-slider-handle {
-    @apply h-4 w-4 border-color_text_1 bg-white dark:bg-color_bg_input #{!important};
+    @apply relative bottom-[2px] border-bc-white rounded-none w-[14px] h-[19px] border-4 bg-bc-blue #{!important};
   }
 }

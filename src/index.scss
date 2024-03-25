@@ -15,12 +15,11 @@
 
 body {
   margin: 0;
-  font-family: 'Rany', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Neue Pixel Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  @apply text-base;
+  @apply text-base text-bc-white;
   line-height: 1.2;
 }
 
@@ -29,15 +28,7 @@ code {
 }
 
 ::placeholder {
-  @apply text-color_text_3 #{!important};
-}
-/* Edge */
-::-webkit-input-placeholder {
-  @apply text-color_text_3 #{!important};
-}
-/* Internet Explorer */
-:-ms-input-placeholder {
-  @apply text-color_text_3 #{!important};
+  @apply text-bc-white-60 #{!important};
 }
 
 @layer components {
@@ -56,24 +47,19 @@ code {
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
-
   .scrollbar-none {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
-
   .scrollbar::-webkit-scrollbar {
     @apply ml-1 w-1;
   }
-
   .scrollbar::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
-
   .scrollbar::-webkit-scrollbar-thumb {
     @apply bg-grey-300 rounded-[100vh];
   }
-
   .scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-grey-500;
   }
@@ -105,8 +91,11 @@ code {
   --obric-color_disabled: rgba(4, 18, 25, 0.1);
 
   // bitCow
-  --bitcow-color_text_white: #fff;
-  --bitcow-color_text_light: #ffffff99;
+  --bitcow-color-text-white: #fff;
+  --bitcow-color-text-main: #ffb500;
+  --bitcow-color-text-red: #ff4d4d;
+  --bitcow-color-text-orange: #ff8a00;
+  --bitcow-color-text-gold: #FECB38;
 
   &.dark {
     --obric-color_main_2: #ffffff;

@@ -6,6 +6,7 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Button from 'components/Button';
+import PixelButton from 'components/PixelButton';
 import {
   numberCompactFormat,
   numberGroupFormat
@@ -80,7 +81,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
       Object.keys(ownedLiquidity?.assetsPooled).map((key) => {
         const val = ownedLiquidity?.assetsPooled[key];
         return (
-          <div className="text-color_text_1" key={`pool-asset-${key}`}>
+          <div className="text-bc-white" key={`pool-asset-${key}`}>
             {val ? (isTablet ? numberCompactFormat(val) : numberGroupFormat(val, 6) || 0) : 0} {key}
           </div>
         );
@@ -100,19 +101,19 @@ const PoolRowDetail = ({ pool }: IProps) => {
 
   return (
     <Fragment>
-      <div className="flex-col tablet:flex">
+      <div className="flex-col text-bc-white tablet:flex">
         <div className="hidden gap-6 p-4 tablet:flex tablet:bg-color_bg_table dark:tablet:bg-color_bg_row">
           <div className="flex flex-col">
             <span className="block text-sm leading-3 tablet:text-xs">
               Volume {poolFilter.timeBasis}
             </span>
-            <span className="text-color_text_1">{numberCompactFormat(poolStats.volume) || 0}</span>
+            <span className="">{numberCompactFormat(poolStats.volume) || 0}</span>
           </div>
           <div className="flex flex-col">
             <span className="block text-sm leading-3 tablet:text-xs">
               Fees {poolFilter.timeBasis}
             </span>
-            <span className="text-color_text_1">
+            <span className="">
               {numberCompactFormat(poolStats.fees)
                 ? `$${numberCompactFormat(poolStats.fees)}`
                 : 'Coming soon'}
@@ -122,47 +123,62 @@ const PoolRowDetail = ({ pool }: IProps) => {
         <div className="flex gap-6 tablet:flex-col tablet:bg-color_bg_panel tablet:p-4">
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[210px] grow flex-col gap-4 tablet:w-[82px]">
-              <span className="block text-sm leading-3 tablet:text-xs">Your Liquidity</span>
+              <span className="block text-sm leading-3 text-bc-white-40 tablet:text-xs">
+                Your Liquidity
+              </span>
               <div className="flex flex-col gap-1">
-                <span className="text-color_text_1">{userLiquidityLine1}</span>
-                <span className="text-color_text_1">{userLiquidityLine2}</span>
+                <span className="">{userLiquidityLine1}</span>
+                <span className="">{userLiquidityLine2}</span>
               </div>
             </div>
             <div className="flex grow flex-col gap-4">
-              <span className="block text-sm leading-3 tablet:text-xs">Assets Pooled</span>
+              <span className="block text-sm leading-3 text-bc-white-40 tablet:text-xs">
+                Assets Pooled
+              </span>
               <div className="flex flex-col gap-1">{assetsPooled}</div>
             </div>
             <div className="flex grow flex-col gap-4">
-              <span className="block text-sm leading-3 tablet:text-xs">Your Share</span>
-              <span className="text-color_text_1">
-                {numberGroupFormat(ownedLiquidityShare * 100, 3) || 0} %
+              <span className="block text-sm leading-3 text-bc-white-40 tablet:text-xs">
+                Your Share
               </span>
-              <span className="text-color_text_1">${owndedLiquidityUsdValue}</span>
+              <span className="">{numberGroupFormat(ownedLiquidityShare * 100, 3) || 0} %</span>
+              <span className="">$ {owndedLiquidityUsdValue || 0}</span>
             </div>
           </div>
           <div className="flex h-12 w-[292px] justify-end gap-4 tablet:w-full">
-            {
-              <Button
-                className="flex w-full max-w-[134px] items-center gap-2 rounded-none bg-color_main fill-white text-base text-white hover:opacity-90 tablet:max-w-full"
+            {wallet ? (
+              <PixelButton
+                width={126}
+                borderWidth={2}
+                height={34}
+                className="text-lg"
+                color="var(--bitcow-color-text-gold)"
+                isSolid={true}
                 onClick={() => handleOnClick('add')}>
-                {wallet ? (
-                  <Fragment>
-                    <PlusIcon />
-                    Deposit
-                  </Fragment>
-                ) : (
-                  'Connect Wallet'
-                )}
-              </Button>
-            }
+                <PlusIcon className="mr-2 fill-black" />
+                Deposit
+              </PixelButton>
+            ) : (
+              <PixelButton
+                width={126}
+                borderWidth={2}
+                height={34}
+                className="text-lg"
+                onClick={() => handleOnClick('add')}>
+                Connect wallet
+              </PixelButton>
+            )}
             {isV1 && wallet && ownedLiquidity?.invested && (
-              <Button
-                className="flex w-full items-center gap-2"
-                variant="outlined"
+              <PixelButton
+                width={126}
+                borderWidth={2}
+                height={34}
+                className="text-lg"
+                color="var(--bitcow-color-text-gold)"
                 onClick={() => handleOnClick('withdraw')}>
-                <MinusIcon />
+                <MinusIcon className="mr-2 fill-bc-gold" />
                 Withdraw
-              </Button>
+              </PixelButton>
             )}
           </div>
         </div>

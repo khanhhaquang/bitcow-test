@@ -6,7 +6,7 @@ import { useCallback, useMemo } from 'react';
 
 import { Collapse } from 'components/Antd';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
-import { MoreIcon } from 'resources/icons';
+import { ReactComponent as MoreIcon } from 'resources/icons/unfoldDetails.svg';
 
 import styles from './SwapDetail.module.scss';
 
@@ -67,13 +67,13 @@ const SwapDetail = ({
       {
         label: 'Price Impact',
         value: priceImpact,
-        className: 'text-color_error'
+        className: styles.priceImpact
       }
     ];
     return (
       <div className={classNames('flex flex-col gap-1')}>
         {details.map((detail) => (
-          <div className="flex justify-between text-xs text-color_text_1" key={detail.label}>
+          <div className="flex justify-between text-xs text-bc-white" key={detail.label}>
             <div className="">{detail.label}</div>
             <div className={detail.className}>{detail.value}</div>
           </div>
@@ -96,7 +96,7 @@ const SwapDetail = ({
     return (
       <div className={classNames('flex flex-col gap-1')}>
         {details.map((detail) => (
-          <div className="flex justify-between text-xs text-color_text_2" key={detail.label}>
+          <div className="flex justify-between text-xs text-bc-white-60" key={detail.label}>
             <div className="">{detail.label}</div>
             <div className="">{detail.value}</div>
           </div>
@@ -106,24 +106,22 @@ const SwapDetail = ({
   }, [fromToken.symbol, minimumOutput, toToken.symbol, values.slipTolerance]);
 
   return (
-    <div className={classNames('mt-2 bg-white_table dark:bg-color_bg_row', styles.collapse)}>
+    <div className={classNames('mt-2 bg-bc-grey-transparent2', styles.collapse)}>
       <Collapse
         ghost
         defaultActiveKey={['1']}
         expandIconPosition="end"
         expandIcon={({ isActive }) => (
           <div>
-            <MoreIcon
-              className={cx('fill-color_text_1', isActive ? '-rotate-180' : '-rotate-90')}
-            />
+            <MoreIcon className={cx(isActive ? '-rotate-180' : '0')} />
           </div>
         )}>
         <Panel
-          header={<div className="text-color_text_1">{swapRate}</div>}
+          header={<div className="text-bc-white">{swapRate}</div>}
           key="1"
-          className="text-color_text_1">
+          className="text-bc-white">
           {renderOutput()}
-          <hr className="my-4 h-[1px] w-full border-0 bg-white_gray_008 dark:bg-gray_008" />
+          <hr className="my-4 h-[1px] w-full border-0 bg-bc-white-10" />
           {renderDetails()}
         </Panel>
       </Collapse>

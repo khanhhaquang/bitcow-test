@@ -44,9 +44,26 @@ module.exports = {
         white_color_list_hover: '#EBEDF4',
 
         bc: {
-          white: 'var(--bitcow-text-white)',
-          light: 'var(--bitcow-text-light)',
-        }
+          white: {
+            DEFAULT: 'var(--bitcow-color-text-white)',
+            10: 'rgba(255, 255, 255, 0.1)',
+            20: 'rgba(255, 255, 255, 0.2)',
+            40: 'rgba(255, 255, 255, 0.4)',
+            50: 'rgba(255, 255, 255, 0.5)',
+            60: 'rgba(255, 255, 255, 0.6)',
+            70: 'rgba(255, 255, 255, 0.7)',
+            80: 'rgba(255, 255, 255, 0.8)',
+          },
+          main: 'var(--bitcow-color-text-main)',
+          red: 'var(--bitcow-color-text-red)',
+          orange: 'var(--bitcow-color-text-orange)',
+          gold: 'var(--bitcow-color-text-gold)',
+          blue: '#0083FE',
+        },
+
+        'bc-grey-transparent': 'rgba(0, 0, 0, 0.05)',
+        'bc-grey-transparent2': 'rgba(0, 0, 0, 0.1)',
+        'bc-input': 'rgba(0, 0, 0, 0.2)',
       },
       height: {
         13: '3.25rem',
@@ -68,13 +85,16 @@ module.exports = {
         dotBg: 'url(resources/img/dotBg.png)',
         accountGradientBg:
           'linear-gradient(51.34deg, rgba(255, 104, 39, 0.3) 0%, #FF792C 24.54%, #FF9C37 48.97%, #FF6827 70.53%, rgba(255, 104, 39, 0.3) 95.27%)',
-        accountBg: 'url(resources/img/accountBg.svg)'
+        accountBg: 'url(resources/img/accountBg.svg)',
+
+        'bc-swap': 'url(resources/img/swapBg.svg)',
+        'bc-pool': 'url(resources/img/poolBg.svg)',
       }
     },
     screens: {
       desktop: { max: '99999px' }, // desktop first
-      laptop: { max: '1439px' },
-      tablet: { max: '1023px' }
+      laptop: { max: '1440px' },
+      tablet: { max: '1024px' }
     },
     backgroundColor: (theme) => ({
       ...theme('colors'),
@@ -90,7 +110,9 @@ module.exports = {
       figma: '8px 8px 0px #2D2D2D',
       main1: '0px 4px 35px rgba(0, 0, 0, 0.05)',
       home: '-4px 8px 32px rgba(211, 207, 230, 0.4)',
-      dropdown: '0px 4px 8px rgba(0, 0, 0, 0.1)'
+      dropdown: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+
+      'bc-swap': '18px 18px 0px 0px rgba(0, 0, 0, 0.05), 12px 12px 0px 0px rgba(0, 0, 0, 0.10), 6px 6px 0px 0px rgba(0, 0, 0, 0.10)',
     },
     fontFamily: {
       Furore: 'Furore, sans-serif',

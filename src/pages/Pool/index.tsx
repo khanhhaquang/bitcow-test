@@ -12,7 +12,7 @@ import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import usePools from 'hooks/usePools';
-import { CancelIcon } from 'resources/icons';
+import { ReactComponent as PiexlCloseIcon } from 'resources/icons/pixelClose.svg';
 
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
@@ -94,25 +94,27 @@ const Pool = () => {
   }, [poolFilter.timeBasis]);
 
   const renderHeader = () => (
-    <div className="mb-8 flex justify-between tablet:flex-col">
-      <div className="font-Furore text-2xl text-color_text_1 tablet:text-lg">Pools</div>
-      <div className="flex gap-2 text-lg leading-4 text-color_text_2 tablet:mt-4">
-        <div className="flex items-center gap-2 bg-color_bg_panel px-6 py-[18px] tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+    <div className="flex items-center justify-between text-2xl text-bc-white tablet:flex-col">
+      <div className=" text-2xl tablet:text-lg">Pools</div>
+      <div className="flex gap-2 text-lg leading-4 text-bc-gold tablet:mt-4">
+        <div className="flex items-center px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+          <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
           <div className="">
             TVL <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-color_text_1 tablet:text-2xl">
+          <div className="tablet:text-2xl">
             ${' '}
             {isTablet
               ? numberCompactFormat(getTotalPoolsTVL())
               : numberCompactFormat(getTotalPoolsTVL(), 1)}
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-color_bg_panel py-[18px] px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+        <div className="flex items-center px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+          <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
           <div className="">
             Volume 24H <span className="tablet:hidden">:</span>
           </div>
-          <div className="text-color_text_1 tablet:text-2xl">
+          <div className="tablet:text-2xl">
             ${' '}
             {isTablet
               ? numberCompactFormat(getTotalPoolsVolume())
@@ -172,9 +174,9 @@ const Pool = () => {
   }, [filteredPools, checkIfInvested, tabs]);
 
   return (
-    <div className="mt-[100px] flex flex-col tablet:mt-4">
+    <div className="mt-[5%] flex h-fit max-w-[1206px] flex-col bg-bc-pool bg-cover bg-no-repeat p-9 text-bc-white shadow-bc-swap tablet:mt-4">
       {renderHeader()}
-      <div className="border-[1px] border-white_table bg-color_bg_table py-8 backdrop-blur-[15px] dark:border-[#272A2C] dark:backdrop-blur-lg tablet:border-0 tablet:bg-color_bg_1 tablet:p-0">
+      <div className="pt-6 tablet:border-0 tablet:bg-color_bg_1 tablet:p-0">
         <div className={cx('hidden tablet:block')}>
           <Radio.Group onChange={(e) => setActiveTab(e.target.value)} value={activeTab}>
             {tabs.map((tab) => (
@@ -211,16 +213,18 @@ const Pool = () => {
                   />
                 </div>
                 {/* Desktop */}
+                {/*
                 <SelectInput
                   className={
-                    "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Time_Basis'] tablet:hidden"
+                    "relative !w-1/2 !bg-transparent before:absolute before:top-2 before:left-3 before:z-10 before:text-bc-white before:content-['Time_Basis'] tablet:hidden"
                   }
                   value={poolFilter.timeBasis}
                   options={filterOptions}
                   onChange={(val) => onUpdateFilter(val, 'timeBasis')}
                 />
+                */}
                 <SearchInput
-                  className={'w-1/2 tablet:mt-4 tablet:w-full'}
+                  className={'w-full tablet:mt-4 tablet:w-full'}
                   value={poolFilter.text}
                   onChange={(val) => onUpdateFilter(val, 'text')}
                   onSearch={() => {}}
@@ -236,7 +240,8 @@ const Pool = () => {
         className=""
         // wrapClassName={styles.modal}
         open={!!liquidityModal}
-        closeIcon={<CancelIcon />}
+        closeIcon={<PiexlCloseIcon className="relative top-[28px]" />}
+        bodyStyle={{ padding: 0 }}
         width={512}
         destroyOnClose>
         {liquidityModal &&

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { BaseToken } from 'obric-merlin';
 
 import CoinIcon from 'components/CoinIcon';
-import { CaretIcon } from 'resources/icons';
+import { ReactComponent as CoinSelectIcon } from 'resources/icons/coinSelect.svg';
 
 const CoinSelectButton = ({
   className = '',
@@ -18,7 +18,7 @@ const CoinSelectButton = ({
   return (
     <div
       className={classNames(
-        'flex w-fit cursor-pointer items-center gap-2 bg-color_bg_token fill-color_text_1 p-2 text-lg font-bold  leading-4',
+        'flex w-fit cursor-pointer items-center gap-2 border border-bc-white-60 bg-bc-white-10 fill-color_text_1 p-2 text-lg font-bold  leading-4',
         {
           'pointer-events-none cursor-not-allowed': isDisabled
         },
@@ -26,14 +26,14 @@ const CoinSelectButton = ({
       )}
       onClick={onClick}>
       {token?.symbol ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-bc-white">
           <CoinIcon token={token} size={20} />
           {token.symbol}
         </div>
       ) : (
         <div className="small">--</div>
       )}
-      <CaretIcon className="font-icon text-grey-300 fill-inherit" />
+      <CoinSelectIcon />
     </div>
   );
 };

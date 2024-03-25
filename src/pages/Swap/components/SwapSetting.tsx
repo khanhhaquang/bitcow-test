@@ -46,11 +46,10 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   // }, [setFieldValue]);
 
   return (
-    <div className="w-full font-Rany text-color_text_1">
+    <div className="w-full bg-bc-swap p-5  text-bc-white">
       <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
         Transaction Settings
       </div>
-      <hr className="my-4 h-[1px] border-0 bg-white_color_list_hover dark:bg-color_list_hover tablet:my-0" />
       <div className="mt-6 tablet:mx-5">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">
@@ -61,13 +60,13 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
               max={10}
               isConfine={true}
               placeholder="Custom"
-              className={classNames('h-full w-full bg-color_bg_input py-3 px-4 text-color_text_1')}
+              className={classNames('h-full w-full bg-bc-input py-3 px-4 text-bc-white')}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
-            <div className={'absolute right-3 text-base text-color_text_2'}>%</div>
+            <div className={'absolute right-3 text-base text-bc-white-60'}>%</div>
           </div>
           {/* <Button
-            className="rounded-none border-[1px] border-color_main py-3 px-5 font-Rany text-base text-color_main hover:bg-color_main hover:text-white tablet:h-10"
+            className="rounded-none border-[1px] border-color_main py-3 px-5  text-base text-color_main hover:bg-color_main hover:text-white tablet:h-10"
             variant="outlined"
             onClick={onClickAuto}>
             Auto
@@ -76,9 +75,9 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
       </div>
       <div className="mt-6 tablet:mx-5">
         <SubTitle>Transaction Deadline</SubTitle>
-        <div className="flex h-10 w-fit items-center gap-x-4">
+        <div className="relative flex h-10 w-full items-center gap-x-4">
           <PositiveFloatNumInput
-            className={classNames('h-full bg-color_bg_input py-3 px-4 text-color_text_1')}
+            className={classNames('h-full w-full bg-bc-input py-3 px-4 text-bc-white')}
             inputAmount={values.trasactionDeadline}
             isConfine={true}
             placeholder="0"
@@ -86,7 +85,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
             max={600}
             onAmountChange={(v) => setFieldValue('trasactionDeadline', v)}
           />
-          <div className="text-base capitalize">minutes</div>
+          <div className="absolute right-3 text-base text-bc-white-60">minutes</div>
         </div>
       </div>
       {/* <hr className="my-4 h-[1px] border-0 bg-color_list_hover tablet:mx-5" />
@@ -114,20 +113,24 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
       {/* Mobile */}
       <div className="hidden bg-color_bg_panel p-4 tablet:block">
         <Button
-          variant="primary"
+          variant="pixelFrame"
           // disabled={activeWallet && (!isValid || !dirty)}
           onClick={onConfirm}>
           SAVE
         </Button>
       </div>
       {/* Desktop */}
-      <Button
-        className="mt-5 tablet:hidden"
-        variant="primary"
-        // disabled={activeWallet && (!isValid || !dirty)}
-        onClick={onConfirm}>
-        SAVE
-      </Button>
+      <div className="mt-5 flex justify-center tablet:hidden">
+        <Button
+          className=""
+          variant="pixelFrame"
+          width="206px"
+          height="40px"
+          // disabled={activeWallet && (!isValid || !dirty)}
+          onClick={onConfirm}>
+          SAVE
+        </Button>
+      </div>
     </div>
   );
 };

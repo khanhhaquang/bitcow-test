@@ -25,16 +25,16 @@ const Home = () => {
 
   const renderTradeStats = () => {
     return (
-      <div className="mt-[200px] flex font-Rany text-color_text_2 tablet:mt-0 tablet:flex-col tablet:gap-2">
+      <div className="mt-[200px] flex  text-color_text_2 tablet:mt-0 tablet:flex-col tablet:gap-2">
         <div className="flex flex-col tablet:w-full tablet:flex-col-reverse tablet:gap-2 tablet:bg-gray_008 tablet:py-4">
           <div className="flex gap-2 tablet:justify-center">
             <div className="text-lg font-light tablet:text-sm">Total Value Locked</div>
-            {/* <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_minor tablet:text-xs">
+            {/* <div className="bg-color_bg_hover px-2 py-1  text-sm text-color_minor tablet:text-xs">
               1.88%
             </div> */}
           </div>
           <div className="flex items-center gap-4 tablet:justify-center">
-            <div className="font-Furore text-2xl text-color_text_1 tablet:text-2xl">{tvl}</div>
+            <div className=" text-2xl text-color_text_1 tablet:text-2xl">{tvl}</div>
             {/* <LeftArrowIcon className="-rotate-45 fill-color_minor" /> */}
           </div>
         </div>
@@ -42,12 +42,12 @@ const Home = () => {
         <div className="flex flex-col tablet:w-full tablet:flex-col-reverse tablet:gap-2 tablet:bg-gray_008 tablet:py-4">
           <div className="flex gap-2 tablet:justify-center">
             <div className="text-lg font-light tablet:text-sm">24 Hour Volume</div>
-            {/* <div className="bg-color_bg_hover px-2 py-1 font-Furore text-sm text-color_main tablet:text-xs">
+            {/* <div className="bg-color_bg_hover px-2 py-1  text-sm text-color_main tablet:text-xs">
               1.88%
             </div> */}
           </div>
           <div className="flex items-center gap-4 tablet:justify-center">
-            <div className="font-Furore text-2xl text-color_text_1 tablet:text-2xl">{vol24hr}</div>
+            <div className=" text-2xl text-color_text_1 tablet:text-2xl">{vol24hr}</div>
             {/* <LeftArrowIcon className="rotate-45 fill-color_main" /> */}
           </div>
         </div>
@@ -61,7 +61,7 @@ const Home = () => {
         <div className="relative w-1/3 grow pb-36 pt-[100px] tablet:w-full tablet:pt-[60px] tablet:pb-8">
           <hr className="absolute top-0 right-0 h-full w-[1px] border-0 bg-color_border desktop:block tablet:hidden" />
           <LazyShow>
-            <div className="font-Furore text-5xl uppercase leading-[60px] text-color_text_1 tablet:text-2xl tablet:leading-7">
+            <div className=" text-5xl uppercase leading-[60px] text-color_text_1 tablet:text-2xl tablet:leading-7">
               SMART LIQUIDITY <br /> MATTERS
             </div>
             <div className="mt-8 text-lg text-color_text_2 tablet:mt-4 tablet:text-sm">
@@ -70,7 +70,7 @@ const Home = () => {
             <div className="mt-16 flex gap-6 tablet:mt-8 tablet:gap-4">
               <NavLink
                 to="swap"
-                className="flex items-center gap-2 rounded-none bg-color_main py-[18px] px-6 font-Furore text-base leading-4 text-white hover:text-white hover:opacity-90 tablet:grow tablet:py-[14px] tablet:px-5 tablet:text-sm tablet:leading-3">
+                className="flex items-center gap-2 rounded-none bg-color_main py-[18px] px-6  text-base leading-4 text-white hover:text-white hover:opacity-90 tablet:grow tablet:py-[14px] tablet:px-5 tablet:text-sm tablet:leading-3">
                 LAUNCH APP
                 <LeftArrowIcon className="fill-white tablet:h-[18px] tablet:w-[18px]" />
               </NavLink>
@@ -78,7 +78,7 @@ const Home = () => {
                 href="https://obricxyz.gitbook.io/smart/"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 rounded-none border-[1px] border-color_main py-[18px] px-6 font-Furore text-base text-color_main hover:bg-gray_02 hover:text-color_main tablet:grow tablet:px-5 tablet:py-[14px] tablet:text-sm tablet:leading-3">
+                className="flex items-center gap-2 rounded-none border-[1px] border-color_main py-[18px] px-6  text-base text-color_main hover:bg-gray_02 hover:text-color_main tablet:grow tablet:px-5 tablet:py-[14px] tablet:text-sm tablet:leading-3">
                 READ DOCS
                 <DocsIcon className="fill-color_main tablet:h-[18px] tablet:w-[18px]" />
               </a>

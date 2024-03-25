@@ -3,11 +3,12 @@
 import { routes } from 'App.routes';
 import cx from 'classnames';
 import { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Drawer, Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
 // import ThemeToggler from 'components/ThemeToggler';
+import PixelButton from 'components/PixelButton';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { MenuIcon } from 'resources/icons';
@@ -20,6 +21,7 @@ const { Header } = Layout;
 const PageHeader: React.FC = () => {
   const [currentPageName] = useCurrentPage();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const nav = useNavigate();
 
   const renderNavItems = useCallback(() => {
     return routes.map(({ name, path, hidden }) => {
@@ -31,7 +33,7 @@ const PageHeader: React.FC = () => {
           className={'group !bg-transparent'}>
           <Link
             to={path || '/'}
-            className="text-[24px] font-normal uppercase leading-none !text-bc-light group-hover:!text-bc-white tablet:font-Furore tablet:!text-color_text_2">
+            className="tablet: text-[24px] font-normal uppercase leading-none !text-bc-white-60 group-hover:!text-bc-white tablet:!text-color_text_2">
             {name}
           </Link>
         </Menu.Item>
@@ -54,21 +56,30 @@ const PageHeader: React.FC = () => {
             {renderNavItems()}
           </Menu>
         </div>
-        <div className="flex h-full items-center justify-center gap-4 px-20">
-          <div className="flex h-10 w-[158px] cursor-pointer items-center justify-center">
-            {<WalletConnector />}
-          </div>
+        <div className="flex h-full items-center justify-center pr-[40px]">
+          <WalletConnector />
           {/*
           <ThemeToggler />
             */}
         </div>
       </div>
-    ) : null;
+    ) : (
+      <PixelButton
+        className="mr-[60px]"
+        width={177}
+        height={44}
+        borderWidth={4}
+        color="var(--bitcow-color-text-white)"
+        isSolid
+        onClick={() => nav('/swap')}>
+        <span className="text-2xl uppercase text-bc-blue">Launch app</span>
+      </PixelButton>
+    );
   };
 
   const rednerMobileMenu = () => {
     return (
-      <div className="flex h-full flex-col justify-between">
+      <div className="flex h-full flex-col justify-between bg-whiteBg">
         <div className="flex flex-col items-start">
           <Link
             to="/"
@@ -98,16 +109,12 @@ const PageHeader: React.FC = () => {
 
   return (
     <Header
-      className={cx('z-30 h-[72px] w-full bg-transparent px-0 tablet:h-[64px]', {
-        'absolute top-0 z-10 h-[126px] bg-transparent tablet:h-[64px]': currentPageName === 'Home'
-      })}>
+      className={cx(
+        'z-10 h-[140px] w-full bg-transparent px-0 pt-[59px] tablet:pt-0 tablet:pb-[40px]'
+      )}>
       <div
         className={cx(
-          'relative top-0 left-0 mx-auto flex h-full items-center  tablet:border-b-[1px] tablet:border-color_border tablet:px-4',
-          {
-            'tablet:justify-between': currentPageName !== 'Home',
-            'tablet:justify-center': currentPageName === 'Home'
-          }
+          'tablet:item-center relative top-0 left-0 mx-auto flex h-full items-start tablet:justify-between tablet:px-4'
         )}>
         <div className={cx('h-full pl-[60px] tablet:pl-0')}>
           <Link to="/" className={cx('flex h-full items-center justify-center hover:-rotate-12')}>
@@ -135,13 +142,26 @@ const PageHeader: React.FC = () => {
         </div>
         {/* Mobile - non home page */}
         {currentPageName !== 'Home' && (
-          <div className="hidden items-center gap-2 tablet:flex">
-            <div className="h-8">
-              <WalletConnector />
-            </div>
+          <div className="hidden h-full items-center gap-x-2 tablet:flex">
+            <WalletConnector />
             <Button className="h-8 w-8" variant="icon" onClick={() => setIsSideMenuOpen(true)}>
               <MenuIcon />
             </Button>
+          </div>
+        )}
+        {/* Mobile - home page */}
+        {currentPageName === 'Home' && (
+          <div className="flex h-full items-center">
+            <PixelButton
+              className=""
+              width={177}
+              height={44}
+              borderWidth={4}
+              color="var(--bitcow-color-text-white)"
+              isSolid
+              onClick={() => nav('/swap')}>
+              <span className="text-2xl uppercase text-bc-blue">Launch app</span>
+            </PixelButton>
           </div>
         )}
       </div>

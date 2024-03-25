@@ -18,6 +18,7 @@ interface TProps {
   width?: number | string;
   destroyOnClose?: boolean;
   mobileHeight?: number | string;
+  bodyStyle?: React.CSSProperties;
 }
 
 const ObricModal: React.FC<TProps> = ({ className, ...rest }) => {

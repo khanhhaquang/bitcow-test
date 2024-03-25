@@ -15,3 +15,9 @@
     }
   }
 }
+
+.priceImpact {
+  display: inline-block;
+  padding: 2px 4px;
+  @apply text-white bg-bc-red;
+}

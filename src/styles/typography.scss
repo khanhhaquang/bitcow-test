@@ -1,17 +1,6 @@
 @font-face {
-  font-family: 'Furore';
-  src: local('Furore'), url('../resources/fonts/Furore/Furore.otf') format('truetype');
+  font-family: "Neue Pixel Grotesk";
+  src: local("Neue Pixel Grotesk"), url("../resources/fonts/NeuePixelGrotesk/Neue-Pixel-Grotesk.otf") format("truetype");
   font-weight: normal;
-}
-
-@font-face {
-  font-family: 'Rany';
-  src: local('Rany'), url('../resources/fonts/Rany/Rany.otf') format('truetype');
-  font-weight: normal;
-}
-
-@font-face {
-  font-family: 'Rany-m';
-  src: local('Rany-m'), url('../resources/fonts/Rany/Rany-Medium.otf') format('truetype');
-  font-weight: medium;
+  font-display: fallback;
 }

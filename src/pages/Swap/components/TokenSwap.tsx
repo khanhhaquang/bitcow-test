@@ -8,10 +8,14 @@ import { Tooltip } from 'components/Antd';
 import Button from 'components/Button';
 import Card from 'components/Card';
 import ObricModal from 'components/ObricModal';
+import PixelButton from 'components/PixelButton';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import useTokenBalance from 'hooks/useTokenBalance';
-import { CancelIcon, SettingBlackIcon, SettingWhiteIcon, SwapIcon } from 'resources/icons';
+import { CancelIcon, SettingsIcon } from 'resources/icons';
+import { ReactComponent as CoinSwapIcon } from 'resources/icons/coinSwap.svg';
+import { ReactComponent as PiexlCloseIcon } from 'resources/icons/pixelClose.svg';
+import { ReactComponent as SwapBorder } from 'resources/img/swapBorder.svg';
 import { openErrorNotification } from 'utils/notifications';
 
 import CurrencyInput from './CurrencyInput';
@@ -108,7 +112,7 @@ const TokenSwap = () => {
 
   const buttonCaption = useMemo(() => {
     if (!wallet) {
-      return 'Connect to Wallet';
+      return 'Connect Wallet';
     } else if ((!uiBalance && isReady) || !fromUiAmt) {
       return 'SWAP';
     } else if (!sufficientBalance) {
@@ -120,41 +124,35 @@ const TokenSwap = () => {
 
   const renderCardHeader = () => (
     <Fragment>
-      <Tooltip title="Setting" zIndex={isTablet ? -1 : 10} openClassName="tablet:hidden">
-        <button
-          className="absolute top-0  right-0 z-10 cursor-pointer fill-none stroke-none py-6 px-5 tablet:py-4"
-          onClick={() => setIsSettingsOpen(true)}>
-          <span className="block dark:hidden">
-            <SettingBlackIcon />
-          </span>
-          <span className="hidden dark:block">
-            <SettingWhiteIcon />
-          </span>
-        </button>
-      </Tooltip>
-      <div className="relative flex w-full justify-start">
-        <h5 className="text-lg font-bold leading-4 text-inherit">Swap</h5>
+      <div className="relative flex w-full items-center text-bc-white">
+        <div className="leading-0 mr-auto text-[36px]">Swap</div>
+        <Tooltip title="Setting" zIndex={isTablet ? -1 : 10} openClassName="tablet:hidden">
+          <button className="" onClick={() => setIsSettingsOpen(true)}>
+            <SettingsIcon />
+          </button>
+        </Tooltip>
       </div>
     </Fragment>
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[512px] flex-col border-[1px] border-color_border_2 bg-color_bg_panel fill-color_text_1 stroke-none py-6 px-5 font-Rany text-color_text_1 backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
+    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none py-6 px-5 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
       {renderCardHeader()}
       <div className="mt-5 flex w-full flex-col tablet:mt-4">
-        <div className="relative flex flex-col gap-[2px]">
-          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_row">
-            <div className="mb-2 text-xs uppercase text-color_text_2">Pay</div>
+        <div className="relative flex flex-col">
+          <div className="relative border-t-2 border-l-2 border-r-2 border-bc-orange bg-bc-grey-transparent p-4">
+            <div className="mb-2 text-xs uppercase text-bc-white-60">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
+            <SwapBorder className="absolute left-0 bottom-0 w-full translate-y-1/2" />
           </div>
           <Button
             variant="icon"
-            className="group absolute top-1/2 left-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-2 border-color_bg_panel bg-white_gray_bg p-0 dark:border-color_bg_table dark:bg-color_bg_row"
+            className="group absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-transparent p-0"
             onClick={onClickSwapToken}>
-            <SwapIcon className="fill-color_text_2 group-hover:fill-color_text_1 tablet:fill-color_text_1" />
+            <CoinSwapIcon />
           </Button>
-          <div className="bg-white_gray_bg p-4 dark:bg-color_bg_row">
-            <div className="mb-2 text-xs uppercase text-color_text_2">RECEIVE</div>
+          <div className="border-b-2 border-l-2 border-r-2 border-bc-orange bg-bc-grey-transparent p-4">
+            <div className="mb-2 text-xs uppercase text-bc-white-60">RECEIVE</div>
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>
@@ -167,22 +165,27 @@ const TokenSwap = () => {
             fromUiAmt={fromUiAmt}
           />
         )}
-        <Button
-          isLoading={isSubmitting}
-          className="mt-5"
-          variant="primary"
-          disabled={wallet && (!isValid || !dirty || !sufficientBalance)}
-          onClick={!wallet ? openWalletModal : submitForm}>
-          {buttonCaption}
-        </Button>
+        <div className="flex justify-center">
+          <PixelButton
+            isLoading={isSubmitting}
+            width={206}
+            height={48}
+            borderWidth={4}
+            className="mt-5 bg-bc-white-10 uppercase"
+            disabled={wallet && (!isValid || !dirty || !sufficientBalance)}
+            onClick={!wallet ? openWalletModal : submitForm}>
+            {buttonCaption}
+          </PixelButton>
+        </div>
       </div>
       <ObricModal
         onCancel={() => setIsSettingsOpen(false)}
         className=""
         // wrapClassName={styles.modal}
         open={isSettingsOpen}
-        closeIcon={<CancelIcon />}
+        closeIcon={<PiexlCloseIcon className="top-[24px]" />}
         width={424}
+        bodyStyle={{ padding: 0 }}
         // mobileHeight={556}
       >
         <SwapSetting onClose={() => setIsSettingsOpen(false)} />

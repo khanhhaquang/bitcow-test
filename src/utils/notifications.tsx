@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 
 import { notification } from 'components/Antd';
 import TextLink from 'components/TextLink';
-import { CancelIcon, NotiErrorIcon, HintIcon, NotiSuccessIcon } from 'resources/icons';
+import { NotiErrorIcon, HintIcon, NotiSuccessIcon } from 'resources/icons';
+import { ReactComponent as PixelCloseIcon } from 'resources/icons/pixelClose.svg';
 
 type NotificationType = 'success' | 'error' | 'info' | 'warn';
 
@@ -22,7 +23,7 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
   if (type === 'success') {
     icon = <NotiSuccessIcon />;
   } else if (type === 'error') {
-    icon = <NotiErrorIcon className="fill-color_error" />;
+    icon = <NotiErrorIcon />;
   } else if (type === 'info') {
     icon = <HintIcon />;
   }
@@ -33,8 +34,8 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     placement: 'topRight',
     icon,
     className: `obric-notification obric-notification--${type}`,
-    closeIcon: <CancelIcon className="h-full w-full" />,
-    top: 84,
+    closeIcon: <PixelCloseIcon className="h-full w-full" />,
+    top: 160,
     duration: 6
   });
 };
@@ -44,28 +45,24 @@ export const openErrorNotification = (args: INotificationArgs) =>
 
 export const openTxSuccessNotification = (txHash: string, content: string) => {
   const detail = (
-    <p>
+    <div>
       <div>{content}</div>
-      <TextLink
-        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
-        className="!text-color_main">
+      <TextLink href={`https://testnet-scan.merlinchain.io/tx/${txHash}`} className="!text-bc-blue">
         View on Explorer
       </TextLink>
-    </p>
+    </div>
   );
   return openNotification({ detail, title: 'Transaction Success' });
 };
 
 export const openTxErrorNotification = (txHash: string, content: string) => {
   const detail = (
-    <p>
+    <div>
       <div>{content}</div>
-      <TextLink
-        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
-        className="text-color_main">
+      <TextLink href={`https://testnet-scan.merlinchain.io/tx/${txHash}`} className="!text-bc-blue">
         View on Explorer
       </TextLink>
-    </p>
+    </div>
   );
   return openNotification({ type: 'error', detail, title: 'Transaction Failed' });
 };

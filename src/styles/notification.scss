@@ -1,29 +1,30 @@
 .ant-notification {
   .ant-notification-notice {
-    @apply relative rounded-none bg-white p-4 text-color_text_1 dark:bg-color_bg_3;
-    &::before {
-      content: '';
-      width: 2px;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
+    width: 354px;
+    height: 64px;
+    @apply relative rounded-none p-3 text-bc-white;
+    border: 2px solid #4DD12C;
+    background: rgba(0, 0, 0, 0.40);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.10);
+
+    .ant-notification-notice-message {
+      @apply text-lg leading-none #{!important};
     }
-    &::after {
-      @apply bg-[#ebecf0] dark:bg-[#040822] #{!important};
-      content: '';
-      position: absolute;
-      width: 17.66px;
-      height: 17.66px;
-      top: -9px;
-      right: -9px;
-      transform: rotate(-45deg);
+    .ant-notification-notice-description {
+      @apply text-bc-white-60 text-sm;
     }
-    &.obric-notification--success::before {
-      @apply bg-color_main;
+
+    &.obric-notification--success {
+      border-color: #4DD12C;
+      .ant-notification-notice-message {
+        color: #4DD12C;
+      }
     }
-    &.obric-notification--error::before {
-      @apply bg-color_error;
+    &.obric-notification--error {
+      border-color: #FF1F00;
+      .ant-notification-notice-message {
+        color: #FF1F00;
+      }
     }
     // &.obric-notification--warn::before {
     //   @apply bg-warn-500;
@@ -32,12 +33,6 @@
     //   @apply bg-info-500;
     // }
     // @apply rounded-[16px];
-    .ant-notification-notice-message {
-      @apply text-lg text-color_text_1;
-    }
-    .ant-notification-notice-close {
-      @apply h-6 w-6 dark:opacity-30 dark:hover:opacity-100;
-    }
     // .ant-notification-notice-description {
     //   @apply text-grey-700 body-medium;
     // }

@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
 import { Pool } from '../Pool';
-import { PoolConfig, POOLS } from '../configs';
+import { PoolConfig, CONFIG } from '../configs';
 import { Sdk } from '../Sdk';
-import { SWAP_ROUTER } from '../constant';
+
 // export const URL = `https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH`;
 export const URL = `https://testnet-rpc.merlinchain.io`;
 export const txOption = { gasPrice: 100000000 };
@@ -21,7 +21,7 @@ export function getSigner() {
     }
 }
 function getPoolConfig(xToken: string, yToken: string): PoolConfig {
-    for (const pool of POOLS) {
+    for (const pool of CONFIG.merlinTestnet.pools) {
         if (pool.xToken.symbol === xToken && pool.yToken.symbol === yToken) {
             return pool;
         }
@@ -35,7 +35,7 @@ export async function getPool(xToken: string, yToken: string): Promise<Pool> {
 }
 export async function getSdk() {
     const signer = getSigner();
-    return await Sdk.create(signer.provider, txOption, signer.signer);
+    return await Sdk.create(signer.provider, CONFIG.merlinTestnet, txOption, signer.signer);
 }
 export async function checkAndApprovePool(sdk: Sdk, pool: Pool) {
     await sdk.coinList.approve(pool.xToken, pool.poolAddress);
@@ -44,6 +44,6 @@ export async function checkAndApprovePool(sdk: Sdk, pool: Pool) {
 
 export async function checkAndApproveSdk(sdk: Sdk) {
     for (const token of sdk.coinList.tokens) {
-        await sdk.coinList.approve(token, SWAP_ROUTER);
+        await sdk.coinList.approve(token, sdk.swapRouter);
     }
 }

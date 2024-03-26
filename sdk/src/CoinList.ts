@@ -1,8 +1,8 @@
 import { BaseToken, TxOption } from './types';
-import { BTC, POOLS } from './configs';
+import { BTC, PoolConfig } from './configs';
 import { Contract, Provider, Signer } from 'ethers';
 import { ABI_ERC20 } from './abi/ERC20';
-import { MAX_U256, SWAP_ROUTER } from './constant';
+import { MAX_U256 } from './constant';
 import BigNumber from 'bignumber.js';
 import { ContractRunner } from './ContractRunner';
 
@@ -16,7 +16,7 @@ export class CoinList extends ContractRunner {
      * @private
      */
     private allowances: Record<string, Record<string, bigint>>;
-    constructor(provider: Provider, txOption?: TxOption, signer?: Signer, public poolConfigs = POOLS) {
+    constructor(provider: Provider, public poolConfigs: PoolConfig[], txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
         const tokensSet = new Set<BaseToken>();
         poolConfigs.map((poolConfig) => {

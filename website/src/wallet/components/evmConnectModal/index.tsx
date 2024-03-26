@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import { chains } from '@particle-network/chains';
+import { useCallback, useMemo } from 'react';
 
 import styles from './evm.connect.module.scss';
 
@@ -11,9 +12,11 @@ import Modal from '../modal';
 import { BtcWalletButton, EvmWalletButton } from '../wallet';
 
 export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  const { evmConnectors, btcConnectors, closeModal, btcConnect, evmConnect } =
+  const { evmConnectors, btcConnectors, closeModal, btcConnect, evmConnect, evmChainId } =
     useEvmConnectContext();
-
+  const showBtcWallets = useMemo(() => {
+    return chains.getEVMChainInfoById(evmChainId) !== undefined;
+  }, [evmChainId]);
   const onBtcConnect = useCallback(
     async (connector: BaseConnector) => {
       if (connector.isReady()) {
@@ -45,20 +48,23 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
       contentClassName={styles.evmConnectModal}>
       <div className={styles.title}>{'Choose Wallet'}</div>
       <img className={styles.closeBtn} src={close} onClick={onClose}></img>
-      <div className={styles.walletsAndTitle}>
-        <div className={styles.walletTypeTitle}>{'BTC Wallets'}</div>
-        <div className={styles.wallets}>
-          {btcConnectors.map((connector) => {
-            return (
-              <BtcWalletButton
-                connector={connector}
-                key={connector.metadata.id}
-                btcConnect={onBtcConnect}></BtcWalletButton>
-            );
-          })}
+      {showBtcWallets && (
+        <div className={styles.walletsAndTitle}>
+          <div className={styles.walletTypeTitle}>{'BTC Wallets'}</div>
+          <div className={styles.wallets}>
+            {btcConnectors.map((connector) => {
+              return (
+                <BtcWalletButton
+                  connector={connector}
+                  key={connector.metadata.id}
+                  btcConnect={onBtcConnect}></BtcWalletButton>
+              );
+            })}
+          </div>
         </div>
-      </div>
-      <hr className={styles.separate} />
+      )}
+      {showBtcWallets && <hr className={styles.separate} />}
+
       <div className={styles.walletsAndTitle}>
         <div className={styles.walletTypeTitle}>{'EVM Wallets'}</div>
         <div className={styles.wallets}>

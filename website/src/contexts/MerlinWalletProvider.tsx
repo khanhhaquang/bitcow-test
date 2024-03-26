@@ -12,7 +12,7 @@ import {
   TxOption,
   UserLpAmount
 } from 'obric-merlin';
-import { SWAP_ROUTER } from 'obric-merlin/dist/constant';
+import { CONFIG } from 'obric-merlin/dist/configs';
 import { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import useNetworkConfiguration from 'hooks/useNetworkConfiguration';
@@ -66,7 +66,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     const provider = new ethers.JsonRpcProvider(networkCfg.fullNodeUrl, undefined, {
       batchMaxCount: 1
     });
-    setObricSDK(new ObricSDK(provider as any, txOption));
+    setObricSDK(new ObricSDK(provider as any, CONFIG.merlinTestnet, txOption));
     setShouldRefresh(true);
   }, [networkCfg, txOption]);
 
@@ -128,6 +128,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const refreshSDKState = useCallback(async () => {
     if (obricSDK && shouldRefresh) {
+      console.log('refreshSDKState');
       fetchPools();
       fetchTokenBalances();
       fetchUserPoolLpAmount();
@@ -181,12 +182,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       // todo check transaction result detail
       if (obricSDK) {
         setPendingTx(true);
-        if (!(await checkApprove(fromToken, SWAP_ROUTER))) {
+        if (!(await checkApprove(fromToken, obricSDK.swapRouter))) {
           setPendingTx(false);
           success = false;
           return success;
         }
-
         try {
           const result = await obricSDK.swap(quote, minOutputAmt);
           if (result.status === 1) {
@@ -204,8 +204,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           success = true;
         } catch (e) {
           checkTransactionError(e);
+          success = false;
+        } finally {
+          setPendingTx(false);
+          setShouldRefresh(true);
         }
-        setPendingTx(false);
       } else {
         success = false;
       }
@@ -237,13 +240,16 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
                 `Failed to deposit to ${pool.token0.symbol}-${pool.token1.symbol}`
               );
             }
+            success = true;
+          } else {
+            success = false;
           }
-          setPendingTx(false);
         }
       } catch (error) {
         checkTransactionError(error);
         success = false;
       } finally {
+        setPendingTx(false);
         setShouldRefresh(true);
         return success;
       }
@@ -275,6 +281,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         }
       } catch (error) {
         checkTransactionError(error);
+        setPendingTx(false);
       } finally {
         setShouldRefresh(true);
         return success;

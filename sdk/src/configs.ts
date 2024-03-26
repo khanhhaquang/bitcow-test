@@ -1,4 +1,4 @@
-import { BaseToken } from './types';
+import { BaseToken, Config } from './types';
 
 export const BTC: BaseToken = {
     name: 'Bit coin',
@@ -73,4 +73,10 @@ export const POOL_USDC_USDM: PoolConfig = {
     lpToken: '0xd3729b5F9b043851906177939Cba20294e795b8E'
 };
 
-export const POOLS: PoolConfig[] = [POOL_USDC_USDT, POOL_USDC_USDM];
+export const CONFIG: { merlinTestnet: Config; botanixTestnet: Config } = {
+    merlinTestnet: {
+        swapRouter: '0x2d112A7C62735CC1ee2a66AffAA99364aA039a6C',
+        pools: [POOL_USDC_USDT, POOL_USDC_USDM]
+    },
+    botanixTestnet: { swapRouter: '', pools: [] }
+};

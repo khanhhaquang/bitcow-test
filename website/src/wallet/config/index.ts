@@ -20,5 +20,12 @@ export const CHAINS: ChainConfig = {
     nativeCurrency: BTC,
     rpcUrls: ['https://testnet-rpc.merlinchain.io'],
     blockExplorerUrls: ['https://testnet-scan.merlinchain.io/']
+  },
+  3636: {
+    chainId: 3636,
+    chainName: 'Botanix Testnet',
+    nativeCurrency: BTC,
+    rpcUrls: ['https://node.botanixlabs.dev'],
+    blockExplorerUrls: ['https://blockscout.botanixlabs.dev']
   }
 };

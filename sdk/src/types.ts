@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 import { TransactionReceipt } from 'ethers';
+import { PoolConfig } from './configs';
 
 export type TxOption = { gasPrice?: number; gasLimit?: number };
 
@@ -104,3 +105,8 @@ export interface IPool {
 
     setTxOption(txOption?: TxOption): void;
 }
+
+export type Config = {
+    swapRouter: string;
+    pools: PoolConfig[];
+};

@@ -1,10 +1,9 @@
-import { POOLS, WBTC } from './configs';
+import { PoolConfig, WBTC } from './configs';
 import { Pool } from './Pool';
-import { BaseToken, Quote, TxOption, UserLpAmount } from './types';
+import { BaseToken, Config, Quote, TxOption, UserLpAmount } from './types';
 import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 import { Contract, Provider, Signer } from 'ethers';
-import { SWAP_ROUTER } from './constant';
 import { ABI_SWAP_ROUTER } from './abi/SwapRouter';
 import { isBTC } from './utils';
 import { CoinList } from './CoinList';
@@ -15,11 +14,11 @@ export class Sdk extends ContractRunner {
     readonly pools: Pool[];
     private router: Contract | undefined;
     coinList: CoinList;
-    constructor(provider: Provider, txOption?: TxOption, signer?: Signer, poolConfigs = POOLS) {
+    constructor(provider: Provider, public config: Config, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
-        this.pools = poolConfigs.map((poolConfig) => new Pool(provider, poolConfig, txOption, signer));
-        this.router = new Contract(SWAP_ROUTER, ABI_SWAP_ROUTER, provider);
-        this.coinList = new CoinList(provider, txOption, signer, poolConfigs);
+        this.pools = config.pools.map((poolConfig) => new Pool(provider, poolConfig, txOption, signer));
+        this.router = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
+        this.coinList = new CoinList(provider, config.pools, txOption, signer);
         // this.afterSetSigner(signer);
     }
     afterSetSigner(signer?: ethers.Signer | undefined): void {
@@ -34,7 +33,9 @@ export class Sdk extends ContractRunner {
         this.coinList.setSigner(signer, address);
         this.pools.forEach((pool) => pool.setSigner(signer, address));
     }
-
+    get swapRouter(): string {
+        return this.config.swapRouter;
+    }
     setTxOption(txOption?: TxOption) {
         this.txOption = txOption;
         for (const pool of this.pools) {
@@ -43,8 +44,8 @@ export class Sdk extends ContractRunner {
         this.coinList.setTxOption(txOption);
     }
 
-    static async create(provider: Provider, txOption?: TxOption, signer?: Signer, poolConfigs = POOLS) {
-        const sdk = new Sdk(provider, txOption, signer, poolConfigs);
+    static async create(provider: Provider, config: Config, txOption?: TxOption, signer?: Signer) {
+        const sdk = new Sdk(provider, config, txOption, signer);
         await sdk.reload();
         return sdk;
     }

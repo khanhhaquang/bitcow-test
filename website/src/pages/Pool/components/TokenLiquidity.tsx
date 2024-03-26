@@ -45,7 +45,6 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
         } else {
           ratio = liquidityPool.reserve0 / liquidityPool.reserve1;
         }
-
         if (type === 'xAmt') {
           pairType = 'yAmt';
           pairValue = a / ratio;
@@ -53,6 +52,7 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
           pairType = 'xAmt';
           pairValue = a * ratio;
         }
+
         setFieldValue(type, a);
         setFieldValue(pairType, pairValue);
       },

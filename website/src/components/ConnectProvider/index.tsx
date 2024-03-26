@@ -1,8 +1,8 @@
 'use client';
 
 import { initializeConnector } from '@web3-react/core';
+import { useState } from 'react';
 
-import { accountContracts } from '../../config';
 import { BtcConnectors, EIP6963Wallet, EvmConnectors, EvmConnectProvider } from '../../wallet';
 
 // import VConsole from 'vconsole';
@@ -23,6 +23,7 @@ export default function ConnectProvider({
   children: React.ReactNode;
   walletConnectProjectId: string;
 }) {
+  const [evmChainId] = useState<number>(686868);
   const [walletConnectV2, walletConnectV2hooks] =
     initializeConnector<EvmConnectors.WalletconnectV2Connector>(
       (actions) =>
@@ -30,8 +31,8 @@ export default function ConnectProvider({
           actions,
           options: {
             projectId: walletConnectProjectId,
-            chains: [4200, 686868],
-            optionalChains: [4200, 686868],
+            chains: [4200, 686868, 3636],
+            optionalChains: [4200, 686868, 3636],
             showQrModal: true
           }
         })
@@ -42,7 +43,7 @@ export default function ConnectProvider({
       new EvmConnectors.CoinbaseConnector({
         actions,
         options: {
-          url: 'https://testnet-rpc.merlinchain.io',
+          url: 'https://bitcow.xyz',
           appName: 'Bitcow',
           reloadOnDisconnect: false
         }
@@ -60,10 +61,17 @@ export default function ConnectProvider({
         clientKey: 'c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH',
         appId: 'd10e3dc4-6ba8-419e-8c00-f4805d289a29',
         aaOptions: {
-          accountContracts
+          accountContracts: {
+            BTC: [
+              {
+                chainIds: [evmChainId],
+                version: '1.0.0'
+              }
+            ]
+          }
         }
       }}
-      evmChainId={686868}
+      evmChainId={evmChainId}
       btcConnectors={[
         new BtcConnectors.UnisatConnector(),
         new BtcConnectors.OKXConnector(),

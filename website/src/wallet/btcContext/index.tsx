@@ -235,9 +235,9 @@ export const ConnectProvider = ({
 
   useEffect(() => {
     const supportChains = evmSupportChainIds.map((id) => chains.getEVMChainInfoById(id));
-    if (supportChains.some((chain) => !chain)) {
-      throw new Error(`Please config valid chain ids, ${JSON.stringify(evmSupportChainIds)}`);
-    }
+    // if (supportChains.some((chain) => !chain)) {
+    //   throw new Error(`Please config valid chain ids, ${JSON.stringify(evmSupportChainIds)}`);
+    // }
     walletEntryPlugin.init(
       {
         projectId: options.projectId,

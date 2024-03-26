@@ -108,10 +108,7 @@ const PageHeader: React.FC = () => {
   };
 
   return (
-    <Header
-      className={cx(
-        'z-10 h-[140px] w-full bg-transparent px-0 pt-[59px] tablet:pt-0 tablet:pb-[40px]'
-      )}>
+    <Header className={cx('z-10 h-[140px] w-full bg-transparent px-0 pt-[59px] tablet:pt-0')}>
       <div
         className={cx(
           'tablet:item-center relative top-0 left-0 mx-auto flex h-full items-start tablet:justify-between tablet:px-4'

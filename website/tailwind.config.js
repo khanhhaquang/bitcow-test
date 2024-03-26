@@ -94,7 +94,8 @@ module.exports = {
     screens: {
       desktop: { max: '99999px' }, // desktop first
       laptop: { max: '1440px' },
-      tablet: { max: '1024px' }
+      tablet: { max: '1024px' },
+      mobile: { max: '768px' },
     },
     backgroundColor: (theme) => ({
       ...theme('colors'),

@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useEvmConnectContext } from 'wallet';
 
 import ObricModal from 'components/ObricModal';
@@ -10,15 +10,27 @@ import { CancelIcon } from 'resources/icons';
 import AccountDetails from './components/AccountDetails';
 import styles from './WalletConnector.module.scss';
 
-const WALLET_WIDTH = 246;
-const WALLET_HEIGHT = 48;
-const WALLET_BORDER_WIDTH = 4;
+const WALLET_WIDTH = 224;
+const WALLET_HEIGHT = 46;
+const WALLET_BORDER_WIDTH = 3;
 
 const WalletConnector = () => {
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const { openWalletModal, pendingTx, wallet } = useMerlinWallet();
   const { disconnect } = useEvmConnectContext();
   const [isDisconnectModalOpen, setIsDisconnectModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (event.target instanceof HTMLElement) {
+        if (!event.target.closest('.bc-wallet-connector-active')) {
+          setIsDisconnectModalOpen(false);
+        }
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   const renderActiveBtn = useCallback(() => {
     if (pendingTx) {
@@ -33,13 +45,14 @@ const WalletConnector = () => {
         </PixelButton>
       );
     }
+
     return (
       <PixelButton
         height={WALLET_HEIGHT}
         width={WALLET_WIDTH}
         borderWidth={WALLET_BORDER_WIDTH}
         onClick={() => setIsDisconnectModalOpen(!isDisconnectModalOpen)}
-        className="group text-2xl uppercase">
+        className="bc-wallet-connector-active group text-2xl uppercase">
         {walletAddressEllipsis(wallet?.accounts[0].evm || '')}
         {isDisconnectModalOpen && (
           <div className="absolute" style={{ top: WALLET_HEIGHT - WALLET_BORDER_WIDTH, left: 0 }}>
@@ -48,8 +61,8 @@ const WalletConnector = () => {
               height={WALLET_HEIGHT}
               borderWidth={WALLET_BORDER_WIDTH}
               onClick={() => disconnect()}
-              className="bg-bc-white-10 uppercase">
-              Disconnect
+              className="bg-bc-white uppercase">
+              <span className="text-bc-blue">Disconnect</span>
             </PixelButton>
           </div>
         )}
@@ -57,7 +70,7 @@ const WalletConnector = () => {
     );
   }, [pendingTx, wallet?.accounts, isDisconnectModalOpen, disconnect]);
   return (
-    <Fragment>
+    <>
       {wallet ? (
         renderActiveBtn()
       ) : (
@@ -78,7 +91,7 @@ const WalletConnector = () => {
         closeIcon={<CancelIcon />}>
         {<AccountDetails onClose={() => setDetailModalOpen(false)} />}
       </ObricModal>
-    </Fragment>
+    </>
   );
 };
 

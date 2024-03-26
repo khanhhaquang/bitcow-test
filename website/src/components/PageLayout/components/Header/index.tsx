@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Drawer, Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
 // import ThemeToggler from 'components/ThemeToggler';
+import NetworkSelect from 'components/NetworkSelect';
 import PixelButton from 'components/PixelButton';
 import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
@@ -56,8 +57,11 @@ const PageHeader: React.FC = () => {
             {renderNavItems()}
           </Menu>
         </div>
-        <div className="flex h-full items-center justify-center pr-[40px]">
+        <div className="relative flex h-full flex-col items-center justify-center pr-[40px]">
           <WalletConnector />
+          <div className="absolute top-full">
+            <NetworkSelect className="mt-3" />
+          </div>
           {/*
           <ThemeToggler />
             */}

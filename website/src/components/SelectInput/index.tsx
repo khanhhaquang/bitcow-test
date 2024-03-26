@@ -20,7 +20,7 @@ interface TProps extends SelectProps {
 const SelectInput: React.FC<TProps> = ({ className, options, ...rest }) => {
   return (
     <div className={cx('selectInput', className)}>
-      <Select suffixIcon={<CaretIcon className="fill-black dark:fill-white" />} {...rest}>
+      <Select suffixIcon={<CaretIcon className="fill-black" />} {...rest}>
         {options.map((option) => {
           const { label, value, ...optRest } = option;
           return (

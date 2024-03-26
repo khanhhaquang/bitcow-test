@@ -34,8 +34,8 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     placement: 'topRight',
     icon,
     className: `obric-notification obric-notification--${type}`,
-    closeIcon: <PixelCloseIcon className="h-full w-full" />,
-    top: 160,
+    closeIcon: <PixelCloseIcon className="relative bottom-1 h-full w-full" />,
+    top: 180,
     duration: 6
   });
 };
@@ -46,9 +46,11 @@ export const openErrorNotification = (args: INotificationArgs) =>
 export const openTxSuccessNotification = (txHash: string, content: string) => {
   const detail = (
     <div>
-      <div>{content}</div>
-      <TextLink href={`https://testnet-scan.merlinchain.io/tx/${txHash}`} className="!text-bc-blue">
-        View on Explorer
+      <span>{content}</span>
+      <TextLink
+        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
+        className="block !text-bc-blue">
+        View Transaction
       </TextLink>
     </div>
   );
@@ -58,9 +60,11 @@ export const openTxSuccessNotification = (txHash: string, content: string) => {
 export const openTxErrorNotification = (txHash: string, content: string) => {
   const detail = (
     <div>
-      <div>{content}</div>
-      <TextLink href={`https://testnet-scan.merlinchain.io/tx/${txHash}`} className="!text-bc-blue">
-        View on Explorer
+      <span>{content}:</span>
+      <TextLink
+        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
+        className="block !text-bc-blue">
+        View Transaction
       </TextLink>
     </div>
   );

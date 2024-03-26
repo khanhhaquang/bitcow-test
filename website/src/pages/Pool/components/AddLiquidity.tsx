@@ -6,10 +6,10 @@ import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
 import PixelButton from 'components/PixelButton';
+import PixelDivider from 'components/PixelDivider';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { AddLiquidity as AddLiquidityProps } from 'pages/Pool/types';
 import { ReactComponent as AddLiq } from 'resources/icons/addLiq.svg';
-import { ReactComponent as AddLiqBorderIcon } from 'resources/icons/addLiqBorder.svg';
 import { openErrorNotification } from 'utils/notifications';
 
 import TokenLiquidity from './TokenLiquidity';
@@ -91,7 +91,10 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     type="xAmt"
                     liquidityPool={liquidityPool}
                   />
-                  <AddLiqBorderIcon className="absolute left-0 bottom-0 w-full translate-y-1/2" />
+                  <PixelDivider
+                    className="absolute left-[-1px] bottom-0 right-[-1px] translate-y-1/2"
+                    color="var(--bitcow-color-text-blue)"
+                  />
                   <AddLiq className="absolute left-1/2 bottom-0 translate-y-1/2 -translate-x-1/2" />
                 </div>
                 <div className="w-full border-b-2 border-l-2 border-r-2 border-bc-blue bg-bc-grey-transparent p-4">

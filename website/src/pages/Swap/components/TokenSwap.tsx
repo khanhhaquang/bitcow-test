@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { useFormikContext } from 'formik';
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -9,13 +6,13 @@ import Button from 'components/Button';
 import Card from 'components/Card';
 import ObricModal from 'components/ObricModal';
 import PixelButton from 'components/PixelButton';
+import PixelDivider from 'components/PixelDivider';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import useTokenBalance from 'hooks/useTokenBalance';
-import { CancelIcon, SettingsIcon } from 'resources/icons';
+import { SettingsIcon } from 'resources/icons';
 import { ReactComponent as CoinSwapIcon } from 'resources/icons/coinSwap.svg';
 import { ReactComponent as PiexlCloseIcon } from 'resources/icons/pixelClose.svg';
-import { ReactComponent as SwapBorder } from 'resources/img/swapBorder.svg';
 import { openErrorNotification } from 'utils/notifications';
 
 import CurrencyInput from './CurrencyInput';
@@ -34,7 +31,6 @@ const TokenSwap = () => {
   const fromUiAmt = values.currencyFrom?.amount;
   const swapRate = values.currencyTo?.amount;
   const { isTablet } = useBreakpoint('tablet');
-  const [isPeriodicRefreshPaused, setIsPeriodicRefreshPaused] = useState(false);
   const [priceImpact, setPriceImpact] = useState(0);
   const [uiBalance, isReady] = useTokenBalance(values.currencyFrom.token);
   const sufficientBalance = useMemo(() => {
@@ -143,7 +139,10 @@ const TokenSwap = () => {
           <div className="relative border-t-2 border-l-2 border-r-2 border-bc-orange bg-bc-grey-transparent p-4">
             <div className="mb-2 text-xs uppercase text-bc-white-60">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
-            <SwapBorder className="absolute left-0 bottom-0 w-full translate-y-1/2" />
+            <PixelDivider
+              className="absolute left-[-1px] bottom-0 right-[-1px] translate-y-1/2"
+              color="var(--bitcow-color-text-orange)"
+            />
           </div>
           <Button
             variant="icon"

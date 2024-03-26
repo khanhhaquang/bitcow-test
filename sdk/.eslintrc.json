@@ -1,0 +1,42 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts", ".tsx"]
+      }
+    },
+    "import/extensions": [".js", ".ts", ".tsx"]
+  },
+  "extends": [
+    "plugin:prettier/recommended",
+    "prettier" // for eslint-config-prettier, make sure it goes last
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "project": ["./tsconfig.json"]
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "ignorePatterns": ["src/**/*.svg", "**/node_modules/**"],
+  "rules": {
+    "consistent-return": 0,
+    "function-paren-newline": 0,
+    "object-curly-newline": 0,
+    "prettier/prettier": "error",
+    "max-len": ["error", { "code": 120, "ignoreUrls": true }],
+    "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": true }],
+    "@typescript-eslint/comma-dangle": 0,
+    "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/indent": 0
+  }
+}

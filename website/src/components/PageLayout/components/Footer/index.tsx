@@ -7,7 +7,7 @@ import { DocsIcon, TwitterIcon } from 'resources/icons';
 const { Footer } = Layout;
 
 const URLs = {
-  doc: '',
+  doc: 'https://bitcow.gitbook.io/amm',
   discord: '',
   twitter: 'https://twitter.com/bitCow_AMM'
 };

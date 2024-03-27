@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { Fragment } from 'react';
 
 import { Layout } from 'components/Antd';
-import { DocsIcon, TwitterIcon } from 'resources/icons';
+import { DocsIcon, TwitterIcon, DiscordIcon } from 'resources/icons';
 
 const { Footer } = Layout;
 
@@ -32,15 +32,15 @@ const SocialBtnGroups = () => {
       </ExternalLink>
       <ExternalLink href={URLs.doc}>
         <DocFilledIcon />
-      </ExternalLink>
-      <ExternalLink href={URLs.discord}>
-        <DiscordIcon />
       </ExternalLink>  */}
       <ExternalLink href={URLs.twitter}>
         <TwitterIcon />
       </ExternalLink>
+      <ExternalLink href={URLs.discord}>
+        <DiscordIcon className="text-bc-white" />
+      </ExternalLink>
       <ExternalLink href={URLs.doc}>
-        <DocsIcon className="text-white" />
+        <DocsIcon className="text-bc-white" />
       </ExternalLink>
     </div>
   );

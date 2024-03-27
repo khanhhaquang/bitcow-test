@@ -57,10 +57,15 @@ const PageHeader: React.FC = () => {
             {renderNavItems()}
           </Menu>
         </div>
-        <div className="relative flex h-full flex-col items-center justify-center pr-[40px]">
-          <WalletConnector />
-          <div className="absolute top-full">
-            <NetworkSelect className="mt-3" />
+        <div className="relative flex h-full items-center justify-center pr-[40px]">
+          {/*
+          <img width={132} height={27} src="/images/bitSmiley.svg" alt="bitSmiley" />
+            */}
+          <div className="relative ml-9">
+            <WalletConnector />
+            <div className="absolute top-full">
+              <NetworkSelect className="mt-3" />
+            </div>
           </div>
           {/*
           <ThemeToggler />

@@ -12,11 +12,15 @@ import Modal from '../modal';
 import { BtcWalletButton, EvmWalletButton } from '../wallet';
 
 export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  const { evmConnectors, btcConnectors, closeModal, btcConnect, evmConnect, evmChainId } =
+  const { evmConnectors, btcConnectors, closeModal, btcConnect, evmConnect, currentChain } =
     useEvmConnectContext();
   const showBtcWallets = useMemo(() => {
-    return chains.getEVMChainInfoById(evmChainId) !== undefined;
-  }, [evmChainId]);
+    if (currentChain) {
+      return chains.getEVMChainInfoById(currentChain.chainId) !== undefined;
+    } else {
+      return false;
+    }
+  }, [currentChain]);
   const onBtcConnect = useCallback(
     async (connector: BaseConnector) => {
       if (connector.isReady()) {

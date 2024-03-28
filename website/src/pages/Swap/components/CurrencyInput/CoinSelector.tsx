@@ -8,7 +8,7 @@ import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import { ISwapSettings } from 'pages/Swap/types';
 import { SearchIcon } from 'resources/icons';
-import { TokenBalance } from 'types/obric';
+import { TokenBalance } from 'types/bitcow';
 
 import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';

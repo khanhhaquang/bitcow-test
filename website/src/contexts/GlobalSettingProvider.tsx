@@ -26,7 +26,6 @@ const GlobalSettingProvider: React.FC<TProviderProps> = ({ children }) => {
 
   const loadTheme = useCallback(() => {
     const darkMode = theme === Theme.Dark;
-    console.log('check theme', theme, darkMode);
     if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {

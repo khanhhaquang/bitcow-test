@@ -1,14 +1,14 @@
-import { initializeConnector, useWeb3React, Web3ReactProvider } from '@web3-react/core';
 import type { Web3ReactHooks } from '@web3-react/core';
+import { initializeConnector, useWeb3React, Web3ReactProvider } from '@web3-react/core';
+import { AddEthereumChainParameter } from '@web3-react/types';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 import type { ConnectOptions } from '../btcContext';
-import { useConnectProvider, ConnectProvider as BtcConnectProvider } from '../btcContext';
+import { ConnectProvider as BtcConnectProvider, useConnectProvider } from '../btcContext';
 import EvmConnectModal from '../components/evmConnectModal';
-import { CHAINS } from '../config';
 import type { BaseConnector as BtcConnector } from '../connector';
-import { EVM_CURRENT_CONNECTOR_ID } from '../const';
 import type { EIP6963Wallet } from '../const';
+import { EVM_CURRENT_CONNECTOR_ID } from '../const';
 import { WalletconnectV2Connector } from '../evmConnector';
 import { EIP6963Connector } from '../evmConnector/eip6963';
 import { useInjectedProviderDetails } from '../evmConnector/eip6963/providers';
@@ -20,7 +20,8 @@ import { WalletType } from '../types/types';
 interface EvmGlobalState {
   openModal: () => void;
   closeModal: () => void;
-  evmChainId: number;
+  currentChain: AddEthereumChainParameter;
+  setCurrentChain: (chain: AddEthereumChainParameter) => void;
   btcConnectors: BtcConnector[];
   evmConnectors: [EvmConnector, Web3ReactHooks][];
   btcConnect: (connector: BtcConnector) => void;
@@ -33,18 +34,17 @@ const EvmConnectContext = createContext<EvmGlobalState>({} as any);
 
 const EvmConnectProviderInner = ({
   children,
-  evmChainId,
   evmConnectors,
   autoConnect
 }: {
   children: React.ReactNode;
-  evmChainId: number;
   evmConnectors: [EvmConnector, Web3ReactHooks][];
   autoConnect?: boolean;
 }) => {
   const { closeModal, isModalOpen, openModal } = useModalStateValue();
 
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
+  const [currentChain, setCurrentChainState] = useState<AddEthereumChainParameter>();
   const {
     connectors: btckitConnectors,
     connector: btckitConnector,
@@ -59,6 +59,7 @@ const EvmConnectProviderInner = ({
     provider: web3ReactProvider,
     account: web3ReactAccount
   } = useWeb3React();
+
   const onDisconnect = useCallback(async () => {
     try {
       if (wallet?.type === WalletType.BTC) {
@@ -84,25 +85,51 @@ const EvmConnectProviderInner = ({
     },
     [btckitConnect]
   );
-  const evmConnect = useCallback(
-    async (connector: EvmConnector) => {
+  const evnConnectWithChain = useCallback(
+    async (connector: EvmConnector, chain: AddEthereumChainParameter) => {
       try {
         if (connector instanceof WalletconnectV2Connector) {
-          await connector.activate(evmChainId);
+          await connector.activate(chain.chainId);
         } else {
-          await connector.activate(CHAINS[evmChainId]);
+          await connector.activate(chain);
         }
       } catch (e) {
         console.log('connect err', e);
       }
     },
-    [evmChainId]
+    []
+  );
+  const evmConnect = useCallback(
+    async (connector: EvmConnector) => {
+      if (currentChain) {
+        await evnConnectWithChain(connector, currentChain);
+      }
+    },
+    [currentChain]
   );
 
+  const setCurrentChain = useCallback(
+    async (chain: AddEthereumChainParameter) => {
+      if (wallet && wallet.type === WalletType.EVM && currentChain.chainId !== chain.chainId) {
+        const connectorId = localStorage.getItem(EVM_CURRENT_CONNECTOR_ID);
+        if (connectorId) {
+          const connector = evmConnectors.find(
+            (connectorValue) => connectorValue[0].metadata.id === connectorId
+          );
+          await evnConnectWithChain(connector[0], chain);
+        }
+      } else if (wallet && wallet.type === WalletType.BTC) {
+        await onDisconnect();
+      }
+      setCurrentChainState(chain);
+    },
+    [wallet, currentChain, evmConnect]
+  );
   useEffect(() => {
     if (btckitConnector && btckitEvmAccount) {
       setWallet({
         type: WalletType.BTC,
+        chainId: btckitEvmProvider.signer.chainId,
         metadata: btckitConnector.metadata,
         provider: btckitEvmProvider,
         accounts: [{ evm: btckitEvmAccount, btc: btckitBtcAccounts[0] }]
@@ -116,6 +143,7 @@ const EvmConnectProviderInner = ({
     if (web3ReactAccount && web3ReactProvider) {
       setWallet({
         type: WalletType.EVM,
+        chainId: currentChain.chainId,
         metadata: (web3ReactConnector as unknown as Metadata).metadata,
         provider: web3ReactProvider.provider,
         accounts: [{ evm: web3ReactAccount }]
@@ -153,7 +181,8 @@ const EvmConnectProviderInner = ({
         openModal,
         closeModal,
         btcConnectors: btckitConnectors,
-        evmChainId,
+        currentChain,
+        setCurrentChain,
         evmConnectors,
         btcConnect,
         evmConnect,
@@ -206,7 +235,6 @@ export const EvmConnectProvider = ({
   children,
   options,
   btcConnectors,
-  evmChainId,
   evmConnectors,
   evmConnectorMaxCount,
   evmSelectEip6963,
@@ -215,7 +243,6 @@ export const EvmConnectProvider = ({
   children: React.ReactNode;
   options: ConnectOptions;
   btcConnectors: BtcConnector[];
-  evmChainId: number;
   evmConnectors: [EvmConnector, Web3ReactHooks][];
   evmConnectorMaxCount: number;
   evmSelectEip6963?: EIP6963Wallet[];
@@ -244,10 +271,7 @@ export const EvmConnectProvider = ({
   return (
     <BtcConnectProvider options={options} connectors={btcConnectors} autoConnect={autoConnect}>
       <Web3ReactProvider connectors={allEvmConnectors}>
-        <EvmConnectProviderInner
-          evmChainId={evmChainId}
-          evmConnectors={allEvmConnectors}
-          autoConnect={autoConnect}>
+        <EvmConnectProviderInner evmConnectors={allEvmConnectors} autoConnect={autoConnect}>
           {children}
         </EvmConnectProviderInner>
       </Web3ReactProvider>

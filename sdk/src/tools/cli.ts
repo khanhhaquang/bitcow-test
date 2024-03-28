@@ -29,16 +29,21 @@ async function approvePool(xToken: string, yToken: string) {
 
 main.command('approve-pool').argument('xToken').argument('yToken').action(approvePool);
 
-async function deposit(xToken: string, yToken: string, xAmount: string) {
+async function deposit(xToken: string, yToken: string, xAmount: string, yAmount: string) {
     const pool = await getPool(xToken, yToken);
     await pool.printMessage();
     await sleep(1000);
-    await pool.depositV1(parseFloat(xAmount));
+    await pool.depositV1(parseFloat(xAmount), parseFloat(yAmount));
     await pool.reload();
     console.log('');
     await pool.printMessage();
 }
-main.command('deposit').argument('xToken').argument('yToken').argument('xAmount').argument('yAmount').action(deposit);
+main.command('deposit')
+    .argument('xToken')
+    .argument('yToken')
+    .argument('xAmount')
+    // .argument('yAmount', '', '63000')
+    .action(deposit);
 
 async function withdraw(xToken: string, yToken: string, lpAmount: string) {
     const pool = await getPool(xToken, yToken);
@@ -73,11 +78,6 @@ async function swap(inputToken: string, outputToken: string, amount: string, min
         console.log('Quote not found');
     }
 }
-main.command('swap')
-    .argument('inputToken')
-    .argument('outputToken')
-    .argument('amount')
-    // .argument('minOut', '', 'undefined')
-    .action(swap);
+main.command('swap').argument('inputToken').argument('outputToken').argument('amount').action(swap);
 
 main.parse();

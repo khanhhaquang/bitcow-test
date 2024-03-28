@@ -12,7 +12,7 @@ import type { EIP6963ProviderDetail, EIP6963ProviderInfo } from './types';
 import type { WalletMetadata } from '../../connector';
 import type { Metadata } from '../../types/types';
 
-function parseChainId(chainId: string | number) {
+export function parseChainId(chainId: string | number) {
   return typeof chainId === 'string' ? Number.parseInt(chainId, 16) : chainId;
 }
 

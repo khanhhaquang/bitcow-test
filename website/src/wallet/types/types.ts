@@ -17,6 +17,7 @@ export enum WalletType {
 
 export type Wallet = {
   type: WalletType;
+  chainId: number;
   metadata: WalletMetadata;
   provider: ExternalProvider | IEthereumProvider;
   accounts: { evm: string; btc?: string }[];

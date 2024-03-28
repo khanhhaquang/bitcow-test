@@ -100,13 +100,14 @@ export interface IPool {
     getUserLiquidity(userLpAmount: UserLpAmount): IUserLiquidity;
 
     get24HourStats(type: 'protocolFees' | 'lpFees' | 'fullFees' | 'volume'): [number, number];
-    depositV1(xUiAmount: number): Promise<null | TransactionReceipt>;
+    depositV1(xUiAmount: number, yUiAmount: number): Promise<null | TransactionReceipt>;
     withdrawV1(inputLPUiAmount: number): Promise<null | TransactionReceipt>;
 
     setTxOption(txOption?: TxOption): void;
 }
 
 export type Config = {
+    wBTC: BaseToken;
     swapRouter: string;
     pools: PoolConfig[];
 };

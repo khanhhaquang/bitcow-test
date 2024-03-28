@@ -22,6 +22,7 @@ import {
   openTxSuccessNotification
 } from 'utils/notifications';
 
+import useNetwork from '../hooks/useNetwork';
 import { useEvmConnectContext, Wallet } from '../wallet';
 
 interface MerlinWalletContextType {
@@ -36,7 +37,7 @@ interface MerlinWalletContextType {
   userPoolLpAmount: Record<string, UserLpAmount>;
   pendingTx: boolean;
   requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
-  requestAddLiquidity: (pool: IPool, xAmount: number) => Promise<boolean>;
+  requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
   requestWithdrawLiquidity: (pool: IPool, amt: number) => Promise<boolean>;
 }
 
@@ -52,24 +53,23 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const [pendingTx, setPendingTx] = useState<boolean>(false);
-  const [txOption, setTxOption] = useState<TxOption>({ gasPrice: 100000000 });
+  const [txOption, setTxOption] = useState<TxOption>({});
 
   const [tokenList, setTokenList] = useState<Token[]>();
   const [symbolToToken, setSymbolToToken] = useState<Record<string, Token>>();
   const [tokenBalances, setTokenBalances] = useState<Record<string, number>>();
   const [liquidityPools, setLiquidityPools] = useState<IPool[]>();
   const [userPoolLpAmount, setUserPoolLpAmount] = useState<Record<string, UserLpAmount>>();
-
-  const { networkCfg } = useNetworkConfiguration();
-
+  const { currentNetwork } = useNetwork();
   useEffect(() => {
-    const provider = new ethers.JsonRpcProvider(networkCfg.fullNodeUrl, undefined, {
-      batchMaxCount: 1
-    });
-    setObricSDK(new ObricSDK(provider as any, CONFIG.merlinTestnet, txOption));
-    setShouldRefresh(true);
-  }, [networkCfg, txOption]);
-
+    if (currentNetwork) {
+      const provider = new ethers.JsonRpcProvider(currentNetwork.rpcNodeUrl, undefined, {
+        batchMaxCount: 1
+      });
+      setObricSDK(new ObricSDK(provider as any, currentNetwork.sdkConfig, txOption));
+      setShouldRefresh(true);
+    }
+  }, [currentNetwork, txOption]);
   const fetchCoinList = useCallback(() => {
     if (obricSDK) {
       const allToken = obricSDK.coinList.tokens;
@@ -128,7 +128,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const refreshSDKState = useCallback(async () => {
     if (obricSDK && shouldRefresh) {
-      console.log('refreshSDKState');
       fetchPools();
       fetchTokenBalances();
       fetchUserPoolLpAmount();
@@ -218,7 +217,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   );
 
   const requestAddLiquidity = useCallback(
-    async (pool, xAmount) => {
+    async (pool, xAmount, yAmount) => {
       let success = false;
       try {
         if (!wallet) throw new Error('Please connect wallet first');
@@ -228,7 +227,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             (await checkApprove(pool.xToken, pool.poolAddress)) &&
             (await checkApprove(pool.yToken, pool.poolAddress))
           ) {
-            const result = await pool.depositV1(xAmount);
+            const result = await pool.depositV1(xAmount, yAmount);
             if (result.status === 1) {
               openTxSuccessNotification(
                 result.hash,

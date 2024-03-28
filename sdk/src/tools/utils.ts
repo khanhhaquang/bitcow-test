@@ -5,7 +5,7 @@ import { Sdk } from '../Sdk';
 
 // export const URL = `https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH`;
 export const URL = `https://testnet-rpc.merlinchain.io`;
-export const txOption = { gasPrice: 100000000 };
+export const txOption = undefined;
 
 export function getProvider() {
     return new ethers.JsonRpcProvider(URL);

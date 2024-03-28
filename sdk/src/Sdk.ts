@@ -1,4 +1,3 @@
-import { PoolConfig, WBTC } from './configs';
 import { Pool } from './Pool';
 import { BaseToken, Config, Quote, TxOption, UserLpAmount } from './types';
 import BigNumber from 'bignumber.js';
@@ -67,8 +66,8 @@ export class Sdk extends ContractRunner {
     getDirectQuote(inputToken: BaseToken, outputToken: BaseToken, inAmt: number): Quote | undefined {
         let pool: Pool | undefined;
         let isReversed: boolean | undefined;
-        const fromToken = isBTC(inputToken) ? WBTC : inputToken;
-        const toToken = isBTC(outputToken) ? WBTC : outputToken;
+        const fromToken = isBTC(inputToken) ? this.config.wBTC : inputToken;
+        const toToken = isBTC(outputToken) ? this.config.wBTC : outputToken;
         for (const pool_ of this.pools) {
             if (pool_.xToken.address === fromToken.address && pool_.yToken.address === toToken.address) {
                 pool = pool_;
@@ -98,8 +97,8 @@ export class Sdk extends ContractRunner {
 
     getBest2HopQuote(inputToken: BaseToken, outputToken: BaseToken, inAmt: number): Quote | undefined {
         let bestQuote: Quote | undefined;
-        const fromToken = isBTC(inputToken) ? WBTC : inputToken;
-        const toToken = isBTC(outputToken) ? WBTC : outputToken;
+        const fromToken = isBTC(inputToken) ? this.config.wBTC : inputToken;
+        const toToken = isBTC(outputToken) ? this.config.wBTC : outputToken;
         for (const mToken of this.coinList.tokens) {
             if (mToken.address === fromToken.address || mToken.address === toToken.address) {
                 continue;
@@ -123,8 +122,8 @@ export class Sdk extends ContractRunner {
 
     getBest3HopQuote(inputToken: BaseToken, outputToken: BaseToken, inAmt: number): Quote | undefined {
         let bestQuote: Quote | undefined;
-        const fromToken = isBTC(inputToken) ? WBTC : inputToken;
-        const toToken = isBTC(outputToken) ? WBTC : outputToken;
+        const fromToken = isBTC(inputToken) ? this.config.wBTC : inputToken;
+        const toToken = isBTC(outputToken) ? this.config.wBTC : outputToken;
         for (const mToken of this.coinList.tokens) {
             if (mToken.address === fromToken.address || mToken.address === toToken.address) {
                 continue;
@@ -215,14 +214,15 @@ export class Sdk extends ContractRunner {
     }
 
     private static getInputAmount(quote: Quote): string {
-        return new BigNumber(quote.inAmt).times(10 ** quote.inputToken.decimals).toFixed();
+        return new BigNumber(quote.inAmt).times(10 ** quote.inputToken.decimals).toFixed(0);
     }
 
     private static getOutputAmount(quote: Quote, output?: number): string {
         if (output === undefined) {
             output = quote.outAmt;
         }
-        return new BigNumber(output).times(10 ** quote.outputToken.decimals).toFixed();
+
+        return new BigNumber(output).times(10 ** quote.outputToken.decimals).toFixed(0);
     }
 
     async print() {

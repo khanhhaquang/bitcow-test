@@ -219,7 +219,7 @@ const Pool = () => {
                     "relative !w-1/2 !bg-transparent before:absolute before:top-2 before:left-3 before:z-10 before:text-bc-white before:content-['Time_Basis'] tablet:hidden"
                   }
                   value={poolFilter.timeBasis}
-                  options={filterOptions}
+                  networks={filterOptions}
                   onChange={(val) => onUpdateFilter(val, 'timeBasis')}
                 />
                 */}

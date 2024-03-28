@@ -1,8 +1,10 @@
 'use client';
 
 import { initializeConnector } from '@web3-react/core';
-import { useState } from 'react';
+import { useMemo } from 'react';
 
+import { ALL_NETWORK } from '../../contexts/NetworkProvider';
+import useNetwork from '../../hooks/useNetwork';
 import { BtcConnectors, EIP6963Wallet, EvmConnectors, EvmConnectProvider } from '../../wallet';
 
 // import VConsole from 'vconsole';
@@ -23,36 +25,40 @@ export default function ConnectProvider({
   children: React.ReactNode;
   walletConnectProjectId: string;
 }) {
-  const [evmChainId] = useState<number>(686868);
-  const [walletConnectV2, walletConnectV2hooks] =
-    initializeConnector<EvmConnectors.WalletconnectV2Connector>(
+  useNetwork();
+  const evmConnectors = useMemo(() => {
+    const chainIds = ALL_NETWORK.map((network) => network.chainConfig.chainId);
+    const [walletConnectV2, walletConnectV2hooks] =
+      initializeConnector<EvmConnectors.WalletconnectV2Connector>(
+        (actions) =>
+          new EvmConnectors.WalletconnectV2Connector({
+            actions,
+            options: {
+              projectId: walletConnectProjectId,
+              chains: chainIds,
+              optionalChains: chainIds,
+              showQrModal: true
+            }
+          })
+      );
+
+    const [coinbaseWallet, coinbaseHooks] = initializeConnector<EvmConnectors.CoinbaseConnector>(
       (actions) =>
-        new EvmConnectors.WalletconnectV2Connector({
+        new EvmConnectors.CoinbaseConnector({
           actions,
           options: {
-            projectId: walletConnectProjectId,
-            chains: [4200, 686868, 3636],
-            optionalChains: [4200, 686868, 3636],
-            showQrModal: true
+            url: 'https://bitcow.xyz',
+            appName: 'Bitcow',
+            reloadOnDisconnect: false
           }
         })
     );
-
-  const [coinbaseWallet, coinbaseHooks] = initializeConnector<EvmConnectors.CoinbaseConnector>(
-    (actions) =>
-      new EvmConnectors.CoinbaseConnector({
-        actions,
-        options: {
-          url: 'https://bitcow.xyz',
-          appName: 'Bitcow',
-          reloadOnDisconnect: false
-        }
-      })
-  );
-  const evmConnectors = [
-    [walletConnectV2, walletConnectV2hooks],
-    [coinbaseWallet, coinbaseHooks]
-  ];
+    console.log('new connectors');
+    return [
+      [walletConnectV2, walletConnectV2hooks],
+      [coinbaseWallet, coinbaseHooks]
+    ];
+  }, [walletConnectProjectId]);
 
   return (
     <EvmConnectProvider
@@ -64,14 +70,13 @@ export default function ConnectProvider({
           accountContracts: {
             BTC: [
               {
-                chainIds: [evmChainId],
+                chainIds: [686868],
                 version: '1.0.0'
               }
             ]
           }
         }
       }}
-      evmChainId={evmChainId}
       btcConnectors={[
         new BtcConnectors.UnisatConnector(),
         new BtcConnectors.OKXConnector(),

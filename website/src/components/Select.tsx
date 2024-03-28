@@ -1,20 +1,9 @@
 import classNames from 'classnames';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import { ReactComponent as SelectUnfoldIcon } from 'resources/icons/selectUnfold.svg';
 
-interface IOption {
-  icon: string;
-  label: string;
-  value: string;
-  disabled?: boolean;
-}
-interface ISelectProps {
-  className?: string;
-  options: IOption[];
-  defaultValue?: string;
-  onSelect: (value: string) => void;
-}
+import useNetwork from '../hooks/useNetwork';
 
 function SelectRow({
   icon,
@@ -40,15 +29,9 @@ function SelectRow({
   );
 }
 
-export default function Select({ defaultValue, options, onSelect }: ISelectProps) {
-  const [value, setValue] = useState(defaultValue ?? options[0].value);
-  useEffect(() => {
-    if (onSelect) onSelect(value);
-  }, [onSelect, value]);
-  const currentOption = useMemo(
-    () => options.find((option) => option.value === value),
-    [options, value]
-  );
+export default function Select() {
+  const { networks, currentNetwork, setCurrentNetwork } = useNetwork();
+
   const [isUnfold, setIsUnfold] = useState(false);
 
   // add logic to unfold when click outside the component
@@ -68,23 +51,27 @@ export default function Select({ defaultValue, options, onSelect }: ISelectProps
     <div className="bc-select relative text-bc-white">
       <div onClick={() => setIsUnfold(!isUnfold)}>
         <SelectRow
-          icon={currentOption?.icon}
-          label={currentOption?.label}
+          icon={currentNetwork?.icon}
+          label={currentNetwork?.chainConfig.chainName}
           suffix={<SelectUnfoldIcon className={isUnfold && 'rotate-180'} />}
         />
       </div>
       {isUnfold && (
         <div className="absolute left-0 top-full">
-          {options.map((option) => {
+          {networks.map((network) => {
             return (
               <div
-                key={option.value}
+                key={network.chainConfig.chainId}
                 className="mt-[2px]"
                 onClick={() => {
-                  setValue(option.value);
+                  setCurrentNetwork(network);
                   setIsUnfold(false);
                 }}>
-                <SelectRow icon={option.icon} label={option.label} isHoverEnabled />
+                <SelectRow
+                  icon={network.icon}
+                  label={network.chainConfig.chainName}
+                  isHoverEnabled
+                />
               </div>
             );
           })}

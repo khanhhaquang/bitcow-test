@@ -133,19 +133,6 @@ export const ABI_SS_TRADING_PAIR_V1 = [
     },
     {
         inputs: [],
-        name: 'PRICE_DECIMAL_MULTIPLIER',
-        outputs: [
-            {
-                internalType: 'uint256',
-                name: '',
-                type: 'uint256'
-            }
-        ],
-        stateMutability: 'view',
-        type: 'function'
-    },
-    {
-        inputs: [],
         name: 'acceptOwnership',
         outputs: [],
         stateMutability: 'nonpayable',
@@ -195,6 +182,11 @@ export const ABI_SS_TRADING_PAIR_V1 = [
             {
                 internalType: 'uint256',
                 name: 'inputX_',
+                type: 'uint256'
+            },
+            {
+                internalType: 'uint256',
+                name: 'inputY_',
                 type: 'uint256'
             }
         ],
@@ -264,12 +256,12 @@ export const ABI_SS_TRADING_PAIR_V1 = [
                 components: [
                     {
                         internalType: 'uint256[7]',
-                        name: 'xFees',
+                        name: 'xProtocolFees',
                         type: 'uint256[7]'
                     },
                     {
                         internalType: 'uint256[7]',
-                        name: 'yFees',
+                        name: 'yProtocolFees',
                         type: 'uint256[7]'
                     },
                     {
@@ -314,14 +306,9 @@ export const ABI_SS_TRADING_PAIR_V1 = [
                 type: 'address'
             },
             {
-                internalType: 'string',
-                name: 'lpTokenName',
-                type: 'string'
-            },
-            {
-                internalType: 'string',
-                name: 'lpTokenSymbol',
-                type: 'string'
+                internalType: 'address',
+                name: 'lpToken_',
+                type: 'address'
             },
             {
                 internalType: 'uint64',

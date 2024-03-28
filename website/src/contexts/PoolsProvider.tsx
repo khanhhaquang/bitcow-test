@@ -62,6 +62,8 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
 
   const getPoolTVL = useCallback(
     (pool: IPool) => {
+      const tvl = pool.tvlUsd(coinPrices[pool.token0.symbol], coinPrices[pool.token1.symbol]);
+      console.log('tvl', tvl);
       return coinPrices
         ? pool.tvlUsd(coinPrices[pool.token0.symbol], coinPrices[pool.token1.symbol])
         : 0;

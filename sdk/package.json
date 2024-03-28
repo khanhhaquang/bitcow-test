@@ -7,7 +7,7 @@
     "approve-sdk": "yarn cli approve-sdk",
     "approve-pool": "yarn cli approve-pool USDC USDT",
     "quote": "yarn cli quote USDC USDT 1",
-    "swap": "yarn cli swap USDC USDT 1"
+    "swap": "yarn cli quote wBTC bitusd 1"
   },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

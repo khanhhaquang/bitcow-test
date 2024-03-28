@@ -20,12 +20,14 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const { requestAddLiquidity } = useMerlinWallet();
   const dispatch = useDispatch();
   const [token0Balance] = useTokenBalance(liquidityPool.token0);
-  const [token1Balance] = useTokenBalance(liquidityPool.token0);
+  const [token1Balance] = useTokenBalance(liquidityPool.token1);
   const onSubmit = useCallback(
     async (values: AddLiquidityProps, formikHelper: FormikHelpers<AddLiquidityProps>) => {
       const { xToken, yToken, xAmt, yAmt } = values;
       if (xToken && yToken && xAmt && yAmt) {
-        const result = await requestAddLiquidity(liquidityPool, xAmt);
+        console.log('xAmt', xAmt);
+        console.log('yAmt', yAmt);
+        const result = await requestAddLiquidity(liquidityPool, xAmt, yAmt);
         if (result) {
           formikHelper.resetForm();
           dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null));

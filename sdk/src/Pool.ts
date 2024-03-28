@@ -79,6 +79,7 @@ export class Pool extends ContractRunner implements IPool {
     private async loadStats() {
         const stats = await this.poolContract.getStats();
         const mult = this.getMult();
+        const bigk = await this.poolContract.bigK();
         this.stats = {
             concentration: bigintToBN(stats.concentration_),
             feeMillionth: bigintToBN(stats.feeMillionth_),
@@ -263,16 +264,22 @@ export class Pool extends ContractRunner implements IPool {
         // target_x_K = sqrt(big_k / p), where p = mult_x / mult_y
         // Note: BN.sqr is not sqrt !
         const targetXK = sqrt(stats.bigK.mul(stats.multY).div(stats.multX));
+        const targetXK_ = targetXK.toString();
         // 1. find current (x,y) on curve-K
         const currentXK = targetXK.sub(stats.targetX).add(stats.currentX);
+        const currentXK_ = currentXK.toString();
         if (currentXK.eqn(0)) {
             return new BN(0);
         }
         // BN.div(0) = 0
         const currentYK = stats.bigK.div(currentXK);
+        const currentYK_ = currentYK.toString();
         // 2. find new (x, y) on curve-K
         const newXK = currentXK.add(inputX);
+        newXK.toString();
+        console.log();
         const newYK = stats.bigK.div(newXK);
+        newYK.toString();
         const outputBeforeFeeY = currentYK.sub(newYK);
         if (outputBeforeFeeY.gt(stats.currentY)) throw new Error('Insufficient active Y');
         const feeY = outputBeforeFeeY.mul(stats.feeMillionth).divn(MILLIONTH);
@@ -313,10 +320,19 @@ export class Pool extends ContractRunner implements IPool {
         return outputAfterFeeX;
     }
 
-    async depositV1(xUiAmount: number) {
+    async depositV1(xUiAmount: number, yUiAmount: number) {
+        console.log(
+            'new BigNumber(xUiAmount).times(this.xMult).toFixed(0)',
+            new BigNumber(xUiAmount).times(this.xMult).toFixed(0)
+        );
+        console.log(
+            'new BigNumber(yUiAmount).times(this.yMult).toFixed(0)',
+            new BigNumber(yUiAmount).times(this.yMult).toFixed(0)
+        );
         return await this.send(
             this.poolContract.deposit,
             new BigNumber(xUiAmount).times(this.xMult).toFixed(0),
+            new BigNumber(yUiAmount).times(this.yMult).toFixed(0),
             this.txOption
         );
     }

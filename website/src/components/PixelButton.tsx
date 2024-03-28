@@ -32,7 +32,7 @@ export default function PixelButton({
         className
       )}
       style={{ width, height, color: isSolid ? 'black' : color }}
-      onClick={!disabled && onClick}
+      onClick={!disabled ? onClick : undefined}
       {...rest}>
       <div
         className="absolute left-0"

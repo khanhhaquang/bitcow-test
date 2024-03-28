@@ -4,9 +4,10 @@
   "scripts": {
     "build": "rm -rf dist; tsc -p tsconfig.json",
     "cli": "ts-node src/tools/cli.ts",
+    "print-sdk": "yarn cli print-sdk",
     "approve-sdk": "yarn cli approve-sdk",
-    "approve-pool": "yarn cli approve-pool USDC USDT",
-    "quote": "yarn cli quote USDC USDT 1",
+    "approve-pool": "yarn cli approve-pool wBTC bitUSD",
+    "quote": "yarn cli quote wBTC bitusd 0.1",
     "swap": "yarn cli quote wBTC bitusd 1"
   },
   "main": "dist/index.js",

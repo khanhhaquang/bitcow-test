@@ -74,7 +74,7 @@ const NetworkProvider: FC<TConfigProps> = ({ children }) => {
       localStorage.setItem('current-network', network.chainConfig.chainId.toString());
       setCurrentNetworkState(network);
     },
-    [setCurrentNetworkState, setCurrentChain]
+    [setCurrentNetworkState]
   );
   useEffect(() => {
     const currentNetworkChainId = localStorage.getItem('current-network');
@@ -92,7 +92,7 @@ const NetworkProvider: FC<TConfigProps> = ({ children }) => {
     if (currentNetwork) {
       setCurrentChain(currentNetwork.chainConfig);
     }
-  }, [currentNetwork]);
+  }, [currentNetwork, setCurrentChain]);
   return (
     <NetworkContext.Provider value={{ networks: ALL_NETWORK, currentNetwork, setCurrentNetwork }}>
       {children}

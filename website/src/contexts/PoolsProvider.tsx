@@ -52,7 +52,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       Object.keys(supportedCoins).map(async (symbol) => {
         const coinInfo = supportedCoins[symbol];
         if (!collectedPrices[coinInfo.symbol]) {
-          collectedPrices[coinInfo.symbol] = 1;
+          collectedPrices[coinInfo.symbol] = 0;
         }
       });
       return collectedPrices;
@@ -62,8 +62,6 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
 
   const getPoolTVL = useCallback(
     (pool: IPool) => {
-      const tvl = pool.tvlUsd(coinPrices[pool.token0.symbol], coinPrices[pool.token1.symbol]);
-      console.log('tvl', tvl);
       return coinPrices
         ? pool.tvlUsd(coinPrices[pool.token0.symbol], coinPrices[pool.token1.symbol])
         : 0;

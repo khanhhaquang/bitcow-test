@@ -14,19 +14,17 @@ import { openErrorNotification } from 'utils/notifications';
 
 import TokenLiquidity from './TokenLiquidity';
 
-import useTokenBalance from '../../../hooks/useTokenBalance';
+// import useTokenBalance from '../../../hooks/useTokenBalance';
 
 const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const { requestAddLiquidity } = useMerlinWallet();
   const dispatch = useDispatch();
-  const [token0Balance] = useTokenBalance(liquidityPool.token0);
-  const [token1Balance] = useTokenBalance(liquidityPool.token1);
+  // const [token0Balance] = useTokenBalance(liquidityPool.token0);
+  // const [token1Balance] = useTokenBalance(liquidityPool.token1);
   const onSubmit = useCallback(
     async (values: AddLiquidityProps, formikHelper: FormikHelpers<AddLiquidityProps>) => {
       const { xToken, yToken, xAmt, yAmt } = values;
       if (xToken && yToken && xAmt && yAmt) {
-        console.log('xAmt', xAmt);
-        console.log('yAmt', yAmt);
         const result = await requestAddLiquidity(liquidityPool, xAmt, yAmt);
         if (result) {
           formikHelper.resetForm();
@@ -43,8 +41,8 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const validationSchema = yup.object({
     xToken: yup.object().required(),
     yToken: yup.object().required(),
-    xAmt: yup.number().positive().lessThan(token0Balance),
-    yAmt: yup.number().positive().lessThan(token1Balance)
+    xAmt: yup.number().positive(),
+    yAmt: yup.number().positive()
   });
 
   const renderDetails = useCallback(() => {

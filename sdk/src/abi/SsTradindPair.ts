@@ -140,19 +140,6 @@ export const ABI_SS_TRADING_PAIR_V1 = [
     },
     {
         inputs: [],
-        name: 'bigK',
-        outputs: [
-            {
-                internalType: 'uint256',
-                name: '',
-                type: 'uint256'
-            }
-        ],
-        stateMutability: 'view',
-        type: 'function'
-    },
-    {
-        inputs: [],
         name: 'concentration',
         outputs: [
             {
@@ -229,16 +216,6 @@ export const ABI_SS_TRADING_PAIR_V1 = [
             },
             {
                 internalType: 'uint256',
-                name: 'bigK_',
-                type: 'uint256'
-            },
-            {
-                internalType: 'uint256',
-                name: 'targetX_',
-                type: 'uint256'
-            },
-            {
-                internalType: 'uint256',
                 name: 'totalProtocolFeeX_',
                 type: 'uint256'
             },
@@ -286,6 +263,16 @@ export const ABI_SS_TRADING_PAIR_V1 = [
             },
             {
                 internalType: 'uint256',
+                name: 'multX_',
+                type: 'uint256'
+            },
+            {
+                internalType: 'uint256',
+                name: 'multY_',
+                type: 'uint256'
+            },
+            {
+                internalType: 'uint256',
                 name: 'totalLP_',
                 type: 'uint256'
             }
@@ -329,6 +316,16 @@ export const ABI_SS_TRADING_PAIR_V1 = [
                 internalType: 'address',
                 name: 'protocolFeeAddress_',
                 type: 'address'
+            },
+            {
+                internalType: 'uint64',
+                name: 'xPrice_',
+                type: 'uint64'
+            },
+            {
+                internalType: 'uint64',
+                name: 'yPrice_',
+                type: 'uint64'
             }
         ],
         name: 'initialize',
@@ -494,19 +491,6 @@ export const ABI_SS_TRADING_PAIR_V1 = [
     },
     {
         inputs: [],
-        name: 'targetX',
-        outputs: [
-            {
-                internalType: 'uint256',
-                name: '',
-                type: 'uint256'
-            }
-        ],
-        stateMutability: 'view',
-        type: 'function'
-    },
-    {
-        inputs: [],
         name: 'totalProtocolFeeX',
         outputs: [
             {
@@ -580,6 +564,24 @@ export const ABI_SS_TRADING_PAIR_V1 = [
     {
         inputs: [],
         name: 'updateFeeRecords',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function'
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint64',
+                name: 'xPrice_',
+                type: 'uint64'
+            },
+            {
+                internalType: 'uint64',
+                name: 'yPrice_',
+                type: 'uint64'
+            }
+        ],
+        name: 'updatePrice',
         outputs: [],
         stateMutability: 'nonpayable',
         type: 'function'

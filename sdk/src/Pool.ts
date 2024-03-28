@@ -78,15 +78,10 @@ export class Pool extends ContractRunner implements IPool {
     }
     private async loadStats() {
         const stats = await this.poolContract.getStats();
-        const mult = this.getMult();
-        const bigk = await this.poolContract.bigK();
         this.stats = {
             concentration: bigintToBN(stats.concentration_),
             feeMillionth: bigintToBN(stats.feeMillionth_),
             protocolFeeShareThousandth: bigintToBN(stats.protocolFeeShareThousandth_),
-
-            bigK: bigintToBN(stats.bigK_),
-            targetX: bigintToBN(stats.targetX_),
 
             totalProtocolFeeX: bigintToBN(stats.totalProtocolFeeX_),
             totalProtocolFeeY: bigintToBN(stats.totalProtocolFeeY_),
@@ -96,27 +91,34 @@ export class Pool extends ContractRunner implements IPool {
                 yProtocolFees: stats.feeRecords_[1].map(bigintToBigNumber),
                 volumes: stats.feeRecords_[2].map(bigintToBigNumber)
             },
-
             currentX: bigintToBN(stats.currentX_),
             currentY: bigintToBN(stats.currentY_),
             totalLP: bigintToBN(stats.totalLP_),
+            multX: bigintToBN(stats.multX_),
+            multY: bigintToBN(stats.multY_),
 
-            // calc in sdk
-            targetY: bigintToBN(undefined),
-            multX: mult.multX,
-            multY: mult.multY
+            bigK: bigintToBN(),
+            targetX: bigintToBN(),
+            targetY: bigintToBN()
         };
 
-        this.updateTargetY();
+        this.fillStats();
     }
-    private updateTargetY() {
+    private fillStats() {
         const stats = this.stats!;
-        const valueX = stats.currentX.mul(stats.multX);
-        const valueY = stats.currentY.mul(stats.multY);
-        const valueTotal = valueX.add(valueY);
-        const targetXValue = stats.targetX.mul(stats.multX);
-        const targetYValue = valueTotal.sub(targetXValue);
-        stats.targetY = targetYValue.div(stats.multY);
+        if (stats.concentration.eqn(1)) {
+            stats.bigK = stats.currentX.mul(stats.currentY);
+            stats.targetX = stats.currentX;
+            stats.targetY = stats.currentY;
+        } else {
+            stats.targetX = stats.currentX
+                .mul(stats.multX)
+                .add(stats.currentY.mul(stats.multY))
+                .divn(2)
+                .div(stats.multX);
+            stats.targetY = stats.targetX.mul(stats.multX).div(stats.multY);
+            stats.bigK = stats.concentration.mul(stats.concentration).mul(stats.targetX).mul(stats.targetY);
+        }
     }
     get token0(): Token {
         return this.xToken;
@@ -201,7 +203,6 @@ export class Pool extends ContractRunner implements IPool {
         const fullFees: [number, number] = [protocolFees[0] / feeShare, protocolFees[1] / feeShare];
         const lpFees: [number, number] = [fullFees[0] * (1 - feeShare), fullFees[1] * (1 - feeShare)];
         const volume: [number, number] = [currVolume - prevVolume, 0];
-
         if (type === 'protocolFees') {
             return protocolFees;
         } else if (type === 'lpFees') {
@@ -260,27 +261,26 @@ export class Pool extends ContractRunner implements IPool {
         if (inputX.eqn(0)) throw new Error('Invalid input x amount');
 
         const stats = this.stats!;
-
-        // target_x_K = sqrt(big_k / p), where p = mult_x / mult_y
-        // Note: BN.sqr is not sqrt !
-        const targetXK = sqrt(stats.bigK.mul(stats.multY).div(stats.multX));
-        const targetXK_ = targetXK.toString();
-        // 1. find current (x,y) on curve-K
-        const currentXK = targetXK.sub(stats.targetX).add(stats.currentX);
-        const currentXK_ = currentXK.toString();
-        if (currentXK.eqn(0)) {
-            return new BN(0);
+        let outputBeforeFeeY;
+        if (stats.concentration.eqn(1)) {
+            outputBeforeFeeY = stats.currentY.sub(stats.bigK.div(stats.currentX.add(inputX)));
+        } else {
+            // target_x_K = sqrt(big_k / p), where p = mult_x / mult_y
+            // Note: BN.sqr is not sqrt !
+            const targetXK = sqrt(stats.bigK.mul(stats.multY).div(stats.multX));
+            // 1. find current (x,y) on curve-K
+            const currentXK = targetXK.sub(stats.targetX).add(stats.currentX);
+            if (currentXK.eqn(0)) {
+                return new BN(0);
+            }
+            // BN.div(0) = 0
+            const currentYK = stats.bigK.div(currentXK);
+            // 2. find new (x, y) on curve-K
+            const newXK = currentXK.add(inputX);
+            const newYK = stats.bigK.div(newXK);
+            outputBeforeFeeY = currentYK.sub(newYK);
         }
-        // BN.div(0) = 0
-        const currentYK = stats.bigK.div(currentXK);
-        const currentYK_ = currentYK.toString();
-        // 2. find new (x, y) on curve-K
-        const newXK = currentXK.add(inputX);
-        newXK.toString();
-        console.log();
-        const newYK = stats.bigK.div(newXK);
-        newYK.toString();
-        const outputBeforeFeeY = currentYK.sub(newYK);
+
         if (outputBeforeFeeY.gt(stats.currentY)) throw new Error('Insufficient active Y');
         const feeY = outputBeforeFeeY.mul(stats.feeMillionth).divn(MILLIONTH);
         const outputAfterFeeY = outputBeforeFeeY.sub(feeY);
@@ -295,22 +295,28 @@ export class Pool extends ContractRunner implements IPool {
         const stats = this.stats!;
         // 0. get target_x on curve-K
         const bigK = stats.bigK;
-        // target_x_K = sqrt(big_k / p), where p = mult_x / mult_y
-        const targetXK = sqrt(bigK.mul(stats.multY).div(stats.multX));
+        let outputBeforeFeeX;
+        if (stats.concentration.eqn(1)) {
+            outputBeforeFeeX = stats.currentX.sub(stats.bigK.div(stats.currentY.add(inputY)));
+        } else {
+            // target_x_K = sqrt(big_k / p), where p = mult_x / mult_y
+            const targetXK = sqrt(bigK.mul(stats.multY).div(stats.multX));
 
-        // 1. find current (x,y) on curve-K
-        const currentXK = targetXK.sub(stats.targetX).add(stats.currentX);
-        if (currentXK.eqn(0)) {
-            return new BN(0);
+            // 1. find current (x,y) on curve-K
+            const currentXK = targetXK.sub(stats.targetX).add(stats.currentX);
+            if (currentXK.eqn(0)) {
+                return new BN(0);
+            }
+            // BN.div(0) = 0
+            const currentYK = bigK.div(currentXK);
+
+            // 2. find new (x, y) on curve-K
+            const newYK = currentYK.add(inputY);
+            const newXK = bigK.div(newYK);
+
+            outputBeforeFeeX = currentXK.sub(newXK);
         }
-        // BN.div(0) = 0
-        const currentYK = bigK.div(currentXK);
 
-        // 2. find new (x, y) on curve-K
-        const newYK = currentYK.add(inputY);
-        const newXK = bigK.div(newYK);
-
-        const outputBeforeFeeX = currentXK.sub(newXK);
         if (outputBeforeFeeX.gt(stats.currentX)) throw new Error('Insufficient active X');
 
         const feeX = outputBeforeFeeX.mul(stats.feeMillionth).divn(MILLIONTH);
@@ -321,14 +327,6 @@ export class Pool extends ContractRunner implements IPool {
     }
 
     async depositV1(xUiAmount: number, yUiAmount: number) {
-        console.log(
-            'new BigNumber(xUiAmount).times(this.xMult).toFixed(0)',
-            new BigNumber(xUiAmount).times(this.xMult).toFixed(0)
-        );
-        console.log(
-            'new BigNumber(yUiAmount).times(this.yMult).toFixed(0)',
-            new BigNumber(yUiAmount).times(this.yMult).toFixed(0)
-        );
         return await this.send(
             this.poolContract.deposit,
             new BigNumber(xUiAmount).times(this.xMult).toFixed(0),

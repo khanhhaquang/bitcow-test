@@ -39,6 +39,7 @@ export type StatsV1 = {
 
     bigK: BN;
     targetX: BN;
+    targetY: BN;
 
     totalProtocolFeeX: BN;
     totalProtocolFeeY: BN;
@@ -49,8 +50,6 @@ export type StatsV1 = {
     currentY: BN;
     totalLP: BN;
 
-    // calc in sdk
-    targetY: BN;
     multX: BN;
     multY: BN;
 };

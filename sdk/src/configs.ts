@@ -18,7 +18,7 @@ export type PoolConfig = {
 const merlinTestnetWBTC: BaseToken = {
     name: 'wBTC',
     symbol: 'wBTC',
-    address: '0xe160e532C187023f47978F09749b7600fDFEFe6e',
+    address: '0x8fA0a1e68cCEd45EC233C6ef6891d76716d40659',
     decimals: 18,
     coingeckoId: 'wrapped-bitcoin',
     logoUrl: ''
@@ -34,20 +34,20 @@ const botanixTestnetWBTC: BaseToken = {
 export const CONFIG: { merlinTestnet: Config; botanixTestnet: Config } = {
     merlinTestnet: {
         wBTC: merlinTestnetWBTC,
-        swapRouter: '0x2d112A7C62735CC1ee2a66AffAA99364aA039a6C',
+        swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
         pools: [
             {
-                address: '0x04D0dCB13bb2c2E5Ef22DF392f6c277F4df7e4a7',
+                address: '0x088Ca4ad4E99862B1f402E8455A54c9e5CabB359',
                 xToken: merlinTestnetWBTC,
                 yToken: {
                     name: 'BITUSD',
                     symbol: 'bitusd',
-                    address: '0x532d60C7Fb7b1395e74382047b308fE746309527',
+                    address: '0x54E25BAb70acB85A65A1C0517212eD3DAE215230',
                     decimals: 18,
                     coingeckoId: '',
                     logoUrl: ''
                 },
-                lpToken: '0x783498553A0091E9A0A75c3B723b508bb860e01B'
+                lpToken: '0x2c4Fe36668D7BCAb0274B92143B40e7A9062f913'
             }
         ]
     },
@@ -56,17 +56,17 @@ export const CONFIG: { merlinTestnet: Config; botanixTestnet: Config } = {
         swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
         pools: [
             {
-                address: '0x04D0dCB13bb2c2E5Ef22DF392f6c277F4df7e4a7',
+                address: '0xC0f7cd107EFCB4f26Df298CBdAB680Fb4781403E',
                 xToken: botanixTestnetWBTC,
                 yToken: {
                     name: 'BITUSD',
                     symbol: 'bitusd',
-                    address: '0x594e3f78299Ec1AF0F69d36AaB451D3EF2976661',
+                    address: '0x193ce459Ed559266971e2BBbB06a089ED6d6D99B',
                     decimals: 18,
                     coingeckoId: '',
                     logoUrl: ''
                 },
-                lpToken: '0x783498553A0091E9A0A75c3B723b508bb860e01B'
+                lpToken: '0x7A04d8a8862738C9a380f71bcF15e2eC7c910ab8'
             }
         ]
     }

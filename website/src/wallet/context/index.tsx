@@ -105,7 +105,7 @@ const EvmConnectProviderInner = ({
         await evnConnectWithChain(connector, currentChain);
       }
     },
-    [currentChain]
+    [currentChain, evnConnectWithChain]
   );
 
   const setCurrentChain = useCallback(
@@ -123,7 +123,7 @@ const EvmConnectProviderInner = ({
       }
       setCurrentChainState(chain);
     },
-    [wallet, currentChain, evmConnect]
+    [wallet, currentChain, evmConnectors, onDisconnect, evnConnectWithChain]
   );
   useEffect(() => {
     if (btckitConnector && btckitEvmAccount) {
@@ -151,7 +151,7 @@ const EvmConnectProviderInner = ({
     } else {
       setWallet(undefined);
     }
-  }, [web3ReactAccount, web3ReactProvider, web3ReactConnector]);
+  }, [web3ReactAccount, web3ReactProvider, web3ReactConnector, currentChain]);
 
   useEffect(() => {
     if (autoConnect) {

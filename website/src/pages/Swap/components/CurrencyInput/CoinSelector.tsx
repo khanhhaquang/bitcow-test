@@ -48,7 +48,6 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   );
 
   const getFilteredTokenListWithBalance = useCallback(() => {
-    console.log('tokenBalances', tokenBalances);
     if (coinInPools) {
       let currentTokenList = tokenList
         .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
@@ -67,7 +66,6 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
           return keysForFilter.includes(filter);
         });
       }
-      console.log('currentTokenList', currentTokenList);
       setTokenListBalance(currentTokenList);
     }
   }, [coinInPools, filter, tokenList, tokenBalances]);

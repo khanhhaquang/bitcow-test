@@ -44,7 +44,7 @@ export const CONFIG: { merlinTestnet: Config; botanixTestnet: Config } = {
                     symbol: 'bitusd',
                     address: '0x54E25BAb70acB85A65A1C0517212eD3DAE215230',
                     decimals: 18,
-                    coingeckoId: '',
+                    coingeckoId: 'usd-coin',
                     logoUrl: ''
                 },
                 lpToken: '0x2c4Fe36668D7BCAb0274B92143B40e7A9062f913'
@@ -63,7 +63,7 @@ export const CONFIG: { merlinTestnet: Config; botanixTestnet: Config } = {
                     symbol: 'bitusd',
                     address: '0x193ce459Ed559266971e2BBbB06a089ED6d6D99B',
                     decimals: 18,
-                    coingeckoId: '',
+                    coingeckoId: 'usd-coin',
                     logoUrl: ''
                 },
                 lpToken: '0x7A04d8a8862738C9a380f71bcF15e2eC7c910ab8'

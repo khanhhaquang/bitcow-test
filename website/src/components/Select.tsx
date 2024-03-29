@@ -53,7 +53,7 @@ export default function Select() {
         <SelectRow
           icon={currentNetwork?.icon}
           label={currentNetwork?.chainConfig.chainName}
-          suffix={<SelectUnfoldIcon className={isUnfold && 'rotate-180'} />}
+          suffix={<SelectUnfoldIcon className={isUnfold ? 'rotate-180' : ''} />}
         />
       </div>
       {isUnfold && (

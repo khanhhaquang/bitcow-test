@@ -5,6 +5,8 @@ import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormat
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { IPoolFilters } from 'types/pool';
 
+import { openErrorNotification } from '../utils/notifications';
+
 interface PoolsContextType {
   activePools: IPool[];
   coinPrices: Record<string, number>;
@@ -45,19 +47,37 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       }
     ]
   });
-
+  const fetchCoinPrice = useCallback(async (ids: string[]) => {
+    try {
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=USD`
+      );
+      return await response?.json();
+    } catch (err) {
+      openErrorNotification({ detail: 'Fail to fetch data from Coingecko' });
+      return {};
+    }
+  }, []);
   const populateCoinRate = useCallback(
     async (supportedCoins: Record<string, Token>): Promise<Record<string, number>> => {
       const collectedPrices = {};
+      const coingeckoIds = Object.entries(supportedCoins).map((entry) => entry[1].coingeckoId);
+      const nonemptyIds = coingeckoIds.filter((id) => id !== '');
+      const prices = await fetchCoinPrice(nonemptyIds);
       Object.keys(supportedCoins).map(async (symbol) => {
         const coinInfo = supportedCoins[symbol];
         if (!collectedPrices[coinInfo.symbol]) {
-          collectedPrices[coinInfo.symbol] = 0;
+          const data = prices[coinInfo.coingeckoId];
+          let rate = 0;
+          if (data) {
+            rate = data.usd;
+          }
+          collectedPrices[coinInfo.symbol] = rate;
         }
       });
       return collectedPrices;
     },
-    []
+    [fetchCoinPrice]
   );
 
   const getPoolTVL = useCallback(

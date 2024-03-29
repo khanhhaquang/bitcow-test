@@ -4,19 +4,7 @@ import { initializeConnector } from '@web3-react/core';
 import { useMemo } from 'react';
 
 import { ALL_NETWORK } from '../../contexts/NetworkProvider';
-import useNetwork from '../../hooks/useNetwork';
 import { BtcConnectors, EIP6963Wallet, EvmConnectors, EvmConnectProvider } from '../../wallet';
-
-// import VConsole from 'vconsole';
-//
-// if (typeof window !== 'undefined') {
-//   (window as any).__PARTICLE_ENVIRONMENT__ = process.env.NEXT_PUBLIC_PARTICLE_ENV;
-//   if (process.env.NEXT_PUBLIC_PARTICLE_ENV === 'development') {
-//     setTimeout(() => {
-//       new VConsole({ theme: 'dark' });
-//     }, 300);
-//   }
-// }
 
 export default function ConnectProvider({
   children,
@@ -25,7 +13,6 @@ export default function ConnectProvider({
   children: React.ReactNode;
   walletConnectProjectId: string;
 }) {
-  useNetwork();
   const evmConnectors = useMemo(() => {
     const chainIds = ALL_NETWORK.map((network) => network.chainConfig.chainId);
     const [walletConnectV2, walletConnectV2hooks] =
@@ -53,7 +40,6 @@ export default function ConnectProvider({
           }
         })
     );
-    console.log('new connectors');
     return [
       [walletConnectV2, walletConnectV2hooks],
       [coinbaseWallet, coinbaseHooks]

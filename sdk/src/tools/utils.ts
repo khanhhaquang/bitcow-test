@@ -19,7 +19,12 @@ const b2TestnetConfig = {
     config: CONFIG.b2Testnet
 };
 
-const currentConfig = botanixTestnetConfig;
+const bobTestnetConfig = {
+    URL: `https://sepolia-dencun.rpc.gobob.xyz/`,
+    config: CONFIG.bobTestnet
+};
+
+const currentConfig = bobTestnetConfig;
 
 export const txOption = undefined;
 

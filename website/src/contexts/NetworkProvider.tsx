@@ -10,11 +10,11 @@ const BTC: AddEthereumChainParameter['nativeCurrency'] = {
   symbol: 'BTC',
   decimals: 18
 };
-// const ETH: AddEthereumChainParameter['nativeCurrency'] = {
-//   name: 'Ether',
-//   symbol: 'ETH',
-//   decimals: 18
-// };
+const ETH: AddEthereumChainParameter['nativeCurrency'] = {
+  name: 'Ether',
+  symbol: 'ETH',
+  decimals: 18
+};
 
 export type NetworkConfig = {
   chainConfig: AddEthereumChainParameter;
@@ -53,18 +53,18 @@ export const ALL_NETWORK: NetworkConfig[] = [
     icon: '/images/botanix.png',
     sdkConfig: CONFIG.botanixTestnet
   },
-  // {
-  //   chainConfig: {
-  //     chainId: 606808,
-  //     chainName: 'Bot Testnet (New)',
-  //     nativeCurrency: ETH,
-  //     rpcUrls: ['https://sepolia-dencun.rpc.gobob.xyz/'],
-  //     blockExplorerUrls: ['https://sepolia-dencun.explorer.gobob.xyz/']
-  //   },
-  //   rpcNodeUrl: 'https://sepolia-dencun.rpc.gobob.xyz/',
-  //   icon: 'images/botanix.png',
-  //   sdkConfig: CONFIG.botanixTestnet
-  // },
+  {
+    chainConfig: {
+      chainId: 606808,
+      chainName: 'Bob Testnet',
+      nativeCurrency: ETH,
+      rpcUrls: ['https://sepolia-dencun.rpc.gobob.xyz/'],
+      blockExplorerUrls: ['https://sepolia-dencun.explorer.gobob.xyz/']
+    },
+    rpcNodeUrl: 'https://sepolia-dencun.rpc.gobob.xyz/',
+    icon: 'images/botanix.png',
+    sdkConfig: CONFIG.bobTestnet
+  },
   {
     chainConfig: {
       chainId: 1102,

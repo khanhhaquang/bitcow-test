@@ -10,6 +10,12 @@ const BTC: AddEthereumChainParameter['nativeCurrency'] = {
   symbol: 'BTC',
   decimals: 18
 };
+// const ETH: AddEthereumChainParameter['nativeCurrency'] = {
+//   name: 'Ether',
+//   symbol: 'ETH',
+//   decimals: 18
+// };
+
 export type NetworkConfig = {
   chainConfig: AddEthereumChainParameter;
   rpcNodeUrl: string;
@@ -46,6 +52,30 @@ export const ALL_NETWORK: NetworkConfig[] = [
     rpcNodeUrl: 'https://node.botanixlabs.dev',
     icon: '/images/botanix.png',
     sdkConfig: CONFIG.botanixTestnet
+  },
+  // {
+  //   chainConfig: {
+  //     chainId: 606808,
+  //     chainName: 'Bot Testnet (New)',
+  //     nativeCurrency: ETH,
+  //     rpcUrls: ['https://sepolia-dencun.rpc.gobob.xyz/'],
+  //     blockExplorerUrls: ['https://sepolia-dencun.explorer.gobob.xyz/']
+  //   },
+  //   rpcNodeUrl: 'https://sepolia-dencun.rpc.gobob.xyz/',
+  //   icon: 'images/botanix.png',
+  //   sdkConfig: CONFIG.botanixTestnet
+  // },
+  {
+    chainConfig: {
+      chainId: 1102,
+      chainName: 'B2 Haven Testnet',
+      nativeCurrency: BTC,
+      rpcUrls: ['https://haven-rpc.bsquared.network'],
+      blockExplorerUrls: ['https://haven-explorer.bsquared.network/']
+    },
+    rpcNodeUrl: 'https://haven-rpc.bsquared.network',
+    icon: '/images/bSquared.png',
+    sdkConfig: CONFIG.b2Testnet
   }
   //   {
   //     chainConfig: {

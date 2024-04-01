@@ -14,7 +14,12 @@ const botanixTestnetConfig = {
     config: CONFIG.botanixTestnet
 };
 
-const currentConfig = merlinTestnetConfig;
+const b2TestnetConfig = {
+    URL: `https://haven-rpc.bsquared.network/`,
+    config: CONFIG.b2Testnet
+};
+
+const currentConfig = botanixTestnetConfig;
 
 export const txOption = undefined;
 

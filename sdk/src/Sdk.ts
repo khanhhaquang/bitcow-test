@@ -183,7 +183,7 @@ export class Sdk extends ContractRunner {
         if (this.router) {
             if (isBTC(quote.inputToken)) {
                 return await this.send(
-                    this.router.swapWithEthInput,
+                    this.router.swapWithBTCInput,
                     quote.steps.map((step) => step.pool.poolAddress),
                     quote.steps.map((step) => step.isReversed),
                     Sdk.getOutputAmount(quote, minOutput),
@@ -191,7 +191,7 @@ export class Sdk extends ContractRunner {
                 );
             } else if (isBTC(quote.outputToken)) {
                 return await this.send(
-                    this.router.swapWithEthInput,
+                    this.router.swapWithBTCInput,
                     Sdk.getInputAmount(quote),
                     quote.steps.map((step) => step.pool.poolAddress),
                     quote.steps.map((step) => step.isReversed),
@@ -199,8 +199,6 @@ export class Sdk extends ContractRunner {
                     this.txOption
                 );
             } else {
-                console.log(Sdk.getInputAmount(quote));
-                console.log(Sdk.getOutputAmount(quote, minOutput));
                 return await this.send(
                     this.router.swap,
                     Sdk.getInputAmount(quote),

@@ -27,24 +27,6 @@ export class Pool extends ContractRunner implements IPool {
         this.xToken = { ...poolConfig.xToken, liquidity: 0, mult: 10 ** poolConfig.xToken.decimals };
         this.yToken = { ...poolConfig.yToken, liquidity: 0, mult: 10 ** poolConfig.yToken.decimals };
     }
-    private getMult() {
-        if (this.xToken.decimals > this.yToken.decimals) {
-            return {
-                multX: new BN(1),
-                multY: new BN(10).pow(new BN(this.xToken.decimals - this.yToken.decimals))
-            };
-        } else if (this.yToken.decimals > this.xToken.decimals) {
-            return {
-                multX: new BN(10).pow(new BN(this.yToken.decimals - this.xToken.decimals)),
-                multY: new BN(1)
-            };
-        } else {
-            return {
-                multX: new BN(1),
-                multY: new BN(1)
-            };
-        }
-    }
     get swapFeeMillionth() {
         return Number(this.stats?.feeMillionth.toString()) / MILLIONTH;
     }

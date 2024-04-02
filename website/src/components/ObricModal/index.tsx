@@ -14,6 +14,7 @@ interface TProps {
   open: boolean;
   closable?: boolean;
   closeIcon?: React.ReactNode;
+  maskClosable?: boolean;
   children: React.ReactNode;
   width?: number | string;
   destroyOnClose?: boolean;

@@ -238,6 +238,7 @@ const Pool = () => {
       <ObricModal
         onCancel={() => dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null))}
         className=""
+        maskClosable={false}
         // wrapClassName={styles.modal}
         open={!!liquidityModal}
         closeIcon={<PiexlCloseIcon className="relative top-[28px]" />}

@@ -150,10 +150,10 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, []);
 
   const checkApprove = useCallback(
-    async (token: BaseToken, spender: string) => {
+    async (token: BaseToken, spender: string, minAmount: number) => {
       // todo
       try {
-        const result = await obricSDK.coinList.approve(token, spender);
+        const result = await obricSDK.coinList.approve(token, spender, minAmount);
         if (result === undefined) {
           return true;
         } else if (result === null) {
@@ -181,7 +181,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       // todo check transaction result detail
       if (obricSDK) {
         setPendingTx(true);
-        if (!(await checkApprove(fromToken, obricSDK.swapRouter))) {
+        if (!(await checkApprove(fromToken, obricSDK.swapRouter, quote.inAmt))) {
           setPendingTx(false);
           success = false;
           return success;
@@ -224,8 +224,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         if (obricSDK) {
           setPendingTx(true);
           if (
-            (await checkApprove(pool.xToken, pool.poolAddress)) &&
-            (await checkApprove(pool.yToken, pool.poolAddress))
+            (await checkApprove(pool.xToken, pool.poolAddress, xAmount)) &&
+            (await checkApprove(pool.yToken, pool.poolAddress, yAmount * 1.0001))
           ) {
             const result = await pool.depositV1(xAmount, yAmount);
             if (result.status === 1) {

@@ -41,10 +41,12 @@ const TokenSwap = () => {
   useEffect(() => {
     if (obricSDK) {
       if (!values.currencyFrom?.token) {
+        console.log(obricSDK.coinList.getTokenBySymbol('wBTC'));
         setFieldValue('currencyFrom.xToken', obricSDK.coinList.getTokenBySymbol('wBTC'));
       }
       if (!values.currencyTo?.token) {
-        setFieldValue('currencyTo.xToken', obricSDK.coinList.getTokenBySymbol('bitusd'));
+        console.log(obricSDK.coinList.getTokenBySymbol('bitusd'));
+        setFieldValue('currencyTo.yToken', obricSDK.coinList.getTokenBySymbol('bitusd'));
       }
     }
   }, [fromToken, obricSDK, setFieldValue, toToken, values.currencyFrom, values.currencyTo]);

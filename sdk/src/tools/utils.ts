@@ -59,12 +59,12 @@ export async function getSdk() {
     return await Sdk.create(signer.provider, currentConfig.config, txOption, signer.signer);
 }
 export async function checkAndApprovePool(sdk: Sdk, pool: Pool) {
-    await sdk.coinList.approve(pool.xToken, pool.poolAddress);
-    await sdk.coinList.approve(pool.yToken, pool.poolAddress);
+    await sdk.coinList.approve(pool.xToken, pool.poolAddress, 1000000);
+    await sdk.coinList.approve(pool.yToken, pool.poolAddress, 1000000);
 }
 
 export async function checkAndApproveSdk(sdk: Sdk) {
     for (const token of sdk.coinList.tokens) {
-        await sdk.coinList.approve(token, sdk.swapRouter);
+        await sdk.coinList.approve(token, sdk.swapRouter, 10000000);
     }
 }

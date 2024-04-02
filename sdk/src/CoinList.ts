@@ -11,11 +11,6 @@ export class CoinList extends ContractRunner {
     private readonly symbolToToken: Record<string, BaseToken>;
     private readonly addressToToken: Record<string, BaseToken>;
     private readonly contracts: Record<string, Contract>;
-    /**
-     * tokenAddress => spender => value
-     * @private
-     */
-    private allowances: Record<string, Record<string, bigint>>;
     constructor(provider: Provider, public poolConfigs: PoolConfig[], txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
         const tokensSet = new Set<BaseToken>();
@@ -34,11 +29,8 @@ export class CoinList extends ContractRunner {
         for (const token of this.tokens) {
             this.contracts[token.address] = new Contract(token.address, ABI_ERC20, this.provider);
         }
-        this.allowances = {};
     }
-    afterSetSigner(signer?: Signer | undefined): void {
-        this.allowances = {};
-    }
+    afterSetSigner(signer?: Signer | undefined): void {}
     setTxOption(txOption?: TxOption) {
         this.txOption = txOption;
     }
@@ -56,21 +48,7 @@ export class CoinList extends ContractRunner {
     async getAllowance(token: BaseToken, spender: string) {
         const userAddress = await this.getAddress();
         if (userAddress) {
-            if (this.allowances[token.address]) {
-                if (this.allowances[token.address][spender] === undefined) {
-                    this.allowances[token.address][spender] = await this.contracts[token.address].allowance(
-                        userAddress,
-                        spender
-                    );
-                }
-            } else {
-                this.allowances[token.address] = {};
-                this.allowances[token.address][spender] = await this.contracts[token.address].allowance(
-                    userAddress,
-                    spender
-                );
-            }
-            return this.allowances[token.address][spender];
+            return await this.contracts[token.address].allowance(userAddress, spender);
         }
     }
 
@@ -94,18 +72,11 @@ export class CoinList extends ContractRunner {
         }
     }
 
-    async isApproved(token: BaseToken, spender: string): Promise<boolean> {
+    async approve(token: BaseToken, spender: string, minAmount: number, amount: string = MAX_U256) {
         const allowance = await this.getAllowance(token, spender);
-        return allowance !== undefined && !(allowance.toString() === '0');
-    }
-
-    async approve(token: BaseToken, spender: string, amount: string = MAX_U256) {
-        if (!(await this.isApproved(token, spender)) && this.signer) {
+        if (new BigNumber(allowance.toString()).div(10 ** token.decimals).lt(minAmount) && this.signer) {
             const tokenContract = this.contracts[token.address];
             const result = await this.send(tokenContract.approve, spender, amount, this.txOption);
-            if (result && result.status === 1) {
-                this.allowances[token.address][spender] = BigInt(amount);
-            }
             return result;
         }
     }

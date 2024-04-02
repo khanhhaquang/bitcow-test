@@ -82,8 +82,8 @@ export interface IPool {
     poolType: string;
     token0: BaseToken;
     token1: BaseToken;
-    reserve0: number;
-    reserve1: number;
+    reserve0: BN;
+    reserve1: BN;
     xMult: number;
     yMult: number;
     totalLP: string | undefined;

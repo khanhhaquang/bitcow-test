@@ -14,13 +14,15 @@ import { openErrorNotification } from 'utils/notifications';
 
 import TokenLiquidity from './TokenLiquidity';
 
+import useTokenBalance from '../../../hooks/useTokenBalance';
+
 // import useTokenBalance from '../../../hooks/useTokenBalance';
 
 const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const { requestAddLiquidity } = useMerlinWallet();
   const dispatch = useDispatch();
-  // const [token0Balance] = useTokenBalance(liquidityPool.token0);
-  // const [token1Balance] = useTokenBalance(liquidityPool.token1);
+  const [token0Balance] = useTokenBalance(liquidityPool.token0);
+  const [token1Balance] = useTokenBalance(liquidityPool.token1);
   const onSubmit = useCallback(
     async (values: AddLiquidityProps, formikHelper: FormikHelpers<AddLiquidityProps>) => {
       const { xToken, yToken, xAmt, yAmt } = values;
@@ -41,8 +43,8 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const validationSchema = yup.object({
     xToken: yup.object().required(),
     yToken: yup.object().required(),
-    xAmt: yup.number().positive(),
-    yAmt: yup.number().positive()
+    xAmt: yup.number().positive().max(token0Balance),
+    yAmt: yup.number().positive().max(token1Balance)
   });
 
   const renderDetails = useCallback(() => {
@@ -91,7 +93,8 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 <div className="relative w-full border-t-2 border-l-2 border-r-2 border-bc-blue bg-bc-grey-transparent p-4">
                   <div className="mb-2 text-xs uppercase text-bc-white-60">Pay</div>
                   <TokenLiquidity
-                    token={liquidityPool.token0}
+                    xToken={liquidityPool.token0}
+                    yToken={liquidityPool.token1}
                     type="xAmt"
                     liquidityPool={liquidityPool}
                   />
@@ -104,7 +107,8 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                 <div className="w-full border-b-2 border-l-2 border-r-2 border-bc-blue bg-bc-grey-transparent p-4">
                   <div className="mb-2 text-xs uppercase text-bc-white-60">Pay</div>
                   <TokenLiquidity
-                    token={liquidityPool.token1}
+                    xToken={liquidityPool.token0}
+                    yToken={liquidityPool.token1}
                     type="yAmt"
                     liquidityPool={liquidityPool}
                   />

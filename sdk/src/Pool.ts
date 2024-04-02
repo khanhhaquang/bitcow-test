@@ -124,16 +124,16 @@ export class Pool extends ContractRunner implements IPool {
         return this.stats?.totalLP.toString();
     }
 
-    get reserve0(): number {
+    get reserve0(): BN {
         if (this.stats) {
-            return bnToBigNumber(this.stats.currentX).div(this.xMult).toNumber();
+            return this.stats.currentX;
         } else {
             throw new Error('Pool stats not loaded');
         }
     }
-    get reserve1(): number {
+    get reserve1(): BN {
         if (this.stats) {
-            return bnToBigNumber(this.stats.currentY).div(this.yMult).toNumber();
+            return this.stats.currentY;
         } else {
             throw new Error('Pool stats not loaded');
         }
@@ -205,7 +205,10 @@ export class Pool extends ContractRunner implements IPool {
         return this.get24HourStats('volume')[0];
     }
     tvlUsd(price0: number, price1: number): number {
-        return this.reserve0 * price0 + this.reserve1 * price1;
+        return (
+            bnToBigNumber(this.stats?.currentX).div(this.xMult).toNumber() * price0 +
+            bnToBigNumber(this.stats?.currentY).div(this.yMult).toNumber() * price1
+        );
     }
 
     getUserLiquidity(userLpAmount: UserLpAmount): IUserLiquidity {

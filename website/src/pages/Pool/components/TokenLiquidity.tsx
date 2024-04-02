@@ -1,7 +1,8 @@
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { BaseToken, IPool } from 'obric-merlin';
+import { BaseToken, BN, IPool } from 'obric-merlin';
 import { useCallback, useEffect } from 'react';
 
 // import { Popover } from 'antd';
@@ -15,18 +16,19 @@ import useTokenBalance from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
 
 interface TProps {
-  token: BaseToken;
+  xToken: BaseToken;
+  yToken: BaseToken;
   type: 'xAmt' | 'yAmt';
   isDisableAmountInput?: boolean;
   liquidityPool: IPool;
 }
 
-const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
+const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool }) => {
   const { values, setFieldValue, validateField } = useFormikContext<ISwapSettings>();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
   const { getTokenBalanceInUSD } = usePools();
 
-  const [uiBalance] = useTokenBalance(token);
+  const [uiBalance] = useTokenBalance(type === 'xAmt' ? xToken : yToken);
 
   useEffect(() => {
     validateField('xAmt');
@@ -39,23 +41,33 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
       (a: number) => {
         let pairType = '';
         let pairValue = 0;
-        let ratio;
-        if (liquidityPool.reserve0 === 0 && liquidityPool.reserve1 === 0) {
+        if (liquidityPool.reserve0.eqn(0) && liquidityPool.reserve1.eqn(0)) {
           setFieldValue(type, a);
         } else {
-          ratio = liquidityPool.reserve0 / liquidityPool.reserve1;
           if (type === 'xAmt') {
             pairType = 'yAmt';
-            pairValue = a / ratio;
+            const inputX = new BN(new BigNumber(a).times(10 ** xToken.decimals).toFixed(0));
+            pairValue = new BigNumber(
+              inputX.mul(liquidityPool.reserve1).div(liquidityPool.reserve0).toString()
+            )
+              .div(10 ** xToken.decimals)
+              .toNumber();
           } else {
             pairType = 'xAmt';
-            pairValue = a * ratio;
+            const inputY = new BN(new BigNumber(a).times(10 ** yToken.decimals).toFixed(0));
+            pairValue =
+              new BigNumber(
+                inputY.mul(liquidityPool.reserve0).div(liquidityPool.reserve1).toString()
+              )
+                .div(10 ** xToken.decimals)
+                .toNumber() * 0.9999999999;
+            // todo remove * 0.999999999
           }
           setFieldValue(type, a);
           setFieldValue(pairType, pairValue);
         }
       },
-      [liquidityPool, setFieldValue, type]
+      [liquidityPool, setFieldValue, type, xToken.decimals, yToken.decimals]
     ),
     200
   );
@@ -65,8 +77,8 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
       <div className="flex w-full items-center justify-between">
         <div className="flex gap-2">
           <div className="flex gap-2">
-            <CoinIcon symbol={token.symbol} size={20} />
-            <div className="">{token.symbol}</div>
+            <CoinIcon symbol={xToken.symbol} size={20} />
+            <div className="">{xToken.symbol}</div>
           </div>
           <div className="flex gap-2 border-l border-bc-white-20 pl-2">
             <Button
@@ -88,7 +100,7 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
         <PositiveFloatNumInput
           min={0}
           max={1e11}
-          maxDecimals={token?.decimals || 9}
+          maxDecimals={xToken?.decimals || 9}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
           className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl"
@@ -103,10 +115,10 @@ const TokenLiquidity: React.FC<TProps> = ({ token, type, liquidityPool }) => {
         )}>
         <small className="flex items-end text-sm">
           Balance:
-          <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, token) || 0}</span>
+          <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, xToken) || 0}</span>
         </small>
         <small className="flex items-end text-sm">
-          ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, token)}</span>
+          ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, xToken)}</span>
         </small>
       </div>
     </div>

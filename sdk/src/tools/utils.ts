@@ -24,7 +24,7 @@ const bobTestnetConfig = {
     config: CONFIG.bobTestnet
 };
 
-const currentConfig = bobTestnetConfig;
+const currentConfig = merlinTestnetConfig;
 
 export const txOption = undefined;
 

@@ -59,7 +59,7 @@ export class CoinList extends ContractRunner {
             const balances = await Promise.all([
                 this.provider.getBalance(userAddress),
                 ...this.tokens.map(async (token) => {
-                    return this.contracts[token.address].balanceOf(userAddress);
+                    return await this.contracts[token.address].balanceOf(userAddress);
                 })
             ]);
             balancesResult[BTC.address] = new BigNumber(balances[0].toString()).div(10 ** BTC.decimals).toNumber();

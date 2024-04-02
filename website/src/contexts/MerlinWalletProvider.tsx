@@ -60,6 +60,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [tokenBalances, setTokenBalances] = useState<Record<string, number>>();
   const [liquidityPools, setLiquidityPools] = useState<IPool[]>();
   const [userPoolLpAmount, setUserPoolLpAmount] = useState<Record<string, UserLpAmount>>();
+  const [isTimeOut, setIsTimeOut] = useState(false);
   const { currentNetwork } = useNetwork();
   useEffect(() => {
     if (currentNetwork) {
@@ -70,6 +71,15 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       setShouldRefresh(true);
     }
   }, [currentNetwork, txOption]);
+  useEffect(() => {
+    console.log('isTimeOut', isTimeOut);
+    if (isTimeOut) {
+      openErrorNotification({
+        detail: `The ${currentNetwork.chainConfig.chainName} is currently unstable. We recommend switching to a different testnet for testing.`
+      });
+      setIsTimeOut(false);
+    }
+  }, [isTimeOut, currentNetwork]);
   const fetchCoinList = useCallback(() => {
     if (obricSDK) {
       const allToken = obricSDK.coinList.tokens;
@@ -113,17 +123,36 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, [setObricSdkSigner]);
 
   const fetchPools = useCallback(async () => {
-    await obricSDK.reload();
-    setLiquidityPools([...obricSDK.pools]);
+    try {
+      const timeOut = setTimeout(() => {
+        setIsTimeOut(true);
+      }, 5000);
+      await obricSDK.reload();
+      clearTimeout(timeOut);
+      setLiquidityPools([...obricSDK.pools]);
+    } catch (e) {}
   }, [obricSDK]);
 
   const fetchTokenBalances = useCallback(async () => {
-    const balances = await obricSDK.coinList.getBalances();
-    setTokenBalances(balances);
+    try {
+      const timeOut = setTimeout(() => {
+        setIsTimeOut(true);
+      }, 5000);
+      const balances = await obricSDK.coinList.getBalances();
+      clearTimeout(timeOut);
+      setTokenBalances(balances);
+    } catch (e) {}
   }, [obricSDK]);
 
   const fetchUserPoolLpAmount = useCallback(async () => {
-    setUserPoolLpAmount(await obricSDK.getUserPoolLpAmount());
+    try {
+      const timeOut = setTimeout(() => {
+        setIsTimeOut(true);
+      }, 5000);
+      const userLP = await obricSDK.getUserPoolLpAmount();
+      clearTimeout(timeOut);
+      setUserPoolLpAmount(userLP);
+    } catch (e) {}
   }, [obricSDK]);
 
   const refreshSDKState = useCallback(async () => {

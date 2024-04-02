@@ -54,7 +54,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       );
       return await response?.json();
     } catch (err) {
-      openErrorNotification({ detail: 'Fail to fetch data from Coingecko' });
+      openErrorNotification({ detail: 'Fail to fetch token prices from Coingecko' });
       return {};
     }
   }, []);

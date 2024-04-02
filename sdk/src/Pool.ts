@@ -319,15 +319,10 @@ export class Pool extends ContractRunner implements IPool {
 
     /**
      *
-     * @param inputXLPUiAmount
-     * @param inputYLPUiAmount
+     * @param inputLPAmount
      */
-    async withdrawV1(inputLPUiAmount: number) {
-        return await this.send(
-            this.poolContract.withdraw,
-            new BigNumber(inputLPUiAmount).times(this.lpMult).toFixed(0),
-            this.txOption
-        );
+    async withdrawV1(inputLPAmount: string) {
+        return await this.send(this.poolContract.withdraw, inputLPAmount, this.txOption);
     }
 
     async printMessage() {

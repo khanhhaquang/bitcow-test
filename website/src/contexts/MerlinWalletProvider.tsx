@@ -38,7 +38,7 @@ interface MerlinWalletContextType {
   pendingTx: boolean;
   requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
-  requestWithdrawLiquidity: (pool: IPool, amt: number) => Promise<boolean>;
+  requestWithdrawLiquidity: (pool: IPool, amt: string) => Promise<boolean>;
 }
 
 interface TProviderProps {
@@ -257,7 +257,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   );
 
   const requestWithdrawLiquidity = useCallback(
-    async (pool: IPool, amt: number) => {
+    async (pool: IPool, amt: string) => {
       let success = false;
       try {
         if (!wallet) throw new Error('Please connect wallet first');

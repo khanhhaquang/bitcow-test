@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
-import { IPool } from 'obric-merlin';
+import { BN, IPool } from 'obric-merlin';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
@@ -24,19 +24,20 @@ const percentageOptions = [25, 50, 75, 100];
 
 const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const dispatch = useDispatch();
-  const { requestWithdrawLiquidity } = useMerlinWallet();
+  const { requestWithdrawLiquidity, userPoolLpAmount } = useMerlinWallet();
   const { isTablet } = useBreakpoint('tablet');
   const { getOwnedLiquidity } = usePools();
-  const [pool, setPool] = useState<{ lp: number; coins: {} }>();
+  const [pool, setPool] = useState<{ lp: BN; coins: {} }>();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
 
   const fetchRecord = useCallback(() => {
+    const userLp = userPoolLpAmount[liquidityPool.poolAddress];
     const userLiq = getOwnedLiquidity(liquidityPool);
     setPool({
-      lp: userLiq.lpAmount,
+      lp: new BN(userLp.toString()),
       coins: userLiq.assetsPooled
     });
-  }, [getOwnedLiquidity, liquidityPool]);
+  }, [getOwnedLiquidity, liquidityPool, userPoolLpAmount]);
 
   useEffect(() => {
     fetchRecord();
@@ -48,7 +49,10 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     async (values: WithdrawLiquidityProps, formikHelper: FormikHelpers<WithdrawLiquidityProps>) => {
       const { xToken, yToken, percent } = values;
       if (xToken && yToken && percent && pool) {
-        const result = await requestWithdrawLiquidity(liquidityPool, (pool.lp * percent) / 100);
+        const result = await requestWithdrawLiquidity(
+          liquidityPool,
+          pool.lp.muln(percent).divn(100).toString()
+        );
         if (result) {
           formikHelper.resetForm();
           dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null));

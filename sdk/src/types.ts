@@ -100,7 +100,7 @@ export interface IPool {
 
     get24HourStats(type: 'protocolFees' | 'lpFees' | 'fullFees' | 'volume'): [number, number];
     depositV1(xUiAmount: number, yUiAmount: number): Promise<null | TransactionReceipt>;
-    withdrawV1(inputLPUiAmount: number): Promise<null | TransactionReceipt>;
+    withdrawV1(inputLPUiAmount: string): Promise<null | TransactionReceipt>;
 
     setTxOption(txOption?: TxOption): void;
 }

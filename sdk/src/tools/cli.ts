@@ -49,7 +49,7 @@ async function withdraw(xToken: string, yToken: string, lpAmount: string) {
     const pool = await getPool(xToken, yToken);
 
     await pool.printMessage();
-    await pool.withdrawV1(parseFloat(lpAmount));
+    await pool.withdrawV1(lpAmount);
     await pool.reload();
     await pool.printMessage();
 }

@@ -112,10 +112,11 @@ const NetworkProvider: FC<TConfigProps> = ({ children }) => {
       for (const networkConfig of ALL_NETWORK) {
         if (networkConfig.chainConfig.chainId.toString() === currentNetworkChainId) {
           setCurrentNetworkState(networkConfig);
-
           break;
         }
       }
+    } else {
+      setCurrentNetworkState(ALL_NETWORK[0]);
     }
   }, []);
   useEffect(() => {

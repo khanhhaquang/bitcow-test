@@ -1,5 +1,6 @@
 import BN from 'bn.js';
 import BigNumber from 'bignumber.js';
+import { ContractTransactionReceipt, EventLog, Interface, Log } from 'ethers';
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -25,4 +26,20 @@ export function bnToBigNumber(value?: BN | undefined) {
     } else {
         return new BigNumber(0);
     }
+}
+export function parseEvents(receipt: ContractTransactionReceipt, interfaces: Interface[]) {
+    const eventLogs: EventLog[] = [];
+    for (const log of receipt.logs) {
+        if (log instanceof Log) {
+            for (const face of interfaces) {
+                const event = face.getEvent(log.topics[0]);
+                if (event) {
+                    eventLogs.push(new EventLog(log, face, event));
+                }
+            }
+        } else {
+            eventLogs.push(log);
+        }
+    }
+    return eventLogs;
 }

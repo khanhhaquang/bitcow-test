@@ -4,8 +4,7 @@ import { TransactionReceipt } from 'ethers';
 
 export type TxOption = { gasPrice?: number; gasLimit?: number };
 
-export type TokenInfo = {
-    address: string;
+export type CreateTokenInfo = {
     name: string;
     symbol: string;
     decimals: number;
@@ -14,6 +13,11 @@ export type TokenInfo = {
     logoUrl: string;
     coingeckoId: string;
 };
+
+export type TokenInfo = {
+    address: string;
+} & CreateTokenInfo;
+
 export type Token = TokenInfo & {
     mult: number;
 };

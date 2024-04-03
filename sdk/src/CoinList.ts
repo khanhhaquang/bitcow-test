@@ -18,14 +18,18 @@ export class CoinList extends ContractRunner {
      * @private
      */
     private allowances: Record<string, Record<string, bigint>>;
-    constructor(provider: Provider, public config: Config, txOption?: TxOption, signer?: Signer) {
+    constructor(provider: Provider, public tokenListAddress: string, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
         this.tokens = [];
         this.symbolToToken = {};
         this.addressToToken = {};
         this.contracts = {};
         this.allowances = {};
-        this.tokenListContract = new Contract(config.tokenList, ABI_TOKEN_LIST, provider);
+        this.tokenListContract = new Contract(tokenListAddress, ABI_TOKEN_LIST, provider);
+    }
+
+    async getCreateFee() {
+        return await this.tokenListContract.createFee();
     }
 
     async reload() {

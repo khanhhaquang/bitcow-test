@@ -31,21 +31,21 @@ export const CONFIG: {
         swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371'
     },
     b2Testnet: {
-        tokenList: '',
-        tradingPairV1List: '',
-        tradingPairV1Creator: '',
+        tokenList: '0xb77c49BAe3d30888ce2176dA3FAb997e531904c7',
+        tradingPairV1List: '0x1E328605b63e426BA6196F1E30e9a7F3b43f81a0',
+        tradingPairV1Creator: '0x0271a2A842F9233A59A05C9E446aeA9f334fc49C',
         swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371'
     },
     bobTestnet: {
-        tokenList: '',
-        tradingPairV1List: '',
-        tradingPairV1Creator: '',
-        swapRouter: '0x783498553A0091E9A0A75c3B723b508bb860e01B'
+        tokenList: '0x40700E1cCd16eAE708A1daB55048E877914c889C',
+        tradingPairV1List: '0x40700E1cCd16eAE708A1daB55048E877914c889C',
+        tradingPairV1Creator: '0x7A04d8a8862738C9a380f71bcF15e2eC7c910ab8',
+        swapRouter: '0xC0f7cd107EFCB4f26Df298CBdAB680Fb4781403E'
     },
     bitlayerTestnet: {
-        tokenList: '',
-        tradingPairV1List: '',
-        tradingPairV1Creator: '',
+        tokenList: '0xeE4b636fF9864446e271eACCcdf560A8517f64c3',
+        tradingPairV1List: '0x40700E1cCd16eAE708A1daB55048E877914c889C',
+        tradingPairV1Creator: '0x7A04d8a8862738C9a380f71bcF15e2eC7c910ab8',
         swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371'
     }
 };

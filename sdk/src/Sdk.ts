@@ -10,16 +10,20 @@ import { ethers } from 'ethers';
 import { ContractRunner } from './ContractRunner';
 import { ABI_SS_TRADING_PAIR_V1_LIST } from './abi/SsTradingPairV1List';
 import { parsePairStats } from './utils/statsV1';
+import { PoolCreator } from './PoolCreator';
 
 export class Sdk extends ContractRunner {
     pools: Pool[] = [];
-    routerContract: Contract;
     coinList: CoinList;
-    tradingPairV1ListContract: Contract;
+    poolCreator: PoolCreator;
+    private routerContract: Contract;
+    private tradingPairV1ListContract: Contract;
     constructor(provider: Provider, public config: Config, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
+
+        this.coinList = new CoinList(provider, config.tokenList, txOption, signer);
+        this.poolCreator = new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer);
         this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
-        this.coinList = new CoinList(provider, config, txOption, signer);
         this.tradingPairV1ListContract = new Contract(config.tradingPairV1List, ABI_SS_TRADING_PAIR_V1_LIST, provider);
     }
     async reload() {
@@ -73,6 +77,7 @@ export class Sdk extends ContractRunner {
         super.setSigner(signer, address);
         this.coinList.setSigner(signer, address);
         this.pools.forEach((pool) => pool.setSigner(signer, address));
+        this.poolCreator.setSigner(signer, address);
     }
     get swapRouter(): string {
         return this.config.swapRouter;

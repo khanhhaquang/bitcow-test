@@ -115,10 +115,10 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   }, [activePools, coinPrices, fetching, gatherPoolTokenInfo]);
 
   useEffect(() => {
-    if (obricSDK && liquidityPools?.length && !activePools.length) {
+    if (obricSDK && liquidityPools?.length) {
       setActivePools(liquidityPools);
     }
-  }, [activePools, liquidityPools, obricSDK]);
+  }, [liquidityPools, obricSDK]);
 
   const getOwnedLiquidity = useCallback(
     (pool: IPool) => {

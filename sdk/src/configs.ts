@@ -47,7 +47,21 @@ const bobTestnetWBTC: BaseToken = {
     coingeckoId: 'wrapped-bitcoin',
     logoUrl: ''
 };
-export const CONFIG: { merlinTestnet: Config; botanixTestnet: Config; b2Testnet: Config; bobTestnet: Config } = {
+const bitlayerTestnetWBTC: BaseToken = {
+    name: 'wBTC',
+    symbol: 'wBTC',
+    address: '0x542c5c6c1391584057885acdc170aa3c1f964da5',
+    decimals: 18,
+    coingeckoId: 'wrapped-bitcoin',
+    logoUrl: ''
+};
+export const CONFIG: {
+    merlinTestnet: Config;
+    botanixTestnet: Config;
+    b2Testnet: Config;
+    bobTestnet: Config;
+    bitlayerTestnet: Config;
+} = {
     merlinTestnet: {
         wBTC: merlinTestnetWBTC,
         swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
@@ -121,6 +135,25 @@ export const CONFIG: { merlinTestnet: Config; botanixTestnet: Config; b2Testnet:
                     logoUrl: ''
                 },
                 lpToken: '0xb08361Ff06d3F201A44108E64C5D622A3CD4Da98'
+            }
+        ]
+    },
+    bitlayerTestnet: {
+        wBTC: bitlayerTestnetWBTC,
+        swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
+        pools: [
+            {
+                address: '0x04D0dCB13bb2c2E5Ef22DF392f6c277F4df7e4a7',
+                xToken: bitlayerTestnetWBTC,
+                yToken: {
+                    name: 'BITUSD',
+                    symbol: 'bitusd',
+                    address: '0x5ca6be430a0e5fb022fc0c842430043fed80cf2b',
+                    decimals: 18,
+                    coingeckoId: 'usd-coin',
+                    logoUrl: ''
+                },
+                lpToken: '0x783498553A0091E9A0A75c3B723b508bb860e01B'
             }
         ]
     }

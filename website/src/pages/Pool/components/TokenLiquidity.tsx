@@ -29,6 +29,7 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
   const { getTokenBalanceInUSD } = usePools();
 
   const [uiBalance] = useTokenBalance(type === 'xAmt' ? xToken : yToken);
+  const token = type === 'xAmt' ? xToken : yToken;
 
   useEffect(() => {
     validateField('xAmt');
@@ -77,8 +78,8 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
       <div className="flex w-full items-center justify-between">
         <div className="flex gap-2">
           <div className="flex gap-2">
-            <CoinIcon symbol={xToken.symbol} size={20} />
-            <div className="">{xToken.symbol}</div>
+            <CoinIcon symbol={token.symbol} size={20} />
+            <div className="">{token.symbol}</div>
           </div>
           <div className="flex gap-2 border-l border-bc-white-20 pl-2">
             <Button
@@ -100,7 +101,7 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
         <PositiveFloatNumInput
           min={0}
           max={1e11}
-          maxDecimals={xToken?.decimals || 9}
+          maxDecimals={token?.decimals || 9}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
           className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl"
@@ -115,10 +116,10 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
         )}>
         <small className="flex items-end text-sm">
           Balance:
-          <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, xToken) || 0}</span>
+          <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, token) || 0}</span>
         </small>
         <small className="flex items-end text-sm">
-          ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, xToken)}</span>
+          ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, token)}</span>
         </small>
       </div>
     </div>

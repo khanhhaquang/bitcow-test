@@ -91,7 +91,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
     },
     rpcNodeUrl: 'https://testnet-rpc.bitlayer.org',
     icon: '/images/bitlayer.png',
-    sdkConfig: CONFIG.b2Testnet
+    sdkConfig: CONFIG.bitlayerTestnet
   }
   //   {
   //     chainConfig: {

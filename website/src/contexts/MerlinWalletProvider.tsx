@@ -60,7 +60,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [tokenBalances, setTokenBalances] = useState<Record<string, number>>();
   const [liquidityPools, setLiquidityPools] = useState<IPool[]>();
   const [userPoolLpAmount, setUserPoolLpAmount] = useState<Record<string, UserLpAmount>>();
-  const [isTimeOut, setIsTimeOut] = useState(false);
+  const [timeOutCount, setTimeOutCount] = useState(0);
+  const [timeOutArray, setTimeOutArray] = useState<boolean[]>([]);
   const { currentNetwork } = useNetwork();
   useEffect(() => {
     if (currentNetwork) {
@@ -72,14 +73,15 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, [currentNetwork, txOption]);
   useEffect(() => {
-    console.log('isTimeOut', isTimeOut);
-    if (isTimeOut) {
+    console.log('timeOutCount', timeOutCount);
+    if (timeOutCount > 2) {
       openErrorNotification({
         detail: `The ${currentNetwork.chainConfig.chainName} is currently unstable. We recommend switching to a different testnet for testing.`
       });
-      setIsTimeOut(false);
+      setTimeOutArray([]);
+      setTimeOutCount(0);
     }
-  }, [isTimeOut, currentNetwork]);
+  }, [timeOutCount, currentNetwork]);
   const fetchCoinList = useCallback(() => {
     if (obricSDK) {
       const allToken = obricSDK.coinList.tokens;
@@ -125,38 +127,42 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const fetchPools = useCallback(async () => {
     try {
       const timeOut = setTimeout(() => {
-        setIsTimeOut(true);
+        timeOutArray.push(true);
+        setTimeOutCount(timeOutArray.length);
       }, 5000);
       await obricSDK.reload();
       clearTimeout(timeOut);
       setLiquidityPools([...obricSDK.pools]);
     } catch (e) {}
-  }, [obricSDK]);
+  }, [obricSDK, timeOutArray]);
 
   const fetchTokenBalances = useCallback(async () => {
     try {
       const timeOut = setTimeout(() => {
-        setIsTimeOut(true);
+        timeOutArray.push(true);
+        setTimeOutCount(timeOutArray.length);
       }, 5000);
       const balances = await obricSDK.coinList.getBalances();
       clearTimeout(timeOut);
       setTokenBalances(balances);
     } catch (e) {}
-  }, [obricSDK]);
+  }, [obricSDK, timeOutArray]);
 
   const fetchUserPoolLpAmount = useCallback(async () => {
     try {
       const timeOut = setTimeout(() => {
-        setIsTimeOut(true);
+        timeOutArray.push(true);
+        setTimeOutCount(timeOutArray.length);
       }, 5000);
       const userLP = await obricSDK.getUserPoolLpAmount();
       clearTimeout(timeOut);
       setUserPoolLpAmount(userLP);
     } catch (e) {}
-  }, [obricSDK]);
+  }, [obricSDK, timeOutArray]);
 
   const refreshSDKState = useCallback(async () => {
     if (obricSDK && shouldRefresh) {
+      console.log('refresh');
       fetchPools();
       fetchTokenBalances();
       fetchUserPoolLpAmount();

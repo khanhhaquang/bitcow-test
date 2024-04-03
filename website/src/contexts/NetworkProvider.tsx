@@ -62,7 +62,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
       blockExplorerUrls: ['https://sepolia-dencun.explorer.gobob.xyz/']
     },
     rpcNodeUrl: 'https://sepolia-dencun.rpc.gobob.xyz/',
-    icon: 'images/botanix.png',
+    icon: 'images/bob.png',
     sdkConfig: CONFIG.bobTestnet
   },
   {
@@ -75,6 +75,22 @@ export const ALL_NETWORK: NetworkConfig[] = [
     },
     rpcNodeUrl: 'https://haven-rpc.bsquared.network',
     icon: '/images/bSquared.png',
+    sdkConfig: CONFIG.b2Testnet
+  },
+  {
+    chainConfig: {
+      chainId: 200810,
+      chainName: 'Bitlayer Testnet',
+      nativeCurrency: BTC,
+      rpcUrls: [
+        'https://testnet-rpc.bitlayer.org',
+        'https://testnet-rpc.bitlayer.org',
+        'https://rpc.ankr.com/bitlayer_testnet'
+      ],
+      blockExplorerUrls: ['https://haven-explorer.bsquared.network/']
+    },
+    rpcNodeUrl: 'https://testnet-rpc.bitlayer.org',
+    icon: '/images/bitlayer.png',
     sdkConfig: CONFIG.b2Testnet
   }
   //   {

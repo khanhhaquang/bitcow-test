@@ -3,8 +3,8 @@
 
 import { Eip1193Provider, ethers } from 'ethers';
 import {
-  BaseToken,
-  BaseToken as Token,
+  TokenInfo,
+  TokenInfo as Token,
   BN,
   IPool,
   Quote,
@@ -31,8 +31,8 @@ interface MerlinWalletContextType {
   closeWalletModal: () => void;
   obricSDK: ObricSDK;
   liquidityPools: IPool[];
-  tokenList: BaseToken[];
-  symbolToToken: Record<string, BaseToken>;
+  tokenList: TokenInfo[];
+  symbolToToken: Record<string, TokenInfo>;
   tokenBalances: Record<string, number>;
   userPoolLpAmount: Record<string, UserLpAmount>;
   pendingTx: boolean;
@@ -64,6 +64,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [timeOutArray, setTimeOutArray] = useState<boolean[]>([]);
   const { currentNetwork } = useNetwork();
   useEffect(() => {
+    console.log('currentNetwork', currentNetwork);
     if (currentNetwork) {
       const provider = new ethers.JsonRpcProvider(currentNetwork.rpcNodeUrl, undefined, {
         batchMaxCount: 1
@@ -73,32 +74,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, [currentNetwork, txOption]);
   useEffect(() => {
-    console.log('timeOutCount', timeOutCount);
-    if (timeOutCount > 2) {
+    if (isTimeOut) {
       openErrorNotification({
         detail: `The ${currentNetwork.chainConfig.chainName} is currently unstable. We recommend switching to a different testnet for testing.`
       });
       setTimeOutArray([]);
       setTimeOutCount(0);
     }
-  }, [timeOutCount, currentNetwork]);
-  const fetchCoinList = useCallback(() => {
-    if (obricSDK) {
-      const allToken = obricSDK.coinList.tokens;
-      setTokenList(allToken);
-      const symbolToTokenInner = {};
-      for (const token of allToken) {
-        symbolToTokenInner[token.symbol] = token;
-      }
-      setSymbolToToken(symbolToTokenInner);
-    }
-  }, [obricSDK]);
-
-  useEffect(() => {
-    if (obricSDK) {
-      fetchCoinList();
-    }
-  }, [obricSDK, fetchCoinList]);
+  }, [isTimeOut, currentNetwork]);
 
   useEffect(() => {
     if (obricSDK) {
@@ -124,18 +107,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     setObricSdkSigner();
   }, [setObricSdkSigner]);
 
-  const fetchPools = useCallback(async () => {
-    try {
-      const timeOut = setTimeout(() => {
-        timeOutArray.push(true);
-        setTimeOutCount(timeOutArray.length);
-      }, 5000);
-      await obricSDK.reload();
-      clearTimeout(timeOut);
-      setLiquidityPools([...obricSDK.pools]);
-    } catch (e) {}
-  }, [obricSDK, timeOutArray]);
-
   const fetchTokenBalances = useCallback(async () => {
     try {
       const timeOut = setTimeout(() => {
@@ -160,18 +131,32 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     } catch (e) {}
   }, [obricSDK, timeOutArray]);
 
-  const refreshSDKState = useCallback(async () => {
-    if (obricSDK && shouldRefresh) {
-      console.log('refresh');
-      fetchPools();
+  const reloadObricSdk = useCallback(async () => {
+    try {
+      const timeOut = setTimeout(() => {
+        setIsTimeOut(true);
+      }, 5000);
+      const { tokens, pools } = await obricSDK.reload();
+      console.log(tokens);
+      clearTimeout(timeOut);
+      setTokenList(tokens);
+      setSymbolToToken(obricSDK.coinList.symbolToToken);
+      setLiquidityPools(pools);
       fetchTokenBalances();
       fetchUserPoolLpAmount();
+    } catch (e) {}
+  }, [obricSDK, fetchTokenBalances, fetchUserPoolLpAmount]);
+
+  const refreshSDKState = useCallback(async () => {
+    if (obricSDK && shouldRefresh) {
+      reloadObricSdk();
       setShouldRefresh(false);
     }
-  }, [obricSDK, shouldRefresh, fetchTokenBalances, fetchPools, fetchUserPoolLpAmount]);
+  }, [obricSDK, shouldRefresh, reloadObricSdk]);
 
   useEffect(() => {
     if (shouldRefresh) {
+      console.log('refresh');
       refreshSDKState();
     }
   }, [shouldRefresh, refreshSDKState]);
@@ -185,7 +170,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, []);
 
   const checkApprove = useCallback(
-    async (token: BaseToken, spender: string, minAmount: number) => {
+    async (token: TokenInfo, spender: string, minAmount: number) => {
       // todo
       try {
         const result = await obricSDK.coinList.approve(token, spender, minAmount);

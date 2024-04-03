@@ -1,10 +1,10 @@
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 
 import Button from 'components/Button';
 import CoinIcon from 'components/CoinIcon';
 
 interface TProps {
-  coin: BaseToken;
+  coin: TokenInfo;
   onClickToken: () => void;
 }
 

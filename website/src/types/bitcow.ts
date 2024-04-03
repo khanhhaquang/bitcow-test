@@ -1,6 +1,6 @@
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 
 export interface TokenBalance {
-  token: BaseToken;
+  token: TokenInfo;
   balance: number;
 }

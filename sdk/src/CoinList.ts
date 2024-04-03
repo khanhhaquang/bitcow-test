@@ -9,8 +9,8 @@ import { ABI_TOKEN_LIST } from './abi/TokenList';
 
 export class CoinList extends ContractRunner {
     tokens: TokenInfo[];
-    private symbolToToken: Record<string, TokenInfo>;
-    private addressToToken: Record<string, TokenInfo>;
+    symbolToToken: Record<string, TokenInfo>;
+    addressToToken: Record<string, TokenInfo>;
     private contracts: Record<string, Contract>;
     private readonly tokenListContract: Contract;
     /**

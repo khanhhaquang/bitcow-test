@@ -1,14 +1,14 @@
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 
 export interface AddLiquidity {
-  xToken: BaseToken;
-  yToken: BaseToken;
+  xToken: TokenInfo;
+  yToken: TokenInfo;
   xAmt: number;
   yAmt: number;
 }
 
 export interface WithdrawLiquidity {
-  xToken: BaseToken;
-  yToken: BaseToken;
+  xToken: TokenInfo;
+  yToken: TokenInfo;
   percent: number;
 }

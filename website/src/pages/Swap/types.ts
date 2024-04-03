@@ -1,11 +1,4 @@
-import { BaseToken, Quote } from 'obric-merlin';
-
-export interface TokenInfo {
-  symbol: any;
-  logo_url: any;
-  decimals: any;
-  name: any;
-}
+import { TokenInfo, Quote } from 'obric-merlin';
 
 export interface ISwapSettings {
   slipTolerance: number;
@@ -16,12 +9,12 @@ export interface ISwapSettings {
   privacySwap: boolean;
   quote?: Quote;
   currencyFrom?: {
-    token?: BaseToken;
+    token?: TokenInfo;
     amount?: number;
     balance: number;
   };
   currencyTo?: {
-    token?: BaseToken;
+    token?: TokenInfo;
     amount?: number;
     balance: number;
   };

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 import { useCallback, useMemo } from 'react';
 
 import { Collapse } from 'components/Antd';
@@ -22,8 +22,8 @@ const SwapDetail = ({
   impact
 }: {
   swapRateQuote: number;
-  fromToken: BaseToken;
-  toToken: BaseToken;
+  fromToken: TokenInfo;
+  toToken: TokenInfo;
   fromUiAmt: number;
   impact: number;
 }) => {

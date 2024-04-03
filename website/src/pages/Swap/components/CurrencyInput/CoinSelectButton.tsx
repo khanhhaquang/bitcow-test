@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 
 import CoinIcon from 'components/CoinIcon';
 import { ReactComponent as CoinSelectIcon } from 'resources/icons/coinSelect.svg';
@@ -11,7 +11,7 @@ const CoinSelectButton = ({
   onClick = () => {}
 }: {
   className?: string;
-  token: BaseToken | undefined;
+  token: TokenInfo | undefined;
   isDisabled?: Boolean;
   onClick?: () => void;
 }) => {

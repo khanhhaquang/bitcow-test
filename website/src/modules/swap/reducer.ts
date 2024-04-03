@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { RootState } from 'modules/rootReducer';
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 
 import { ISwapSettings } from 'pages/Swap/types';
 
@@ -11,7 +11,7 @@ interface SwapState {
   isFetching: boolean;
   isFetched: boolean;
   error: any;
-  tokenList: BaseToken[];
+  tokenList: TokenInfo[];
   swapSettings: ISwapSettings;
 }
 

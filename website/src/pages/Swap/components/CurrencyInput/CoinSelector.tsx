@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 import VirtualList from 'rc-virtual-list';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -29,7 +29,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const [tokenListBalance, setTokenListBalance] = useState<TokenBalance[]>();
 
   const onSelectToken = useCallback(
-    (token: BaseToken) => {
+    (token: TokenInfo) => {
       const otherActionType: TProps['actionType'] =
         actionType === 'currencyFrom' ? 'currencyTo' : 'currencyFrom';
       if (token.symbol === values[otherActionType]?.token?.symbol) {
@@ -106,7 +106,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
     return (
       <List
         className="max-h-[354px] overflow-y-scroll border-2 border-bc-orange bg-bc-grey-transparent2 no-scrollbar tablet:mx-5 tablet:mb-6"
-        rowKey={(item) => `list-row-${(item as BaseToken).symbol}`}>
+        rowKey={(item) => `list-row-${(item as TokenInfo).symbol}`}>
         <VirtualList
           data={tokenListBalance || []}
           itemKey={(item) => `list-item-${item.token.symbol}`}>

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';
@@ -8,7 +8,7 @@ import useMerlinWallet from 'hooks/useMerlinWallet';
 interface TProps {
   className?: string;
   symbol?: string;
-  token?: BaseToken;
+  token?: TokenInfo;
   size?: number;
 }
 

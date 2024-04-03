@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { BaseToken, BN, IPool } from 'obric-merlin';
+import { TokenInfo, BN, IPool } from 'obric-merlin';
 import { useCallback, useEffect } from 'react';
 
 // import { Popover } from 'antd';
@@ -16,8 +16,8 @@ import useTokenBalance from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
 
 interface TProps {
-  xToken: BaseToken;
-  yToken: BaseToken;
+  xToken: TokenInfo;
+  yToken: TokenInfo;
   type: 'xAmt' | 'yAmt';
   isDisableAmountInput?: boolean;
   liquidityPool: IPool;

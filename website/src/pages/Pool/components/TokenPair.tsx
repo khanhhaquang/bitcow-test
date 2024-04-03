@@ -1,10 +1,10 @@
-import { BaseToken } from 'obric-merlin';
+import { TokenInfo } from 'obric-merlin';
 
 import CoinIcon from 'components/CoinIcon';
 
 interface TProps {
-  token0: BaseToken;
-  token1: BaseToken;
+  token0: TokenInfo;
+  token1: TokenInfo;
 }
 
 const TokenPair: React.FC<TProps> = ({ token0, token1 }) => {

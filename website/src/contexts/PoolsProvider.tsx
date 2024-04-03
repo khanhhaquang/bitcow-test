@@ -1,4 +1,4 @@
-import { IPool, IUserLiquidity, BaseToken as Token } from 'obric-merlin';
+import { IPool, IUserLiquidity, TokenInfo as Token } from 'obric-merlin';
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';

@@ -112,7 +112,7 @@ export class CoinList extends ContractRunner {
         }
     }
 
-    async approve(token: BaseToken, spender: string, minAmount: number, amount: string = MAX_U256) {
+    async approve(token: TokenInfo, spender: string, minAmount: number, amount: string = MAX_U256) {
         const allowance = await this.getAllowance(token, spender);
         if (new BigNumber(allowance.toString()).div(10 ** token.decimals).lt(minAmount) && this.signer) {
             const tokenContract = this.contracts[token.address];

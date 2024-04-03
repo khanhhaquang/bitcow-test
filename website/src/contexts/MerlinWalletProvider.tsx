@@ -5,17 +5,14 @@ import { Eip1193Provider, ethers } from 'ethers';
 import {
   TokenInfo,
   TokenInfo as Token,
-  BN,
   IPool,
   Quote,
   Sdk as ObricSDK,
   TxOption,
   UserLpAmount
 } from 'obric-merlin';
-import { CONFIG } from 'obric-merlin/dist/configs';
 import { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
 
-import useNetworkConfiguration from 'hooks/useNetworkConfiguration';
 import {
   openErrorNotification,
   openTxErrorNotification,
@@ -74,14 +71,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, [currentNetwork, txOption]);
   useEffect(() => {
-    if (isTimeOut) {
+    if (timeOutCount > 2) {
       openErrorNotification({
         detail: `The ${currentNetwork.chainConfig.chainName} is currently unstable. We recommend switching to a different testnet for testing.`
       });
       setTimeOutArray([]);
       setTimeOutCount(0);
     }
-  }, [isTimeOut, currentNetwork]);
+  }, [timeOutCount, currentNetwork]);
 
   useEffect(() => {
     if (obricSDK) {
@@ -134,7 +131,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const reloadObricSdk = useCallback(async () => {
     try {
       const timeOut = setTimeout(() => {
-        setIsTimeOut(true);
+        timeOutArray.push(true);
+        setTimeOutCount(timeOutArray.length);
       }, 5000);
       const { tokens, pools } = await obricSDK.reload();
       console.log(tokens);
@@ -145,7 +143,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       fetchTokenBalances();
       fetchUserPoolLpAmount();
     } catch (e) {}
-  }, [obricSDK, fetchTokenBalances, fetchUserPoolLpAmount]);
+  }, [obricSDK, fetchTokenBalances, fetchUserPoolLpAmount, timeOutArray]);
 
   const refreshSDKState = useCallback(async () => {
     if (obricSDK && shouldRefresh) {

@@ -1,31 +1,41 @@
-import { PoolConfig } from './configs';
 import { Contract, Provider, Signer } from 'ethers';
-import { ABI_SS_TRADING_PAIR_V1 } from './abi/SsTradindPair';
+import { ABI_SS_TRADING_PAIR_V1 } from './abi/SsTradindPairV1';
 import BigNumber from 'bignumber.js';
 import { ABI_ERC20 } from './abi/ERC20';
-import { IPool, IUserLiquidity, StatsV1, Token, TxOption, UserLpAmount } from './types';
+import { IPool, IUserLiquidity, Pair, PairStats, StatsV1, Token, TokenInfo, TxOption, UserLpAmount } from './types';
 import { MILLIONTH } from './constant';
 import BN from 'bn.js';
 import sqrt from './utils/math';
-import { bigintToBN, bigintToBigNumber, bnToBigNumber } from './utils/common';
+import { bigintToBigNumber, bnToBigNumber } from './utils/common';
 import { ContractRunner } from './ContractRunner';
+import { parseStatsV1 } from './utils/statsV1';
 export class Pool extends ContractRunner implements IPool {
     poolContract: Contract;
     xTokenContract: Contract;
     yTokenContract: Contract;
     private lpTokenContract: Contract;
-    xToken: Token;
-    yToken: Token;
+    pair: Pair;
     stats: StatsV1 | undefined;
+    public xToken: Token;
+    public yToken: Token;
 
-    constructor(provider: Provider, private poolConfig: PoolConfig, txOption?: TxOption, signer?: Signer) {
+    constructor(
+        provider: Provider,
+        private pairStats: PairStats,
+        xTokenInfo: TokenInfo,
+        yTokenInfo: TokenInfo,
+        txOption?: TxOption,
+        signer?: Signer
+    ) {
         super(provider, txOption, signer);
-        this.poolContract = new Contract(poolConfig.address, ABI_SS_TRADING_PAIR_V1, this.provider);
-        this.xTokenContract = new Contract(poolConfig.xToken.address, ABI_ERC20, this.provider);
-        this.yTokenContract = new Contract(poolConfig.yToken.address, ABI_ERC20, this.provider);
-        this.lpTokenContract = new Contract(poolConfig.lpToken, ABI_ERC20, this.provider);
-        this.xToken = { ...poolConfig.xToken, liquidity: 0, mult: 10 ** poolConfig.xToken.decimals };
-        this.yToken = { ...poolConfig.yToken, liquidity: 0, mult: 10 ** poolConfig.yToken.decimals };
+        this.pair = pairStats.pair;
+        this.stats = pairStats.statsV1;
+        this.xToken = { ...xTokenInfo, mult: 10 ** xTokenInfo.decimals };
+        this.yToken = { ...yTokenInfo, mult: 10 ** yTokenInfo.decimals };
+        this.poolContract = new Contract(this.pair.pairAddress, ABI_SS_TRADING_PAIR_V1, this.provider);
+        this.xTokenContract = new Contract(this.pair.xToken, ABI_ERC20, this.provider);
+        this.yTokenContract = new Contract(this.pair.yToken, ABI_ERC20, this.provider);
+        this.lpTokenContract = new Contract(this.pair.lpToken, ABI_ERC20, this.provider);
     }
     get swapFeeMillionth() {
         return Number(this.stats?.feeMillionth.toString()) / MILLIONTH;
@@ -40,17 +50,9 @@ export class Pool extends ContractRunner implements IPool {
         return await super.getAddress();
     }
     get poolAddress() {
-        return this.poolConfig.address;
-    }
-    static async create(provider: Provider, poolConfig: PoolConfig, txOption?: TxOption, signer?: Signer) {
-        const pool = new Pool(provider, poolConfig, txOption, signer);
-        await pool.reload();
-        return pool;
+        return this.pair.pairAddress;
     }
 
-    /**
-     * only initAndLoadAll once
-     */
     async reload() {
         await this.loadStats();
     }
@@ -60,48 +62,9 @@ export class Pool extends ContractRunner implements IPool {
     }
     private async loadStats() {
         const stats = await this.poolContract.getStats();
-        this.stats = {
-            concentration: bigintToBN(stats.concentration_),
-            feeMillionth: bigintToBN(stats.feeMillionth_),
-            protocolFeeShareThousandth: bigintToBN(stats.protocolFeeShareThousandth_),
-
-            totalProtocolFeeX: bigintToBN(stats.totalProtocolFeeX_),
-            totalProtocolFeeY: bigintToBN(stats.totalProtocolFeeY_),
-            cumulativeVolume: bigintToBN(stats.cumulativeVolume_),
-            feeRecords: {
-                xProtocolFees: stats.feeRecords_[0].map(bigintToBigNumber),
-                yProtocolFees: stats.feeRecords_[1].map(bigintToBigNumber),
-                volumes: stats.feeRecords_[2].map(bigintToBigNumber)
-            },
-            currentX: bigintToBN(stats.currentX_),
-            currentY: bigintToBN(stats.currentY_),
-            totalLP: bigintToBN(stats.totalLP_),
-            multX: bigintToBN(stats.multX_),
-            multY: bigintToBN(stats.multY_),
-
-            bigK: bigintToBN(),
-            targetX: bigintToBN(),
-            targetY: bigintToBN()
-        };
-
-        this.fillStats();
+        this.stats = parseStatsV1(stats);
     }
-    private fillStats() {
-        const stats = this.stats!;
-        if (stats.concentration.eqn(1)) {
-            stats.bigK = stats.currentX.mul(stats.currentY);
-            stats.targetX = stats.currentX;
-            stats.targetY = stats.currentY;
-        } else {
-            stats.targetX = stats.currentX
-                .mul(stats.multX)
-                .add(stats.currentY.mul(stats.multY))
-                .divn(2)
-                .div(stats.multX);
-            stats.targetY = stats.targetX.mul(stats.multX).div(stats.multY);
-            stats.bigK = stats.concentration.mul(stats.concentration).mul(stats.targetX).mul(stats.targetY);
-        }
-    }
+
     get token0(): Token {
         return this.xToken;
     }

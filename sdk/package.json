@@ -8,7 +8,8 @@
     "approve-sdk": "yarn cli approve-sdk",
     "approve-pool": "yarn cli approve-pool wBTC bitUSD",
     "quote": "yarn cli quote wBTC bitusd 0.1",
-    "swap": "yarn cli quote wBTC bitusd 1"
+    "swap": "yarn cli quote wBTC bitusd 1",
+    "test": "ts-node src/SdkTest.ts"
   },
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

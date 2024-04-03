@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { Pool } from '../Pool';
-import { PoolConfig, CONFIG } from '../configs';
+import { CONFIG } from '../configs';
 import { Sdk } from '../Sdk';
 
 // export const URL = `https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH`;
@@ -41,18 +41,17 @@ export function getSigner() {
         throw new Error('Tester not found from env');
     }
 }
-function getPoolConfig(xToken: string, yToken: string): PoolConfig {
-    for (const pool of currentConfig.config.pools) {
-        if (pool.xToken.symbol === xToken && pool.yToken.symbol === yToken) {
+
+export async function getPool(xToken: string, yToken: string): Promise<Pool> {
+    const sdk = await getSdk();
+    for (const pool of sdk.pools) {
+        if (pool.xToken.symbol == xToken && pool.yToken.symbol == yToken) {
+            return pool;
+        } else if (pool.xToken.symbol == yToken && pool.yToken.symbol === xToken) {
             return pool;
         }
     }
     throw new Error('Pool of ' + xToken + '-' + yToken + ' not found');
-}
-
-export async function getPool(xToken: string, yToken: string): Promise<Pool> {
-    const signer = getSigner();
-    return await Pool.create(signer.provider, getPoolConfig(xToken, yToken), txOption, signer.signer);
 }
 export async function getSdk() {
     const signer = getSigner();

@@ -1,5 +1,5 @@
 import { Pool } from './Pool';
-import { BaseToken, Config, Quote, TxOption, UserLpAmount } from './types';
+import { TokenInfo, Config, Quote, TxOption, UserLpAmount, PairStats } from './types';
 import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 import { Contract, Provider, Signer } from 'ethers';
@@ -8,25 +8,67 @@ import { isBTC } from './utils';
 import { CoinList } from './CoinList';
 import { ethers } from 'ethers';
 import { ContractRunner } from './ContractRunner';
+import { ABI_SS_TRADING_PAIR_V1_LIST } from './abi/SsTradingPairV1List';
+import { parsePairStats } from './utils/statsV1';
 
 export class Sdk extends ContractRunner {
-    readonly pools: Pool[];
-    private router: Contract | undefined;
+    pools: Pool[] = [];
+    routerContract: Contract;
     coinList: CoinList;
+    tradingPairV1ListContract: Contract;
     constructor(provider: Provider, public config: Config, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
-        this.pools = config.pools.map((poolConfig) => new Pool(provider, poolConfig, txOption, signer));
-        this.router = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
-        this.coinList = new CoinList(provider, config.pools, txOption, signer);
-        // this.afterSetSigner(signer);
+        this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
+        this.coinList = new CoinList(provider, config, txOption, signer);
+        this.tradingPairV1ListContract = new Contract(config.tradingPairV1List, ABI_SS_TRADING_PAIR_V1_LIST, provider);
     }
-    afterSetSigner(signer?: ethers.Signer | undefined): void {
-        // if (signer) {
-        //     this.router = new Contract(SWAP_ROUTER, ABI_SWAP_ROUTER, this.signer);
-        // } else {
-        //     this.router = undefined;
-        // }
+    async reload() {
+        const [tokens, pairStats] = await Promise.all([this.coinList.reload(), this.reloadPools()]);
+        this.buildCache(pairStats);
+        return { tokens, pools: this.pools };
     }
+    private buildCache(pairStats: PairStats[]) {
+        this.pools = [];
+        for (const pairStat of pairStats) {
+            const xToken = this.coinList.getTokenByAddress(pairStat.pair.xToken);
+            const yToken = this.coinList.getTokenByAddress(pairStat.pair.yToken);
+            if (xToken === undefined) {
+                throw new Error(
+                    `Token ${pairStat.pair.xToken} of pool ${pairStat.pair.pairAddress} not found from CoinList`
+                );
+            }
+            if (yToken === undefined) {
+                throw new Error(
+                    `Token ${pairStat.pair.yToken} of pool ${pairStat.pair.pairAddress} not found from CoinList`
+                );
+            }
+            this.pools.push(new Pool(this.provider, pairStat, xToken, yToken, this.txOption, this.signer));
+        }
+    }
+    private async reloadPools(): Promise<PairStats[]> {
+        const paginateCount = 1000;
+        let resultPairStats: PairStats[] = [];
+        for (let start = 0; ; start++) {
+            const fetchResult = await this.tradingPairV1ListContract.fetchPairsStatsListPaginate(
+                start,
+                start + paginateCount
+            );
+            const pairStatss = fetchResult[0];
+            resultPairStats = resultPairStats.concat(
+                pairStatss.map((pairStats: any) => {
+                    return parsePairStats(pairStats);
+                })
+            );
+            const tokenCount = Number(fetchResult[1].toString());
+            if (pairStatss.length + start <= tokenCount) {
+                break;
+            } else {
+                start += paginateCount;
+            }
+        }
+        return resultPairStats;
+    }
+    afterSetSigner(signer?: ethers.Signer | undefined): void {}
     setSigner(signer?: Signer, address?: string) {
         super.setSigner(signer, address);
         this.coinList.setSigner(signer, address);
@@ -49,9 +91,6 @@ export class Sdk extends ContractRunner {
         return sdk;
     }
 
-    async reload() {
-        await Promise.all(this.pools.map((pool) => pool.reload()));
-    }
     async getUserPoolLpAmount(): Promise<Record<string, UserLpAmount> | undefined> {
         if (this.signer) {
             const result: Record<string, UserLpAmount> = {};
@@ -63,11 +102,11 @@ export class Sdk extends ContractRunner {
             return undefined;
         }
     }
-    getDirectQuote(inputToken: BaseToken, outputToken: BaseToken, inAmt: number): Quote | undefined {
+    getDirectQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
         let pool: Pool | undefined;
         let isReversed: boolean | undefined;
-        const fromToken = isBTC(inputToken) ? this.config.wBTC : inputToken;
-        const toToken = isBTC(outputToken) ? this.config.wBTC : outputToken;
+        const fromToken = inputToken;
+        const toToken = outputToken;
         for (const pool_ of this.pools) {
             if (pool_.xToken.address === fromToken.address && pool_.yToken.address === toToken.address) {
                 pool = pool_;
@@ -95,10 +134,10 @@ export class Sdk extends ContractRunner {
         };
     }
 
-    getBest2HopQuote(inputToken: BaseToken, outputToken: BaseToken, inAmt: number): Quote | undefined {
+    getBest2HopQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
         let bestQuote: Quote | undefined;
-        const fromToken = isBTC(inputToken) ? this.config.wBTC : inputToken;
-        const toToken = isBTC(outputToken) ? this.config.wBTC : outputToken;
+        const fromToken = inputToken;
+        const toToken = outputToken;
         for (const mToken of this.coinList.tokens) {
             if (mToken.address === fromToken.address || mToken.address === toToken.address) {
                 continue;
@@ -120,10 +159,10 @@ export class Sdk extends ContractRunner {
         return bestQuote;
     }
 
-    getBest3HopQuote(inputToken: BaseToken, outputToken: BaseToken, inAmt: number): Quote | undefined {
+    getBest3HopQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
         let bestQuote: Quote | undefined;
-        const fromToken = isBTC(inputToken) ? this.config.wBTC : inputToken;
-        const toToken = isBTC(outputToken) ? this.config.wBTC : outputToken;
+        const fromToken = inputToken;
+        const toToken = outputToken;
         for (const mToken of this.coinList.tokens) {
             if (mToken.address === fromToken.address || mToken.address === toToken.address) {
                 continue;
@@ -145,7 +184,7 @@ export class Sdk extends ContractRunner {
         return bestQuote;
     }
 
-    getQuote(inputToken: BaseToken, outputToken: BaseToken, inAmt: number): Quote | undefined {
+    getQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
         const directQuote = this.getDirectQuote(inputToken, outputToken, inAmt);
         const twoHopQuote = this.getBest2HopQuote(inputToken, outputToken, inAmt);
         const threeHopQuote = this.getBest3HopQuote(inputToken, outputToken, inAmt);
@@ -180,10 +219,10 @@ export class Sdk extends ContractRunner {
     }
 
     async swap(quote: Quote, minOutput?: number) {
-        if (this.router) {
+        if (this.routerContract) {
             if (isBTC(quote.inputToken)) {
                 return await this.send(
-                    this.router.swapWithBTCInput,
+                    this.routerContract.swapWithBTCInput,
                     quote.steps.map((step) => step.pool.poolAddress),
                     quote.steps.map((step) => step.isReversed),
                     Sdk.getOutputAmount(quote, minOutput),
@@ -191,7 +230,7 @@ export class Sdk extends ContractRunner {
                 );
             } else if (isBTC(quote.outputToken)) {
                 return await this.send(
-                    this.router.swapWithBTCInput,
+                    this.routerContract.swapWithBTCInput,
                     Sdk.getInputAmount(quote),
                     quote.steps.map((step) => step.pool.poolAddress),
                     quote.steps.map((step) => step.isReversed),
@@ -200,7 +239,7 @@ export class Sdk extends ContractRunner {
                 );
             } else {
                 return await this.send(
-                    this.router.swap,
+                    this.routerContract.swap,
                     Sdk.getInputAmount(quote),
                     quote.steps.map((step) => step.pool.poolAddress),
                     quote.steps.map((step) => !step.isReversed),

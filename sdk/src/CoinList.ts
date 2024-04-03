@@ -1,24 +1,64 @@
-import { BaseToken, TxOption } from './types';
-import { BTC, PoolConfig } from './configs';
+import { TokenInfo, Config, TxOption } from './types';
+import { BTC } from './configs';
 import { Contract, Provider, Signer } from 'ethers';
 import { ABI_ERC20 } from './abi/ERC20';
 import { MAX_U256 } from './constant';
 import BigNumber from 'bignumber.js';
 import { ContractRunner } from './ContractRunner';
+import { ABI_TOKEN_LIST } from './abi/TokenList';
 
 export class CoinList extends ContractRunner {
-    readonly tokens: BaseToken[];
-    private readonly symbolToToken: Record<string, BaseToken>;
-    private readonly addressToToken: Record<string, BaseToken>;
-    private readonly contracts: Record<string, Contract>;
-    constructor(provider: Provider, public poolConfigs: PoolConfig[], txOption?: TxOption, signer?: Signer) {
+    tokens: TokenInfo[];
+    private symbolToToken: Record<string, TokenInfo>;
+    private addressToToken: Record<string, TokenInfo>;
+    private contracts: Record<string, Contract>;
+    private readonly tokenListContract: Contract;
+    /**
+     * tokenAddress => spender => value
+     * @private
+     */
+    private allowances: Record<string, Record<string, bigint>>;
+    constructor(provider: Provider, public config: Config, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
-        const tokensSet = new Set<BaseToken>();
-        poolConfigs.map((poolConfig) => {
-            tokensSet.add(poolConfig.xToken);
-            tokensSet.add(poolConfig.yToken);
-        });
-        this.tokens = Array.from(tokensSet.keys());
+        this.tokens = [];
+        this.symbolToToken = {};
+        this.addressToToken = {};
+        this.contracts = {};
+        this.allowances = {};
+        this.tokenListContract = new Contract(config.tokenList, ABI_TOKEN_LIST, provider);
+    }
+
+    async reload() {
+        const paginateCount = 1000;
+        this.tokens = [];
+        for (let start = 0; ; start++) {
+            const fetchResult = await this.tokenListContract.fetchTokenListPaginate(start, start + paginateCount);
+            const tokens = fetchResult[0];
+            this.tokens = this.tokens.concat(
+                tokens.map((token: any) => {
+                    return {
+                        address: token.tokenAddress,
+                        name: token.name,
+                        symbol: token.symbol,
+                        decimals: Number(token.decimals.toString()),
+                        description: token.description,
+                        projectUrl: token.projectUrl,
+                        logoUrl: token.logoUrl,
+                        coingeckoId: token.coingeckoId
+                    };
+                })
+            );
+            const tokenCount = Number(fetchResult[1].toString());
+            if (tokens.length + start <= tokenCount) {
+                break;
+            } else {
+                start += paginateCount;
+            }
+        }
+        this.buildCache();
+        return this.tokens;
+    }
+    buildCache() {
         this.symbolToToken = {};
         this.addressToToken = {};
         this.tokens.forEach((token) => {
@@ -34,10 +74,10 @@ export class CoinList extends ContractRunner {
     setTxOption(txOption?: TxOption) {
         this.txOption = txOption;
     }
-    getTokenByAddress(address: string): BaseToken {
+    getTokenByAddress(address: string): TokenInfo {
         return this.addressToToken[address];
     }
-    getTokenBySymbol(symbol: string): BaseToken {
+    getTokenBySymbol(symbol: string): TokenInfo {
         return this.symbolToToken[symbol];
     }
 
@@ -45,7 +85,7 @@ export class CoinList extends ContractRunner {
         return [BTC, ...this.tokens];
     }
 
-    async getAllowance(token: BaseToken, spender: string) {
+    async getAllowance(token: TokenInfo, spender: string) {
         const userAddress = await this.getAddress();
         if (userAddress) {
             return await this.contracts[token.address].allowance(userAddress, spender);

@@ -1,25 +1,23 @@
 import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 import { TransactionReceipt } from 'ethers';
-import { PoolConfig } from './configs';
 
 export type TxOption = { gasPrice?: number; gasLimit?: number };
 
-export type BaseToken = {
+export type TokenInfo = {
     address: string;
-    decimals: number;
-    symbol: string;
     name: string;
-    coingeckoId: string;
+    symbol: string;
+    decimals: number;
+    description: string;
+    projectUrl: string;
     logoUrl: string;
+    coingeckoId: string;
 };
-export type Token = BaseToken & {
-    liquidity: number;
+export type Token = TokenInfo & {
     mult: number;
 };
-export type LpToken = BaseToken & {
-    totalSupply: number;
-};
+
 export type FeeRecords = {
     xProtocolFees: BigNumber[];
     yProtocolFees: BigNumber[];
@@ -53,6 +51,19 @@ export type StatsV1 = {
     multX: BN;
     multY: BN;
 };
+
+export type Pair = {
+    pairAddress: string;
+    xToken: string;
+    yToken: string;
+    lpToken: string;
+};
+
+export type PairStats = {
+    pair: Pair;
+    statsV1: StatsV1;
+};
+
 export type UserLpAmount = bigint;
 export interface IUserLiquidity {
     invested: boolean;
@@ -67,12 +78,12 @@ export type Step = {
     inAmt: number;
     outAmt: number;
     poolType: number;
-    fromToken: BaseToken;
-    toToken: BaseToken;
+    fromToken: TokenInfo;
+    toToken: TokenInfo;
 };
 export type Quote = {
-    inputToken: BaseToken;
-    outputToken: BaseToken;
+    inputToken: TokenInfo;
+    outputToken: TokenInfo;
     inAmt: number;
     steps: Step[];
     outAmt: number;
@@ -80,10 +91,10 @@ export type Quote = {
 
 export interface IPool {
     poolType: string;
-    token0: BaseToken;
-    token1: BaseToken;
     reserve0: BN;
     reserve1: BN;
+    token0: TokenInfo;
+    token1: TokenInfo;
     xMult: number;
     yMult: number;
     totalLP: string | undefined;
@@ -106,7 +117,8 @@ export interface IPool {
 }
 
 export type Config = {
-    wBTC: BaseToken;
+    tokenList: string;
+    tradingPairV1List: string;
+    tradingPairV1Creator: string;
     swapRouter: string;
-    pools: PoolConfig[];
 };

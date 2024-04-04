@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { ReactComponent as SelectUnfoldIcon } from 'resources/icons/selectUnfold.svg';
 
 import useNetwork from '../hooks/useNetwork';
+import { useEvmConnectContext } from '../wallet';
 
 function SelectRow({
   icon,
@@ -31,7 +32,7 @@ function SelectRow({
 
 export default function Select() {
   const { networks, currentNetwork, setCurrentNetwork } = useNetwork();
-
+  const { setCurrentChain } = useEvmConnectContext();
   const [isUnfold, setIsUnfold] = useState(false);
 
   // add logic to unfold when click outside the component
@@ -63,8 +64,10 @@ export default function Select() {
               <div
                 key={network.chainConfig.chainId}
                 className="mt-[2px]"
-                onClick={() => {
-                  setCurrentNetwork(network);
+                onClick={async () => {
+                  if (await setCurrentChain(network.chainConfig)) {
+                    setCurrentNetwork(network);
+                  }
                   setIsUnfold(false);
                 }}>
                 <SelectRow

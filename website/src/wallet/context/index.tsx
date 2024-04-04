@@ -21,7 +21,7 @@ interface EvmGlobalState {
   openModal: () => void;
   closeModal: () => void;
   currentChain: AddEthereumChainParameter;
-  setCurrentChain: (chain: AddEthereumChainParameter) => void;
+  setCurrentChain: (chain: AddEthereumChainParameter) => Promise<boolean>;
   btcConnectors: BtcConnector[];
   evmConnectors: [EvmConnector, Web3ReactHooks][];
   btcConnect: (connector: BtcConnector) => void;
@@ -93,8 +93,9 @@ const EvmConnectProviderInner = ({
         } else {
           await connector.activate(chain);
         }
+        return true;
       } catch (e) {
-        console.log('connect err', e);
+        return false;
       }
     },
     []
@@ -110,18 +111,22 @@ const EvmConnectProviderInner = ({
 
   const setCurrentChain = useCallback(
     async (chain: AddEthereumChainParameter) => {
+      console.log('wallet, setCurrentChain', wallet, currentChain);
+      let success = true;
       if (wallet && wallet.type === WalletType.EVM && currentChain.chainId !== chain.chainId) {
         const connectorId = localStorage.getItem(EVM_CURRENT_CONNECTOR_ID);
         if (connectorId) {
           const connector = evmConnectors.find(
             (connectorValue) => connectorValue[0].metadata.id === connectorId
           );
-          await evnConnectWithChain(connector[0], chain);
+          success = await evnConnectWithChain(connector[0], chain);
         }
       } else if (wallet && wallet.type === WalletType.BTC) {
         await onDisconnect();
+        success = true;
       }
       setCurrentChainState(chain);
+      return success;
     },
     [wallet, currentChain, evmConnectors, onDisconnect, evnConnectWithChain]
   );
@@ -143,7 +148,7 @@ const EvmConnectProviderInner = ({
     if (web3ReactAccount && web3ReactProvider) {
       setWallet({
         type: WalletType.EVM,
-        chainId: currentChain.chainId,
+        chainId: currentChain?.chainId, // todo should get chainID from
         metadata: (web3ReactConnector as unknown as Metadata).metadata,
         provider: web3ReactProvider.provider,
         accounts: [{ evm: web3ReactAccount }]

@@ -128,6 +128,7 @@ const NetworkProvider: FC<TConfigProps> = ({ children }) => {
       for (const networkConfig of ALL_NETWORK) {
         if (networkConfig.chainConfig.chainId.toString() === currentNetworkChainId) {
           setCurrentNetworkState(networkConfig);
+          setCurrentChain(networkConfig.chainConfig);
           break;
         }
       }
@@ -135,11 +136,6 @@ const NetworkProvider: FC<TConfigProps> = ({ children }) => {
       setCurrentNetworkState(ALL_NETWORK[0]);
     }
   }, []);
-  useEffect(() => {
-    if (currentNetwork) {
-      setCurrentChain(currentNetwork.chainConfig);
-    }
-  }, [currentNetwork, setCurrentChain]);
   return (
     <NetworkContext.Provider value={{ networks: ALL_NETWORK, currentNetwork, setCurrentNetwork }}>
       {children}

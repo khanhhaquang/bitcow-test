@@ -34,11 +34,11 @@ export class CoinList extends ContractRunner {
 
     async reload() {
         const paginateCount = 1000;
-        this.tokens = [];
+        let resultTokens: TokenInfo[] = [];
         for (let start = 0; ; start++) {
             const fetchResult = await this.tokenListContract.fetchTokenListPaginate(start, start + paginateCount);
             const tokens = fetchResult[0];
-            this.tokens = this.tokens.concat(
+            resultTokens = resultTokens.concat(
                 tokens.map((token: any) => {
                     return {
                         address: token.tokenAddress,
@@ -59,6 +59,7 @@ export class CoinList extends ContractRunner {
                 start += paginateCount;
             }
         }
+        this.tokens = resultTokens;
         this.buildCache();
         return this.tokens;
     }

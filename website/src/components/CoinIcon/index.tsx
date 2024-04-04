@@ -17,6 +17,7 @@ const CoinIcon: React.FC<TProps> = ({ size = 24, className, symbol, token }) => 
   const { symbolToToken } = useMerlinWallet();
   const [isLoaded, setIsLoaded] = useState(false);
   const logoSrc = useMemo(() => {
+    if (token && token.logoUrl != '') return token.logoUrl;
     if (token) return 'images/' + token.symbol + '.svg';
     if (symbol) {
       const tok = symbolToToken[symbol];

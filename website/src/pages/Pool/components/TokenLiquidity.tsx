@@ -78,7 +78,7 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
       <div className="flex w-full items-center justify-between">
         <div className="flex gap-2">
           <div className="flex gap-2">
-            <CoinIcon symbol={token.symbol} size={20} />
+            <CoinIcon token={token} size={20} />
             <div className="">{token.symbol}</div>
           </div>
           <div className="flex gap-2 border-l border-bc-white-20 pl-2">

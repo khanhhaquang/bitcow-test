@@ -87,7 +87,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           return (
             <div className="flex w-full items-center justify-between" key={key}>
               <div className="flex items-center gap-2">
-                <CoinIcon symbol={key} size={20} />
+                <CoinIcon token={token} size={20} />
                 <div className="text-[18px]">{key}</div>
               </div>
               <div className="text-sm">

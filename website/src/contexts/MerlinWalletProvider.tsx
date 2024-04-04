@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import BigNumber from 'bignumber.js';
 import { Eip1193Provider, ethers } from 'ethers';
 import {
   TokenInfo,
@@ -9,7 +10,8 @@ import {
   Quote,
   Sdk as ObricSDK,
   TxOption,
-  UserLpAmount
+  UserLpAmount,
+  CreateTokenInfo
 } from 'obric-merlin';
 import { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
 
@@ -32,10 +34,22 @@ interface MerlinWalletContextType {
   symbolToToken: Record<string, TokenInfo>;
   tokenBalances: Record<string, number>;
   userPoolLpAmount: Record<string, UserLpAmount>;
+  createFee: bigint;
+  bitusdToken: TokenInfo;
   pendingTx: boolean;
   requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
   requestWithdrawLiquidity: (pool: IPool, amt: string) => Promise<boolean>;
+  requestCreatePair: (
+    tokenInfo: CreateTokenInfo,
+    mintAmount: number,
+    addLiquidityAmount: number,
+    bitusdAddLiquidityAmount: number,
+    protocolFeeShareThousandth: number,
+    feeMillionth: number,
+    protocolFeeAddress: string,
+    addTokenListFee: string
+  ) => Promise<boolean>;
 }
 
 interface TProviderProps {
@@ -59,9 +73,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [userPoolLpAmount, setUserPoolLpAmount] = useState<Record<string, UserLpAmount>>();
   const [timeOutCount, setTimeOutCount] = useState(0);
   const [timeOutArray, setTimeOutArray] = useState<boolean[]>([]);
+  const [createFee, setCreateFee] = useState<bigint>();
+  const [bitusdToken, setBitusdToken] = useState<TokenInfo>();
+
   const { currentNetwork } = useNetwork();
   useEffect(() => {
-    console.log('currentNetwork', currentNetwork);
     if (currentNetwork) {
       const provider = new ethers.JsonRpcProvider(currentNetwork.rpcNodeUrl, undefined, {
         batchMaxCount: 1
@@ -128,6 +144,13 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     } catch (e) {}
   }, [obricSDK, timeOutArray]);
 
+  const fetchCreateFee = useCallback(async () => {
+    if (obricSDK) {
+      const createFeeInner = await obricSDK.coinList.getCreateFee();
+      setCreateFee(createFeeInner);
+    }
+  }, [obricSDK]);
+
   const reloadObricSdk = useCallback(async () => {
     try {
       const timeOut = setTimeout(() => {
@@ -135,15 +158,17 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         setTimeOutCount(timeOutArray.length);
       }, 5000);
       const { tokens, pools } = await obricSDK.reload();
-      console.log(tokens);
       clearTimeout(timeOut);
       setTokenList(tokens);
+      const bitusd = tokens.find((token) => token.symbol === 'bitusd');
+      setBitusdToken(bitusd);
       setSymbolToToken(obricSDK.coinList.symbolToToken);
       setLiquidityPools(pools);
       fetchTokenBalances();
       fetchUserPoolLpAmount();
+      fetchCreateFee();
     } catch (e) {}
-  }, [obricSDK, fetchTokenBalances, fetchUserPoolLpAmount, timeOutArray]);
+  }, [obricSDK, fetchTokenBalances, fetchUserPoolLpAmount, timeOutArray, fetchCreateFee]);
 
   const refreshSDKState = useCallback(async () => {
     if (obricSDK && shouldRefresh) {
@@ -211,14 +236,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               result.hash,
               `Swapped ${quote.inAmt} ${fromToken.symbol} to ${toToken.symbol}`
             );
+            success = true;
           } else if (result.status === 0) {
             openTxErrorNotification(
               result.hash,
               `Failed to swap ${quote.inAmt} ${fromToken.symbol} to ${toToken.symbol}`
             );
+            success = false;
           }
-
-          success = true;
         } catch (e) {
           checkTransactionError(e);
           success = false;
@@ -251,13 +276,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
                 result.hash,
                 `Deposit success to ${pool.token0.symbol}-${pool.token1.symbol}`
               );
+              success = true;
             } else if (result.status === 0) {
               openTxErrorNotification(
                 result.hash,
                 `Failed to deposit to ${pool.token0.symbol}-${pool.token1.symbol}`
               );
+              success = false;
             }
-            success = true;
           } else {
             success = false;
           }
@@ -287,24 +313,91 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               result.hash,
               `Withdraw success from ${amt} lp ${pool.token0.symbol}-${pool.token1.symbol}`
             );
+            success = true;
           } else if (result.status === 0) {
             openTxErrorNotification(
               result.hash,
               `Failed to withdraw from ${pool.token0.symbol}-${pool.token1.symbol}`
             );
+            success = false;
           }
-          setPendingTx(false);
-          success = true;
+        } else {
+          success = false;
         }
       } catch (error) {
         checkTransactionError(error);
-        setPendingTx(false);
+        success = false;
       } finally {
+        setPendingTx(false);
         setShouldRefresh(true);
         return success;
       }
     },
     [obricSDK, wallet, checkTransactionError]
+  );
+
+  const requestCreatePair = useCallback(
+    async (
+      tokenInfo: CreateTokenInfo,
+      mintAmount: number,
+      addLiquidityAmount: number,
+      bitusdAddLiquidityAmount: number,
+      protocolFeeShareThousandth: number,
+      feeMillionth: number,
+      protocolFeeAddress: string,
+      addTokenListFee: string
+    ) => {
+      let success = true;
+      try {
+        if (!wallet) throw new Error('Please connect wallet first');
+        if (obricSDK && tokenList) {
+          if (
+            bitusdToken &&
+            (await checkApprove(
+              bitusdToken,
+              obricSDK.config.tradingPairV1Creator,
+              bitusdAddLiquidityAmount
+            ))
+          ) {
+            const {
+              success: createSuccess,
+              hash,
+              tokenAddress,
+              pairAddress
+            } = await obricSDK.poolCreator.cretePair(
+              tokenInfo,
+              new BigNumber(mintAmount).times(10 ** tokenInfo.decimals).toFixed(0),
+              new BigNumber(addLiquidityAmount).times(10 ** tokenInfo.decimals).toFixed(0),
+              new BigNumber(bitusdAddLiquidityAmount).times(10 ** bitusdToken.decimals).toFixed(0),
+              protocolFeeShareThousandth,
+              feeMillionth,
+              protocolFeeAddress,
+              addTokenListFee
+            );
+            if (createSuccess) {
+              openTxSuccessNotification(hash, 'Create token and pool success');
+              success = true;
+            } else {
+              openTxErrorNotification(hash, 'Failed to create token and pool');
+              success = false;
+            }
+          } else {
+            success = false;
+          }
+        } else {
+          success = false;
+        }
+      } catch (error) {
+        console.log(error);
+        checkTransactionError(error);
+        success = false;
+      } finally {
+        setShouldRefresh(true);
+        setPendingTx(false);
+        return success;
+      }
+    },
+    [obricSDK, wallet, tokenList, checkApprove, checkTransactionError, bitusdToken]
   );
 
   return (
@@ -319,10 +412,13 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         symbolToToken,
         tokenBalances,
         userPoolLpAmount,
+        createFee,
+        bitusdToken,
         pendingTx,
         requestSwap,
         requestAddLiquidity,
-        requestWithdrawLiquidity
+        requestWithdrawLiquidity,
+        requestCreatePair
       }}>
       {children}
     </MerlinWalletContext.Provider>

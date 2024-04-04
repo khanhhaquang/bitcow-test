@@ -23,7 +23,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const { tokenList, tokenBalances } = useMerlinWallet();
   const { coinPrices: coinInPools } = usePools();
   const commonCoins = tokenList.filter((token) => {
-    return ['APT', 'USDT', 'USDC'].includes(token.symbol);
+    return ['wBTC', 'bitusd'].includes(token.symbol);
   });
   const [filter, setFilter] = useState<string>('');
   const [tokenListBalance, setTokenListBalance] = useState<TokenBalance[]>();

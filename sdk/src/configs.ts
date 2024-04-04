@@ -38,9 +38,9 @@ export const CONFIG: {
     },
     bobTestnet: {
         tokenList: '0x40700E1cCd16eAE708A1daB55048E877914c889C',
-        tradingPairV1List: '0x40700E1cCd16eAE708A1daB55048E877914c889C',
-        tradingPairV1Creator: '0x7A04d8a8862738C9a380f71bcF15e2eC7c910ab8',
-        swapRouter: '0xC0f7cd107EFCB4f26Df298CBdAB680Fb4781403E'
+        tradingPairV1List: '0x7A04d8a8862738C9a380f71bcF15e2eC7c910ab8',
+        tradingPairV1Creator: '0xC0f7cd107EFCB4f26Df298CBdAB680Fb4781403E',
+        swapRouter: '0x783498553A0091E9A0A75c3B723b508bb860e01B'
     },
     bitlayerTestnet: {
         tokenList: '0xeE4b636fF9864446e271eACCcdf560A8517f64c3',

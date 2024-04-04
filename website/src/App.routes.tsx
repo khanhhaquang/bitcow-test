@@ -3,13 +3,14 @@ import { Navigate, RouteObject, useRoutes } from 'react-router-dom';
 import Home from 'pages/Home2';
 import Pool from 'pages/Pool';
 import Swap from 'pages/Swap';
+import Tokens from 'pages/Tokens';
 // import Faucet from 'pages/Faucet';
 // import { useSelector } from 'react-redux';
 // import { getIsResourcesNotFound } from 'modules/common/reducer';
 // import Stats from 'pages/Stats';
 
 export type TRoute = RouteObject & {
-  name: 'Home' | 'Pools' | 'Swap' | '404' | 'Faucet' | 'Stats';
+  name: 'Home' | 'Pools' | 'Swap' | 'Tokens' | '404' | 'Faucet' | 'Stats';
   hidden?: boolean; //to hide the visibility in header menu
 };
 
@@ -30,6 +31,12 @@ export const routes: TRoute[] = [
     name: 'Pools',
     // hidden: true,
     element: <Pool />
+  },
+  {
+    path: 'tokens',
+    name: 'Tokens',
+    hidden: true,
+    element: <Tokens />
   },
   // {
   //   path: 'stats',

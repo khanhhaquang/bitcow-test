@@ -58,7 +58,6 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
               inputAmount={values.slipTolerance}
               min={0}
               max={10}
-              isConfine={true}
               placeholder="Custom"
               className={classNames('h-full w-full bg-bc-input py-3 px-4 text-bc-white')}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
@@ -79,7 +78,6 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
           <PositiveFloatNumInput
             className={classNames('h-full w-full bg-bc-input py-3 px-4 text-bc-white')}
             inputAmount={values.trasactionDeadline}
-            isConfine={true}
             placeholder="0"
             min={0}
             max={600}

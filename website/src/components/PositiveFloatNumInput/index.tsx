@@ -15,9 +15,8 @@ type PositiveFloatNumInputProps = {
   styles?: Object;
   min?: number;
   max?: number;
-  isConfine?: boolean;
   maxDecimals?: number;
-  onInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputChange?: (a: number) => void;
   onEnter?: () => {};
   onAmountChange?: (a: number) => void;
   suffix?: string;
@@ -42,7 +41,6 @@ const PositiveFloatNumInput = forwardRef<
       styles = {},
       min = MIN_DEFAULT,
       max = MAX_DEFAULT,
-      isConfine = false,
       maxDecimals = MAX_DECIMALS_DEFAULT,
       onInputChange = () => {},
       onEnter = () => {},
@@ -71,15 +69,12 @@ const PositiveFloatNumInput = forwardRef<
       if (!inputAmount) return '';
       let inputAmountTemp = inputAmount;
       if (inputAmount > max || inputAmount < min) {
-        if (!isConfine) {
-          throw new Error('Invalid input amount');
-        } else {
-          inputAmountTemp = inputAmount > max ? max : min;
-        }
+        inputAmountTemp = inputAmount > max ? max : min;
+        onInputChange(inputAmountTemp);
       }
 
       return cutDecimals(avoidScientificNotation(inputAmountTemp), maxDecimals);
-    }, [inputAmount, isConfine, max, maxDecimals, min]);
+    }, [inputAmount, max, maxDecimals, min, onInputChange]);
 
     const [internalAmountText, setInternalAmountText] = useState<string>(inputToInternalAmount); // can be ''
 
@@ -160,16 +155,12 @@ const PositiveFloatNumInput = forwardRef<
               }
               const value = parseFloat(valueStr);
               if (value < min) {
-                if (isConfine) valueStr = '0';
-                else return;
+                valueStr = '0';
               } else if (value > max) {
-                if (isConfine) valueStr = '' + max;
-                else return;
+                valueStr = '' + max;
               }
             }
             setInternalAmountText(valueStr);
-            onInputChange(event);
-            // When internal value is '', convert to 0
             onAmountChange(parseFloat(valueStr || '0'));
           }}
         />

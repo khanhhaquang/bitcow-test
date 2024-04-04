@@ -100,12 +100,13 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
         </div>
         <PositiveFloatNumInput
           min={0}
-          max={1e11}
+          max={uiBalance}
           maxDecimals={token?.decimals || 9}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
           className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl"
           inputAmount={values[type] || 0}
+          onInputChange={onAmountChange}
           onAmountChange={onAmountChange}
         />
       </div>

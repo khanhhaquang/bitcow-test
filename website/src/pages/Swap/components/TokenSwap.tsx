@@ -72,6 +72,7 @@ const TokenSwap = () => {
         setFieldValue('currencyTo.amount', undefined);
       }
     } catch (error) {
+      console.log(error);
       openErrorNotification({
         detail: error?.message || JSON.stringify(error),
         title: 'Fetch swap routes error'

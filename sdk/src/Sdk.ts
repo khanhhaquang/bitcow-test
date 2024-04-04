@@ -127,7 +127,7 @@ export class Sdk extends ContractRunner {
         pool = pool!;
         isReversed = isReversed!;
         const [inputMult, outputMult] = isReversed ? [pool.yMult, pool.xMult] : [pool.xMult, pool.yMult];
-        const inputAmount = new BN(new BigNumber(inAmt).times(inputMult).toFixed());
+        const inputAmount = new BN(new BigNumber(inAmt).times(inputMult).toFixed(0));
         const outAmount = isReversed ? pool.quoteYtoX(inputAmount) : pool.quoteXtoY(inputAmount);
         const outAmt = new BigNumber(outAmount.toString()).div(outputMult).toNumber();
         return {

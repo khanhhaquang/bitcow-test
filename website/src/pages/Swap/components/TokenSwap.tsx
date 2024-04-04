@@ -24,7 +24,7 @@ import { ISwapSettings } from '../types';
 const TokenSwap = () => {
   const { values, setFieldValue, submitForm, isSubmitting, isValid, dirty } =
     useFormikContext<ISwapSettings>();
-  const { wallet, openWalletModal, obricSDK, tokenList } = useMerlinWallet();
+  const { wallet, openWalletModal, obricSDK, symbolToToken } = useMerlinWallet();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
   const toToken = values.currencyTo?.token;
@@ -39,23 +39,11 @@ const TokenSwap = () => {
   }, [wallet, fromUiAmt, isReady, uiBalance]);
 
   useEffect(() => {
-    if (obricSDK && tokenList) {
-      if (!values.currencyFrom?.token) {
-        setFieldValue('currencyFrom.token', obricSDK.coinList.getTokenBySymbol('wBTC'));
-      }
-      if (!values.currencyTo?.token) {
-        setFieldValue('currencyTo.token', obricSDK.coinList.getTokenBySymbol('bitusd'));
-      }
+    if (symbolToToken) {
+      setFieldValue('currencyFrom.token', symbolToToken.wBTC);
+      setFieldValue('currencyTo.token', symbolToToken.bitusd);
     }
-  }, [
-    fromToken,
-    obricSDK,
-    setFieldValue,
-    toToken,
-    values.currencyFrom,
-    values.currencyTo,
-    tokenList
-  ]);
+  }, [symbolToToken, setFieldValue]);
 
   const lastFetchTs = useRef(0);
 

@@ -111,7 +111,6 @@ const EvmConnectProviderInner = ({
 
   const setCurrentChain = useCallback(
     async (chain: AddEthereumChainParameter) => {
-      console.log('wallet, setCurrentChain', wallet, currentChain);
       let success = true;
       if (wallet && wallet.type === WalletType.EVM && currentChain.chainId !== chain.chainId) {
         const connectorId = localStorage.getItem(EVM_CURRENT_CONNECTOR_ID);

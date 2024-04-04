@@ -135,7 +135,7 @@ const NetworkProvider: FC<TConfigProps> = ({ children }) => {
     } else {
       setCurrentNetworkState(ALL_NETWORK[0]);
     }
-  }, []);
+  }, [setCurrentChain]);
   return (
     <NetworkContext.Provider value={{ networks: ALL_NETWORK, currentNetwork, setCurrentNetwork }}>
       {children}

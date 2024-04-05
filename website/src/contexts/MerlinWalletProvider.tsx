@@ -87,7 +87,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, [currentNetwork, txOption]);
   useEffect(() => {
-    if (timeOutCount > 2) {
+    if (timeOutCount >= 2) {
       openErrorNotification({
         detail: `The ${currentNetwork.chainConfig.chainName} is currently unstable. We recommend switching to a different testnet for testing.`
       });

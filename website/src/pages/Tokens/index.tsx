@@ -1,4 +1,4 @@
-import sizeOf from 'buffer-image-size';
+//import sizeOf from 'buffer-image-size';
 import { Formik, FormikHelpers } from 'formik';
 import { useCallback } from 'react';
 import * as yup from 'yup';
@@ -23,7 +23,10 @@ const Tokens: React.FC = () => {
       .matches(
         new RegExp(
           '.(bmp|jpg|png|tif|gif|pcx|tga|exif|fpx|svg|psd|cdr|pcd|dxf|ufo|eps|ai|raw|WMF|webp|jpeg)$'
-        )
+        ),
+        {
+          message: 'image logo must end with one of: bmp/jpg/png/tif/gif/webp/jpeg'
+        }
       )
       .required("Log url can't be empty"),
     mintAmount: yup.number().required().moreThan(0, 'Mint Amount should create than 0'),
@@ -44,17 +47,40 @@ const Tokens: React.FC = () => {
         return;
       }
 
-      const response = await fetch(values.logoUrl);
+      let response;
+      try {
+        response = await fetch(values.logoUrl, {
+          mode: 'no-cors'
+        });
+      } catch (e) {
+        openErrorNotification({
+          detail: `Unable to load the image. Please check the validity of the URL. ${
+            e instanceof Error ? e.message : ''
+          }`
+        });
+        return;
+      }
       const arrayBuffer = await response.arrayBuffer();
-      if (arrayBuffer.byteLength / 1024 > 10) {
-        openErrorNotification({ detail: 'Image size must less than 10kB' });
+      if (arrayBuffer.byteLength / 1024 > 15) {
+        openErrorNotification({ detail: 'Image size must less than 15kB' });
         return;
       }
-      const image = sizeOf(Buffer.from(arrayBuffer));
-      if (image.width != image.height) {
-        openErrorNotification({ detail: 'Image with must equals height' });
+      /*
+      try {
+        const image = sizeOf(Buffer.from(arrayBuffer));
+        if (image.width != image.height) {
+          openErrorNotification({ detail: 'Image width must equal height' });
+          return;
+        }
+      } catch (e) {
+        openErrorNotification({
+          detail: `Could not read the content of the logo image: ${
+            e instanceof Error ? e.message : ''
+          }`
+        });
         return;
       }
+      */
 
       // console.log(arrayBuffer);
 

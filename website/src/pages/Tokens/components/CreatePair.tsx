@@ -15,7 +15,7 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
   bitusdBalance,
   ready
 }) => {
-  const { isSubmitting, dirty, submitForm, isValid, setFieldValue } =
+  const { isSubmitting, dirty, submitForm, isValid, setFieldValue, values, errors } =
     useFormikContext<ICreatePoolSetting>();
   const { createFee, wallet, openWalletModal } = useMerlinWallet();
   useEffect(() => {
@@ -24,6 +24,7 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
     }
   }, [createFee, setFieldValue]);
   const { currentNetwork } = useNetwork();
+
   return (
     <div className="border-1 mx-32 mt-4 flex h-fit w-full flex-col items-center bg-bc-pool bg-cover bg-no-repeat p-9 text-bc-white text-bc-white shadow-bc-swap tablet:mt-4 ">
       <div className="mx-auto text-center text-3xl text-amber-600">Create Token and Pool</div>
@@ -34,15 +35,15 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
         <TextInput title={'Project Url'} actionType={'projectUrl'}></TextInput>
         <TextInput title={'Logo Url'} actionType={'logoUrl'}></TextInput>
         <NumberInput
-          title={'Mint Amount'}
+          title={'Token Supply'}
           actionType={'mintAmount'}
           placeholderVale={'0.00'}></NumberInput>
         <NumberInput
-          title={'Add Liquidity'}
+          title={`Add ${values.symbol || 'SYMBOL'} to pool`}
           actionType={'addLiquidityAmount'}
           placeholderVale={'0.00'}></NumberInput>
         <NumberInput
-          title={'BITUSD Add'}
+          title={'Add bitusd to pool'}
           actionType={'bitusdAddLiquidityAmount'}
           placeholderVale={ready ? bitusdBalance.toString() : '0.00'}></NumberInput>
         <MessageShow
@@ -53,6 +54,24 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
                 currentNetwork.chainConfig.nativeCurrency.symbol
               : ''
           }></MessageShow>
+
+        {!isValid ? (
+          <div className="m-4 text-center text-2xl text-red-500">
+            {errors.name ||
+              errors.symbol ||
+              errors.logoUrl ||
+              errors.addLiquidityAmount ||
+              errors.bitusdAddLiquidityAmount}
+          </div>
+        ) : null}
+
+        {isValid ? (
+          <div className="m-4 text-center text-2xl">
+            You are about to mint {values.mintAmount} {values.symbol}, and add
+            {values.addLiquidityAmount} {values.symbol} + {values.bitusdAddLiquidityAmount} bitusd
+            to create a new liquidity pool.
+          </div>
+        ) : null}
 
         <div className="pt-2">
           <PixelButton

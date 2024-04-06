@@ -32,16 +32,21 @@ const Tokens: React.FC = () => {
         }
       )
       .required("Log url can't be empty"),
-    mintAmount: yup.number().required().moreThan(0, 'Mint Amount should create than 0'),
+    mintAmount: yup.number().required().moreThan(0, 'Mint Amount should more than 0'),
     addLiquidityAmount: yup
       .number()
       .min(0)
+      .required()
       .test(
         'max',
-        '${path} must be less than Mint Amount',
+        'Add liquidity amount must be less than Supply Amount',
         (value, context) => value < context.parent.mintAmount
       ),
-    bitusdAddLiquidityAmount: yup.number().required().moreThan(0, 'BITUSD Add must more than 0')
+    bitusdAddLiquidityAmount: yup
+      .number()
+      .required('Add bitusd to pool is required')
+      .moreThan(0, 'BITUSD Add must more than 0')
+      .max(bitusdTokenBalance, "BITUSD Add can't more than your balance")
   });
   const onSubmit = useCallback(
     async (values: ICreatePoolSetting, formikHelper: FormikHelpers<ICreatePoolSetting>) => {

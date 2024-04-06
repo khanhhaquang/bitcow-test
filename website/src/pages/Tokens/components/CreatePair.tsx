@@ -60,6 +60,7 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
             {errors.name ||
               errors.symbol ||
               errors.logoUrl ||
+              errors.mintAmount ||
               errors.addLiquidityAmount ||
               errors.bitusdAddLiquidityAmount}
           </div>

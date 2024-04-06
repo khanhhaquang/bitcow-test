@@ -363,6 +363,10 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       try {
         if (!wallet) throw new Error('Please connect wallet first');
         if (obricSDK && tokenList) {
+          if (symbolToToken[tokenInfo.symbol]) {
+            openErrorNotification({ detail: 'Token symbol exited' });
+            return;
+          }
           if (!(await checkNetwork())) {
             return;
           }

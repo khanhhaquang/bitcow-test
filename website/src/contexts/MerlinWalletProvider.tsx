@@ -59,7 +59,7 @@ interface TProviderProps {
 const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinWalletContextType);
 
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
-  const { wallet, openModal, closeModal } = useEvmConnectContext();
+  const { wallet, openModal, closeModal, setCurrentChain } = useEvmConnectContext();
   const [obricSDK, setObricSDK] = useState<ObricSDK>();
 
   const [shouldRefresh, setShouldRefresh] = useState(false);
@@ -77,6 +77,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [bitusdToken, setBitusdToken] = useState<TokenInfo>();
 
   const { currentNetwork } = useNetwork();
+  const checkNetwork = useCallback(async () => {
+    return setCurrentChain(currentNetwork.chainConfig);
+  }, [setCurrentChain, currentNetwork]);
   useEffect(() => {
     if (currentNetwork) {
       const provider = new ethers.JsonRpcProvider(currentNetwork.rpcNodeUrl, undefined, {
@@ -223,6 +226,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       const toToken = quote.outputToken;
       // todo check transaction result detail
       if (obricSDK) {
+        if (!(await checkNetwork())) {
+          return;
+        }
         setPendingTx(true);
         if (!(await checkApprove(fromToken, obricSDK.swapRouter, quote.inAmt))) {
           setPendingTx(false);
@@ -265,6 +271,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       try {
         if (!wallet) throw new Error('Please connect wallet first');
         if (obricSDK) {
+          if (!(await checkNetwork())) {
+            return;
+          }
           setPendingTx(true);
           if (
             (await checkApprove(pool.xToken, pool.poolAddress, xAmount)) &&
@@ -306,6 +315,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       try {
         if (!wallet) throw new Error('Please connect wallet first');
         if (obricSDK) {
+          if (!(await checkNetwork())) {
+            return;
+          }
           setPendingTx(true);
           const result = await pool.withdrawV1(amt);
           if (result.status === 1) {
@@ -351,6 +363,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       try {
         if (!wallet) throw new Error('Please connect wallet first');
         if (obricSDK && tokenList) {
+          if (!(await checkNetwork())) {
+            return;
+          }
           if (
             bitusdToken &&
             (await checkApprove(

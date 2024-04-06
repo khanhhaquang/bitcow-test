@@ -8,7 +8,7 @@ const { Footer } = Layout;
 
 const URLs = {
   doc: 'https://bitcow.gitbook.io/amm',
-  discord: '',
+  discord: 'https://discord.gg/sD3Y2qCT',
   twitter: 'https://twitter.com/bitCow_AMM'
 };
 

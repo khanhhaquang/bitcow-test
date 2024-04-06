@@ -11,7 +11,7 @@ import type { BaseConnector as BtcConnector } from '../connector';
 import type { EIP6963Wallet } from '../const';
 import { EVM_CURRENT_CONNECTOR_ID } from '../const';
 import { WalletconnectV2Connector } from '../evmConnector';
-import { EIP6963Connector } from '../evmConnector/eip6963';
+import { EIP6963Connector, parseChainId } from '../evmConnector/eip6963';
 import { useInjectedProviderDetails } from '../evmConnector/eip6963/providers';
 import type { EIP6963ProviderDetail } from '../evmConnector/eip6963/types';
 import { useConnector, useETHProvider, useModalStateValue } from '../hooks';
@@ -113,13 +113,17 @@ const EvmConnectProviderInner = ({
   const setCurrentChain = useCallback(
     async (chain: AddEthereumChainParameter) => {
       let success = true;
-      if (wallet && wallet.type === WalletType.EVM && currentChain.chainId !== chain.chainId) {
-        const connectorId = localStorage.getItem(EVM_CURRENT_CONNECTOR_ID);
-        if (connectorId) {
-          const connector = evmConnectors.find(
-            (connectorValue) => connectorValue[0].metadata.id === connectorId
-          );
-          success = await evnConnectWithChain(connector[0], chain);
+      if (wallet && wallet.type === WalletType.EVM) {
+        const result = await wallet.provider.request({ method: 'eth_chainId' });
+        const chainId = parseChainId(result);
+        if (chainId !== chain.chainId) {
+          const connectorId = localStorage.getItem(EVM_CURRENT_CONNECTOR_ID);
+          if (connectorId) {
+            const connector = evmConnectors.find(
+              (connectorValue) => connectorValue[0].metadata.id === connectorId
+            );
+            success = await evnConnectWithChain(connector[0], chain);
+          }
         }
       } else if (
         wallet &&
@@ -152,7 +156,7 @@ const EvmConnectProviderInner = ({
     if (web3ReactAccount && web3ReactProvider) {
       setWallet({
         type: WalletType.EVM,
-        chainId: currentChain?.chainId, // todo should get chainID from
+        chainId: 0,
         metadata: (web3ReactConnector as unknown as Metadata).metadata,
         provider: web3ReactProvider.provider,
         accounts: [{ evm: web3ReactAccount }]
@@ -160,7 +164,7 @@ const EvmConnectProviderInner = ({
     } else {
       setWallet(undefined);
     }
-  }, [web3ReactAccount, web3ReactProvider, web3ReactConnector, currentChain]);
+  }, [web3ReactAccount, web3ReactProvider, web3ReactConnector]);
 
   useEffect(() => {
     if (autoConnect) {

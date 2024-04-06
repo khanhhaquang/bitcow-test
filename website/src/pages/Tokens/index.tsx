@@ -11,11 +11,14 @@ import useTokenBalance from '../../hooks/useTokenBalance';
 import { openErrorNotification } from '../../utils/notifications';
 
 const Tokens: React.FC = () => {
-  const { requestCreatePair, bitusdToken } = useMerlinWallet();
+  const { requestCreatePair, bitusdToken, symbolToToken } = useMerlinWallet();
   const [bitusdTokenBalance, ready] = useTokenBalance(bitusdToken);
   const validationSchema = yup.object({
     name: yup.string().required("Name can't be empty"),
-    symbol: yup.string().required("Symbol can't be empty"),
+    symbol: yup
+      .string()
+      .required("Symbol can't be empty")
+      .test('Repeat', 'Token Symbol has exited', (value) => !symbolToToken[value]),
     projectUrl: yup.string().url(),
     logoUrl: yup
       .string()

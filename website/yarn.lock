@@ -2231,9 +2231,9 @@
     uuid "^8.3.2"
 
 "@particle-network/chains@*":
-  version "1.3.21"
-  resolved "https://registry.yarnpkg.com/@particle-network/chains/-/chains-1.3.21.tgz#82d2b098e165fc198e6e6e3e4c8b2154235e3aa1"
-  integrity sha512-tuUVuOPf+el+kDlHLFMyDy4IkoGjk+P3QvVrxT7WnmEma1NgWTE7RaNsniwqn6SYkAwAxksL/D9aADUXZxqPmw==
+  version "1.3.27"
+  resolved "https://registry.yarnpkg.com/@particle-network/chains/-/chains-1.3.27.tgz#dca4f2714d23957cc68cb1301de1f310895658db"
+  integrity sha512-+my+i0jqZjUoP+mNXxsPc2D7o3Cijl6uRvvWyTT0DmpyK1P+9yFpUuhEHUVmZMriTGKXv6synner16CD8/AkpQ==
 
 "@particle-network/wallet@^1.3.2":
   version "1.3.3"

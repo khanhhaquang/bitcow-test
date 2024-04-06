@@ -1,5 +1,6 @@
 'use client';
 
+import { chains } from '@particle-network/chains';
 import { initializeConnector } from '@web3-react/core';
 import { useMemo } from 'react';
 
@@ -13,6 +14,11 @@ export default function ConnectProvider({
   children: React.ReactNode;
   walletConnectProjectId: string;
 }) {
+  const btcWalletsChains = useMemo(() => {
+    return ALL_NETWORK.filter(
+      (network) => chains.getEVMChainInfoById(network.chainConfig.chainId) !== undefined
+    ).map((network) => network.chainConfig.chainId);
+  }, []);
   const evmConnectors = useMemo(() => {
     const chainIds = ALL_NETWORK.map((network) => network.chainConfig.chainId);
     const [walletConnectV2, walletConnectV2hooks] =
@@ -56,7 +62,7 @@ export default function ConnectProvider({
           accountContracts: {
             BTC: [
               {
-                chainIds: [686868],
+                chainIds: btcWalletsChains,
                 version: '1.0.0'
               }
             ]

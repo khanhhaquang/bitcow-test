@@ -206,7 +206,7 @@ export class Pool extends ContractRunner implements IPool {
 
     quoteXtoY(inputX: BN) {
         this.assertStats();
-        if (inputX.eqn(0)) throw new Error('Invalid input x amount');
+        if (inputX.eqn(0)) return new BN(0);
 
         const stats = this.stats!;
         let outputBeforeFeeY;

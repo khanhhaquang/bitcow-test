@@ -1,3 +1,4 @@
+import { chains } from '@particle-network/chains';
 import type { Web3ReactHooks } from '@web3-react/core';
 import { initializeConnector, useWeb3React, Web3ReactProvider } from '@web3-react/core';
 import { AddEthereumChainParameter } from '@web3-react/types';
@@ -120,7 +121,11 @@ const EvmConnectProviderInner = ({
           );
           success = await evnConnectWithChain(connector[0], chain);
         }
-      } else if (wallet && wallet.type === WalletType.BTC) {
+      } else if (
+        wallet &&
+        wallet.type === WalletType.BTC &&
+        chains.getEVMChainInfoById(currentChain.chainId) === undefined
+      ) {
         await onDisconnect();
         success = true;
       }

@@ -61,6 +61,7 @@ const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinW
 
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const { wallet, openModal, closeModal, setCurrentChain } = useEvmConnectContext();
+
   const [obricSDK, setObricSDK] = useState<ObricSDK>();
 
   const [shouldRefreshSdk, setShouldRefreshSdk] = useState(false);
@@ -98,9 +99,15 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, [setCurrentChain, currentNetwork]);
   useEffect(() => {
     if (currentNetwork) {
-      const provider = new ethers.JsonRpcProvider(currentNetwork.rpcNodeUrl, undefined, {
-        batchMaxCount: 1
-      });
+      const provider = new ethers.JsonRpcProvider(
+        currentNetwork.rpcNodeUrl,
+        currentNetwork.chainConfig.chainId,
+        {
+          batchMaxCount: 1,
+          staticNetwork: true
+        }
+      );
+
       setObricSDK(new ObricSDK(provider as any, currentNetwork.sdkConfig, txOption));
       setShouldRefreshSdk(true);
     }

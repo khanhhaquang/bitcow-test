@@ -117,6 +117,8 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   useEffect(() => {
     if (obricSDK && liquidityPools?.length) {
       setActivePools(liquidityPools);
+    } else {
+      setActivePools([]);
     }
   }, [liquidityPools, obricSDK]);
 

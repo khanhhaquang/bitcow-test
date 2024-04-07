@@ -36,6 +36,7 @@ interface MerlinWalletContextType {
   userPoolLpAmount: Record<string, UserLpAmount>;
   createFee: bigint;
   bitusdToken: TokenInfo;
+  clearCache: () => void;
   pendingTx: boolean;
   requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
@@ -68,17 +69,30 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [pendingTx, setPendingTx] = useState<boolean>(false);
   const [txOption, setTxOption] = useState<TxOption>({});
 
-  const [tokenList, setTokenList] = useState<Token[]>();
-  const [symbolToToken, setSymbolToToken] = useState<Record<string, Token>>();
-  const [tokenBalances, setTokenBalances] = useState<Record<string, number>>();
-  const [liquidityPools, setLiquidityPools] = useState<IPool[]>();
-  const [userPoolLpAmount, setUserPoolLpAmount] = useState<Record<string, UserLpAmount>>();
+  const [tokenList, setTokenList] = useState<Token[]>([]);
+  const [symbolToToken, setSymbolToToken] = useState<Record<string, Token>>({});
+  const [tokenBalances, setTokenBalances] = useState<Record<string, number>>({});
+  const [liquidityPools, setLiquidityPools] = useState<IPool[]>([]);
+  const [userPoolLpAmount, setUserPoolLpAmount] = useState<Record<string, UserLpAmount>>({});
   const [timeOutCount, setTimeOutCount] = useState(0);
   const [timeOutArray, setTimeOutArray] = useState<boolean[]>([]);
   const [createFee] = useState<bigint>(BigInt(150000000000000));
   const [bitusdToken, setBitusdToken] = useState<TokenInfo>();
 
   const { currentNetwork } = useNetwork();
+  const clearCache = useCallback(() => {
+    setLiquidityPools([]);
+    setTokenList([]);
+    setSymbolToToken({});
+    setTokenBalances({});
+    setUserPoolLpAmount({});
+    setBitusdToken(undefined);
+  }, []);
+
+  useEffect(() => {
+    clearCache();
+  }, [currentNetwork, clearCache]);
+
   const checkNetwork = useCallback(async () => {
     return setCurrentChain(currentNetwork.chainConfig);
   }, [setCurrentChain, currentNetwork]);
@@ -354,10 +368,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       try {
         if (!wallet) throw new Error('Please connect wallet first');
         if (obricSDK && tokenList) {
-          if (symbolToToken[tokenInfo.symbol]) {
-            openErrorNotification({ detail: 'Token symbol exited' });
-            return;
-          }
           if (!(await checkNetwork())) {
             return;
           }
@@ -408,16 +418,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [
-      obricSDK,
-      wallet,
-      tokenList,
-      checkApprove,
-      checkTransactionError,
-      bitusdToken,
-      checkNetwork,
-      symbolToToken
-    ]
+    [obricSDK, wallet, tokenList, checkApprove, checkTransactionError, bitusdToken, checkNetwork]
   );
 
   return (
@@ -434,6 +435,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         userPoolLpAmount,
         createFee,
         bitusdToken,
+        clearCache,
         pendingTx,
         requestSwap,
         requestAddLiquidity,

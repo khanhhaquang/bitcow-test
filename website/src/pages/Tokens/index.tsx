@@ -54,7 +54,10 @@ const Tokens: React.FC = () => {
         openErrorNotification({ detail: "BITUSD Add amount can't more than your owned balance" });
         return;
       }
-
+      if (symbolToToken[values.symbol]) {
+        openErrorNotification({ detail: 'Token symbol exited' });
+        return;
+      }
       let response;
       try {
         response = await fetch(values.logoUrl, {
@@ -115,7 +118,7 @@ const Tokens: React.FC = () => {
       }
       formikHelper.setSubmitting(false);
     },
-    [requestCreatePair, bitusdTokenBalance]
+    [requestCreatePair, bitusdTokenBalance, symbolToToken]
   );
   return (
     <Formik

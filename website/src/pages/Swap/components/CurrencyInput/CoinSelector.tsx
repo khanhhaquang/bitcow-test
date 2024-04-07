@@ -67,6 +67,8 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
         });
       }
       setTokenListBalance(currentTokenList);
+    } else {
+      setTokenListBalance([]);
     }
   }, [coinInPools, filter, tokenList, tokenBalances]);
 

@@ -170,10 +170,16 @@ export class Pool extends ContractRunner implements IPool {
         return this.get24HourStats('volume')[0];
     }
     tvlUsd(price0: number, price1: number): number {
-        return (
-            bnToBigNumber(this.stats?.currentX).div(this.xMult).toNumber() * price0 +
-            bnToBigNumber(this.stats?.currentY).div(this.yMult).toNumber() * price1
-        );
+        if (price0 === 0) {
+            return bnToBigNumber(this.stats?.currentY).div(this.yMult).toNumber() * price1 * 2;
+        } else if (price1 === 0) {
+            return bnToBigNumber(this.stats?.currentX).div(this.xMult).toNumber() * price0 * 2;
+        } else {
+            return (
+                bnToBigNumber(this.stats?.currentX).div(this.xMult).toNumber() * price0 +
+                bnToBigNumber(this.stats?.currentY).div(this.yMult).toNumber() * price1
+            );
+        }
     }
 
     getUserLiquidity(userLpAmount: UserLpAmount): IUserLiquidity {

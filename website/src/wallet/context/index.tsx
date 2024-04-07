@@ -285,7 +285,7 @@ export const EvmConnectProvider = ({
 
   return (
     <BtcConnectProvider options={options} connectors={btcConnectors} autoConnect={autoConnect}>
-      <Web3ReactProvider connectors={evmConnectors}>
+      <Web3ReactProvider connectors={allEvmConnectors}>
         <EvmConnectProviderInner evmConnectors={allEvmConnectors} autoConnect={autoConnect}>
           {children}
         </EvmConnectProviderInner>

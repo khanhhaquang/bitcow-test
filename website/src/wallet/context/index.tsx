@@ -58,7 +58,8 @@ const EvmConnectProviderInner = ({
   const {
     connector: web3ReactConnector,
     provider: web3ReactProvider,
-    account: web3ReactAccount
+    account: web3ReactAccount,
+    chainId: web3ReactChainId
   } = useWeb3React();
 
   const onDisconnect = useCallback(async () => {
@@ -155,10 +156,10 @@ const EvmConnectProviderInner = ({
   }, [btckitConnector, btckitEvmAccount, btckitBtcAccounts, btckitEvmProvider]);
 
   useEffect(() => {
-    if (web3ReactAccount && web3ReactProvider) {
+    if (web3ReactAccount && web3ReactProvider && web3ReactChainId) {
       setWallet({
         type: WalletType.EVM,
-        chainId: 0,
+        chainId: web3ReactChainId,
         metadata: (web3ReactConnector as unknown as Metadata).metadata,
         provider: web3ReactProvider.provider,
         accounts: [{ evm: web3ReactAccount }]
@@ -166,7 +167,7 @@ const EvmConnectProviderInner = ({
     } else {
       setWallet(undefined);
     }
-  }, [web3ReactAccount, web3ReactProvider, web3ReactConnector]);
+  }, [web3ReactAccount, web3ReactProvider, web3ReactConnector, web3ReactChainId]);
 
   useEffect(() => {
     if (autoConnect) {

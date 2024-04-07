@@ -99,6 +99,7 @@ export interface IPool {
     reserve1: BN;
     token0: TokenInfo;
     token1: TokenInfo;
+
     xMult: number;
     yMult: number;
     totalLP: string | undefined;
@@ -106,6 +107,7 @@ export interface IPool {
     poolAddress: string;
     swapFeeMillionth: number;
     protocolFeeShareThousandth: number;
+    lpAddress: string;
 
     volumeUsd(): number;
     feesUsd(price0: number, price1: number): number;
@@ -125,4 +127,5 @@ export type Config = {
     tradingPairV1List: string;
     tradingPairV1Creator: string;
     swapRouter: string;
+    tokensBalance: string;
 };

@@ -133,7 +133,9 @@ const EvmConnectProviderInner = ({
         await onDisconnect();
         success = true;
       }
-      setCurrentChainState(chain);
+      if (currentChain === undefined || currentChain.chainId != chain.chainId) {
+        setCurrentChainState(chain);
+      }
       return success;
     },
     [wallet, currentChain, evmConnectors, onDisconnect, evnConnectWithChain]

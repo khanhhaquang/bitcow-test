@@ -52,7 +52,9 @@ export class Pool extends ContractRunner implements IPool {
     get poolAddress() {
         return this.pair.pairAddress;
     }
-
+    get lpAddress() {
+        return this.pair.lpToken;
+    }
     async reload() {
         await this.loadStats();
     }
@@ -195,15 +197,6 @@ export class Pool extends ContractRunner implements IPool {
         return result;
     }
 
-    async getUserLpAmount(): Promise<UserLpAmount> {
-        let address = await this.getAddress();
-        if (address) {
-            return await this.lpTokenContract.balanceOf(address);
-        } else {
-            return BigInt(0);
-        }
-    }
-
     quoteXtoY(inputX: BN) {
         this.assertStats();
         if (inputX.eqn(0)) return new BN(0);
@@ -315,11 +308,10 @@ export class Pool extends ContractRunner implements IPool {
         console.log('24 hour stats (volume):', this.get24HourStats('volume'));
     }
     async printUserMessage() {
-        const userLpAmount = await this.getUserLpAmount();
-        const userLiquidity = this.getUserLiquidity(userLpAmount);
-        console.log('Invested', userLiquidity.invested);
-        console.log('lp amount: ', userLiquidity.lpAmount);
-        console.log('Assets Pooled: ', JSON.stringify(userLiquidity.assetsPooled));
-        console.log('Liquidity share: ', userLiquidity.liquidityShare);
+        // const userLiquidity = this.getUserLiquidity(userLpAmount);
+        // console.log('Invested', userLiquidity.invested);
+        // console.log('lp amount: ', userLiquidity.lpAmount);
+        // console.log('Assets Pooled: ', JSON.stringify(userLiquidity.assetsPooled));
+        // console.log('Liquidity share: ', userLiquidity.liquidityShare);
     }
 }

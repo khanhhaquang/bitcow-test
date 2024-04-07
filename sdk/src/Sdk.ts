@@ -21,7 +21,7 @@ export class Sdk extends ContractRunner {
     constructor(provider: Provider, public config: Config, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
 
-        this.coinList = new CoinList(provider, config.tokenList, txOption, signer);
+        this.coinList = new CoinList(provider, config.tokenList, config.tokensBalance, txOption, signer);
         this.poolCreator = new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer);
         this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
         this.tradingPairV1ListContract = new Contract(config.tradingPairV1List, ABI_SS_TRADING_PAIR_V1_LIST, provider);
@@ -72,6 +72,26 @@ export class Sdk extends ContractRunner {
         }
         return resultPairStats;
     }
+    async getTokensBalance() {
+        const tokens = this.pools
+            .map((pool) => pool.pair.lpToken)
+            .concat(this.coinList.getAllToken().map((token) => token.address));
+        const balances = await this.coinList.getBalances(tokens);
+        if (balances) {
+            const userPoolLp: Record<string, bigint> = {};
+            this.pools.forEach((pool) => {
+                userPoolLp[pool.poolAddress] = balances[pool.lpAddress];
+            });
+
+            const userTokenBalances: Record<string, number> = {};
+            this.coinList.getAllToken().forEach((token) => {
+                userTokenBalances[token.address] = new BigNumber(balances[token.address].toString())
+                    .div(10 ** token.decimals)
+                    .toNumber();
+            });
+            return { userPoolLp, userTokenBalances };
+        }
+    }
     afterSetSigner(signer?: ethers.Signer | undefined): void {}
     setSigner(signer?: Signer, address?: string) {
         super.setSigner(signer, address);
@@ -96,17 +116,6 @@ export class Sdk extends ContractRunner {
         return sdk;
     }
 
-    async getUserPoolLpAmount(): Promise<Record<string, UserLpAmount> | undefined> {
-        if (this.signer) {
-            const result: Record<string, UserLpAmount> = {};
-            for (const pool of this.pools) {
-                result[pool.poolAddress] = await pool.getUserLpAmount();
-            }
-            return result;
-        } else {
-            return undefined;
-        }
-    }
     getDirectQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
         let pool: Pool | undefined;
         let isReversed: boolean | undefined;

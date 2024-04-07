@@ -1,4 +1,4 @@
-import { TokenInfo, Config, TxOption } from './types';
+import { TokenInfo, TxOption } from './types';
 import { BTC } from './configs';
 import { Contract, Provider, Signer } from 'ethers';
 import { ABI_ERC20 } from './abi/ERC20';
@@ -6,6 +6,7 @@ import { MAX_U256 } from './constant';
 import BigNumber from 'bignumber.js';
 import { ContractRunner } from './ContractRunner';
 import { ABI_TOKEN_LIST } from './abi/TokenList';
+import { ABI_TOKENS_BALANCE } from './abi/TokensBalance';
 
 export class CoinList extends ContractRunner {
     tokens: TokenInfo[];
@@ -13,19 +14,22 @@ export class CoinList extends ContractRunner {
     addressToToken: Record<string, TokenInfo>;
     private contracts: Record<string, Contract>;
     private readonly tokenListContract: Contract;
-    /**
-     * tokenAddress => spender => value
-     * @private
-     */
-    private allowances: Record<string, Record<string, bigint>>;
-    constructor(provider: Provider, public tokenListAddress: string, txOption?: TxOption, signer?: Signer) {
+    private readonly tokensBalanceContract: Contract;
+    constructor(
+        provider: Provider,
+        public tokenListAddress: string,
+        tokensBalance: string,
+        txOption?: TxOption,
+        signer?: Signer
+    ) {
         super(provider, txOption, signer);
         this.tokens = [];
         this.symbolToToken = {};
         this.addressToToken = {};
         this.contracts = {};
-        this.allowances = {};
+
         this.tokenListContract = new Contract(tokenListAddress, ABI_TOKEN_LIST, provider);
+        this.tokensBalanceContract = new Contract(tokensBalance, ABI_TOKENS_BALANCE, provider);
     }
 
     async getCreateFee() {
@@ -97,21 +101,13 @@ export class CoinList extends ContractRunner {
         }
     }
 
-    async getBalances() {
+    async getBalances(tokens = this.getAllToken().map((token) => token.address)) {
         const userAddress = await this.getAddress();
         if (userAddress) {
-            const balancesResult: Record<string, number> = {};
-            const balances = await Promise.all([
-                this.provider.getBalance(userAddress),
-                ...this.tokens.map(async (token) => {
-                    return await this.contracts[token.address].balanceOf(userAddress);
-                })
-            ]);
-            balancesResult[BTC.address] = new BigNumber(balances[0].toString()).div(10 ** BTC.decimals).toNumber();
-            this.tokens.forEach((token, index) => {
-                balancesResult[token.address] = new BigNumber(balances[index + 1].toString())
-                    .div(10 ** token.decimals)
-                    .toNumber();
+            const balances = await this.tokensBalanceContract.balances(userAddress, tokens);
+            const balancesResult: Record<string, bigint> = {};
+            tokens.forEach((token, index) => {
+                balancesResult[token] = balances[index].toString();
             });
             return balancesResult;
         }
@@ -130,7 +126,7 @@ export class CoinList extends ContractRunner {
         console.log('Token balances');
         const balances = await this.getBalances();
         if (balances) {
-            for (const token of this.tokens) {
+            for (const token of this.getAllToken()) {
                 console.log('', token.symbol, balances[token.address]);
             }
         }

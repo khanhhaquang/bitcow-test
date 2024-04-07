@@ -51,7 +51,14 @@ export default function ConnectProvider({
       [coinbaseWallet, coinbaseHooks]
     ];
   }, [walletConnectProjectId]);
-
+  const btcConnectors = useMemo(
+    () => [
+      new BtcConnectors.UnisatConnector(),
+      new BtcConnectors.OKXConnector(),
+      new BtcConnectors.BitgetConnector()
+    ],
+    []
+  );
   return (
     <EvmConnectProvider
       options={{
@@ -69,11 +76,7 @@ export default function ConnectProvider({
           }
         }
       }}
-      btcConnectors={[
-        new BtcConnectors.UnisatConnector(),
-        new BtcConnectors.OKXConnector(),
-        new BtcConnectors.BitgetConnector()
-      ]}
+      btcConnectors={btcConnectors}
       // @ts-ignore
       evmConnectors={evmConnectors}
       evmConnectorMaxCount={4}

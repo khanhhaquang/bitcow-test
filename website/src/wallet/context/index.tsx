@@ -13,7 +13,7 @@ import { EVM_CURRENT_CONNECTOR_ID } from '../const';
 import { WalletconnectV2Connector } from '../evmConnector';
 import { EIP6963Connector, parseChainId } from '../evmConnector/eip6963';
 import { useInjectedProviderDetails } from '../evmConnector/eip6963/providers';
-import type { EIP6963ProviderDetail } from '../evmConnector/eip6963/types';
+// import type { EIP6963ProviderDetail } from '../evmConnector/eip6963/types';
 import { useConnector, useETHProvider, useModalStateValue } from '../hooks';
 import type { EvmConnector, Metadata, Wallet } from '../types/types';
 import { WalletType } from '../types/types';
@@ -210,42 +210,43 @@ const EvmConnectProviderInner = ({
     </EvmConnectContext.Provider>
   );
 };
-function getSelectedInjectors(
-  allEip6963Injectors: readonly EIP6963ProviderDetail[],
-  maxSelectCount: number,
-  selectEip6963?: EIP6963Wallet[]
-) {
-  let selectedEip6963Injectors: EIP6963ProviderDetail[];
-  if (selectEip6963 && selectEip6963.length > 0) {
-    selectedEip6963Injectors = [];
-    for (const eip6963Wallet of selectEip6963) {
-      if (selectedEip6963Injectors.length >= maxSelectCount) {
-        break;
-      }
-      for (const eip6963Injector of allEip6963Injectors) {
-        if (selectedEip6963Injectors.length >= maxSelectCount) {
-          break;
-        }
-        if (eip6963Wallet.toString() === eip6963Injector.info.name) {
-          selectedEip6963Injectors.push(eip6963Injector);
-        }
-      }
-    }
-    if (selectedEip6963Injectors.length < maxSelectCount) {
-      for (const eip6963Injector of allEip6963Injectors) {
-        if (selectedEip6963Injectors.length >= maxSelectCount) {
-          break;
-        }
-        if (!selectedEip6963Injectors.includes(eip6963Injector)) {
-          selectedEip6963Injectors.push(eip6963Injector);
-        }
-      }
-    }
-  } else {
-    selectedEip6963Injectors = allEip6963Injectors.slice(0, maxSelectCount);
-  }
-  return selectedEip6963Injectors;
-}
+//@typescript-eslint/no-unused-vars
+// function getSelectedInjectors(
+//   allEip6963Injectors: readonly EIP6963ProviderDetail[],
+//   maxSelectCount: number,
+//   selectEip6963?: EIP6963Wallet[]
+// ) {
+//   let selectedEip6963Injectors: EIP6963ProviderDetail[];
+//   if (selectEip6963 && selectEip6963.length > 0) {
+//     selectedEip6963Injectors = [];
+//     for (const eip6963Wallet of selectEip6963) {
+//       if (selectedEip6963Injectors.length >= maxSelectCount) {
+//         break;
+//       }
+//       for (const eip6963Injector of allEip6963Injectors) {
+//         if (selectedEip6963Injectors.length >= maxSelectCount) {
+//           break;
+//         }
+//         if (eip6963Wallet.toString() === eip6963Injector.info.name) {
+//           selectedEip6963Injectors.push(eip6963Injector);
+//         }
+//       }
+//     }
+//     if (selectedEip6963Injectors.length < maxSelectCount) {
+//       for (const eip6963Injector of allEip6963Injectors) {
+//         if (selectedEip6963Injectors.length >= maxSelectCount) {
+//           break;
+//         }
+//         if (!selectedEip6963Injectors.includes(eip6963Injector)) {
+//           selectedEip6963Injectors.push(eip6963Injector);
+//         }
+//       }
+//     }
+//   } else {
+//     selectedEip6963Injectors = allEip6963Injectors.slice(0, maxSelectCount);
+//   }
+//   return selectedEip6963Injectors;
+// }
 export const EvmConnectProvider = ({
   children,
   options,
@@ -263,26 +264,16 @@ export const EvmConnectProvider = ({
   evmSelectEip6963?: EIP6963Wallet[];
   autoConnect?: boolean;
 }) => {
+  console.log('rebuild EvmConnectProvider');
   const allEip6963Injectors = useInjectedProviderDetails();
   const allEvmConnectors = useMemo(() => {
-    const selectedEip6963Injectors = getSelectedInjectors(
-      allEip6963Injectors,
-      evmConnectorMaxCount - 1,
-      evmSelectEip6963
-    );
-
-    const eip6963Connectors = selectedEip6963Injectors.map(
-      (providerDetail): [EvmConnector, Web3ReactHooks] => {
-        const [connector, hooks] = initializeConnector<EIP6963Connector>((actions) => {
-          return new EIP6963Connector({ actions, providerDetail });
-        });
-        return [connector as EvmConnector, hooks];
-      }
-    );
-    return [
-      ...eip6963Connectors,
-      ...evmConnectors.slice(0, evmConnectorMaxCount - eip6963Connectors.length)
-    ];
+    console.log('rebuild Web3ReactProvider');
+    return allEip6963Injectors.map((providerDetail): [EvmConnector, Web3ReactHooks] => {
+      const [connector, hooks] = initializeConnector<EIP6963Connector>((actions) => {
+        return new EIP6963Connector({ actions, providerDetail });
+      });
+      return [connector as EvmConnector, hooks];
+    });
   }, [evmConnectors, allEip6963Injectors, evmConnectorMaxCount, evmSelectEip6963]);
 
   return (

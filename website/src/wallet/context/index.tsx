@@ -2,7 +2,7 @@ import { chains } from '@particle-network/chains';
 import type { Web3ReactHooks } from '@web3-react/core';
 import { initializeConnector, useWeb3React, Web3ReactProvider } from '@web3-react/core';
 import { AddEthereumChainParameter } from '@web3-react/types';
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import type { ConnectOptions } from '../btcContext';
 import { ConnectProvider as BtcConnectProvider, useConnectProvider } from '../btcContext';
@@ -262,28 +262,30 @@ export const EvmConnectProvider = ({
   autoConnect?: boolean;
 }) => {
   const allEip6963Injectors = useInjectedProviderDetails();
+  const allEvmConnectors = useMemo(() => {
+    const selectedEip6963Injectors = getSelectedInjectors(
+      allEip6963Injectors,
+      evmConnectorMaxCount - 1,
+      evmSelectEip6963
+    );
 
-  const selectedEip6963Injectors = getSelectedInjectors(
-    allEip6963Injectors,
-    evmConnectorMaxCount - 1,
-    evmSelectEip6963
-  );
+    const eip6963Connectors = selectedEip6963Injectors.map(
+      (providerDetail): [EvmConnector, Web3ReactHooks] => {
+        const [connector, hooks] = initializeConnector<EIP6963Connector>((actions) => {
+          return new EIP6963Connector({ actions, providerDetail });
+        });
+        return [connector as EvmConnector, hooks];
+      }
+    );
+    return [
+      ...eip6963Connectors,
+      ...evmConnectors.slice(0, evmConnectorMaxCount - eip6963Connectors.length)
+    ];
+  }, [evmConnectors, allEip6963Injectors, evmConnectorMaxCount, evmSelectEip6963]);
 
-  const eip6963Connectors = selectedEip6963Injectors.map(
-    (providerDetail): [EvmConnector, Web3ReactHooks] => {
-      const [connector, hooks] = initializeConnector<EIP6963Connector>((actions) => {
-        return new EIP6963Connector({ actions, providerDetail });
-      });
-      return [connector as EvmConnector, hooks];
-    }
-  );
-  const allEvmConnectors = [
-    ...eip6963Connectors,
-    ...evmConnectors.slice(0, evmConnectorMaxCount - eip6963Connectors.length)
-  ];
   return (
     <BtcConnectProvider options={options} connectors={btcConnectors} autoConnect={autoConnect}>
-      <Web3ReactProvider connectors={allEvmConnectors}>
+      <Web3ReactProvider connectors={evmConnectors}>
         <EvmConnectProviderInner evmConnectors={allEvmConnectors} autoConnect={autoConnect}>
           {children}
         </EvmConnectProviderInner>

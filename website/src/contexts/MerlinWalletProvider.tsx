@@ -262,7 +262,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       }
       return success;
     },
-    [obricSDK, checkApprove, wallet, checkTransactionError]
+    [obricSDK, checkApprove, wallet, checkTransactionError, checkNetwork]
   );
 
   const requestAddLiquidity = useCallback(
@@ -306,7 +306,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [obricSDK, checkApprove, wallet, checkTransactionError]
+    [obricSDK, checkApprove, wallet, checkTransactionError, checkNetwork]
   );
 
   const requestWithdrawLiquidity = useCallback(
@@ -345,7 +345,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [obricSDK, wallet, checkTransactionError]
+    [obricSDK, wallet, checkTransactionError, checkNetwork]
   );
 
   const requestCreatePair = useCallback(
@@ -416,7 +416,16 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [obricSDK, wallet, tokenList, checkApprove, checkTransactionError, bitusdToken]
+    [
+      obricSDK,
+      wallet,
+      tokenList,
+      checkApprove,
+      checkTransactionError,
+      bitusdToken,
+      checkNetwork,
+      symbolToToken
+    ]
   );
 
   return (

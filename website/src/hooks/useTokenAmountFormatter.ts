@@ -14,8 +14,8 @@ const useTokenAmountFormatter = () => {
         if (!obricSDK || typeof amount !== 'number' || amount <= 0 || !token) return '0';
 
         if (!token) return '0';
-        const decimals = token.decimals;
-        return numberGroupFormat(amount, decimals);
+        // const decimals = token.decimals;
+        return numberGroupFormat(amount, 9);
       },
     [obricSDK]
   );

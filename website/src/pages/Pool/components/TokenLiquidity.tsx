@@ -3,7 +3,7 @@ import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { TokenInfo, BN, IPool } from 'obric-merlin';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 // import { Popover } from 'antd';
 import Button from 'components/Button';
@@ -27,6 +27,7 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
   const { values, setFieldValue, validateField } = useFormikContext<ISwapSettings>();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
   const { getTokenBalanceInUSD } = usePools();
+  const tokenInputDecimals = useRef(9);
 
   const [uiBalance] = useTokenBalance(type === 'xAmt' ? xToken : yToken);
   const token = type === 'xAmt' ? xToken : yToken;
@@ -48,20 +49,25 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
           if (type === 'xAmt') {
             pairType = 'yAmt';
             const inputX = new BN(new BigNumber(a).times(10 ** xToken.decimals).toFixed(0));
-            pairValue = new BigNumber(
-              inputX.mul(liquidityPool.reserve1).div(liquidityPool.reserve0).toString()
-            )
-              .div(10 ** xToken.decimals)
-              .toNumber();
+            pairValue = parseFloat(
+              new BigNumber(
+                inputX.mul(liquidityPool.reserve1).div(liquidityPool.reserve0).toString()
+              )
+                .div(10 ** xToken.decimals)
+                .toFixed(tokenInputDecimals.current)
+            );
           } else {
             pairType = 'xAmt';
             const inputY = new BN(new BigNumber(a).times(10 ** yToken.decimals).toFixed(0));
-            pairValue =
+            pairValue = parseFloat(
               new BigNumber(
                 inputY.mul(liquidityPool.reserve0).div(liquidityPool.reserve1).toString()
               )
                 .div(10 ** xToken.decimals)
-                .toNumber() * 0.9999999999;
+                .times(0.9999999999)
+                .toNumber()
+                .toFixed(tokenInputDecimals.current)
+            );
             // todo remove * 0.999999999
           }
           setFieldValue(type, a);
@@ -101,7 +107,7 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
         <PositiveFloatNumInput
           min={0}
           max={uiBalance}
-          maxDecimals={token?.decimals || 9}
+          maxDecimals={tokenInputDecimals.current}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
           className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl"

@@ -263,7 +263,6 @@ export const EvmConnectProvider = ({
   evmSelectEip6963?: EIP6963Wallet[];
   autoConnect?: boolean;
 }) => {
-  console.log('rebuild EvmConnectProvider');
   const allEip6963Injectors = useInjectedProviderDetails();
   const allEvmConnectors = useMemo(() => {
     const selectedEip6963Injectors = getSelectedInjectors(

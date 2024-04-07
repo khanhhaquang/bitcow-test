@@ -309,10 +309,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           ) {
             const result = await pool.depositV1(xAmount, yAmount);
             if (result.status === 1) {
-              openTxSuccessNotification(
-                result.hash,
-                `Deposit success`
-              );
+              openTxSuccessNotification(result.hash, 'Deposit success');
               success = true;
             } else if (result.status === 0) {
               openTxErrorNotification(

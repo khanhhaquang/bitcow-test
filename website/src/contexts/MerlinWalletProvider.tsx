@@ -304,13 +304,13 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             if (result.status === 1) {
               openTxSuccessNotification(
                 result.hash,
-                `Deposit success to ${pool.token0.symbol}-${pool.token1.symbol}`
+                `Deposit success`
               );
               success = true;
             } else if (result.status === 0) {
               openTxErrorNotification(
                 result.hash,
-                `Failed to deposit to ${pool.token0.symbol}-${pool.token1.symbol}`
+                `Failed to deposit to ${pool.token0.symbol}-${pool.token1.symbol} pool`
               );
               success = false;
             }

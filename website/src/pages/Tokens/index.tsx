@@ -22,7 +22,7 @@ const Tokens: React.FC = () => {
     projectUrl: yup.string().url(),
     logoUrl: yup
       .string()
-      .url('Logo Url is a invalid url')
+      .url('Logo URL is invalid')
       .matches(
         new RegExp(
           '.(bmp|jpg|png|tif|gif|pcx|tga|exif|fpx|svg|psd|cdr|pcd|dxf|ufo|eps|ai|raw|WMF|webp|jpeg)$'
@@ -44,9 +44,9 @@ const Tokens: React.FC = () => {
       ),
     bitusdAddLiquidityAmount: yup
       .number()
-      .required('Add bitusd to pool is required')
-      .moreThan(0, 'BITUSD Add must more than 0')
-      .max(bitusdTokenBalance, "BITUSD Add can't more than your balance")
+      .required('Adding bitusd to initial pool is required')
+      .moreThan(0, 'bitusd addded to initial pool must more than 0')
+      .max(bitusdTokenBalance, "Added bitusd amount can't be more than your balance")
   });
   const onSubmit = useCallback(
     async (values: ICreatePoolSetting, formikHelper: FormikHelpers<ICreatePoolSetting>) => {
@@ -55,7 +55,7 @@ const Tokens: React.FC = () => {
         return;
       }
       if (symbolToToken[values.symbol]) {
-        openErrorNotification({ detail: 'Token symbol exited' });
+        openErrorNotification({ detail: 'This symbol is already used by another token' });
         return;
       }
       let response;

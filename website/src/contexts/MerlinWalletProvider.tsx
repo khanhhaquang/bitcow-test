@@ -141,53 +141,71 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const fetchTokenBalances = useCallback(async () => {
     try {
-      if (obricSDK && timeOutArray) {
+      if (obricSDK) {
         const timeOut = setTimeout(() => {
           timeOutArray.push(true);
           setTimeOutCount(timeOutArray.length);
         }, 5000);
         const balances = await obricSDK.getTokensBalance();
         clearTimeout(timeOut);
-
-        setUserPoolLpAmount(balances.userPoolLp);
-        setTokenBalances(balances.userTokenBalances);
+        if (balances) {
+          setUserPoolLpAmount(balances.userPoolLp);
+          setTokenBalances(balances.userTokenBalances);
+        } else {
+          setUserPoolLpAmount({});
+          setTokenBalances({});
+        }
+      } else {
+        setUserPoolLpAmount({});
+        setTokenBalances({});
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   }, [obricSDK, timeOutArray]);
 
   const reloadObricSdk = useCallback(async () => {
     try {
-      setRefreshingSdk(true);
-      const timeOut = setTimeout(() => {
-        timeOutArray.push(true);
-        setTimeOutCount(timeOutArray.length);
-      }, 5000);
-      const { tokens, pools } = await obricSDK.reload();
-      clearTimeout(timeOut);
-      setTokenList(tokens);
-      const bitusd = tokens.find((token) => token.symbol === 'bitusd');
-      setBitusdToken(bitusd);
-      setSymbolToToken(obricSDK.coinList.symbolToToken);
-      setLiquidityPools(pools);
+      if (obricSDK) {
+        setRefreshingSdk(true);
+        const timeOut = setTimeout(() => {
+          timeOutArray.push(true);
+          setTimeOutCount(timeOutArray.length);
+        }, 5000);
+        const { tokens, pools } = await obricSDK.reload();
+        clearTimeout(timeOut);
+        setTokenList(tokens);
+        const bitusd = tokens.find((token) => token.symbol === 'bitusd');
+        setBitusdToken(bitusd);
+        setSymbolToToken(obricSDK.coinList.symbolToToken);
+        setLiquidityPools(pools);
+      } else {
+        console.log('clear tokenlist');
+        setLiquidityPools([]);
+        setTokenList([]);
+        setSymbolToToken({});
+        setBitusdToken(undefined);
+      }
     } catch (e) {
+      console.log(e);
     } finally {
       setRefreshingSdk(false);
     }
   }, [obricSDK, timeOutArray]);
 
   useEffect(() => {
-    if (obricSDK && shouldRefreshSdk) {
+    if (shouldRefreshSdk) {
       reloadObricSdk();
       setShouldRefreshSdk(false);
     }
-  }, [obricSDK, shouldRefreshSdk, reloadObricSdk]);
+  }, [shouldRefreshSdk, reloadObricSdk]);
 
   useEffect(() => {
-    if (obricSDK && shouldRefreshUserMessage && !refreshingSdk) {
+    if (shouldRefreshUserMessage && !refreshingSdk) {
       fetchTokenBalances();
       setShouldRefreshUserMessage(false);
     }
-  }, [obricSDK, shouldRefreshUserMessage, refreshingSdk, fetchTokenBalances]);
+  }, [shouldRefreshUserMessage, refreshingSdk, fetchTokenBalances]);
 
   const checkTransactionError = useCallback((e: any) => {
     if (e.code === 'ACTION_REJECTED' || e.reason === 'rejected' || e.info?.error?.code === 4001) {

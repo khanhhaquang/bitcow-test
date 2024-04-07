@@ -1,4 +1,4 @@
-import invariant from 'tiny-invariant';
+//import invariant from 'tiny-invariant';
 
 export const numToGrouped = (num: string) => {
   return num
@@ -23,7 +23,7 @@ export const numToGrouped = (num: string) => {
 };
 
 export const avoidScientificNotation = (x: number) => {
-  invariant(x >= 0 && x <= Number.MAX_SAFE_INTEGER, 'Invalid number range');
+  // invariant(x >= 0 && x <= Number.MAX_SAFE_INTEGER, 'Invalid number range');
   let res = x.toString();
   if (Math.abs(x) < 1.0) {
     const e = parseInt(x.toString().split('e-')[1]);

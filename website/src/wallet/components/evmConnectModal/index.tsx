@@ -16,7 +16,9 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
     useEvmConnectContext();
   const showBtcWallets = useMemo(() => {
     if (currentChain) {
-      return chains.getEVMChainInfoById(currentChain.chainId) !== undefined;
+      return (
+        chains.getEVMChainInfoById(currentChain.chainId) !== undefined && btcConnectors.length > 0
+      );
     } else {
       return false;
     }
@@ -70,7 +72,7 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
       {showBtcWallets && <hr className={styles.separate} />}
 
       <div className={styles.walletsAndTitle}>
-        <div className={styles.walletTypeTitle}>{'EVM Wallets'}</div>
+        {showBtcWallets && <div className={styles.walletTypeTitle}>{'EVM Wallets'}</div>}
         <div className={styles.wallets}>
           {evmConnectors.map((connector) => {
             return (

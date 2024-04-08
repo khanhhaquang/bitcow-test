@@ -5,7 +5,7 @@ import { initializeConnector } from '@web3-react/core';
 import { useMemo } from 'react';
 
 import { ALL_NETWORK } from '../../contexts/NetworkProvider';
-import { BtcConnectors, EIP6963Wallet, EvmConnectors, EvmConnectProvider } from '../../wallet';
+import { EIP6963Wallet, EvmConnectors, EvmConnectProvider } from '../../wallet';
 
 export default function ConnectProvider({
   children,
@@ -35,30 +35,9 @@ export default function ConnectProvider({
           })
       );
 
-    const [coinbaseWallet, coinbaseHooks] = initializeConnector<EvmConnectors.CoinbaseConnector>(
-      (actions) =>
-        new EvmConnectors.CoinbaseConnector({
-          actions,
-          options: {
-            url: 'https://bitcow.xyz',
-            appName: 'Bitcow',
-            reloadOnDisconnect: false
-          }
-        })
-    );
-    return [
-      [walletConnectV2, walletConnectV2hooks],
-      [coinbaseWallet, coinbaseHooks]
-    ];
+    return [[walletConnectV2, walletConnectV2hooks]];
   }, [walletConnectProjectId]);
-  const btcConnectors = useMemo(
-    () => [
-      new BtcConnectors.UnisatConnector(),
-      new BtcConnectors.OKXConnector(),
-      new BtcConnectors.BitgetConnector()
-    ],
-    []
-  );
+
   return (
     <EvmConnectProvider
       options={{
@@ -76,7 +55,7 @@ export default function ConnectProvider({
           }
         }
       }}
-      btcConnectors={btcConnectors}
+      btcConnectors={[]}
       // @ts-ignore
       evmConnectors={evmConnectors}
       evmConnectorMaxCount={4}

@@ -10,6 +10,7 @@ import PixelButton from '../../../components/PixelButton';
 import useMerlinWallet from '../../../hooks/useMerlinWallet';
 import useNetwork from '../../../hooks/useNetwork';
 import { ICreatePoolSetting } from '../types';
+import UploadInput from './UploadInput';
 
 const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }> = ({
   bitusdBalance,
@@ -33,7 +34,7 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
         <TextInput title={'Symbol'} actionType={'symbol'}></TextInput>
         <TextInput title={'Description'} actionType={'description'}></TextInput>
         <TextInput title={'Project Url'} actionType={'projectUrl'}></TextInput>
-        <TextInput title={'Logo Url'} actionType={'logoUrl'}></TextInput>
+        <UploadInput title={'Logo Url'} actionType={'logoUrl'} />
         <NumberInput
           title={'Token Supply'}
           actionType={'mintAmount'}

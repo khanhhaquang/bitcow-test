@@ -15,7 +15,8 @@
 
 body {
   margin: 0;
-  font-family: 'Neue Pixel Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Neue Pixel Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -25,6 +26,12 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+input[type=file], /* FF, IE7+, chrome (except button) */
+input[type=file]::-webkit-file-upload-button {
+  /* chromes and blink button */
+  cursor: pointer;
 }
 
 ::placeholder {
@@ -95,8 +102,8 @@ code {
   --bitcow-color-text-main: #ffb500;
   --bitcow-color-text-red: #ff4d4d;
   --bitcow-color-text-orange: #ff8a00;
-  --bitcow-color-text-gold: #FECB38;
-  --bitcow-color-text-blue: #0083FE;
+  --bitcow-color-text-gold: #fecb38;
+  --bitcow-color-text-blue: #0083fe;
 
   &.dark {
     --obric-color_main_2: #ffffff;

@@ -1,10 +1,11 @@
 import { useFormikContext } from 'formik';
 
+import PixelButton from 'components/PixelButton';
+import useUpload from 'hooks/useUpload';
+
 import Title from './Title';
 
 import { ICreatePoolSetting } from '../types';
-import PixelButton from 'components/PixelButton';
-import useUpload from 'hooks/useUpload';
 
 interface TProps {
   title: string;

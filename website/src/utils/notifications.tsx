@@ -43,13 +43,11 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
 export const openErrorNotification = (args: INotificationArgs) =>
   openNotification({ type: 'error', ...args });
 
-export const openTxSuccessNotification = (txHash: string, content: string) => {
+export const openTxSuccessNotification = (url: string, txHash: string, content: string) => {
   const detail = (
     <div>
       <span>{content}</span>
-      <TextLink
-        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
-        className="block !text-bc-blue">
+      <TextLink href={`${url}/tx/${txHash}`} className="block !text-bc-blue">
         View Transaction
       </TextLink>
     </div>
@@ -57,13 +55,11 @@ export const openTxSuccessNotification = (txHash: string, content: string) => {
   return openNotification({ detail, title: 'Transaction Success' });
 };
 
-export const openTxErrorNotification = (txHash: string, content: string) => {
+export const openTxErrorNotification = (url: string, txHash: string, content: string) => {
   const detail = (
     <div>
       <span>{content}:</span>
-      <TextLink
-        href={`https://testnet-scan.merlinchain.io/tx/${txHash}`}
-        className="block !text-bc-blue">
+      <TextLink href={`${url}/tx/${txHash}`} className="block !text-bc-blue">
         View Transaction
       </TextLink>
     </div>

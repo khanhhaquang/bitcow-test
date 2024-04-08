@@ -233,7 +233,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           openErrorNotification({ detail: `Fail approve to ${token.symbol}` });
           return false;
         } else if (result.status === 0) {
-          openTxErrorNotification(result.hash, `Fail approve to ${token.symbol}`);
+          openTxErrorNotification(
+            currentNetwork.chainConfig.blockExplorerUrls[0],
+            result.hash,
+            `Fail approve to ${token.symbol}`
+          );
           return false;
         } else {
           return true;
@@ -243,7 +247,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return false;
       }
     },
-    [obricSDK, checkTransactionError]
+    [obricSDK, checkTransactionError, currentNetwork]
   );
   const requestSwap = useCallback(
     async (quote, minOutputAmt) => {
@@ -266,12 +270,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           const result = await obricSDK.swap(quote, minOutputAmt);
           if (result.status === 1) {
             openTxSuccessNotification(
+              currentNetwork.chainConfig.blockExplorerUrls[0],
               result.hash,
               `Swapped ${quote.inAmt} ${fromToken.symbol} to ${toToken.symbol}`
             );
             success = true;
           } else if (result.status === 0) {
             openTxErrorNotification(
+              currentNetwork.chainConfig.blockExplorerUrls[0],
               result.hash,
               `Failed to swap ${quote.inAmt} ${fromToken.symbol} to ${toToken.symbol}`
             );
@@ -290,7 +296,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       }
       return success;
     },
-    [obricSDK, checkApprove, wallet, checkTransactionError, checkNetwork]
+    [obricSDK, checkApprove, wallet, checkTransactionError, checkNetwork, currentNetwork]
   );
 
   const requestAddLiquidity = useCallback(
@@ -309,10 +315,15 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           ) {
             const result = await pool.depositV1(xAmount, yAmount);
             if (result.status === 1) {
-              openTxSuccessNotification(result.hash, 'Deposit success');
+              openTxSuccessNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
+                result.hash,
+                'Deposit success'
+              );
               success = true;
             } else if (result.status === 0) {
               openTxErrorNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
                 result.hash,
                 `Failed to deposit to ${pool.token0.symbol}-${pool.token1.symbol} pool`
               );
@@ -332,7 +343,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [obricSDK, checkApprove, wallet, checkTransactionError, checkNetwork]
+    [obricSDK, checkApprove, wallet, checkTransactionError, checkNetwork, currentNetwork]
   );
 
   const requestWithdrawLiquidity = useCallback(
@@ -348,12 +359,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           const result = await pool.withdrawV1(amt);
           if (result.status === 1) {
             openTxSuccessNotification(
+              currentNetwork.chainConfig.blockExplorerUrls[0],
               result.hash,
               `Withdraw success from ${amt} lp ${pool.token0.symbol}-${pool.token1.symbol}`
             );
             success = true;
           } else if (result.status === 0) {
             openTxErrorNotification(
+              currentNetwork.chainConfig.blockExplorerUrls[0],
               result.hash,
               `Failed to withdraw from ${pool.token0.symbol}-${pool.token1.symbol}`
             );
@@ -372,7 +385,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [obricSDK, wallet, checkTransactionError, checkNetwork]
+    [obricSDK, wallet, checkTransactionError, checkNetwork, currentNetwork]
   );
 
   const requestCreatePair = useCallback(
@@ -412,10 +425,18 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               addTokenListFee
             );
             if (result.status === 1) {
-              openTxSuccessNotification(result.hash, 'Create token and pool success');
+              openTxSuccessNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
+                result.hash,
+                'Create token and pool success'
+              );
               success = true;
             } else if (result.status === 0) {
-              openTxErrorNotification(result.hash, 'Failed to create token and pool');
+              openTxErrorNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
+                result.hash,
+                'Failed to create token and pool'
+              );
               success = false;
             }
           } else {
@@ -435,7 +456,16 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [obricSDK, wallet, tokenList, checkApprove, checkTransactionError, bitusdToken, checkNetwork]
+    [
+      obricSDK,
+      wallet,
+      tokenList,
+      checkApprove,
+      checkTransactionError,
+      bitusdToken,
+      checkNetwork,
+      currentNetwork
+    ]
   );
 
   return (

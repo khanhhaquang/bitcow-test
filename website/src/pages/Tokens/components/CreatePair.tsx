@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 import MessageShow from './MessageShow';
 import NumberInput from './NumberInput';
 import TextInput from './TextInput';
+import UploadInput from './UploadInput';
 
 import PixelButton from '../../../components/PixelButton';
 import useMerlinWallet from '../../../hooks/useMerlinWallet';
 import useNetwork from '../../../hooks/useNetwork';
 import { ICreatePoolSetting } from '../types';
-import UploadInput from './UploadInput';
 
 const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }> = ({
   bitusdBalance,

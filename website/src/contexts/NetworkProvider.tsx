@@ -41,18 +41,18 @@ export const ALL_NETWORK: NetworkConfig[] = [
     icon: '/images/merlin.png',
     sdkConfig: CONFIG.merlinTestnet
   },
-  // {
-  //   chainConfig: {
-  //     chainId: 3636,
-  //     chainName: 'Botanix Testnet',
-  //     nativeCurrency: BTC,
-  //     rpcUrls: ['https://node.botanixlabs.dev'],
-  //     blockExplorerUrls: ['https://blockscout.botanixlabs.dev']
-  //   },
-  //   rpcNodeUrl: 'https://node.botanixlabs.dev',
-  //   icon: '/images/botanix.png',
-  //   sdkConfig: CONFIG.botanixTestnet
-  // },
+  {
+    chainConfig: {
+      chainId: 3636,
+      chainName: 'Botanix Testnet',
+      nativeCurrency: BTC,
+      rpcUrls: ['https://node.botanixlabs.dev'],
+      blockExplorerUrls: ['https://blockscout.botanixlabs.dev']
+    },
+    rpcNodeUrl: 'https://node.botanixlabs.dev',
+    icon: '/images/botanix.png',
+    sdkConfig: CONFIG.botanixTestnet
+  },
   {
     chainConfig: {
       chainId: 606808,

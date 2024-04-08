@@ -50,24 +50,18 @@ export class Sdk extends ContractRunner {
         }
     }
     private async reloadPools(): Promise<PairStats[]> {
-        const paginateCount = 1000;
+        const paginateCount = 50;
         let resultPairStats: PairStats[] = [];
-        for (let start = 0; ; start++) {
-            const fetchResult = await this.tradingPairV1ListContract.fetchPairsStatsListPaginate(
-                start,
-                start + paginateCount
-            );
-            const pairStatss = fetchResult[0];
-            resultPairStats = resultPairStats.concat(
-                pairStatss.map((pairStats: any) => {
-                    return parsePairStats(pairStats);
-                })
-            );
-            const tokenCount = Number(fetchResult[1].toString());
-            if (pairStatss.length + start <= tokenCount) {
-                break;
-            } else {
-                start += paginateCount;
+        const fetchResult = await this.tradingPairV1ListContract.fetchPairsStatsListPaginate(0, paginateCount);
+        resultPairStats = resultPairStats.concat(fetchResult[0].map(parsePairStats));
+        if (fetchResult[0].length < parseFloat(fetchResult[1].toString())) {
+            const promise = [];
+            for (let i = paginateCount; i < parseFloat(fetchResult[1].toString()); i += paginateCount) {
+                promise.push(this.tradingPairV1ListContract.fetchPairsStatsListPaginate(i, i + paginateCount));
+            }
+            const promisePairs = await Promise.all(promise);
+            for (const promisePair of promisePairs) {
+                resultPairStats = resultPairStats.concat(promisePair[0].map(parsePairStats));
             }
         }
         return resultPairStats;

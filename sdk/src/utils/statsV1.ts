@@ -1,4 +1,4 @@
-import { PairStats, StatsV1 } from '../types';
+import { PairStats, StatsV1, TokenInfo } from '../types';
 import { bigintToBigNumber, bigintToBN } from './common';
 
 export function parseStatsV1(fetchStatsV1: any): StatsV1 {
@@ -44,5 +44,17 @@ export function parsePairStats(pairStats: any): PairStats {
     return {
         pair: { pairAddress: pair.pairAddress, xToken: pair.xToken, yToken: pair.yToken, lpToken: pair.lpToken },
         statsV1: parseStatsV1(pairStats.statsV1)
+    };
+}
+export function parseTokenInfo(token: any): TokenInfo {
+    return {
+        address: token.tokenAddress,
+        name: token.name,
+        symbol: token.symbol,
+        decimals: Number(token.decimals.toString()),
+        description: token.description,
+        projectUrl: token.projectUrl,
+        logoUrl: token.logoUrl,
+        coingeckoId: token.coingeckoId
     };
 }

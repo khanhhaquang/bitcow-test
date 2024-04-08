@@ -31,7 +31,7 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
       <div className="mx-auto text-center text-3xl text-amber-600">Create Token and Pool</div>
       <div className="mx-auto mt-8 w-1/2">
         <TextInput title={'Name'} actionType={'name'}></TextInput>
-        <TextInput title={'Symbol'} actionType={'symbol'}></TextInput>
+        <TextInput title={'Ticker'} actionType={'symbol'}></TextInput>
         <TextInput title={'Description'} actionType={'description'}></TextInput>
         <TextInput title={'Project Url'} actionType={'projectUrl'}></TextInput>
         <UploadInput title={'Logo Url'} actionType={'logoUrl'} />
@@ -40,11 +40,11 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
           actionType={'mintAmount'}
           placeholderVale={'0.00'}></NumberInput>
         <NumberInput
-          title={`Add ${values.symbol || 'SYMBOL'} to pool`}
+          title={`Add ${values.symbol || '...'} to pool`}
           actionType={'addLiquidityAmount'}
           placeholderVale={'0.00'}></NumberInput>
         <NumberInput
-          title={'Add bitusd to pool'}
+          title={'Add bitUSD to pool'}
           actionType={'bitusdAddLiquidityAmount'}
           placeholderVale={ready ? bitusdBalance.toString() : '0.00'}></NumberInput>
         <MessageShow
@@ -67,13 +67,13 @@ const CreatePair: React.FC<{ bitusdBalance: number | undefined; ready: boolean }
           </div>
         ) : null}
 
-        {isValid ? (
+        {isValid && (
           <div className="m-4 text-center text-2xl">
             You are about to mint {values.mintAmount} {values.symbol}, and add
             {values.addLiquidityAmount} {values.symbol} + {values.bitusdAddLiquidityAmount} bitusd
             to create a new liquidity pool.
           </div>
-        ) : null}
+        )}
 
         <div className="pt-2">
           <PixelButton

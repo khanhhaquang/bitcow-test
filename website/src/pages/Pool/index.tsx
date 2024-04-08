@@ -109,18 +109,20 @@ const Pool = () => {
               : numberCompactFormat(getTotalPoolsTVL(), 1)}
           </div>
         </div>
-        <div className="flex items-center px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
-          <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
-          <div className="">
-            Volume 24H <span className="tablet:hidden">:</span>
+        {false && (
+          <div className="flex items-center px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+            <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
+            <div className="">
+              Volume 24H <span className="tablet:hidden">:</span>
+            </div>
+            <div className="tablet:text-2xl">
+              ${' '}
+              {isTablet
+                ? numberCompactFormat(getTotalPoolsVolume())
+                : numberCompactFormat(getTotalPoolsVolume(), 1)}
+            </div>
           </div>
-          <div className="tablet:text-2xl">
-            ${' '}
-            {isTablet
-              ? numberCompactFormat(getTotalPoolsVolume())
-              : numberCompactFormat(getTotalPoolsVolume(), 1)}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

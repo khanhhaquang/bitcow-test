@@ -22,7 +22,7 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
     } else {
       return false;
     }
-  }, [currentChain]);
+  }, [currentChain, btcConnectors]);
   const onBtcConnect = useCallback(
     async (connector: BaseConnector) => {
       if (connector.isReady()) {

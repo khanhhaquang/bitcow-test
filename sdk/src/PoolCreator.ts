@@ -3,7 +3,6 @@ import { Contract, Interface, Provider, Signer } from 'ethers';
 import { CreateTokenInfo, TxOption } from './types';
 import { ABI_SS_TRADING_PAIR_V1_CREATOR } from './abi/SsTradingPairV1Creator';
 import { ABI_TOKEN_LIST } from './abi/TokenList';
-import { parseEvents } from './utils/common';
 
 export class PoolCreator extends ContractRunner {
     pairCreator: Contract;
@@ -32,17 +31,8 @@ export class PoolCreator extends ContractRunner {
         protocolFeeAddress: string,
         addTokenListFee: string
     ) {
-        console.log(tokenInfo);
-        console.log(
-            mintAmount,
-            addLiquidityAmount,
-            bitusdAddLiquidityAmount,
-            protocolFeeShareThousandth,
-            feeMillionth,
-            protocolFeeAddress,
-            addTokenListFee
-        );
-        const tx = await this.pairCreator.createPair(
+        return await this.send(
+            this.pairCreator.createPair,
             tokenInfo,
             mintAmount,
             addLiquidityAmount,
@@ -52,22 +42,5 @@ export class PoolCreator extends ContractRunner {
             protocolFeeAddress,
             { value: addTokenListFee }
         );
-        if (tx.status === 1) {
-            const receipt = await tx.wait();
-            const logs = parseEvents(receipt, [this.tokenListInterface, this.pairCreator.interface]);
-            let tokenAddress: string | undefined;
-            let pairAddress: string | undefined;
-            for (const log of logs) {
-                if (log.fragment.name === 'CreateToken') {
-                    tokenAddress = log.args[0];
-                }
-                if (log.fragment.name === 'CreatePair') {
-                    pairAddress = log.args[0];
-                }
-            }
-            return { success: true, hash: tx.hash, tokenAddress, pairAddress };
-        } else {
-            return { success: false, hash: tx.hash };
-        }
     }
 }

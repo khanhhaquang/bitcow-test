@@ -401,12 +401,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               bitusdAddLiquidityAmount
             ))
           ) {
-            const {
-              success: createSuccess,
-              hash,
-              tokenAddress,
-              pairAddress
-            } = await obricSDK.poolCreator.cretePair(
+            const result = await obricSDK.poolCreator.cretePair(
               tokenInfo,
               new BigNumber(mintAmount).times(10 ** tokenInfo.decimals).toFixed(0),
               new BigNumber(addLiquidityAmount).times(10 ** tokenInfo.decimals).toFixed(0),
@@ -416,11 +411,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               protocolFeeAddress,
               addTokenListFee
             );
-            if (createSuccess) {
-              openTxSuccessNotification(hash, 'Create token and pool success');
+            if (result.status === 1) {
+              openTxSuccessNotification(result.hash, 'Create token and pool success');
               success = true;
-            } else {
-              openTxErrorNotification(hash, 'Failed to create token and pool');
+            } else if (result.status === 0) {
+              openTxErrorNotification(result.hash, 'Failed to create token and pool');
               success = false;
             }
           } else {

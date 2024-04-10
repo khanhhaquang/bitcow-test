@@ -47,7 +47,7 @@ const CoinIcon: React.FC<TProps> = ({ size = 24, className, symbol, token }) => 
             invisible: !isLoaded,
             'bg-white': isAPT
           })}
-          alt="coin icon"
+          alt=""
           onError={onImgError}
           onLoad={onImgLoad}
         />

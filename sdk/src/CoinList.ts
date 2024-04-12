@@ -1,4 +1,4 @@
-import { TokenInfo, TxOption } from './types';
+import { Token, TokenInfo, TxOption } from './types';
 import { BTC } from './configs';
 import { Contract, Provider, Signer } from 'ethers';
 import { ABI_ERC20 } from './abi/ERC20';
@@ -8,6 +8,7 @@ import { ContractRunner } from './ContractRunner';
 import { ABI_TOKEN_LIST } from './abi/TokenList';
 import { ABI_TOKENS_BALANCE } from './abi/TokensBalance';
 import { parseTokenInfo } from './utils/statsV1';
+import PromiseThrottle from 'promise-throttle';
 
 export class CoinList extends ContractRunner {
     tokens: TokenInfo[];
@@ -16,9 +17,13 @@ export class CoinList extends ContractRunner {
     private contracts: Record<string, Contract>;
     private readonly tokenListContract: Contract;
     private readonly tokensBalanceContract: Contract;
+
     constructor(
         provider: Provider,
         public tokenListAddress: string,
+        private promiseThrottle: PromiseThrottle,
+        private pageTokenCount: number,
+        private pageBalancesCount: number,
         tokensBalance: string,
         txOption?: TxOption,
         signer?: Signer
@@ -38,24 +43,34 @@ export class CoinList extends ContractRunner {
     }
 
     async reload() {
-        const paginateCount = 500;
+        const paginateCount = this.pageTokenCount;
         let resultTokens: TokenInfo[] = [];
-        const fetchResult = await this.tokenListContract.fetchTokenListPaginate(0, paginateCount);
+        console.log(`Fetch tokens ${paginateCount} after index 0`);
+        const fetchResult = await this.promiseThrottle.add(async () => {
+            return this.tokenListContract.fetchTokenListPaginate(0, paginateCount);
+        });
         resultTokens = resultTokens.concat(fetchResult[0].map(parseTokenInfo));
         if (fetchResult[0].length < parseFloat(fetchResult[1].toString())) {
             const promise = [];
             for (let i = paginateCount; i < parseFloat(fetchResult[1].toString()); i += paginateCount) {
-                promise.push(this.tokenListContract.fetchTokenListPaginate(i, i + paginateCount));
+                promise.push(async () => {
+                    console.log(
+                        `Fetch tokens ${paginateCount} after index ${i} of ${parseFloat(fetchResult[1].toString())}`
+                    );
+                    return await this.tokenListContract.fetchTokenListPaginate(i, i + paginateCount);
+                });
             }
-            const promiseTokens = await Promise.all(promise);
+            const promiseTokens = await this.promiseThrottle.addAll(promise);
             for (const promiseToken of promiseTokens) {
                 resultTokens = resultTokens.concat(promiseToken[0].map(parseTokenInfo));
             }
         }
+        console.log('Tokens count ', resultTokens.length);
         this.tokens = resultTokens;
         this.buildCache();
         return this.tokens;
     }
+
     buildCache() {
         this.symbolToToken = {};
         this.addressToToken = {};
@@ -83,7 +98,7 @@ export class CoinList extends ContractRunner {
         return [BTC, ...this.tokens];
     }
 
-    async getAllowance(token: TokenInfo, spender: string) {
+    async getAllowance(token: TokenInfo | Token, spender: string) {
         const userAddress = await this.getAddress();
         if (userAddress) {
             return await this.contracts[token.address].allowance(userAddress, spender);
@@ -93,16 +108,23 @@ export class CoinList extends ContractRunner {
     async getBalances(tokens = this.getAllToken().map((token) => token.address)) {
         const userAddress = await this.getAddress();
         if (userAddress) {
-            const maxTokenCount = 500;
+            const maxTokenCount = this.pageBalancesCount;
             const fetchTokens: string[][] = [];
             for (let i = 0; i < tokens.length; i += maxTokenCount) {
                 fetchTokens.push(tokens.slice(i, i + maxTokenCount));
             }
             const promise = [];
+            let index = 0;
             for (const fetchToken of fetchTokens) {
-                promise.push(this.tokensBalanceContract.balances(userAddress, fetchToken));
+                const indexInner = index;
+                promise.push(async () => {
+                    console.log(`Fetch token balance ${maxTokenCount} after index ${indexInner} of ${tokens.length}`);
+                    return this.tokensBalanceContract.balances(userAddress, fetchToken);
+                });
+                index += fetchToken.length;
             }
-            const balances = await Promise.all(promise);
+            const balances = await this.promiseThrottle.addAll(promise);
+            console.log('Fetch tokens balance end');
             const balancesResult: Record<string, bigint> = {};
             tokens.forEach((token, index) => {
                 balancesResult[token] = balances[Math.floor(index / maxTokenCount)][index % maxTokenCount];
@@ -111,7 +133,7 @@ export class CoinList extends ContractRunner {
         }
     }
 
-    async approve(token: TokenInfo, spender: string, minAmount: number, amount: string = MAX_U256) {
+    async approve(token: TokenInfo | Token, spender: string, minAmount: number, amount: string = MAX_U256) {
         const allowance = await this.getAllowance(token, spender);
         if (new BigNumber(allowance.toString()).div(10 ** token.decimals).lt(minAmount) && this.signer) {
             const tokenContract = this.contracts[token.address];

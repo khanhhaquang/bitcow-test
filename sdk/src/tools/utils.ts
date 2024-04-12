@@ -55,7 +55,7 @@ export async function getPool(xToken: string, yToken: string): Promise<Pool> {
 }
 export async function getSdk() {
     const signer = getSigner();
-    return await Sdk.create(signer.provider, currentConfig.config, txOption, signer.signer);
+    return await Sdk.create(signer.provider, currentConfig.config, 0.2, txOption, signer.signer);
 }
 export async function checkAndApprovePool(sdk: Sdk, pool: Pool) {
     await sdk.coinList.approve(pool.xToken, pool.poolAddress, 1000000);

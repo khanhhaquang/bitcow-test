@@ -95,7 +95,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
           {commonCoins.map((coin) => (
             <CommonCoinButton
               coin={coin}
-              key={`common-coin-${coin.symbol}`}
+              key={`common-coin-${coin.address}`}
               onClickToken={() => onSelectToken(coin)}
             />
           ))}
@@ -108,10 +108,10 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
     return (
       <List
         className="max-h-[354px] overflow-y-scroll border-2 border-bc-orange bg-bc-grey-transparent2 no-scrollbar tablet:mx-5 tablet:mb-6"
-        rowKey={(item) => `list-row-${(item as TokenInfo).symbol}`}>
+        rowKey={(item) => `list-row-${(item as TokenInfo).address}`}>
         <VirtualList
           data={tokenListBalance || []}
-          itemKey={(item) => `list-item-${item.token.symbol}`}>
+          itemKey={(item) => `list-item-${item.token.address}`}>
           {(item) => (
             <List.Item
               className="cursor-pointer !border-0 !px-0 !py-2 hover:bg-bc-white-10"

@@ -1,6 +1,6 @@
 //import sizeOf from 'buffer-image-size';
 import { Formik, FormikHelpers } from 'formik';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import * as yup from 'yup';
 
 import CreatePair from './components/CreatePair';
@@ -13,6 +13,10 @@ import { openErrorNotification } from '../../utils/notifications';
 const Tokens: React.FC = () => {
   const { requestCreatePair, bitusdToken, symbolToToken } = useMerlinWallet();
   const [bitusdTokenBalance, ready] = useTokenBalance(bitusdToken);
+  const { initProvider } = useMerlinWallet();
+  useEffect(() => {
+    initProvider('tokens');
+  }, [initProvider]);
   const validationSchema = yup.object({
     name: yup.string().required("Name can't be empty"),
     symbol: yup

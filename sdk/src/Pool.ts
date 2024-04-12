@@ -2,7 +2,7 @@ import { Contract, Provider, Signer } from 'ethers';
 import { ABI_SS_TRADING_PAIR_V1 } from './abi/SsTradindPairV1';
 import BigNumber from 'bignumber.js';
 import { ABI_ERC20 } from './abi/ERC20';
-import { IPool, IUserLiquidity, Pair, PairStats, StatsV1, Token, TokenInfo, TxOption, UserLpAmount } from './types';
+import { IPool, IUserLiquidity, Pair, PairStats, Token, StatsV1, TxOption, UserLpAmount } from './types';
 import { MILLIONTH } from './constant';
 import BN from 'bn.js';
 import sqrt from './utils/math';
@@ -13,29 +13,30 @@ export class Pool extends ContractRunner implements IPool {
     poolContract: Contract;
     xTokenContract: Contract;
     yTokenContract: Contract;
-    private lpTokenContract: Contract;
     pair: Pair;
     stats: StatsV1 | undefined;
     public xToken: Token;
     public yToken: Token;
 
-    constructor(
-        provider: Provider,
-        private pairStats: PairStats,
-        xTokenInfo: TokenInfo,
-        yTokenInfo: TokenInfo,
-        txOption?: TxOption,
-        signer?: Signer
-    ) {
+    constructor(provider: Provider, pairStats: PairStats, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
         this.pair = pairStats.pair;
         this.stats = pairStats.statsV1;
-        this.xToken = { ...xTokenInfo, mult: 10 ** xTokenInfo.decimals };
-        this.yToken = { ...yTokenInfo, mult: 10 ** yTokenInfo.decimals };
+        this.xToken = {
+            address: this.pair.xToken,
+            symbol: this.pair.xSymbol,
+            decimals: this.pair.xDecimals,
+            mult: 10 ** this.pair.xDecimals
+        };
+        this.yToken = {
+            address: this.pair.yToken,
+            symbol: this.pair.ySymbol,
+            decimals: this.pair.yDecimals,
+            mult: 10 ** this.pair.yDecimals
+        };
         this.poolContract = new Contract(this.pair.pairAddress, ABI_SS_TRADING_PAIR_V1, this.provider);
         this.xTokenContract = new Contract(this.pair.xToken, ABI_ERC20, this.provider);
         this.yTokenContract = new Contract(this.pair.yToken, ABI_ERC20, this.provider);
-        this.lpTokenContract = new Contract(this.pair.lpToken, ABI_ERC20, this.provider);
     }
     get swapFeeMillionth() {
         return Number(this.stats?.feeMillionth.toString()) / MILLIONTH;

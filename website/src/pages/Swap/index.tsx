@@ -3,7 +3,7 @@
 
 import { Formik, FormikHelpers } from 'formik';
 import { getSwapSettings } from 'modules/swap/reducer';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 
@@ -25,7 +25,10 @@ const validationSchema = yup.object({
 
 const Swap: React.FC = () => {
   const swapSettings = useSelector(getSwapSettings);
-  const { requestSwap } = useMerlinWallet();
+  const { requestSwap, initProvider } = useMerlinWallet();
+  useEffect(() => {
+    initProvider('swap');
+  }, [initProvider]);
   const onSubmitSwap = useCallback(
     async (values: ISwapSettings, formikHelper: FormikHelpers<ISwapSettings>) => {
       const fromToken = values.currencyFrom?.token;

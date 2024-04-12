@@ -42,7 +42,16 @@ function fillStats(stats: StatsV1) {
 export function parsePairStats(pairStats: any): PairStats {
     const pair = pairStats.pair;
     return {
-        pair: { pairAddress: pair.pairAddress, xToken: pair.xToken, yToken: pair.yToken, lpToken: pair.lpToken },
+        pair: {
+            pairAddress: pair.pairAddress,
+            xToken: pair.xToken,
+            xDecimals: parseFloat(pair.xDecimals.toString()),
+            xSymbol: pair.xSymbol,
+            yToken: pair.yToken,
+            yDecimals: parseFloat(pair.yDecimals.toString()),
+            ySymbol: pair.ySymbol,
+            lpToken: pair.lpToken
+        },
         statsV1: parseStatsV1(pairStats.statsV1)
     };
 }

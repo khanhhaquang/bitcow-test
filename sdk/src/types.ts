@@ -4,6 +4,13 @@ import { TransactionReceipt } from 'ethers';
 
 export type TxOption = { gasPrice?: number; gasLimit?: number };
 
+export type Token = {
+    address: string;
+    decimals: number;
+    symbol: string;
+    mult: number;
+};
+
 export type CreateTokenInfo = {
     name: string;
     symbol: string;
@@ -17,10 +24,6 @@ export type CreateTokenInfo = {
 export type TokenInfo = {
     address: string;
 } & CreateTokenInfo;
-
-export type Token = TokenInfo & {
-    mult: number;
-};
 
 export type FeeRecords = {
     xProtocolFees: BigNumber[];
@@ -59,7 +62,11 @@ export type StatsV1 = {
 export type Pair = {
     pairAddress: string;
     xToken: string;
+    xDecimals: number;
+    xSymbol: string;
     yToken: string;
+    yDecimals: number;
+    ySymbol: string;
     lpToken: string;
 };
 
@@ -97,8 +104,8 @@ export interface IPool {
     poolType: string;
     reserve0: BN;
     reserve1: BN;
-    token0: TokenInfo;
-    token1: TokenInfo;
+    token0: Token;
+    token1: Token;
 
     xMult: number;
     yMult: number;

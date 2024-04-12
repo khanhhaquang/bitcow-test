@@ -1,11 +1,11 @@
-import { TokenInfo } from 'obric-merlin';
+import { Token, TokenInfo } from 'obric-merlin';
 import { useMemo } from 'react';
 
 import useMerlinWallet from './useMerlinWallet';
 
 export type Balance = number | null;
 
-const useTokenBalance = (token: TokenInfo | undefined): [Balance, boolean] => {
+const useTokenBalance = (token: Token | TokenInfo | undefined): [Balance, boolean] => {
   const { tokenBalances } = useMerlinWallet();
 
   const balance = useMemo(() => {

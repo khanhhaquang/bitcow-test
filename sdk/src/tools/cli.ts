@@ -1,20 +1,28 @@
 import { Command } from 'commander';
 import { checkAndApprovePool, checkAndApproveSdk, getPool, getSdk } from './utils';
 import { sleep } from '../utils/common';
+import PromiseThrottle from 'promise-throttle';
 
 export const main = new Command();
 
 main.name('obric-cli').description('Obric SDK cli tool.');
 
+async function print() {
+    return new Promise((r) =>
+        setTimeout(() => {
+            console.log('hello');
+            r(true);
+        }, 10000)
+    );
+}
+
 async function printSDK() {
     const sdk = await getSdk();
-    const fees = sdk.pools[0].feesUsd(1, 1);
-    console.log(fees);
-    await sleep(1000);
+    await sdk.coinList.reload();
+
+    const balances = await sdk.getTokensBalance();
+
     await sdk.print();
-    await sleep(1000);
-    const balances = await sdk.coinList.getBalances();
-    await sleep(1000);
     console.log(balances);
 }
 

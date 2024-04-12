@@ -17,6 +17,8 @@ import { ReactComponent as PiexlCloseIcon } from 'resources/icons/pixelClose.svg
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
+
+import useMerlinWallet from '../../hooks/useMerlinWallet';
 // import styles from './Pool.module.scss';
 
 const filterOptions = [
@@ -49,6 +51,11 @@ const Pool = () => {
   const [filteredPools, setFilteredPools] = useState(activePools);
   const liquidityModal = useSelector(getLiquidityModal);
   const { isTablet } = useBreakpoint('tablet');
+
+  const { initProvider } = useMerlinWallet();
+  useEffect(() => {
+    initProvider('pool');
+  }, [initProvider]);
 
   const sortPoolsByFilter = useCallback(
     (poolsToSort: IPool[]) => {

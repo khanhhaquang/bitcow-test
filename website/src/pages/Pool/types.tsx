@@ -1,14 +1,14 @@
-import { TokenInfo } from 'obric-merlin';
+import { Token } from 'obric-merlin';
 
 export interface AddLiquidity {
-  xToken: TokenInfo;
-  yToken: TokenInfo;
+  xToken: Token;
+  yToken: Token;
   xAmt: number;
   yAmt: number;
 }
 
 export interface WithdrawLiquidity {
-  xToken: TokenInfo;
-  yToken: TokenInfo;
+  xToken: Token;
+  yToken: Token;
   percent: number;
 }

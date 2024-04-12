@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { TokenInfo } from 'obric-merlin';
+import { Token, TokenInfo } from 'obric-merlin';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';
@@ -7,24 +7,31 @@ import useMerlinWallet from 'hooks/useMerlinWallet';
 
 interface TProps {
   className?: string;
-  symbol?: string;
-  token?: TokenInfo;
+  token?: Token | TokenInfo;
   size?: number;
 }
 
 // Use size instead of className to set the size of images
-const CoinIcon: React.FC<TProps> = ({ size = 24, className, symbol, token }) => {
+const CoinIcon: React.FC<TProps> = ({ size = 24, className, token }) => {
   const { symbolToToken } = useMerlinWallet();
   const [isLoaded, setIsLoaded] = useState(false);
   const logoSrc = useMemo(() => {
-    if (token && token.logoUrl != '') return token.logoUrl;
-    if (token) return 'images/' + token.symbol + '.svg';
-    if (symbol) {
-      const tok = symbolToToken[symbol];
-      return 'images/' + tok.symbol + '.svg';
+    let tokenInfo: TokenInfo;
+    if ('logUrl' in token) {
+      tokenInfo = token;
+    } else {
+      if (symbolToToken) {
+        tokenInfo = symbolToToken[token.symbol];
+      }
     }
-  }, [symbol, token, symbolToToken]);
-  const isAPT = token?.symbol === 'APT' || symbol === 'APT';
+    if (tokenInfo) {
+      if (tokenInfo.logoUrl) {
+        return tokenInfo.logoUrl;
+      } else {
+        return 'images/' + tokenInfo.symbol + '.svg';
+      }
+    }
+  }, [token, symbolToToken]);
   const onImgError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = '';
     event.currentTarget.className = 'bg-black';
@@ -44,8 +51,7 @@ const CoinIcon: React.FC<TProps> = ({ size = 24, className, symbol, token }) => 
         <img
           src={logoSrc}
           className={classNames('h-full w-full rounded-full', {
-            invisible: !isLoaded,
-            'bg-white': isAPT
+            invisible: !isLoaded
           })}
           alt=""
           onError={onImgError}

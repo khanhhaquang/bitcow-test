@@ -1,4 +1,4 @@
-import { TokenInfo } from 'obric-merlin';
+import { Token, TokenInfo } from 'obric-merlin';
 import { useMemo } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
@@ -10,7 +10,7 @@ const useTokenAmountFormatter = () => {
 
   const formatter = useMemo(
     () =>
-      (amount: number | undefined | null, token: TokenInfo | undefined): string => {
+      (amount: number | undefined | null, token: Token | TokenInfo | undefined): string => {
         if (!obricSDK || typeof amount !== 'number' || amount <= 0 || !token) return '0';
 
         if (!token) return '0';

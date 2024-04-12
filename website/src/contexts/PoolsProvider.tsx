@@ -1,4 +1,4 @@
-import { IPool, IUserLiquidity, TokenInfo as Token } from 'obric-merlin';
+import { IPool, IUserLiquidity, TokenInfo, Token } from 'obric-merlin';
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
@@ -8,7 +8,7 @@ import { IPoolFilters } from 'types/pool';
 interface PoolsContextType {
   activePools: IPool[];
   coinPrices: Record<string, number>;
-  getTokenBalanceInUSD: (balance: number, token: Token) => string;
+  getTokenBalanceInUSD: (balance: number, token: Token | TokenInfo) => string;
   getPoolTVL: (pool: IPool) => number;
   getOwnedLiquidity: (pool: IPool) => IUserLiquidity;
   getOwnedLiquidityShare: (pool: IPool) => number;
@@ -137,7 +137,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   );
 
   const getTokenBalanceInUSD = useCallback(
-    (balance: number, token: Token) => {
+    (balance: number, token: Token | TokenInfo) => {
       let value = 0;
       if (coinPrices && token && coinPrices[token.symbol]) {
         value = balance * coinPrices[token.symbol];

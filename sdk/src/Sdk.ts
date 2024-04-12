@@ -1,5 +1,5 @@
 import { Pool } from './Pool';
-import { TokenInfo, Config, Quote, TxOption, UserLpAmount, PairStats } from './types';
+import { TokenInfo, Config, Quote, TxOption, PairStats } from './types';
 import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 import { Contract, Provider, Signer } from 'ethers';
@@ -11,6 +11,7 @@ import { ContractRunner } from './ContractRunner';
 import { ABI_SS_TRADING_PAIR_V1_LIST } from './abi/SsTradingPairV1List';
 import { parsePairStats } from './utils/statsV1';
 import { PoolCreator } from './PoolCreator';
+import PromiseThrottle from 'promise-throttle';
 
 export class Sdk extends ContractRunner {
     pools: Pool[] = [];
@@ -18,6 +19,8 @@ export class Sdk extends ContractRunner {
     poolCreator: PoolCreator;
     private routerContract: Contract;
     private tradingPairV1ListContract: Contract;
+    private promiseThrottle: PromiseThrottle;
+    private pairStats: PairStats[] = [];
     constructor(provider: Provider, public config: Config, txOption?: TxOption, signer?: Signer) {
         super(provider, txOption, signer);
 
@@ -25,15 +28,24 @@ export class Sdk extends ContractRunner {
         this.poolCreator = new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer);
         this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
         this.tradingPairV1ListContract = new Contract(config.tradingPairV1List, ABI_SS_TRADING_PAIR_V1_LIST, provider);
+        this.promiseThrottle = new PromiseThrottle({ requestsPerSecond: 0.2 });
     }
     async reload() {
-        const [tokens, pairStats] = await Promise.all([this.coinList.reload(), this.reloadPools()]);
-        this.buildCache(pairStats);
-        return { tokens, pools: this.pools };
+        await this.promiseThrottle.addAll<void>([
+            async () => {
+                await this.coinList.reload();
+            },
+            async () => {
+                await this.reloadPools();
+            }
+        ]);
+
+        this.buildCache();
+        return { tokens: this.coinList.tokens, pools: this.pools };
     }
-    private buildCache(pairStats: PairStats[]) {
+    private buildCache() {
         this.pools = [];
-        for (const pairStat of pairStats) {
+        for (const pairStat of this.pairStats) {
             const xToken = this.coinList.getTokenByAddress(pairStat.pair.xToken);
             const yToken = this.coinList.getTokenByAddress(pairStat.pair.yToken);
             if (xToken === undefined) {
@@ -49,7 +61,7 @@ export class Sdk extends ContractRunner {
             this.pools.push(new Pool(this.provider, pairStat, xToken, yToken, this.txOption, this.signer));
         }
     }
-    private async reloadPools(): Promise<PairStats[]> {
+    private async reloadPools(): Promise<void> {
         const paginateCount = 500;
         let resultPairStats: PairStats[] = [];
         const fetchResult = await this.tradingPairV1ListContract.fetchPairsStatsListPaginate(0, paginateCount);
@@ -64,7 +76,7 @@ export class Sdk extends ContractRunner {
                 resultPairStats = resultPairStats.concat(promisePair[0].map(parsePairStats));
             }
         }
-        return resultPairStats;
+        this.pairStats = resultPairStats;
     }
     async getTokensBalance() {
         const tokens = this.pools

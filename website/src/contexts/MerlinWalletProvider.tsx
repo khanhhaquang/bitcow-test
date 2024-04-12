@@ -13,6 +13,7 @@ import {
   UserLpAmount,
   CreateTokenInfo
 } from 'obric-merlin';
+import PromiseThrottle from 'promise-throttle';
 import { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import {
@@ -23,7 +24,7 @@ import {
 
 import useNetwork from '../hooks/useNetwork';
 import { useEvmConnectContext, Wallet } from '../wallet';
-
+const promiseThrottle = new PromiseThrottle({ requestsPerSecond: 0.1 });
 interface MerlinWalletContextType {
   wallet?: Wallet;
   openWalletModal: () => void;
@@ -153,15 +154,17 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           timeOutArray.push(true);
           setTimeOutCount(timeOutArray.length);
         }, 5000);
-        const balances = await obricSDK.getTokensBalance();
+        await promiseThrottle.add(async () => {
+          const balances = await obricSDK.getTokensBalance();
+          if (balances) {
+            setUserPoolLpAmount(balances.userPoolLp);
+            setTokenBalances(balances.userTokenBalances);
+          } else {
+            setUserPoolLpAmount({});
+            setTokenBalances({});
+          }
+        });
         clearTimeout(timeOut);
-        if (balances) {
-          setUserPoolLpAmount(balances.userPoolLp);
-          setTokenBalances(balances.userTokenBalances);
-        } else {
-          setUserPoolLpAmount({});
-          setTokenBalances({});
-        }
       } else {
         setUserPoolLpAmount({});
         setTokenBalances({});
@@ -179,15 +182,16 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           timeOutArray.push(true);
           setTimeOutCount(timeOutArray.length);
         }, 5000);
-        const { tokens, pools } = await obricSDK.reload();
-        clearTimeout(timeOut);
-        setTokenList(tokens);
-        const bitusd = tokens.find((token) => token.symbol === 'bitusd');
-        setBitusdToken(bitusd);
-        setSymbolToToken(obricSDK.coinList.symbolToToken);
-        setLiquidityPools(pools);
+        await promiseThrottle.add(async () => {
+          const { tokens, pools } = await obricSDK.reload();
+          clearTimeout(timeOut);
+          setTokenList(tokens);
+          const bitusd = tokens.find((token) => token.symbol === 'bitusd');
+          setBitusdToken(bitusd);
+          setSymbolToToken(obricSDK.coinList.symbolToToken);
+          setLiquidityPools(pools);
+        });
       } else {
-        console.log('clear tokenlist');
         setLiquidityPools([]);
         setTokenList([]);
         setSymbolToToken({});

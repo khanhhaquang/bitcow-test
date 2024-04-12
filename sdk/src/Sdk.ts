@@ -50,7 +50,7 @@ export class Sdk extends ContractRunner {
         }
     }
     private async reloadPools(): Promise<PairStats[]> {
-        const paginateCount = 50;
+        const paginateCount = 500;
         let resultPairStats: PairStats[] = [];
         const fetchResult = await this.tradingPairV1ListContract.fetchPairsStatsListPaginate(0, paginateCount);
         resultPairStats = resultPairStats.concat(fetchResult[0].map(parsePairStats));

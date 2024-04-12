@@ -38,7 +38,7 @@ export class CoinList extends ContractRunner {
     }
 
     async reload() {
-        const paginateCount = 100;
+        const paginateCount = 500;
         let resultTokens: TokenInfo[] = [];
         const fetchResult = await this.tokenListContract.fetchTokenListPaginate(0, paginateCount);
         resultTokens = resultTokens.concat(fetchResult[0].map(parseTokenInfo));
@@ -93,7 +93,7 @@ export class CoinList extends ContractRunner {
     async getBalances(tokens = this.getAllToken().map((token) => token.address)) {
         const userAddress = await this.getAddress();
         if (userAddress) {
-            const maxTokenCount = 200;
+            const maxTokenCount = 500;
             const fetchTokens: string[][] = [];
             for (let i = 0; i < tokens.length; i += maxTokenCount) {
                 fetchTokens.push(tokens.slice(i, i + maxTokenCount));

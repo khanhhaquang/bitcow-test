@@ -24,7 +24,7 @@ import { ISwapSettings } from '../types';
 const TokenSwap = () => {
   const { values, setFieldValue, submitForm, isSubmitting, isValid, dirty } =
     useFormikContext<ISwapSettings>();
-  const { wallet, openWalletModal, obricSDK, symbolToToken } = useMerlinWallet();
+  const { wallet, openWalletModal, obricSDK, symbolToToken, liquidityPools } = useMerlinWallet();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
   const toToken = values.currencyTo?.token;
@@ -40,10 +40,20 @@ const TokenSwap = () => {
 
   useEffect(() => {
     if (symbolToToken) {
-      setFieldValue('currencyFrom.token', symbolToToken.wBTC);
-      setFieldValue('currencyTo.token', symbolToToken.bitusd);
+      if (
+        fromToken === undefined ||
+        obricSDK.coinList.getTokenByAddress(fromToken.address) === undefined
+      ) {
+        setFieldValue('currencyFrom.token', symbolToToken.wBTC);
+      }
+      if (
+        toToken === undefined ||
+        obricSDK.coinList.getTokenByAddress(toToken.address) === undefined
+      ) {
+        setFieldValue('currencyTo.token', symbolToToken.bitusd);
+      }
     }
-  }, [symbolToToken, setFieldValue]);
+  }, [symbolToToken, setFieldValue, obricSDK, fromToken, toToken]);
 
   const lastFetchTs = useRef(0);
 
@@ -52,7 +62,7 @@ const TokenSwap = () => {
       const now = Date.now();
       lastFetchTs.current = now;
 
-      if (obricSDK && fromToken && toToken && fromUiAmt) {
+      if (obricSDK && fromToken && toToken && fromUiAmt && liquidityPools.length > 0) {
         const rate = obricSDK.getQuote(fromToken, toToken, Number(fromUiAmt));
         if (rate) {
           setFieldValue('quote', rate);
@@ -83,12 +93,12 @@ const TokenSwap = () => {
         amount: 0
       });
     }
-  }, [fromToken, fromUiAmt, obricSDK, setFieldValue, toToken, values.currencyFrom]);
+  }, [fromToken, fromUiAmt, obricSDK, setFieldValue, toToken, values.currencyFrom, liquidityPools]);
 
   useEffect(() => {
     fetchSwapRate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromToken, toToken, fromUiAmt, obricSDK]);
+  }, [fromToken, toToken, fromUiAmt, obricSDK, liquidityPools]);
 
   const onClickSwapToken = useCallback(() => {
     const tokenFrom = values.currencyFrom;

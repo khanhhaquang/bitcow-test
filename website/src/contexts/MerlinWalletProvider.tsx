@@ -29,6 +29,7 @@ interface MerlinWalletContextType {
   closeWalletModal: () => void;
   obricSDK: ObricSDK;
   liquidityPools: IPool[];
+  poolsCount: number;
   tokenList: TokenInfo[];
   symbolToToken: Record<string, TokenInfo>;
   tokenBalances: Record<string, number>;
@@ -77,15 +78,18 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [timeOutArray, setTimeOutArray] = useState<boolean[]>([]);
   const [createFee] = useState<bigint>(BigInt(150000000000000));
   const [bitusdToken, setBitusdToken] = useState<TokenInfo>();
-
+  const [poolsCount, setPoolsCount] = useState(0);
+  const [startInit, setStartInit] = useState(false);
   const { currentNetwork } = useNetwork();
   const clearCache = useCallback(() => {
     setLiquidityPools([]);
+    setPoolsCount(0);
     setTokenList([]);
     setSymbolToToken({});
     setTokenBalances({});
     setUserPoolLpAmount({});
     setBitusdToken(undefined);
+    setStartInit(false);
   }, []);
 
   useEffect(() => {
@@ -105,19 +109,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           staticNetwork: true
         }
       );
-      setObricSDK(
-        new ObricSDK(
-          provider as any,
-          currentNetwork.sdkConfig,
-          {
-            requestsPerSecond: 0.4,
-            pagePoolCount: 140,
-            pageTokenCount: 400,
-            pageBalancesCount: 300
-          },
-          txOption
-        )
-      );
+      console.log('setObricSdk');
+      setObricSDK(new ObricSDK(provider as any, currentNetwork.sdkConfig, 0.4, txOption));
     }
   }, [currentNetwork, txOption]);
   useEffect(() => {
@@ -136,73 +129,106 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, [txOption, obricSDK]);
 
-  const fetchPools = useCallback(async () => {
-    try {
-      if (obricSDK) {
-        const timeOut = setTimeout(() => {
-          timeOutArray.push(true);
-          setTimeOutCount(timeOutArray.length);
-        }, timeOutLength);
-        const pools = await obricSDK.reload();
-        clearTimeout(timeOut);
-        setLiquidityPools(pools);
-      } else {
-        setLiquidityPools([]);
+  const fetchPools = useCallback(
+    async (init: boolean, firstPaginateCount: number, paginateCount: number) => {
+      try {
+        if (obricSDK) {
+          const timeOut = setTimeout(() => {
+            timeOutArray.push(true);
+            setTimeOutCount(timeOutArray.length);
+          }, timeOutLength);
+          if (init) {
+            setStartInit(true);
+            await obricSDK.reload(firstPaginateCount, paginateCount, (pagePools, allCount) => {
+              setLiquidityPools(pagePools);
+              setPoolsCount(allCount);
+            });
+          } else {
+            const pools = await obricSDK.reload(firstPaginateCount, paginateCount);
+            setLiquidityPools(pools);
+            setPoolsCount(pools.length);
+          }
+          clearTimeout(timeOut);
+        } else {
+          setLiquidityPools([]);
+          setPoolsCount(0);
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-    }
-  }, [obricSDK, timeOutArray, timeOutLength]);
+    },
+    [obricSDK, timeOutArray, timeOutLength]
+  );
 
-  const fetchTokenList = useCallback(async () => {
-    try {
-      if (obricSDK) {
-        const timeOut = setTimeout(() => {
-          timeOutArray.push(true);
-          setTimeOutCount(timeOutArray.length);
-        }, timeOutLength);
-        const tokens = await obricSDK.coinList.reload();
-        clearTimeout(timeOut);
-        setTokenList(tokens);
-        const bitusd = tokens.find((token) => token.symbol === 'bitusd');
-        setBitusdToken(bitusd);
-        setSymbolToToken(obricSDK.coinList.symbolToToken);
-      } else {
-        setTokenList([]);
-        setSymbolToToken({});
-        setBitusdToken(undefined);
+  const fetchTokenList = useCallback(
+    async (init: boolean, firstPaginateCount: number, paginateCount: number) => {
+      let bitusd: TokenInfo | undefined;
+      try {
+        if (obricSDK) {
+          const timeOut = setTimeout(() => {
+            timeOutArray.push(true);
+            setTimeOutCount(timeOutArray.length);
+          }, timeOutLength);
+          if (init) {
+            setStartInit(true);
+            await obricSDK.coinList.reload(firstPaginateCount, paginateCount, (tokens) => {
+              setTokenList(tokens);
+              bitusd = tokens.find((token) => token.symbol === 'bitusd');
+              setBitusdToken(bitusd);
+              setSymbolToToken(obricSDK.coinList.symbolToToken);
+            });
+          } else {
+            const tokens = await obricSDK.coinList.reload(firstPaginateCount, paginateCount);
+            setTokenList(tokens);
+            bitusd = tokens.find((token) => token.symbol === 'bitusd');
+            setBitusdToken(bitusd);
+            setSymbolToToken(obricSDK.coinList.symbolToToken);
+          }
+
+          clearTimeout(timeOut);
+        } else {
+          setTokenList([]);
+          setSymbolToToken({});
+          setBitusdToken(undefined);
+        }
+      } catch (e) {
+        console.log(e);
+      } finally {
+        return bitusd;
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
-    }
-  }, [obricSDK, timeOutArray, timeOutLength]);
+    },
+    [obricSDK, timeOutArray, timeOutLength]
+  );
 
-  const fetchTokenBalances = useCallback(async () => {
-    try {
-      if (obricSDK) {
-        const timeOut = setTimeout(() => {
-          timeOutArray.push(true);
-          setTimeOutCount(timeOutArray.length);
-        }, timeOutLength);
-        const balances = await obricSDK.getTokensBalance();
-        if (balances) {
-          setUserPoolLpAmount(balances.userPoolLp);
-          setTokenBalances(balances.userTokenBalances);
+  const fetchTokenBalances = useCallback(
+    async (lpFirst: boolean) => {
+      try {
+        if (obricSDK) {
+          setStartInit(true);
+          const timeOut = setTimeout(() => {
+            timeOutArray.push(true);
+            setTimeOutCount(timeOutArray.length);
+          }, timeOutLength);
+          const balances = await obricSDK.getTokensBalance(500, lpFirst);
+          if (balances) {
+            setUserPoolLpAmount(balances.userPoolLp);
+            setTokenBalances(balances.userTokenBalances);
+          } else {
+            setUserPoolLpAmount({});
+            setTokenBalances({});
+          }
+          clearTimeout(timeOut);
         } else {
           setUserPoolLpAmount({});
           setTokenBalances({});
         }
-        clearTimeout(timeOut);
-      } else {
-        setUserPoolLpAmount({});
-        setTokenBalances({});
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  }, [obricSDK, timeOutArray, timeOutLength]);
+    },
+    [obricSDK, timeOutArray, timeOutLength]
+  );
 
   const setObricSdkSigner = useCallback(async () => {
     if (!obricSDK) {
@@ -212,10 +238,10 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
       const signer = await browserProvider.getSigner();
       obricSDK.setSigner(signer as any);
-      fetchTokenBalances();
+      fetchTokenBalances(true);
     } else {
       obricSDK.setSigner(undefined);
-      fetchTokenBalances();
+      fetchTokenBalances(true);
     }
   }, [obricSDK, wallet, fetchTokenBalances]);
 
@@ -223,35 +249,61 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     setObricSdkSigner();
   }, [setObricSdkSigner]);
 
-  const swapPageReload = useCallback(async () => {
-    await fetchTokenList();
-    await fetchPools();
-    await fetchTokenBalances();
-  }, [fetchTokenList, fetchPools, fetchTokenBalances]);
+  const swapPageReload = useCallback(
+    async (init: boolean) => {
+      if (init) {
+        await fetchTokenList(true, 40, 500);
+      }
+      await fetchPools(init, 140, 140);
+      await fetchTokenBalances(false);
+    },
+    [fetchTokenList, fetchPools, fetchTokenBalances]
+  );
 
-  const poolPageReload = useCallback(async () => {
-    await fetchPools();
-    await fetchTokenList();
-    await fetchTokenBalances();
-  }, [fetchTokenList, fetchPools, fetchTokenBalances]);
+  const poolPageReload = useCallback(
+    async (init: boolean) => {
+      if (init) {
+        await fetchPools(init, 40, 140);
+      } else {
+        await fetchPools(init, 140, 140);
+      }
+      if (init) {
+        await fetchTokenList(true, 500, 500);
+      }
+      await fetchTokenBalances(true);
+    },
+    [fetchTokenList, fetchPools, fetchTokenBalances]
+  );
 
-  const tokensPageReload = useCallback(async () => {
-    await fetchTokenList();
-    await fetchTokenBalances();
-  }, [fetchTokenList, fetchTokenBalances]);
+  const tokensPageReload = useCallback(
+    async (init: boolean) => {
+      const bitusd = await fetchTokenList(init, 500, 500);
+      if (bitusd) {
+        const balances = await obricSDK.coinList.getBalances(1, [bitusd.address]);
+        setTokenBalances({
+          [bitusd.address]: new BigNumber(balances[bitusd.address].toString())
+            .div(10 ** bitusd.decimals)
+            .toNumber()
+        });
+      }
+    },
+    [fetchTokenList, obricSDK]
+  );
 
   const initProvider = useCallback(
     (from: string) => {
-      console.log('initProvider from ', from);
+      if (startInit) {
+        return;
+      }
       if (from === 'swap') {
-        swapPageReload();
+        swapPageReload(true);
       } else if (from === 'pool') {
-        poolPageReload();
+        poolPageReload(true);
       } else if (from === 'tokens') {
-        tokensPageReload();
+        tokensPageReload(true);
       }
     },
-    [swapPageReload, poolPageReload, tokensPageReload]
+    [swapPageReload, poolPageReload, tokensPageReload, startInit]
   );
 
   const checkTransactionError = useCallback((e: any) => {
@@ -328,7 +380,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           success = false;
         } finally {
           setPendingTx(false);
-          swapPageReload();
+          swapPageReload(false);
         }
       } else {
         success = false;
@@ -385,7 +437,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         success = false;
       } finally {
         setPendingTx(false);
-        poolPageReload();
+        poolPageReload(false);
         return success;
       }
     },
@@ -434,7 +486,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         success = false;
       } finally {
         setPendingTx(false);
-        poolPageReload();
+        poolPageReload(false);
         return success;
       }
     },
@@ -504,7 +556,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         success = false;
       } finally {
         setPendingTx(false);
-        tokensPageReload();
+        tokensPageReload(false);
         return success;
       }
     },
@@ -529,6 +581,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         closeWalletModal: closeModal,
         obricSDK,
         liquidityPools,
+        poolsCount,
         tokenList,
         symbolToToken,
         tokenBalances,

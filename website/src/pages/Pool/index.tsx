@@ -52,7 +52,7 @@ const Pool = () => {
   const liquidityModal = useSelector(getLiquidityModal);
   const { isTablet } = useBreakpoint('tablet');
 
-  const { initProvider } = useMerlinWallet();
+  const { initProvider, poolsCount, liquidityPools } = useMerlinWallet();
   useEffect(() => {
     initProvider('pool');
   }, [initProvider]);
@@ -101,9 +101,16 @@ const Pool = () => {
   }, [poolFilter.timeBasis]);
 
   const renderHeader = () => (
-    <div className="flex items-center justify-between text-2xl text-bc-white tablet:flex-col">
+    <div className="flex items-center text-2xl text-bc-white tablet:flex-col">
       <div className=" text-2xl tablet:text-lg">Pools</div>
-      <div className="flex gap-2 text-lg leading-4 text-bc-gold tablet:mt-4">
+      {liquidityPools.length != 0 &&
+        (liquidityPools.length < poolsCount ? (
+          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{`(loading ${liquidityPools.length} / ${poolsCount})`}</div>
+        ) : (
+          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{`(${poolsCount})`}</div>
+        ))}
+
+      <div className="ml-auto flex gap-2 text-lg leading-4 text-bc-gold tablet:mt-4">
         <div className="flex items-center px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
           <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
           <div className="">

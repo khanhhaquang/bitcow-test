@@ -18,9 +18,9 @@ async function print() {
 
 async function printSDK() {
     const sdk = await getSdk();
-    await sdk.coinList.reload();
+    await sdk.coinList.reload(500, 500);
 
-    const balances = await sdk.getTokensBalance();
+    const balances = await sdk.getTokensBalance(500, false);
 
     await sdk.print();
     console.log(balances);

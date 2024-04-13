@@ -1,46 +1,37 @@
 import { Pool } from './Pool';
-import { TokenInfo, Config, Quote, TxOption, PairStats } from './types';
+import { TokenInfo, Config, Quote, TxOption } from './types';
 import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 import { Contract, Provider, Signer } from 'ethers';
 import { ABI_SWAP_ROUTER } from './abi/SwapRouter';
 import { isBTC } from './utils';
 import { CoinList } from './CoinList';
-import { ethers } from 'ethers';
 import { ContractRunner } from './ContractRunner';
 import { ABI_SS_TRADING_PAIR_V1_LIST } from './abi/SsTradingPairV1List';
-import { parsePairStats } from './utils/statsV1';
 import { PoolCreator } from './PoolCreator';
 import PromiseThrottle from 'promise-throttle';
+import { parsePairStats } from './utils/statsV1';
 
 export class Sdk extends ContractRunner {
     pools: Pool[] = [];
     coinList: CoinList;
     poolCreator: PoolCreator;
-    private routerContract: Contract;
+    private readonly routerContract: Contract;
     private tradingPairV1ListContract: Contract;
-    private promiseThrottle: PromiseThrottle;
-    private pairStats: PairStats[] = [];
+    private readonly promiseThrottle: PromiseThrottle;
     constructor(
         provider: Provider,
         public config: Config,
-        private fetch: {
-            requestsPerSecond: number;
-            pagePoolCount: number;
-            pageTokenCount: number;
-            pageBalancesCount: number;
-        },
+        requestsPerSecond: number,
         txOption?: TxOption,
         signer?: Signer
     ) {
         super(provider, txOption, signer);
-        this.promiseThrottle = new PromiseThrottle({ requestsPerSecond: fetch.requestsPerSecond });
+        this.promiseThrottle = new PromiseThrottle({ requestsPerSecond: requestsPerSecond });
         this.coinList = new CoinList(
             provider,
             config.tokenList,
             this.promiseThrottle,
-            fetch.pageTokenCount,
-            fetch.pageBalancesCount,
             config.tokensBalance,
             txOption,
             signer
@@ -50,53 +41,76 @@ export class Sdk extends ContractRunner {
         this.tradingPairV1ListContract = new Contract(config.tradingPairV1List, ABI_SS_TRADING_PAIR_V1_LIST, provider);
     }
 
-    async reload() {
-        const pairStats = await this.reloadPools();
-        this.buildCache(pairStats);
-        return this.pools;
-    }
-    private buildCache(pairStats: PairStats[]) {
+    async fetchPoolsPaginate(start: number, paginateCount: number): Promise<{ pools: Pool[]; allCount: number }> {
         const pools: Pool[] = [];
-        for (const pairStat of pairStats) {
-            pools.push(new Pool(this.provider, pairStat, this.txOption, this.signer));
+        const promisePair = await this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(
+            start,
+            start + paginateCount
+        );
+        for (const pairStat of promisePair.pageStats) {
+            pools.push(new Pool(this.provider, parsePairStats(pairStat), this.txOption, this.signer));
         }
-        this.pools = pools;
+        const allCount = parseFloat(promisePair.pairCount.toString());
+        return { pools, allCount };
     }
-    private async reloadPools(): Promise<PairStats[]> {
-        const paginateCount = this.fetch.pagePoolCount;
-        let resultPairStats: PairStats[] = [];
-        console.log(`Fetch pools ${paginateCount} after index ${0} `);
-        const fetchResult = await this.promiseThrottle.add(async () => {
-            return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(0, paginateCount);
+
+    async reload(
+        firstPaginateCount: number,
+        paginateCount: number,
+        callBack?: (pools: Pool[], allCount: number) => void
+    ): Promise<Pool[]> {
+        const isThisPoolsEmpty = this.pools.length === 0;
+        let resultPools: Pool[] = [];
+        console.log(`Fetch pools ${firstPaginateCount} after index ${0} `);
+        const { pools, allCount } = await this.promiseThrottle.add(async () => {
+            return this.fetchPoolsPaginate(0, firstPaginateCount);
         });
-        resultPairStats = resultPairStats.concat(fetchResult[0].map(parsePairStats));
-        if (fetchResult[0].length < parseFloat(fetchResult[1].toString())) {
+
+        callBack && callBack(pools, allCount);
+        if (isThisPoolsEmpty) {
+            this.pools = this.pools.concat(pools);
+        } else {
+            resultPools = resultPools.concat(pools);
+        }
+        if (pools.length < allCount) {
             const promise = [];
-            for (let i = paginateCount; i < parseFloat(fetchResult[1].toString()); i += paginateCount) {
+            for (let i = firstPaginateCount; i < allCount; i += paginateCount) {
                 promise.push(async () => {
-                    console.log(
-                        `Fetch pools ${paginateCount} after index ${i} of ${parseFloat(fetchResult[1].toString())}`
-                    );
-                    return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(i, i + paginateCount);
+                    console.log(`Fetch pools ${paginateCount} after index ${i} of ${allCount}`);
+                    const pools = await this.fetchPoolsPaginate(i, paginateCount);
+                    if (isThisPoolsEmpty) {
+                        this.pools = this.pools.concat(pools.pools);
+                    } else {
+                        resultPools = resultPools.concat(pools.pools);
+                    }
+                    callBack && callBack(isThisPoolsEmpty ? this.pools : resultPools, pools.allCount);
                 });
             }
-            const promisePairs = await this.promiseThrottle.addAll(promise);
-
-            for (const promisePair of promisePairs) {
-                resultPairStats = resultPairStats.concat(promisePair[0].map(parsePairStats));
-            }
+            await this.promiseThrottle.addAll(promise);
         }
-        console.log('Pools count ', resultPairStats.length);
-        return resultPairStats;
+
+        if (!isThisPoolsEmpty) {
+            this.pools = resultPools;
+        }
+        console.log('Pools count ', this.pools.length);
+        return resultPools;
     }
-    async getTokensBalance() {
-        const tokens = this.pools
-            .map((pool) => pool.pair.lpToken)
-            .concat(this.coinList.getAllToken().map((token) => token.address));
+    async getTokensBalance(pageFetchCount: number, poolsLpTokenFirst = true) {
+        let tokens;
+        if (poolsLpTokenFirst) {
+            tokens = this.pools
+                .map((pool) => pool.pair.lpToken)
+                .concat(this.coinList.getAllToken().map((token) => token.address));
+        } else {
+            tokens = this.coinList
+                .getAllToken()
+                .map((token) => token.address)
+                .concat(this.pools.map((pool) => pool.pair.lpToken));
+        }
         if (tokens.length == 1) {
             return undefined;
         }
-        const balances = await this.coinList.getBalances(tokens);
+        const balances = await this.coinList.getBalances(pageFetchCount, tokens);
         if (balances) {
             const userPoolLp: Record<string, bigint> = {};
             this.pools.forEach((pool) => {
@@ -112,7 +126,7 @@ export class Sdk extends ContractRunner {
             return { userPoolLp, userTokenBalances };
         }
     }
-    afterSetSigner(signer?: ethers.Signer | undefined): void {}
+
     setSigner(signer?: Signer, address?: string) {
         super.setSigner(signer, address);
         this.coinList.setSigner(signer, address);
@@ -133,18 +147,12 @@ export class Sdk extends ContractRunner {
     static async create(
         provider: Provider,
         config: Config,
-        requestsPerSecond = 0.2,
+        requestsPerSecond = 0.1,
         txOption?: TxOption,
         signer?: Signer
     ) {
-        const sdk = new Sdk(
-            provider,
-            config,
-            { requestsPerSecond, pagePoolCount: 140, pageTokenCount: 400, pageBalancesCount: 300 },
-            txOption,
-            signer
-        );
-        await sdk.reload();
+        const sdk = new Sdk(provider, config, requestsPerSecond, txOption, signer);
+        await sdk.reload(100, 140, (pools) => {});
         return sdk;
     }
 

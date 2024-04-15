@@ -1,7 +1,7 @@
+import { TokenInfo } from 'bitcow';
 import classNames from 'classnames';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
-import { TokenInfo } from 'obric-merlin';
 import { useCallback, useMemo } from 'react';
 
 import { Collapse } from 'components/Antd';

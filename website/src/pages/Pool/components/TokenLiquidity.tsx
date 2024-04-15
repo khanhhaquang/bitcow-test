@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
+import { BN, IPool, Token } from 'bitcow';
 import cx from 'classnames';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { BN, IPool, Token } from 'obric-merlin';
 import { useCallback, useEffect, useRef } from 'react';
 
 // import { Popover } from 'antd';

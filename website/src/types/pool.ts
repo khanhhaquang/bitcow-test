@@ -1,4 +1,4 @@
-import { IPool } from 'obric-merlin';
+import { IPool } from 'bitcow';
 
 export interface IPoolToken {
   id: string;

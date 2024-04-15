@@ -130,6 +130,7 @@ export interface IPool {
 }
 
 export type Config = {
+    chainId: number;
     tokenList: string;
     tradingPairV1List: string;
     tradingPairV1Creator: string;

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { TokenInfo } from 'bitcow';
 import { RootState } from 'modules/rootReducer';
-import { TokenInfo } from 'obric-merlin';
 
 import { ISwapSettings } from 'pages/Swap/types';
 

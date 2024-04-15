@@ -1,4 +1,4 @@
-import { TokenInfo } from 'obric-merlin';
+import { TokenInfo } from 'bitcow';
 
 import Button from 'components/Button';
 import CoinIcon from 'components/CoinIcon';

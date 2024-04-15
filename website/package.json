@@ -34,7 +34,6 @@
     "lodash": "^4.17.21",
     "lottie-react": "^2.3.1",
     "normalize.css": "^8.0.1",
-    "obric-merlin": "../sdk",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "promise-throttle": "^1.1.2",

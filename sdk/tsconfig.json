@@ -5,6 +5,7 @@
     "module": "commonjs",
     "rootDir": "./src",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "jsx": "react-jsx",
     "declaration": true,
     "declarationMap": false,

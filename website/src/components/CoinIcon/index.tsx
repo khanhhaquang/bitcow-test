@@ -1,5 +1,5 @@
+import { Token, TokenInfo } from 'bitcow';
 import classNames from 'classnames';
-import { Token, TokenInfo } from 'obric-merlin';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+import { IPool } from 'bitcow';
 import cx from 'classnames';
-import { IPool } from 'obric-merlin';
 import { useCallback } from 'react';
 
 import { ColumnsType, Table, TableProps } from 'components/Antd';

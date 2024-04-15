@@ -1,4 +1,4 @@
-import { TokenInfo, Quote } from 'obric-merlin';
+import { TokenInfo, Quote } from 'bitcow';
 
 export interface ISwapSettings {
   slipTolerance: number;

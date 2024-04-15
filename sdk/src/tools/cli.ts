@@ -1,7 +1,10 @@
 import { Command } from 'commander';
-import { checkAndApprovePool, checkAndApproveSdk, getPool, getSdk } from './utils';
+import { checkAndApprovePool, checkAndApproveSdk, getPool, getSdk, readFile, UTIL_CONFIGS, writeFile } from './utils';
 import { sleep } from '../utils/common';
-import PromiseThrottle from 'promise-throttle';
+
+import { ethers } from 'ethers';
+import { Sdk } from '../Sdk';
+import { PairStats, TokenInfo } from '../types';
 
 export const main = new Command();
 
@@ -87,5 +90,29 @@ async function swap(inputToken: string, outputToken: string, amount: string, min
     }
 }
 main.command('swap').argument('inputToken').argument('outputToken').argument('amount').action(swap);
+
+async function cacheTokenList() {
+    const tokensMap: Record<number, TokenInfo[]> = await readFile('tokens', {});
+    const pairsMap: Record<number, PairStats[]> = await readFile('pairs', {});
+    for (const config of UTIL_CONFIGS) {
+        console.log('ChainId:', config.config.chainId);
+        if ([1102].includes(config.config.chainId)) {
+            tokensMap[config.config.chainId] = [];
+            pairsMap[config.config.chainId] = [];
+            continue;
+        }
+        const provider = new ethers.JsonRpcProvider(config.URL);
+        const sdk = new Sdk(provider, config.config, 0.1);
+        const tokens = await sdk.coinList.reload(500, 500);
+        tokensMap[config.config.chainId] = tokens;
+        const stats = await sdk.fetchStats(140);
+        pairsMap[config.config.chainId] = stats;
+    }
+
+    await writeFile('tokens', tokensMap);
+    await writeFile('pairs', pairsMap);
+}
+
+main.command('cache').action(cacheTokenList);
 
 main.parse();

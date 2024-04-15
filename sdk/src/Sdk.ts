@@ -10,7 +10,8 @@ import { ContractRunner } from './ContractRunner';
 import { ABI_SS_TRADING_PAIR_V1_LIST } from './abi/SsTradingPairV1List';
 import { PoolCreator } from './PoolCreator';
 import PromiseThrottle from 'promise-throttle';
-import { parsePairStats } from './utils/statsV1';
+import { parsePairFromConfig, parsePairStats, parsePairStatsToConfig } from './utils/statsV1';
+import * as ConfigPair from './cache/pairs.json';
 import { log } from './utils/common';
 
 export class Sdk extends ContractRunner {
@@ -28,11 +29,19 @@ export class Sdk extends ContractRunner {
         signer?: Signer
     ) {
         super(provider, txOption, signer);
+        const pairStats = (ConfigPair as Record<string, any>)[config.chainId.toString()];
+        if (pairStats) {
+            for (const pairStat of pairStats) {
+                this.pools.push(new Pool(provider, parsePairFromConfig(pairStat), this.txOption, this.signer));
+            }
+        }
+
         this.promiseThrottle = new PromiseThrottle({ requestsPerSecond: requestsPerSecond });
         this.coinList = new CoinList(
             provider,
             config.tokenList,
             this.promiseThrottle,
+            config.chainId,
             config.tokensBalance,
             txOption,
             signer
@@ -40,6 +49,26 @@ export class Sdk extends ContractRunner {
         this.poolCreator = new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer);
         this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
         this.tradingPairV1ListContract = new Contract(config.tradingPairV1List, ABI_SS_TRADING_PAIR_V1_LIST, provider);
+    }
+
+    async fetchStats(paginateCount: number = 140): Promise<any[]> {
+        let result: any[] = [];
+        const promisePair = await this.promiseThrottle.add(() => {
+            return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(0, paginateCount);
+        });
+        log(`Load pools start ${0}`);
+
+        result = result.concat(promisePair.pageStats.map(parsePairStatsToConfig));
+
+        const allCount = parseFloat(promisePair.pairCount.toString());
+        for (let i = paginateCount; i < allCount; i += paginateCount) {
+            const promisePair = await this.promiseThrottle.add(() => {
+                log(`Load pools start ${i}`);
+                return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(i, i + paginateCount);
+            });
+            result = result.concat(promisePair.pageStats.map(parsePairStatsToConfig));
+        }
+        return result;
     }
 
     async fetchPoolsPaginate(start: number, paginateCount: number): Promise<{ pools: Pool[]; allCount: number }> {
@@ -98,15 +127,12 @@ export class Sdk extends ContractRunner {
     }
     async getTokensBalance(pageFetchCount: number, poolsLpTokenFirst = true) {
         let tokens;
+        const pools = this.pools;
+        const allTokens = this.coinList.getAllToken();
         if (poolsLpTokenFirst) {
-            tokens = this.pools
-                .map((pool) => pool.pair.lpToken)
-                .concat(this.coinList.getAllToken().map((token) => token.address));
+            tokens = pools.map((pool) => pool.pair.lpToken).concat(allTokens.map((token) => token.address));
         } else {
-            tokens = this.coinList
-                .getAllToken()
-                .map((token) => token.address)
-                .concat(this.pools.map((pool) => pool.pair.lpToken));
+            tokens = allTokens.map((token) => token.address).concat(pools.map((pool) => pool.pair.lpToken));
         }
         if (tokens.length == 1) {
             return undefined;
@@ -114,12 +140,16 @@ export class Sdk extends ContractRunner {
         const balances = await this.coinList.getBalances(pageFetchCount, tokens);
         if (balances) {
             const userPoolLp: Record<string, bigint> = {};
-            this.pools.forEach((pool) => {
+            pools.forEach((pool) => {
                 userPoolLp[pool.poolAddress] = balances[pool.lpAddress];
             });
 
             const userTokenBalances: Record<string, number> = {};
-            this.coinList.getAllToken().forEach((token) => {
+            allTokens.forEach((token) => {
+                if (balances[token.address] === undefined) {
+                    console.log(balances);
+                    console.log(token);
+                }
                 userTokenBalances[token.address] = new BigNumber(balances[token.address].toString())
                     .div(10 ** token.decimals)
                     .toNumber();

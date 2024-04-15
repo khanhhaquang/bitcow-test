@@ -1,7 +1,7 @@
+import { BN, IPool } from 'bitcow';
 import cx from 'classnames';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
-import { BN, IPool } from 'obric-merlin';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';

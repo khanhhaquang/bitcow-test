@@ -1,4 +1,4 @@
-import { Token } from 'obric-merlin';
+import { Token } from 'bitcow';
 
 export interface AddLiquidity {
   xToken: Token;

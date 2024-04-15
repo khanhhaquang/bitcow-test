@@ -9,13 +9,14 @@ import { ABI_TOKEN_LIST } from './abi/TokenList';
 import { ABI_TOKENS_BALANCE } from './abi/TokensBalance';
 import { parseTokenInfo } from './utils/statsV1';
 import PromiseThrottle from 'promise-throttle';
+import * as ConfigTokens from './cache/tokens.json';
 import { log } from './utils/common';
 
 export class CoinList extends ContractRunner {
-    tokens: TokenInfo[];
-    symbolToToken: Record<string, TokenInfo>;
-    addressToToken: Record<string, TokenInfo>;
-    private contracts: Record<string, Contract>;
+    tokens: TokenInfo[] = [];
+    symbolToToken: Record<string, TokenInfo> = {};
+    addressToToken: Record<string, TokenInfo> = {};
+    private contracts: Record<string, Contract> = {};
     private readonly tokenListContract: Contract;
     private readonly tokensBalanceContract: Contract;
 
@@ -23,16 +24,14 @@ export class CoinList extends ContractRunner {
         provider: Provider,
         public tokenListAddress: string,
         private promiseThrottle: PromiseThrottle,
+        chainId: number,
         tokensBalance: string,
         txOption?: TxOption,
         signer?: Signer
     ) {
         super(provider, txOption, signer);
-        this.tokens = [];
-        this.symbolToToken = {};
-        this.addressToToken = {};
-        this.contracts = {};
-
+        this.tokens = (ConfigTokens as Record<string, any>)[chainId.toString()];
+        this.buildCache();
         this.tokenListContract = new Contract(tokenListAddress, ABI_TOKEN_LIST, provider);
         this.tokensBalanceContract = new Contract(tokensBalance, ABI_TOKENS_BALANCE, provider);
     }

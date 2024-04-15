@@ -4,6 +4,14 @@ import { ContractTransactionReceipt, EventLog, Interface, Log } from 'ethers';
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+export function stringToBigNumber(value?: string) {
+    if (value) {
+        return new BigNumber(value);
+    } else {
+        return new BigNumber(0);
+    }
+}
+
 export function bigintToBigNumber(value?: bigint | undefined) {
     if (value) {
         return new BigNumber(value.toString());
@@ -11,7 +19,13 @@ export function bigintToBigNumber(value?: bigint | undefined) {
         return new BigNumber(0);
     }
 }
-
+export function stringToBN(value?: string | undefined) {
+    if (value) {
+        return new BN(value);
+    } else {
+        return new BN(0);
+    }
+}
 export function bigintToBN(value?: bigint | undefined) {
     if (value) {
         return new BN(value.toString());

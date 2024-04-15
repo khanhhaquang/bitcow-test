@@ -1,5 +1,5 @@
+import { TokenInfo } from 'bitcow';
 import { useFormikContext } from 'formik';
-import { TokenInfo } from 'obric-merlin';
 import VirtualList from 'rc-virtual-list';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 

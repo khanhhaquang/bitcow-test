@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TokenInfo } from 'obric-merlin';
+import { TokenInfo } from 'bitcow';
 
 import { ISwapSettings } from 'pages/Swap/types';
 // import { ITokenInfo } from 'types/tokenList';

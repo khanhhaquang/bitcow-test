@@ -1,4 +1,4 @@
-import { TokenInfo } from 'obric-merlin';
+import { TokenInfo } from 'bitcow';
 
 export interface TokenBalance {
   token: TokenInfo;

@@ -1,4 +1,4 @@
-import { Token, TokenInfo } from 'obric-merlin';
+import { Token, TokenInfo } from 'bitcow';
 import { useMemo } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';

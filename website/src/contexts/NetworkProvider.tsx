@@ -1,6 +1,6 @@
 import { AddEthereumChainParameter } from '@web3-react/types';
-import { Config } from 'obric-merlin';
-import { CONFIG } from 'obric-merlin/dist/configs';
+import { Config } from 'bitcow';
+import { CONFIG } from 'bitcow/dist/configs';
 import { createContext, FC, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { useEvmConnectContext } from '../wallet';

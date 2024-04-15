@@ -2,11 +2,12 @@ import { ethers } from 'ethers';
 import { Pool } from '../Pool';
 import { CONFIG } from '../configs';
 import { Sdk } from '../Sdk';
+import fs from 'mz/fs';
 
 // export const URL = `https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH`;
 
 const merlinTestnetConfig = {
-    URL: `https://testnet-rpc.merlinchain.io`,
+    URL: `https://merlin-testnet.blockpi.network/v1/rpc/b890f4dba4f9b56ad2a8301d7bb77ddb3d1f3cc7`,
     config: CONFIG.merlinTestnet
 };
 const botanixTestnetConfig = {
@@ -23,6 +24,19 @@ const bobTestnetConfig = {
     URL: `https://sepolia-dencun.rpc.gobob.xyz/`,
     config: CONFIG.bobTestnet
 };
+
+const bitLayerTestnetConfig = {
+    URL: 'https://testnet-rpc.bitlayer.org',
+    config: CONFIG.bitlayerTestnet
+};
+
+export const UTIL_CONFIGS = [
+    merlinTestnetConfig,
+    botanixTestnetConfig,
+    b2TestnetConfig,
+    bobTestnetConfig,
+    bitLayerTestnetConfig
+];
 
 const currentConfig = merlinTestnetConfig;
 
@@ -65,5 +79,30 @@ export async function checkAndApprovePool(sdk: Sdk, pool: Pool) {
 export async function checkAndApproveSdk(sdk: Sdk) {
     for (const token of sdk.coinList.tokens) {
         await sdk.coinList.approve(token, sdk.swapRouter, 10000000);
+    }
+}
+
+function getPath(fileName: string) {
+    return __dirname + '/../cache/' + fileName + '.json';
+}
+
+export async function readFile(fileName: string, defaultValue?: any): Promise<any | undefined> {
+    const path = getPath(fileName);
+    const exists = await fs.exists(path);
+    if (exists) {
+        const str: string = fs.readFileSync(path) as any;
+        return JSON.parse(str);
+    } else {
+        return defaultValue;
+    }
+}
+
+export async function writeFile(fileName: string, data: Record<string, any>) {
+    const path = getPath(fileName);
+    try {
+        const str = JSON.stringify(data);
+        fs.writeFileSync(path, str);
+    } catch (e) {
+        throw e;
     }
 }

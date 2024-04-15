@@ -1,5 +1,5 @@
+import { BTC } from 'bitcow/dist/configs';
 import cx from 'classnames';
-import { BTC } from 'obric-merlin/dist/configs';
 import { useState } from 'react';
 
 import { Tooltip } from 'components/Antd';

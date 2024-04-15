@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { IUserLiquidity, IPool } from 'bitcow';
 import poolAction from 'modules/pool/actions';
-import { IUserLiquidity, IPool } from 'obric-merlin';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 

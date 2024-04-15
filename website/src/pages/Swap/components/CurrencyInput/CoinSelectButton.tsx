@@ -1,5 +1,5 @@
+import { TokenInfo } from 'bitcow';
 import classNames from 'classnames';
-import { TokenInfo } from 'obric-merlin';
 
 import CoinIcon from 'components/CoinIcon';
 import { ReactComponent as CoinSelectIcon } from 'resources/icons/coinSelect.svg';

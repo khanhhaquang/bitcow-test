@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Pool } from 'obric-merlin';
+import { Pool } from 'bitcow';
 
 import { IPoolFilters, LiquidityModal } from 'types/pool';
 

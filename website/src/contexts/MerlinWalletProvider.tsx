@@ -428,8 +428,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             success = false;
           }
         }
-      } catch (error) {
-        checkTransactionError(error);
+      } catch (error: any) {
+        if (error.action === 'estimateGas' && error.code === 'CALL_EXCEPTION') {
+          openErrorNotification({
+            detail: `Pool balance has changed. To provide ${xAmount} ${pool.xToken.symbol} token, you will need more than ${yAmount} ${pool.yToken.symbol} token. You may refresh the page to get updated pool balance`
+          });
+        } else {
+          checkTransactionError(error);
+        }
         success = false;
       } finally {
         setPendingTx(false);

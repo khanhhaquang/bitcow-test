@@ -126,7 +126,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       setPoolsCount(sdk.pools.length);
       setTokensCache(sdk);
     }
-  }, [currentNetwork, txOption]);
+  }, [currentNetwork, txOption, setTokensCache]);
   useEffect(() => {
     if (timeOutCount >= 2) {
       openErrorNotification({
@@ -190,14 +190,13 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return bitusd;
       }
     },
-    [bitcowSDK, timeOutArray, timeOutLength]
+    [bitcowSDK, timeOutArray, timeOutLength, setTokensCache]
   );
 
   const fetchTokenBalances = useCallback(
     async (lpFirst: boolean) => {
       try {
         if (bitcowSDK) {
-          setStartInit(true);
           const timeOut = setTimeout(() => {
             timeOutArray.push(true);
             setTimeOutCount(timeOutArray.length);
@@ -302,6 +301,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       openErrorNotification({ detail: 'User rejected' });
       return;
     }
+    console.log(e);
     openErrorNotification({ detail: e.message });
   }, []);
 

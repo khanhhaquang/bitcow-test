@@ -1,13 +1,20 @@
 import classNames from 'classnames';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import usePools from 'hooks/usePools';
 
 import styles from './Home2.module.scss';
 
+import useMerlinWallet from '../../hooks/useMerlinWallet';
+
 export default function Home2() {
   const { getTotalPoolsTVL, getTotalPoolsVolume } = usePools();
+  const { initProvider } = useMerlinWallet();
+
+  useEffect(() => {
+    initProvider('swap');
+  }, [initProvider]);
 
   const tvl = useMemo(() => {
     const val = getTotalPoolsTVL();

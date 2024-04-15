@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Radio, Tabs } from 'components/Antd';
-import ObricModal from 'components/ObricModal';
+import BitcowModal from 'components/BitcowModal';
 import { numberCompactFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
@@ -251,7 +251,7 @@ const Pool = () => {
           items={renderTabContents()}
         />
       </div>
-      <ObricModal
+      <BitcowModal
         onCancel={() => dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null))}
         className=""
         maskClosable={false}
@@ -267,7 +267,7 @@ const Pool = () => {
           ) : (
             <WithdrawLiquidity liquidityPool={liquidityModal.pool} />
           ))}
-      </ObricModal>
+      </BitcowModal>
     </div>
   );
 };

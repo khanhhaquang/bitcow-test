@@ -5,8 +5,6 @@ import { Drawer, Modal } from 'components/Antd';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import { CancelIcon } from 'resources/icons';
 
-// import styles from './ObricModal.module.scss';
-
 interface TProps {
   className?: string;
   onCancel: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
@@ -22,7 +20,7 @@ interface TProps {
   bodyStyle?: React.CSSProperties;
 }
 
-const ObricModal: React.FC<TProps> = ({ className, ...rest }) => {
+const BitcowModal: React.FC<TProps> = ({ className, ...rest }) => {
   const { isTablet } = useBreakpoint('tablet');
   return (
     <Fragment>
@@ -51,4 +49,4 @@ const ObricModal: React.FC<TProps> = ({ className, ...rest }) => {
   );
 };
 
-export default ObricModal;
+export default BitcowModal;

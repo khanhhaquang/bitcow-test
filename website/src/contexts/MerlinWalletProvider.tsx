@@ -8,7 +8,7 @@ import {
   TokenInfo as Token,
   IPool,
   Quote,
-  Sdk as ObricSDK,
+  Sdk as BitcowSDK,
   TxOption,
   UserLpAmount,
   CreateTokenInfo
@@ -27,7 +27,7 @@ interface MerlinWalletContextType {
   wallet?: Wallet;
   openWalletModal: () => void;
   closeWalletModal: () => void;
-  obricSDK: ObricSDK;
+  bitcowSDK: BitcowSDK;
   liquidityPools: IPool[];
   poolsCount: number;
   tokenList: TokenInfo[];
@@ -63,7 +63,7 @@ const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinW
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const { wallet, openModal, closeModal, setCurrentChain } = useEvmConnectContext();
 
-  const [obricSDK, setObricSDK] = useState<ObricSDK>();
+  const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK>();
 
   const [pendingTx, setPendingTx] = useState<boolean>(false);
   const [txOption, setTxOption] = useState<TxOption>({});
@@ -109,8 +109,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           staticNetwork: true
         }
       );
-      console.log('setObricSdk');
-      setObricSDK(new ObricSDK(provider as any, currentNetwork.sdkConfig, 0.4, txOption));
+      setBitcowSDK(new BitcowSDK(provider as any, currentNetwork.sdkConfig, 0.4, txOption));
     }
   }, [currentNetwork, txOption]);
   useEffect(() => {
@@ -124,27 +123,27 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   }, [timeOutCount, currentNetwork]);
 
   useEffect(() => {
-    if (obricSDK) {
-      obricSDK.setTxOption(txOption);
+    if (bitcowSDK) {
+      bitcowSDK.setTxOption(txOption);
     }
-  }, [txOption, obricSDK]);
+  }, [txOption, bitcowSDK]);
 
   const fetchPools = useCallback(
     async (init: boolean, firstPaginateCount: number, paginateCount: number) => {
       try {
-        if (obricSDK) {
+        if (bitcowSDK) {
           const timeOut = setTimeout(() => {
             timeOutArray.push(true);
             setTimeOutCount(timeOutArray.length);
           }, timeOutLength);
           if (init) {
             setStartInit(true);
-            await obricSDK.reload(firstPaginateCount, paginateCount, (pagePools, allCount) => {
+            await bitcowSDK.reload(firstPaginateCount, paginateCount, (pagePools, allCount) => {
               setLiquidityPools(pagePools);
               setPoolsCount(allCount);
             });
           } else {
-            const pools = await obricSDK.reload(firstPaginateCount, paginateCount);
+            const pools = await bitcowSDK.reload(firstPaginateCount, paginateCount);
             setLiquidityPools(pools);
             setPoolsCount(pools.length);
           }
@@ -158,32 +157,32 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       } finally {
       }
     },
-    [obricSDK, timeOutArray, timeOutLength]
+    [bitcowSDK, timeOutArray, timeOutLength]
   );
 
   const fetchTokenList = useCallback(
     async (init: boolean, firstPaginateCount: number, paginateCount: number) => {
       let bitusd: TokenInfo | undefined;
       try {
-        if (obricSDK) {
+        if (bitcowSDK) {
           const timeOut = setTimeout(() => {
             timeOutArray.push(true);
             setTimeOutCount(timeOutArray.length);
           }, timeOutLength);
           if (init) {
             setStartInit(true);
-            await obricSDK.coinList.reload(firstPaginateCount, paginateCount, (tokens) => {
+            await bitcowSDK.coinList.reload(firstPaginateCount, paginateCount, (tokens) => {
               setTokenList(tokens);
               bitusd = tokens.find((token) => token.symbol === 'bitusd');
               setBitusdToken(bitusd);
-              setSymbolToToken(obricSDK.coinList.symbolToToken);
+              setSymbolToToken(bitcowSDK.coinList.symbolToToken);
             });
           } else {
-            const tokens = await obricSDK.coinList.reload(firstPaginateCount, paginateCount);
+            const tokens = await bitcowSDK.coinList.reload(firstPaginateCount, paginateCount);
             setTokenList(tokens);
             bitusd = tokens.find((token) => token.symbol === 'bitusd');
             setBitusdToken(bitusd);
-            setSymbolToToken(obricSDK.coinList.symbolToToken);
+            setSymbolToToken(bitcowSDK.coinList.symbolToToken);
           }
 
           clearTimeout(timeOut);
@@ -198,19 +197,19 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return bitusd;
       }
     },
-    [obricSDK, timeOutArray, timeOutLength]
+    [bitcowSDK, timeOutArray, timeOutLength]
   );
 
   const fetchTokenBalances = useCallback(
     async (lpFirst: boolean) => {
       try {
-        if (obricSDK) {
+        if (bitcowSDK) {
           setStartInit(true);
           const timeOut = setTimeout(() => {
             timeOutArray.push(true);
             setTimeOutCount(timeOutArray.length);
           }, timeOutLength);
-          const balances = await obricSDK.getTokensBalance(500, lpFirst);
+          const balances = await bitcowSDK.getTokensBalance(500, lpFirst);
           if (balances) {
             setUserPoolLpAmount(balances.userPoolLp);
             setTokenBalances(balances.userTokenBalances);
@@ -227,27 +226,27 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         console.log(e);
       }
     },
-    [obricSDK, timeOutArray, timeOutLength]
+    [bitcowSDK, timeOutArray, timeOutLength]
   );
 
-  const setObricSdkSigner = useCallback(async () => {
-    if (!obricSDK) {
+  const setBitcowSdkSigner = useCallback(async () => {
+    if (!bitcowSDK) {
       return;
     }
     if (wallet) {
       const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
       const signer = await browserProvider.getSigner();
-      obricSDK.setSigner(signer as any);
+      bitcowSDK.setSigner(signer as any);
       fetchTokenBalances(true);
     } else {
-      obricSDK.setSigner(undefined);
+      bitcowSDK.setSigner(undefined);
       fetchTokenBalances(true);
     }
-  }, [obricSDK, wallet, fetchTokenBalances]);
+  }, [bitcowSDK, wallet, fetchTokenBalances]);
 
   useEffect(() => {
-    setObricSdkSigner();
-  }, [setObricSdkSigner]);
+    setBitcowSdkSigner();
+  }, [setBitcowSdkSigner]);
 
   const swapPageReload = useCallback(
     async (init: boolean) => {
@@ -279,7 +278,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     async (init: boolean) => {
       const bitusd = await fetchTokenList(init, 500, 500);
       if (bitusd) {
-        const balances = await obricSDK.coinList.getBalances(1, [bitusd.address]);
+        const balances = await bitcowSDK.coinList.getBalances(1, [bitusd.address]);
         setTokenBalances({
           [bitusd.address]: new BigNumber(balances[bitusd.address].toString())
             .div(10 ** bitusd.decimals)
@@ -287,7 +286,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         });
       }
     },
-    [fetchTokenList, obricSDK]
+    [fetchTokenList, bitcowSDK]
   );
 
   const initProvider = useCallback(
@@ -318,7 +317,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     async (token: TokenInfo, spender: string, minAmount: number) => {
       // todo
       try {
-        const result = await obricSDK.coinList.approve(token, spender, minAmount);
+        const result = await bitcowSDK.coinList.approve(token, spender, minAmount);
         if (result === undefined) {
           return true;
         } else if (result === null) {
@@ -339,7 +338,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return false;
       }
     },
-    [obricSDK, checkTransactionError, currentNetwork]
+    [bitcowSDK, checkTransactionError, currentNetwork]
   );
   const requestSwap = useCallback(
     async (quote, minOutputAmt) => {
@@ -348,18 +347,18 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       const fromToken = quote.inputToken;
       const toToken = quote.outputToken;
       // todo check transaction result detail
-      if (obricSDK) {
+      if (bitcowSDK) {
         if (!(await checkNetwork())) {
           return;
         }
         setPendingTx(true);
-        if (!(await checkApprove(fromToken, obricSDK.swapRouter, quote.inAmt))) {
+        if (!(await checkApprove(fromToken, bitcowSDK.swapRouter, quote.inAmt))) {
           setPendingTx(false);
           success = false;
           return success;
         }
         try {
-          const result = await obricSDK.swap(quote, minOutputAmt);
+          const result = await bitcowSDK.swap(quote, minOutputAmt);
           if (result.status === 1) {
             openTxSuccessNotification(
               currentNetwork.chainConfig.blockExplorerUrls[0],
@@ -388,7 +387,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       return success;
     },
     [
-      obricSDK,
+      bitcowSDK,
       checkApprove,
       wallet,
       checkTransactionError,
@@ -403,7 +402,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       let success = false;
       try {
         if (!wallet) throw new Error('Please connect wallet first');
-        if (obricSDK) {
+        if (bitcowSDK) {
           if (!(await checkNetwork())) {
             return;
           }
@@ -442,7 +441,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       }
     },
     [
-      obricSDK,
+      bitcowSDK,
       checkApprove,
       wallet,
       checkTransactionError,
@@ -457,7 +456,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       let success = false;
       try {
         if (!wallet) throw new Error('Please connect wallet first');
-        if (obricSDK) {
+        if (bitcowSDK) {
           if (!(await checkNetwork())) {
             return;
           }
@@ -490,7 +489,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         return success;
       }
     },
-    [obricSDK, wallet, checkTransactionError, checkNetwork, currentNetwork, poolPageReload]
+    [bitcowSDK, wallet, checkTransactionError, checkNetwork, currentNetwork, poolPageReload]
   );
 
   const requestCreatePair = useCallback(
@@ -507,7 +506,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       let success = true;
       try {
         if (!wallet) throw new Error('Please connect wallet first');
-        if (obricSDK && tokenList) {
+        if (bitcowSDK && tokenList) {
           if (!(await checkNetwork())) {
             return;
           }
@@ -515,11 +514,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             bitusdToken &&
             (await checkApprove(
               bitusdToken,
-              obricSDK.config.tradingPairV1Creator,
+              bitcowSDK.config.tradingPairV1Creator,
               bitusdAddLiquidityAmount
             ))
           ) {
-            const result = await obricSDK.poolCreator.cretePair(
+            const result = await bitcowSDK.poolCreator.cretePair(
               tokenInfo,
               new BigNumber(mintAmount).times(10 ** tokenInfo.decimals).toFixed(0),
               new BigNumber(addLiquidityAmount).times(10 ** tokenInfo.decimals).toFixed(0),
@@ -561,7 +560,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       }
     },
     [
-      obricSDK,
+      bitcowSDK,
       wallet,
       tokenList,
       checkApprove,
@@ -579,7 +578,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         wallet,
         openWalletModal: openModal,
         closeWalletModal: closeModal,
-        obricSDK,
+        bitcowSDK: bitcowSDK,
         liquidityPools,
         poolsCount,
         tokenList,

@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useEvmConnectContext } from 'wallet';
 
-import ObricModal from 'components/ObricModal';
+import BitcowModal from 'components/BitcowModal';
 import PixelButton from 'components/PixelButton';
 import { walletAddressEllipsis } from 'components/utils/utility';
 import useMerlinWallet from 'hooks/useMerlinWallet';
@@ -84,14 +84,14 @@ const WalletConnector = () => {
           Connect Wallet
         </PixelButton>
       )}
-      <ObricModal
+      <BitcowModal
         onCancel={() => setDetailModalOpen(false)}
         className=""
         wrapClassName={wallet ? styles.walletDetail : styles.walletsModal}
         open={detailModalOpen}
         closeIcon={<CancelIcon />}>
         {<AccountDetails onClose={() => setDetailModalOpen(false)} />}
-      </ObricModal>
+      </BitcowModal>
     </>
   );
 };

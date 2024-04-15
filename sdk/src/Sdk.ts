@@ -11,6 +11,7 @@ import { ABI_SS_TRADING_PAIR_V1_LIST } from './abi/SsTradingPairV1List';
 import { PoolCreator } from './PoolCreator';
 import PromiseThrottle from 'promise-throttle';
 import { parsePairStats } from './utils/statsV1';
+import { log } from './utils/common';
 
 export class Sdk extends ContractRunner {
     pools: Pool[] = [];
@@ -61,7 +62,7 @@ export class Sdk extends ContractRunner {
     ): Promise<Pool[]> {
         const isThisPoolsEmpty = this.pools.length === 0;
         let resultPools: Pool[] = [];
-        console.log(`Fetch pools ${firstPaginateCount} after index ${0} `);
+        log(`Fetch pools ${firstPaginateCount} after index ${0} `);
         const { pools, allCount } = await this.promiseThrottle.add(async () => {
             return this.fetchPoolsPaginate(0, firstPaginateCount);
         });
@@ -76,7 +77,7 @@ export class Sdk extends ContractRunner {
             const promise = [];
             for (let i = firstPaginateCount; i < allCount; i += paginateCount) {
                 promise.push(async () => {
-                    console.log(`Fetch pools ${paginateCount} after index ${i} of ${allCount}`);
+                    log(`Fetch pools ${paginateCount} after index ${i} of ${allCount}`);
                     const pools = await this.fetchPoolsPaginate(i, paginateCount);
                     if (isThisPoolsEmpty) {
                         this.pools = this.pools.concat(pools.pools);
@@ -92,7 +93,7 @@ export class Sdk extends ContractRunner {
         if (!isThisPoolsEmpty) {
             this.pools = resultPools;
         }
-        console.log('Pools count ', this.pools.length);
+        log('Pools count ', this.pools.length);
         return resultPools;
     }
     async getTokensBalance(pageFetchCount: number, poolsLpTokenFirst = true) {
@@ -249,7 +250,7 @@ export class Sdk extends ContractRunner {
         const twoHopOutput = twoHopQuote?.outAmt ?? 0;
         const threeHopOutput = threeHopQuote?.outAmt ?? 0;
 
-        console.log('Get quote', [directOutput, twoHopOutput, threeHopOutput]);
+        log('Get quote', [directOutput, twoHopOutput, threeHopOutput]);
         const maxOutput = Math.max(directOutput, twoHopOutput, threeHopOutput);
         if (directOutput === maxOutput) {
             return directQuote;
@@ -320,7 +321,7 @@ export class Sdk extends ContractRunner {
         console.log('\nPools\n');
         for (const pool of this.pools) {
             await pool.printMessage();
-            console.log('\n');
+            log('\n');
         }
     }
 }

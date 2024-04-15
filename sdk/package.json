@@ -1,5 +1,5 @@
 {
-  "name": "obric-merlin",
+  "name": "bitcow",
   "version": "0.0.0",
   "scripts": {
     "build": "rm -rf dist; tsc -p tsconfig.json",

@@ -37,7 +37,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
       rpcUrls: ['https://testnet-rpc.merlinchain.io'],
       blockExplorerUrls: ['https://testnet-scan.merlinchain.io/']
     },
-    rpcNodeUrl: 'https://testnet-rpc.merlinchain.io',
+    rpcNodeUrl:
+      'https://merlin-testnet.blockpi.network/v1/rpc/b890f4dba4f9b56ad2a8301d7bb77ddb3d1f3cc7',
     icon: '/images/merlin.png',
     sdkConfig: CONFIG.merlinTestnet
   },
@@ -87,7 +88,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
         'https://testnet-rpc.bitlayer.org',
         'https://rpc.ankr.com/bitlayer_testnet'
       ],
-      blockExplorerUrls: ['https://haven-explorer.bsquared.network/']
+      blockExplorerUrls: ['https://testnet-scan.bitlayer.org/']
     },
     rpcNodeUrl: 'https://testnet-rpc.bitlayer.org',
     icon: '/images/bitlayer.png',

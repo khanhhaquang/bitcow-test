@@ -43,3 +43,7 @@ export function parseEvents(receipt: ContractTransactionReceipt, interfaces: Int
     }
     return eventLogs;
 }
+
+export function log(message?: any, ...optionalParams: any[]) {
+    // console.log(message, ...optionalParams);
+}

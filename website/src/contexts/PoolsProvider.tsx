@@ -31,7 +31,7 @@ interface TProviderProps {
 const PoolsContext = createContext<PoolsContextType>({} as PoolsContextType);
 
 const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
-  const { obricSDK, liquidityPools, userPoolLpAmount } = useMerlinWallet();
+  const { bitcowSDK, liquidityPools, userPoolLpAmount } = useMerlinWallet();
   const [activePools, setActivePools] = useState<IPool[]>([]);
   const [coinPrices, setCoinPrices] = useState<Record<string, number>>();
   // const [fetching, setFetching] = useState(false);
@@ -98,12 +98,12 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   }, [activePools, gatherPoolTokenInfo]);
 
   useEffect(() => {
-    if (obricSDK && liquidityPools?.length) {
+    if (bitcowSDK && liquidityPools?.length) {
       setActivePools(liquidityPools);
     } else {
       setActivePools([]);
     }
-  }, [liquidityPools, obricSDK]);
+  }, [liquidityPools, bitcowSDK]);
 
   const getOwnedLiquidity = useCallback(
     (pool: IPool) => {

@@ -47,9 +47,9 @@ export const CONFIG: {
         tokensBalance: '0xE30CDfF0B7aEBb81d5B48B99DE42b191e98F355a'
     },
     bitlayerTestnet: {
-        tokenList: '0xeE4b636fF9864446e271eACCcdf560A8517f64c3',
-        tradingPairV1List: '0x40700E1cCd16eAE708A1daB55048E877914c889C',
-        tradingPairV1Creator: '0x7A04d8a8862738C9a380f71bcF15e2eC7c910ab8',
+        tokenList: '0x5aEAdE53c354c9d8ce31d359c83E658A1F9C9B0B',
+        tradingPairV1List: '0xbe83Cf6F9eFCBd04Aa34D57D139ab4e94A5aF33d',
+        tradingPairV1Creator: '0x6C99BB0364123035e58Ee3Fa2dD9E28C8E547Aae',
         swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
         tokensBalance: '0x088Ca4ad4E99862B1f402E8455A54c9e5CabB359'
     }

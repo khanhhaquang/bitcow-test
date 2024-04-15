@@ -4538,6 +4538,14 @@ bitcore-lib@10.0.23:
     inherits "=2.0.1"
     lodash "^4.17.20"
 
+bitcow@../sdk:
+  version "0.0.0"
+  dependencies:
+    bignumber.js "^9.1.1"
+    bn.js "^5.2.1"
+    ethers "^6.4.0"
+    promise-throttle "^1.1.2"
+
 bluebird@^3.5.5:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
@@ -9305,6 +9313,7 @@ obric-merlin@../sdk:
     bignumber.js "^9.1.1"
     bn.js "^5.2.1"
     ethers "^6.4.0"
+    promise-throttle "^1.1.2"
 
 obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"

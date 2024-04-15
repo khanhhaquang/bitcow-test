@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import ObricModal from 'components/ObricModal';
+import BitcowModal from 'components/BitcowModal';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
 import useMerlinWallet from 'hooks/useMerlinWallet';
@@ -108,7 +108,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           ~${getTokenBalanceInUSD(uiBalance, selectedToken)}
         </small>
       </div>
-      <ObricModal
+      <BitcowModal
         onCancel={() => setIsCoinSelectorVisible(false)}
         className=""
         wrapClassName={styles.modal}
@@ -119,7 +119,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           actionType={actionType}
           dismissiModal={() => setIsCoinSelectorVisible(!isCoinSelectorVisible)}
         />
-      </ObricModal>
+      </BitcowModal>
     </div>
   );
 };

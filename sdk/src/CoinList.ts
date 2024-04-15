@@ -9,6 +9,7 @@ import { ABI_TOKEN_LIST } from './abi/TokenList';
 import { ABI_TOKENS_BALANCE } from './abi/TokensBalance';
 import { parseTokenInfo } from './utils/statsV1';
 import PromiseThrottle from 'promise-throttle';
+import { log } from './utils/common';
 
 export class CoinList extends ContractRunner {
     tokens: TokenInfo[];
@@ -43,7 +44,7 @@ export class CoinList extends ContractRunner {
     async reload(firstPaginateCount: number, paginateCount: number, callBack?: (tokens: TokenInfo[]) => void) {
         let resultTokens: TokenInfo[] = [];
         const isThisTokensEmpty = this.tokens.length === 0;
-        console.log(`Fetch tokens ${firstPaginateCount} after index 0`);
+        log(`Fetch tokens ${firstPaginateCount} after index 0`);
         const fetchResult = await this.promiseThrottle.add(async () => {
             return this.tokenListContract.fetchTokenListPaginate(0, firstPaginateCount);
         });
@@ -61,7 +62,7 @@ export class CoinList extends ContractRunner {
             const promise = [];
             for (let i = firstPaginateCount; i < allTokensCount; i += paginateCount) {
                 promise.push(async () => {
-                    console.log(`Fetch tokens ${paginateCount} after index ${i} of ${allTokensCount}`);
+                    log(`Fetch tokens ${paginateCount} after index ${i} of ${allTokensCount}`);
                     const fetchResult = await this.tokenListContract.fetchTokenListPaginate(i, i + paginateCount);
                     const fetchTokens = fetchResult[0].map(parseTokenInfo);
                     if (isThisTokensEmpty) {
@@ -80,7 +81,7 @@ export class CoinList extends ContractRunner {
             this.tokens = resultTokens;
             this.buildCache();
         }
-        console.log('Tokens count ', this.tokens.length);
+        log('Tokens count ', this.tokens.length);
         return this.tokens;
     }
 
@@ -130,13 +131,13 @@ export class CoinList extends ContractRunner {
             for (const fetchToken of fetchTokens) {
                 const indexInner = index;
                 promise.push(async () => {
-                    console.log(`Fetch token balance ${pageFetchCount} after index ${indexInner} of ${tokens.length}`);
+                    log(`Fetch token balance ${pageFetchCount} after index ${indexInner} of ${tokens.length}`);
                     return this.tokensBalanceContract.balances(userAddress, fetchToken);
                 });
                 index += fetchToken.length;
             }
             const balances = await this.promiseThrottle.addAll(promise);
-            console.log('Fetch tokens balance end');
+            log('Fetch tokens balance end');
             const balancesResult: Record<string, bigint> = {};
             tokens.forEach((token, index) => {
                 balancesResult[token] = balances[Math.floor(index / pageFetchCount)][index % pageFetchCount];

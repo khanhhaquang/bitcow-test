@@ -2,9 +2,9 @@ import { useFormikContext } from 'formik';
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Tooltip } from 'components/Antd';
+import BitcowModal from 'components/BitcowModal';
 import Button from 'components/Button';
 import Card from 'components/Card';
-import ObricModal from 'components/ObricModal';
 import PixelButton from 'components/PixelButton';
 import PixelDivider from 'components/PixelDivider';
 import { useBreakpoint } from 'hooks/useBreakpoint';
@@ -24,7 +24,7 @@ import { ISwapSettings } from '../types';
 const TokenSwap = () => {
   const { values, setFieldValue, submitForm, isSubmitting, isValid, dirty } =
     useFormikContext<ISwapSettings>();
-  const { wallet, openWalletModal, obricSDK, symbolToToken, liquidityPools } = useMerlinWallet();
+  const { wallet, openWalletModal, bitcowSDK, symbolToToken, liquidityPools } = useMerlinWallet();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
   const toToken = values.currencyTo?.token;
@@ -42,18 +42,18 @@ const TokenSwap = () => {
     if (symbolToToken) {
       if (
         fromToken === undefined ||
-        obricSDK.coinList.getTokenByAddress(fromToken.address) === undefined
+        bitcowSDK.coinList.getTokenByAddress(fromToken.address) === undefined
       ) {
         setFieldValue('currencyFrom.token', symbolToToken.wBTC);
       }
       if (
         toToken === undefined ||
-        obricSDK.coinList.getTokenByAddress(toToken.address) === undefined
+        bitcowSDK.coinList.getTokenByAddress(toToken.address) === undefined
       ) {
         setFieldValue('currencyTo.token', symbolToToken.bitusd);
       }
     }
-  }, [symbolToToken, setFieldValue, obricSDK, fromToken, toToken]);
+  }, [symbolToToken, setFieldValue, bitcowSDK, fromToken, toToken]);
 
   const lastFetchTs = useRef(0);
 
@@ -62,12 +62,12 @@ const TokenSwap = () => {
       const now = Date.now();
       lastFetchTs.current = now;
 
-      if (obricSDK && fromToken && toToken && fromUiAmt && liquidityPools.length > 0) {
-        const rate = obricSDK.getQuote(fromToken, toToken, Number(fromUiAmt));
+      if (bitcowSDK && fromToken && toToken && fromUiAmt && liquidityPools.length > 0) {
+        const rate = bitcowSDK.getQuote(fromToken, toToken, Number(fromUiAmt));
         if (rate) {
           setFieldValue('quote', rate);
           setFieldValue('currencyTo.amount', rate.outAmt);
-          const rate1Percent = obricSDK.getQuote(fromToken, toToken, Number(fromUiAmt * 0.01));
+          const rate1Percent = bitcowSDK.getQuote(fromToken, toToken, Number(fromUiAmt * 0.01));
           if (rate1Percent) {
             const impact =
               ((rate1Percent.outAmt * 100 - rate.outAmt) / (rate1Percent.outAmt * 100)) * 100;
@@ -93,12 +93,20 @@ const TokenSwap = () => {
         amount: 0
       });
     }
-  }, [fromToken, fromUiAmt, obricSDK, setFieldValue, toToken, values.currencyFrom, liquidityPools]);
+  }, [
+    fromToken,
+    fromUiAmt,
+    bitcowSDK,
+    setFieldValue,
+    toToken,
+    values.currencyFrom,
+    liquidityPools
+  ]);
 
   useEffect(() => {
     fetchSwapRate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromToken, toToken, fromUiAmt, obricSDK, liquidityPools]);
+  }, [fromToken, toToken, fromUiAmt, bitcowSDK, liquidityPools]);
 
   const onClickSwapToken = useCallback(() => {
     const tokenFrom = values.currencyFrom;
@@ -184,7 +192,7 @@ const TokenSwap = () => {
           </PixelButton>
         </div>
       </div>
-      <ObricModal
+      <BitcowModal
         onCancel={() => setIsSettingsOpen(false)}
         className=""
         // wrapClassName={styles.modal}
@@ -195,7 +203,7 @@ const TokenSwap = () => {
         // mobileHeight={556}
       >
         <SwapSetting onClose={() => setIsSettingsOpen(false)} />
-      </ObricModal>
+      </BitcowModal>
     </Card>
   );
 };

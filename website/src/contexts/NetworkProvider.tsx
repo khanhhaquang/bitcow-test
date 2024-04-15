@@ -35,7 +35,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
       chainName: 'Merlin Testnet',
       nativeCurrency: BTC,
       rpcUrls: ['https://testnet-rpc.merlinchain.io'],
-      blockExplorerUrls: ['https://testnet-scan.merlinchain.io/']
+      blockExplorerUrls: ['https://testnet-scan.merlinchain.io']
     },
     rpcNodeUrl:
       'https://merlin-testnet.blockpi.network/v1/rpc/b890f4dba4f9b56ad2a8301d7bb77ddb3d1f3cc7',
@@ -60,7 +60,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
       chainName: 'Bob Testnet',
       nativeCurrency: ETH,
       rpcUrls: ['https://sepolia-dencun.rpc.gobob.xyz/'],
-      blockExplorerUrls: ['https://sepolia-dencun.explorer.gobob.xyz/']
+      blockExplorerUrls: ['https://sepolia-dencun.explorer.gobob.xyz']
     },
     rpcNodeUrl: 'https://sepolia-dencun.rpc.gobob.xyz/',
     icon: 'images/bob.png',
@@ -72,7 +72,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
       chainName: 'B2 Haven Testnet',
       nativeCurrency: BTC,
       rpcUrls: ['https://haven-rpc.bsquared.network'],
-      blockExplorerUrls: ['https://haven-explorer.bsquared.network/']
+      blockExplorerUrls: ['https://haven-explorer.bsquared.network']
     },
     rpcNodeUrl: 'https://haven-rpc.bsquared.network',
     icon: '/images/bSquared.png',

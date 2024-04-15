@@ -16,8 +16,6 @@ import TokenLiquidity from './TokenLiquidity';
 
 import useTokenBalance from '../../../hooks/useTokenBalance';
 
-// import useTokenBalance from '../../../hooks/useTokenBalance';
-
 const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const { requestAddLiquidity } = useMerlinWallet();
   const dispatch = useDispatch();

@@ -88,7 +88,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
         'https://testnet-rpc.bitlayer.org',
         'https://rpc.ankr.com/bitlayer_testnet'
       ],
-      blockExplorerUrls: ['https://testnet.btrscan.com/']
+      blockExplorerUrls: ['https://testnet.btrscan.com']
     },
     rpcNodeUrl: 'https://testnet-rpc.bitlayer.org',
     icon: '/images/bitlayer.png',

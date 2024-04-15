@@ -120,7 +120,12 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           staticNetwork: true
         }
       );
-      const sdk = new BitcowSDK(provider as any, currentNetwork.sdkConfig, 0.4, txOption);
+      const sdk = new BitcowSDK(
+        provider as any,
+        currentNetwork.sdkConfig,
+        currentNetwork.requestsPerSecond,
+        txOption
+      );
       setBitcowSDK(sdk);
       setLiquidityPools(sdk.pools);
       setPoolsCount(sdk.pools.length);

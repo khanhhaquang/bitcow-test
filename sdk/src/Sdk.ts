@@ -12,7 +12,6 @@ import { PoolCreator } from './PoolCreator';
 import PromiseThrottle from 'promise-throttle';
 import { parsePairFromConfig, parsePairStats, parsePairStatsToConfig } from './utils/statsV1';
 import * as ConfigPair from './cache/pairs.json';
-import { log } from './utils/common';
 
 export class Sdk extends ContractRunner {
     pools: Pool[] = [];
@@ -26,7 +25,8 @@ export class Sdk extends ContractRunner {
         public config: Config,
         requestsPerSecond: number,
         txOption?: TxOption,
-        signer?: Signer
+        signer?: Signer,
+        private debug: (message?: any, ...optionalParams: any[]) => void = console.log
     ) {
         super(provider, txOption, signer);
         const pairStats = (ConfigPair as Record<string, any>)[config.chainId.toString()];
@@ -44,7 +44,8 @@ export class Sdk extends ContractRunner {
             config.chainId,
             config.tokensBalance,
             txOption,
-            signer
+            signer,
+            debug
         );
         this.poolCreator = new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer);
         this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
@@ -56,14 +57,14 @@ export class Sdk extends ContractRunner {
         const promisePair = await this.promiseThrottle.add(() => {
             return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(0, paginateCount);
         });
-        log(`Load pools start ${0}`);
+        this.debug(`Load pools ${paginateCount} from index ${0}`);
 
         result = result.concat(promisePair.pageStats.map(parsePairStatsToConfig));
 
         const allCount = parseFloat(promisePair.pairCount.toString());
         for (let i = paginateCount; i < allCount; i += paginateCount) {
             const promisePair = await this.promiseThrottle.add(() => {
-                log(`Load pools start ${i}`);
+                this.debug(`Load pools ${paginateCount} from index ${i}`);
                 return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(i, i + paginateCount);
             });
             result = result.concat(promisePair.pageStats.map(parsePairStatsToConfig));
@@ -91,7 +92,7 @@ export class Sdk extends ContractRunner {
     ): Promise<Pool[]> {
         const isThisPoolsEmpty = this.pools.length === 0;
         let resultPools: Pool[] = [];
-        log(`Fetch pools ${firstPaginateCount} after index ${0} `);
+        this.debug(`Fetch pools ${firstPaginateCount} from index ${0} `);
         const { pools, allCount } = await this.promiseThrottle.add(async () => {
             return this.fetchPoolsPaginate(0, firstPaginateCount);
         });
@@ -106,7 +107,7 @@ export class Sdk extends ContractRunner {
             const promise = [];
             for (let i = firstPaginateCount; i < allCount; i += paginateCount) {
                 promise.push(async () => {
-                    log(`Fetch pools ${paginateCount} after index ${i} of ${allCount}`);
+                    this.debug(`Fetch pools ${paginateCount} from index ${i} of ${allCount}`);
                     const pools = await this.fetchPoolsPaginate(i, paginateCount);
                     if (isThisPoolsEmpty) {
                         this.pools = this.pools.concat(pools.pools);
@@ -122,7 +123,7 @@ export class Sdk extends ContractRunner {
         if (!isThisPoolsEmpty) {
             this.pools = resultPools;
         }
-        log('Pools count ', this.pools.length);
+        this.debug('Pools count ', this.pools.length);
         return resultPools;
     }
     async getTokensBalance(pageFetchCount: number, poolsLpTokenFirst = true) {
@@ -146,10 +147,6 @@ export class Sdk extends ContractRunner {
 
             const userTokenBalances: Record<string, number> = {};
             allTokens.forEach((token) => {
-                if (balances[token.address] === undefined) {
-                    console.log(balances);
-                    console.log(token);
-                }
                 userTokenBalances[token.address] = new BigNumber(balances[token.address].toString())
                     .div(10 ** token.decimals)
                     .toNumber();
@@ -280,7 +277,7 @@ export class Sdk extends ContractRunner {
         const twoHopOutput = twoHopQuote?.outAmt ?? 0;
         const threeHopOutput = threeHopQuote?.outAmt ?? 0;
 
-        log('Get quote', [directOutput, twoHopOutput, threeHopOutput]);
+        this.debug('Get quote', [directOutput, twoHopOutput, threeHopOutput]);
         const maxOutput = Math.max(directOutput, twoHopOutput, threeHopOutput);
         if (directOutput === maxOutput) {
             return directQuote;
@@ -348,10 +345,10 @@ export class Sdk extends ContractRunner {
     }
 
     async print() {
-        console.log('\nPools\n');
+        this.debug('\nPools\n');
         for (const pool of this.pools) {
             await pool.printMessage();
-            log('\n');
+            this.debug('\n');
         }
     }
 }

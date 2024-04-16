@@ -124,7 +124,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         provider as any,
         currentNetwork.sdkConfig,
         currentNetwork.requestsPerSecond,
-        txOption
+        txOption,
+        undefined,
+        () => {}
       );
       setBitcowSDK(sdk);
       setLiquidityPools(sdk.pools);
@@ -148,55 +150,55 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, [txOption, bitcowSDK]);
 
-  const fetchPools = useCallback(
-    async (firstPaginateCount: number, paginateCount: number) => {
-      try {
-        if (bitcowSDK) {
-          const timeOut = setTimeout(() => {
-            timeOutArray.push(true);
-            setTimeOutCount(timeOutArray.length);
-          }, timeOutLength);
-          const pools = await bitcowSDK.reload(firstPaginateCount, paginateCount);
-          setLiquidityPools(pools);
-          setPoolsCount(pools.length);
-          clearTimeout(timeOut);
-        } else {
-          setLiquidityPools([]);
-          setPoolsCount(0);
-        }
-      } catch (e) {
-        console.log(e);
-      } finally {
+  const fetchPools = useCallback(async () => {
+    try {
+      if (bitcowSDK) {
+        const timeOut = setTimeout(() => {
+          timeOutArray.push(true);
+          setTimeOutCount(timeOutArray.length);
+        }, timeOutLength);
+        const pools = await bitcowSDK.reload(
+          currentNetwork.poolsFirstPaginateCount,
+          currentNetwork.poolsPaginateCount
+        );
+        setLiquidityPools(pools);
+        setPoolsCount(pools.length);
+        clearTimeout(timeOut);
+      } else {
+        setLiquidityPools([]);
+        setPoolsCount(0);
       }
-    },
-    [bitcowSDK, timeOutArray, timeOutLength]
-  );
+    } catch (e) {
+      console.log(e);
+    } finally {
+    }
+  }, [currentNetwork, bitcowSDK, timeOutArray, timeOutLength]);
 
-  const fetchTokenList = useCallback(
-    async (firstPaginateCount: number, paginateCount: number) => {
-      let bitusd: TokenInfo | undefined;
-      try {
-        if (bitcowSDK) {
-          const timeOut = setTimeout(() => {
-            timeOutArray.push(true);
-            setTimeOutCount(timeOutArray.length);
-          }, timeOutLength);
-          await bitcowSDK.coinList.reload(firstPaginateCount, paginateCount);
-          bitusd = setTokensCache(bitcowSDK);
-          clearTimeout(timeOut);
-        } else {
-          setTokenList([]);
-          setSymbolToToken({});
-          setBitusdToken(undefined);
-        }
-      } catch (e) {
-        console.log(e);
-      } finally {
-        return bitusd;
+  const fetchTokenList = useCallback(async () => {
+    let bitusd: TokenInfo | undefined;
+    try {
+      if (bitcowSDK) {
+        const timeOut = setTimeout(() => {
+          timeOutArray.push(true);
+          setTimeOutCount(timeOutArray.length);
+        }, timeOutLength);
+        await bitcowSDK.coinList.reload(
+          currentNetwork.tokensFirstPaginateCount,
+          currentNetwork.tokensPaginateCount
+        );
+        bitusd = setTokensCache(bitcowSDK);
+        clearTimeout(timeOut);
+      } else {
+        setTokenList([]);
+        setSymbolToToken({});
+        setBitusdToken(undefined);
       }
-    },
-    [bitcowSDK, timeOutArray, timeOutLength, setTokensCache]
-  );
+    } catch (e) {
+      console.log(e);
+    } finally {
+      return bitusd;
+    }
+  }, [currentNetwork, bitcowSDK, timeOutArray, timeOutLength, setTokensCache]);
 
   const fetchTokenBalances = useCallback(
     async (lpFirst: boolean) => {
@@ -251,9 +253,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const swapPageReload = useCallback(
     async (init: boolean) => {
       if (init) {
-        await fetchTokenList(600, 600);
+        await fetchTokenList();
       }
-      await fetchPools(140, 140);
+      await fetchPools();
       await fetchTokenBalances(false);
     },
     [fetchTokenList, fetchPools, fetchTokenBalances]
@@ -261,9 +263,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const poolPageReload = useCallback(
     async (init: boolean) => {
-      await fetchPools(140, 140);
+      await fetchPools();
       if (init) {
-        await fetchTokenList(600, 600);
+        await fetchTokenList();
       }
       await fetchTokenBalances(true);
     },
@@ -272,7 +274,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const tokensPageReload = useCallback(
     async (init: boolean) => {
-      const bitusd = await fetchTokenList(500, 500);
+      const bitusd = await fetchTokenList();
       if (bitusd) {
         const balances = await bitcowSDK.coinList.getBalances(1, [bitusd.address]);
         setTokenBalances({

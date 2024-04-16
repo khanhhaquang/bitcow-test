@@ -21,6 +21,11 @@ export type NetworkConfig = {
   rpcNodeUrl: string;
   icon: string;
   requestsPerSecond: number;
+  poolsFirstPaginateCount: number;
+  poolsPaginateCount: number;
+  tokensFirstPaginateCount: number;
+  tokensPaginateCount: number;
+  balancePaginateCount: number;
   sdkConfig: Config;
 };
 interface NetworkContextType {
@@ -39,6 +44,11 @@ export const ALL_NETWORK: NetworkConfig[] = [
       blockExplorerUrls: ['https://testnet-scan.merlinchain.io']
     },
     requestsPerSecond: 0.4,
+    poolsFirstPaginateCount: 140,
+    poolsPaginateCount: 140,
+    tokensFirstPaginateCount: 600,
+    tokensPaginateCount: 600,
+    balancePaginateCount: 600,
     rpcNodeUrl:
       'https://merlin-testnet.blockpi.network/v1/rpc/b890f4dba4f9b56ad2a8301d7bb77ddb3d1f3cc7',
     icon: '/images/merlin.png',
@@ -53,6 +63,11 @@ export const ALL_NETWORK: NetworkConfig[] = [
       blockExplorerUrls: ['https://blockscout.botanixlabs.dev']
     },
     requestsPerSecond: 0.4,
+    poolsFirstPaginateCount: 140,
+    poolsPaginateCount: 140,
+    tokensFirstPaginateCount: 600,
+    tokensPaginateCount: 600,
+    balancePaginateCount: 600,
     rpcNodeUrl: 'https://node.botanixlabs.dev',
     icon: '/images/botanix.png',
     sdkConfig: CONFIG.botanixTestnet
@@ -66,6 +81,11 @@ export const ALL_NETWORK: NetworkConfig[] = [
       blockExplorerUrls: ['https://sepolia-dencun.explorer.gobob.xyz']
     },
     requestsPerSecond: 0.4,
+    poolsFirstPaginateCount: 140,
+    poolsPaginateCount: 140,
+    tokensFirstPaginateCount: 600,
+    tokensPaginateCount: 600,
+    balancePaginateCount: 600,
     rpcNodeUrl: 'https://sepolia-dencun.rpc.gobob.xyz/',
     icon: 'images/bob.png',
     sdkConfig: CONFIG.bobTestnet
@@ -79,6 +99,11 @@ export const ALL_NETWORK: NetworkConfig[] = [
       blockExplorerUrls: ['https://haven-explorer.bsquared.network']
     },
     requestsPerSecond: 0.4,
+    poolsFirstPaginateCount: 140,
+    poolsPaginateCount: 140,
+    tokensFirstPaginateCount: 600,
+    tokensPaginateCount: 600,
+    balancePaginateCount: 600,
     rpcNodeUrl: 'https://haven-rpc.bsquared.network',
     icon: '/images/bSquared.png',
     sdkConfig: CONFIG.b2Testnet
@@ -96,7 +121,12 @@ export const ALL_NETWORK: NetworkConfig[] = [
 
       blockExplorerUrls: ['https://testnet.btrscan.com']
     },
-    requestsPerSecond: 1,
+    requestsPerSecond: 5,
+    poolsFirstPaginateCount: 140,
+    poolsPaginateCount: 140,
+    tokensFirstPaginateCount: 600,
+    tokensPaginateCount: 600,
+    balancePaginateCount: 600,
     rpcNodeUrl: 'https://testnet-rpc.bitlayer.org',
     icon: '/images/bitlayer.png',
     sdkConfig: CONFIG.bitlayerTestnet

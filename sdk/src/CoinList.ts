@@ -10,7 +10,6 @@ import { ABI_TOKENS_BALANCE } from './abi/TokensBalance';
 import { parseTokenInfo } from './utils/statsV1';
 import PromiseThrottle from 'promise-throttle';
 import * as ConfigTokens from './cache/tokens.json';
-import { log } from './utils/common';
 
 export class CoinList extends ContractRunner {
     tokens: TokenInfo[] = [];
@@ -27,7 +26,8 @@ export class CoinList extends ContractRunner {
         chainId: number,
         tokensBalance: string,
         txOption?: TxOption,
-        signer?: Signer
+        signer?: Signer,
+        private debug: (message?: any, ...optionalParams: any[]) => void = console.log
     ) {
         super(provider, txOption, signer);
         this.tokens = (ConfigTokens as Record<string, any>)[chainId.toString()];
@@ -43,7 +43,7 @@ export class CoinList extends ContractRunner {
     async reload(firstPaginateCount: number, paginateCount: number, callBack?: (tokens: TokenInfo[]) => void) {
         let resultTokens: TokenInfo[] = [];
         const isThisTokensEmpty = this.tokens.length === 0;
-        log(`Fetch tokens ${firstPaginateCount} after index 0`);
+        this.debug(`Fetch tokens ${firstPaginateCount} from index 0`);
         const fetchResult = await this.promiseThrottle.add(async () => {
             return this.tokenListContract.fetchTokenListPaginate(0, firstPaginateCount);
         });
@@ -61,7 +61,7 @@ export class CoinList extends ContractRunner {
             const promise = [];
             for (let i = firstPaginateCount; i < allTokensCount; i += paginateCount) {
                 promise.push(async () => {
-                    log(`Fetch tokens ${paginateCount} after index ${i} of ${allTokensCount}`);
+                    this.debug(`Fetch tokens ${paginateCount} from index ${i} of ${allTokensCount}`);
                     const fetchResult = await this.tokenListContract.fetchTokenListPaginate(i, i + paginateCount);
                     const fetchTokens = fetchResult[0].map(parseTokenInfo);
                     if (isThisTokensEmpty) {
@@ -80,7 +80,7 @@ export class CoinList extends ContractRunner {
             this.tokens = resultTokens;
             this.buildCache();
         }
-        log('Tokens count ', this.tokens.length);
+        this.debug('Tokens count ', this.tokens.length);
         return this.tokens;
     }
 
@@ -130,13 +130,13 @@ export class CoinList extends ContractRunner {
             for (const fetchToken of fetchTokens) {
                 const indexInner = index;
                 promise.push(async () => {
-                    log(`Fetch token balance ${pageFetchCount} after index ${indexInner} of ${tokens.length}`);
+                    this.debug(`Fetch token balance ${pageFetchCount} from index ${indexInner} of ${tokens.length}`);
                     return this.tokensBalanceContract.balances(userAddress, fetchToken);
                 });
                 index += fetchToken.length;
             }
             const balances = await this.promiseThrottle.addAll(promise);
-            log('Fetch tokens balance end');
+            this.debug('Fetch tokens balance end');
             const balancesResult: Record<string, bigint> = {};
             tokens.forEach((token, index) => {
                 balancesResult[token] = balances[Math.floor(index / pageFetchCount)][index % pageFetchCount];

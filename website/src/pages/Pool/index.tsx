@@ -52,7 +52,7 @@ const Pool = () => {
   const liquidityModal = useSelector(getLiquidityModal);
   const { isTablet } = useBreakpoint('tablet');
 
-  const { initProvider, poolsCount, liquidityPools } = useMerlinWallet();
+  const { initProvider, fetchedPoolsCount, liquidityPools } = useMerlinWallet();
   useEffect(() => {
     initProvider('pool');
   }, [initProvider]);
@@ -104,10 +104,10 @@ const Pool = () => {
     <div className="flex items-center text-2xl text-bc-white tablet:flex-col">
       <div className=" text-2xl tablet:text-lg">Pools</div>
       {liquidityPools.length != 0 &&
-        (liquidityPools.length < poolsCount ? (
-          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{`(loading ${liquidityPools.length} / ${poolsCount})`}</div>
+        (fetchedPoolsCount === 0 ? (
+          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{'(loading)'}</div>
         ) : (
-          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{`(${poolsCount})`}</div>
+          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{`(${fetchedPoolsCount})`}</div>
         ))}
 
       <div className="ml-auto flex gap-2 text-lg leading-4 text-bc-gold tablet:mt-4">

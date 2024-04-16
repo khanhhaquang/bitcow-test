@@ -110,6 +110,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const checkNetwork = useCallback(async () => {
     return setCurrentChain(currentNetwork.chainConfig);
   }, [setCurrentChain, currentNetwork]);
+
   useEffect(() => {
     if (currentNetwork) {
       const provider = new ethers.JsonRpcProvider(
@@ -126,7 +127,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         currentNetwork.requestsPerSecond,
         txOption,
         undefined,
-        () => {}
+        (message, optionalParams) => {
+          console.log(currentNetwork.chainConfig.chainName, message, optionalParams);
+        }
       );
       setBitcowSDK(sdk);
       setLiquidityPools(sdk.pools);
@@ -188,10 +191,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         );
         bitusd = setTokensCache(bitcowSDK);
         clearTimeout(timeOut);
-      } else {
-        setTokenList([]);
-        setSymbolToToken({});
-        setBitusdToken(undefined);
       }
     } catch (e) {
       console.log(e);
@@ -217,9 +216,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             setTokenBalances({});
           }
           clearTimeout(timeOut);
-        } else {
-          setUserPoolLpAmount({});
-          setTokenBalances({});
         }
       } catch (e) {
         console.log(e);

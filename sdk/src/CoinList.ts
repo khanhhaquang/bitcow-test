@@ -112,14 +112,14 @@ export class CoinList extends ContractRunner {
     }
 
     async getAllowance(token: TokenInfo | Token, spender: string) {
-        const userAddress = await this.getAddress();
+        const userAddress = this.getAddress();
         if (userAddress) {
             return await this.contracts[token.address].allowance(userAddress, spender);
         }
     }
 
     async getBalances(pageFetchCount: number, tokens = this.getAllToken().map((token) => token.address)) {
-        const userAddress = await this.getAddress();
+        const userAddress = this.getAddress();
         if (userAddress) {
             const fetchTokens: string[][] = [];
             for (let i = 0; i < tokens.length; i += pageFetchCount) {
@@ -149,8 +149,7 @@ export class CoinList extends ContractRunner {
         const allowance = await this.getAllowance(token, spender);
         if (new BigNumber(allowance.toString()).div(10 ** token.decimals).lt(minAmount) && this.signer) {
             const tokenContract = this.contracts[token.address];
-            const result = await this.send(tokenContract.approve, spender, amount, this.txOption);
-            return result;
+            return await this.send(tokenContract.approve, spender, amount, this.txOption);
         }
     }
 

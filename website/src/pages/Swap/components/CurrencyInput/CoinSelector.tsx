@@ -13,6 +13,8 @@ import { TokenBalance } from 'types/bitcow';
 import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';
 
+import { bigintTokenBalanceToNumber } from '../../../../utils/formatter';
+
 interface TProps {
   actionType: 'currencyTo' | 'currencyFrom';
   dismissiModal: () => void;
@@ -20,11 +22,15 @@ interface TProps {
 
 const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
-  const { tokenList, tokenBalances } = useMerlinWallet();
+  const { tokenList, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();
   const { coinPrices: coinInPools } = usePools();
-  const commonCoins = tokenList.filter((token) => {
-    return ['wBTC', 'bitusd'].includes(token.symbol);
-  });
+  const commonCoins = useMemo(() => {
+    return tokenList
+      ? tokenList.filter((token) => {
+          return ['wBTC', 'bitusd'].includes(token.symbol);
+        })
+      : [];
+  }, [tokenList]);
   const [filter, setFilter] = useState<string>('');
   const [tokenListBalance, setTokenListBalance] = useState<TokenBalance[]>();
 
@@ -42,23 +48,32 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
         ...values[actionType],
         token
       });
+      if (tokenBalances[token.address] === undefined) {
+        setNeedBalanceTokens([token.address]);
+      }
       dismissiModal();
     },
-    [actionType, values, setFieldValue, dismissiModal]
+    [actionType, values, setFieldValue, dismissiModal, setNeedBalanceTokens, tokenBalances]
   );
 
   const getFilteredTokenListWithBalance = useCallback(() => {
     if (coinInPools) {
       let currentTokenList = tokenList
-        .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
-        .map((t) => {
-          const balance = tokenBalances ? tokenBalances[t.address] : -1;
-          return {
-            token: t,
-            balance
-          };
-        })
-        .sort((a, b) => b.balance - a.balance); // TODO: sort by values
+        ? tokenList
+            .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
+            .map((t) => {
+              const balance = tokenBalances
+                ? tokenBalances[t.address] !== undefined
+                  ? bigintTokenBalanceToNumber(t, tokenBalances[t.address])
+                  : -2
+                : -1;
+              return {
+                token: t,
+                balance
+              };
+            })
+            .sort((a, b) => b.balance - a.balance)
+        : []; // TODO: sort by values
 
       if (filter) {
         currentTokenList = currentTokenList?.filter((token) => {
@@ -66,6 +81,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
           return keysForFilter.includes(filter);
         });
       }
+
       setTokenListBalance(currentTokenList);
     } else {
       setTokenListBalance([]);

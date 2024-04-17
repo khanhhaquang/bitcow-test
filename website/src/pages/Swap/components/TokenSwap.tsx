@@ -19,12 +19,20 @@ import CurrencyInput from './CurrencyInput';
 import SwapDetail from './SwapDetail';
 import SwapSetting from './SwapSetting';
 
+import useNetwork from '../../../hooks/useNetwork';
 import { ISwapSettings } from '../types';
 
 const TokenSwap = () => {
   const { values, setFieldValue, submitForm, isSubmitting, isValid, dirty } =
     useFormikContext<ISwapSettings>();
-  const { wallet, openWalletModal, bitcowSDK, symbolToToken, liquidityPools } = useMerlinWallet();
+  const {
+    wallet,
+    openWalletModal,
+    bitcowSDK,
+    setNeedBalanceTokens,
+    symbolToToken,
+    liquidityPools
+  } = useMerlinWallet();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
   const toToken = values.currencyTo?.token;
@@ -33,6 +41,7 @@ const TokenSwap = () => {
   const { isTablet } = useBreakpoint('tablet');
   const [priceImpact, setPriceImpact] = useState(0);
   const [uiBalance, isReady] = useTokenBalance(values.currencyFrom.token);
+  const { currentNetwork } = useNetwork();
   const sufficientBalance = useMemo(() => {
     if (!wallet || (!uiBalance && isReady)) return false;
     return uiBalance >= fromUiAmt;
@@ -40,20 +49,38 @@ const TokenSwap = () => {
 
   useEffect(() => {
     if (symbolToToken) {
+      const needFetchTokens: string[] = [];
       if (
         fromToken === undefined ||
         bitcowSDK.coinList.getTokenByAddress(fromToken.address) === undefined
       ) {
         setFieldValue('currencyFrom.token', symbolToToken.wBTC);
+        if (symbolToToken.wBTC) {
+          needFetchTokens.push(symbolToToken.wBTC.address);
+        }
       }
       if (
         toToken === undefined ||
         bitcowSDK.coinList.getTokenByAddress(toToken.address) === undefined
       ) {
         setFieldValue('currencyTo.token', symbolToToken.bitusd);
+        if (symbolToToken.bitusd) {
+          needFetchTokens.push(symbolToToken.bitusd.address);
+        }
+      }
+      if (!currentNetwork.fetchAllTokenBalance && needFetchTokens.length > 0) {
+        setNeedBalanceTokens(needFetchTokens);
       }
     }
-  }, [symbolToToken, setFieldValue, bitcowSDK, fromToken, toToken]);
+  }, [
+    currentNetwork,
+    symbolToToken,
+    setFieldValue,
+    bitcowSDK,
+    fromToken,
+    toToken,
+    setNeedBalanceTokens
+  ]);
 
   const lastFetchTs = useRef(0);
 

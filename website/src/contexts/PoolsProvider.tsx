@@ -31,7 +31,7 @@ interface TProviderProps {
 const PoolsContext = createContext<PoolsContextType>({} as PoolsContextType);
 
 const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
-  const { bitcowSDK, liquidityPools, userPoolLpAmount } = useMerlinWallet();
+  const { bitcowSDK, liquidityPools, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();
   const [activePools, setActivePools] = useState<IPool[]>([]);
   const [coinPrices, setCoinPrices] = useState<Record<string, number>>();
   // const [fetching, setFetching] = useState(false);
@@ -107,33 +107,36 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
 
   const getOwnedLiquidity = useCallback(
     (pool: IPool) => {
-      if (userPoolLpAmount) {
-        const userLpAmount = userPoolLpAmount[pool.poolAddress];
+      if (tokenBalances) {
+        const userLpAmount = tokenBalances[pool.lpAddress];
+        if (userLpAmount === undefined) {
+          setNeedBalanceTokens([pool.lpAddress]);
+        }
         return pool.getUserLiquidity(userLpAmount);
       }
     },
-    [userPoolLpAmount]
+    [tokenBalances, setNeedBalanceTokens]
   );
 
   const getOwnedLiquidityShare = useCallback(
     (pool: IPool) => {
-      if (userPoolLpAmount) {
-        const userLpAmount = userPoolLpAmount[pool.poolAddress];
+      if (tokenBalances) {
+        const userLpAmount = tokenBalances[pool.lpAddress];
         return pool.getUserLiquidity(userLpAmount).liquidityShare;
       } else {
         return 0;
       }
     },
-    [userPoolLpAmount]
+    [tokenBalances]
   );
 
   const checkIfInvested = useCallback(
     (pool: IPool) => {
-      if (userPoolLpAmount) {
+      if (tokenBalances) {
         return getOwnedLiquidity(pool).invested;
       }
     },
-    [getOwnedLiquidity, userPoolLpAmount]
+    [getOwnedLiquidity, tokenBalances]
   );
 
   const getTokenBalanceInUSD = useCallback(

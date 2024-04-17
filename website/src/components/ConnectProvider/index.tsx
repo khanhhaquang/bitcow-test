@@ -4,7 +4,7 @@ import { chains } from '@particle-network/chains';
 import { initializeConnector } from '@web3-react/core';
 import { useMemo } from 'react';
 
-import { ALL_NETWORK } from '../../contexts/NetworkProvider';
+import { ALL_NETWORK } from '../../config';
 import { EIP6963Wallet, EvmConnectors, EvmConnectProvider } from '../../wallet';
 
 export default function ConnectProvider({

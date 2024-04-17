@@ -47,8 +47,8 @@ export class Pool extends ContractRunner implements IPool {
     setTxOption(txOption?: TxOption) {
         this.txOption = txOption;
     }
-    async getUserAddress() {
-        return await super.getAddress();
+    getUserAddress() {
+        return super.getAddress();
     }
     get poolAddress() {
         return this.pair.pairAddress;

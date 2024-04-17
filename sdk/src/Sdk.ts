@@ -138,21 +138,7 @@ export class Sdk extends ContractRunner {
         if (tokens.length == 1) {
             return undefined;
         }
-        const balances = await this.coinList.getBalances(pageFetchCount, tokens);
-        if (balances) {
-            const userPoolLp: Record<string, bigint> = {};
-            pools.forEach((pool) => {
-                userPoolLp[pool.poolAddress] = balances[pool.lpAddress];
-            });
-
-            const userTokenBalances: Record<string, number> = {};
-            allTokens.forEach((token) => {
-                userTokenBalances[token.address] = new BigNumber(balances[token.address].toString())
-                    .div(10 ** token.decimals)
-                    .toNumber();
-            });
-            return { userPoolLp, userTokenBalances };
-        }
+        return await this.coinList.getBalances(pageFetchCount, tokens);
     }
 
     setSigner(signer?: Signer, address?: string) {

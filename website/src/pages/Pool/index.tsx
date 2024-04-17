@@ -19,6 +19,7 @@ import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
 
 import useMerlinWallet from '../../hooks/useMerlinWallet';
+import useNetwork from '../../hooks/useNetwork';
 // import styles from './Pool.module.scss';
 
 const filterOptions = [
@@ -46,6 +47,7 @@ const Pool = () => {
     getTotalPoolsTVL,
     getTotalPoolsVolume
   } = usePools();
+  const { currentNetwork } = useNetwork();
   const [activeTab, setActiveTab] = useState('1');
   const dispatch = useDispatch();
   const [filteredPools, setFilteredPools] = useState(activePools);
@@ -103,7 +105,7 @@ const Pool = () => {
   const renderHeader = () => (
     <div className="flex items-center text-2xl text-bc-white tablet:flex-col">
       <div className=" text-2xl tablet:text-lg">Pools</div>
-      {liquidityPools.length != 0 &&
+      {liquidityPools?.length &&
         (fetchedPoolsCount === 0 ? (
           <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{'(loading)'}</div>
         ) : (
@@ -160,19 +162,27 @@ const Pool = () => {
     }));
   };
 
-  const tabs = useMemo(
-    () => [
-      {
-        id: '1',
-        label: 'Liquidity Pools'
-      },
-      {
-        id: '2',
-        label: 'My Position'
-      }
-    ],
-    []
-  );
+  const tabs = useMemo(() => {
+    if (currentNetwork && currentNetwork.fetchAllTokenBalance) {
+      return [
+        {
+          id: '1',
+          label: 'Liquidity Pools'
+        },
+        {
+          id: '2',
+          label: 'My Position'
+        }
+      ];
+    } else {
+      return [
+        {
+          id: '1',
+          label: 'Liquidity Pools'
+        }
+      ];
+    }
+  }, [currentNetwork]);
 
   const renderTabContents = useCallback(() => {
     return tabs.map((tab) => {
@@ -180,7 +190,6 @@ const Pool = () => {
       if (tab.id === '2') {
         currentPools = currentPools.filter((pool) => checkIfInvested(pool));
       }
-
       return {
         label: tab.label,
         key: tab.id,

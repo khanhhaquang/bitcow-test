@@ -30,8 +30,12 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
         </div>
       </div>
       <small className="text-base font-bold">
-        {wallet && item.balance < 0 && <Skeleton.Button className="!h-4 !w-10 !min-w-0" active />}
-        {(!wallet || item.balance >= 0) && (
+        {!wallet && <small className="ml-2">{item.token.symbol}</small>}
+        {wallet && item.balance === -2 && <small className="ml-2">{item.token.symbol}</small>}
+        {wallet && item.balance === -1 && (
+          <Skeleton.Button className="!h-4 !w-10 !min-w-0" active />
+        )}
+        {wallet && item.balance != undefined && item.balance >= 0 && (
           <div>
             <span>{tokenAmountFormatter(item.balance, item.token)}</span>
             <small className="ml-2">{item.token.symbol}</small>

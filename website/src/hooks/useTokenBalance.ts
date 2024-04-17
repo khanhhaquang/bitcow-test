@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { Token, TokenInfo } from 'bitcow';
 import { useMemo } from 'react';
 
@@ -10,7 +11,11 @@ const useTokenBalance = (token: Token | TokenInfo | undefined): [Balance, boolea
 
   const balance = useMemo(() => {
     if (tokenBalances && token) {
-      return tokenBalances[token.address];
+      return tokenBalances[token.address] !== undefined
+        ? new BigNumber(tokenBalances[token.address].toString())
+            .div(10 ** token.decimals)
+            .toNumber()
+        : undefined;
     } else {
       return undefined;
     }

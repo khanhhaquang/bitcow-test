@@ -24,20 +24,20 @@ const percentageOptions = [25, 50, 75, 100];
 
 const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const dispatch = useDispatch();
-  const { requestWithdrawLiquidity, userPoolLpAmount } = useMerlinWallet();
+  const { requestWithdrawLiquidity, tokenBalances } = useMerlinWallet();
   const { isTablet } = useBreakpoint('tablet');
   const { getOwnedLiquidity } = usePools();
   const [pool, setPool] = useState<{ lp: BN; coins: {} }>();
   const [tokenAmountFormatter] = useTokenAmountFormatter();
 
   const fetchRecord = useCallback(() => {
-    const userLp = userPoolLpAmount[liquidityPool.poolAddress];
+    const userLp = tokenBalances[liquidityPool.lpAddress];
     const userLiq = getOwnedLiquidity(liquidityPool);
     setPool({
       lp: new BN(userLp.toString()),
       coins: userLiq.assetsPooled
     });
-  }, [getOwnedLiquidity, liquidityPool, userPoolLpAmount]);
+  }, [getOwnedLiquidity, liquidityPool, tokenBalances]);
 
   useEffect(() => {
     fetchRecord();

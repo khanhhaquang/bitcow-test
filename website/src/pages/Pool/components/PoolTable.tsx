@@ -236,8 +236,12 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         expandedRowClassName: () => 'expanded-pool',
         expandRowByClick: true,
         defaultExpandAllRows: viewOwned,
-        expandedRowRender: (record) => {
-          return <PoolRowDetail pool={record} />;
+        expandedRowRender: (record, index, indent, expanded) => {
+          if (expanded) {
+            return <PoolRowDetail pool={record} />;
+          } else {
+            return undefined;
+          }
         },
         expandIcon: ({ expanded, onExpand, record }) => {
           return <PoolUnfoldIcon className={cx({ 'rotate-180': expanded })} />;

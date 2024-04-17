@@ -5,8 +5,8 @@ export abstract class ContractRunner {
     protected constructor(
         protected provider: Provider,
         protected txOption?: TxOption,
-        protected signer?: Signer,
-        protected address?: string
+        public signer?: Signer,
+        public address?: string
     ) {}
 
     setTxOption(txOption?: TxOption) {
@@ -14,8 +14,16 @@ export abstract class ContractRunner {
     }
 
     setSigner(signer?: Signer, address?: string) {
+        if (signer && !address) {
+            throw new Error('Must set address while set signer');
+        }
+
         this.signer = signer;
-        this.address = address;
+        if (signer) {
+            this.address = address;
+        } else {
+            this.address = undefined;
+        }
         this.afterSetSigner(signer);
     }
 
@@ -34,15 +42,8 @@ export abstract class ContractRunner {
         return await tx.wait();
     }
 
-    async getAddress(): Promise<string | undefined> {
-        if (this.address) {
-            return this.address;
-        } else if (this.signer) {
-            this.address = await this.signer.getAddress();
-            return this.address;
-        } else {
-            return undefined;
-        }
+    getAddress(): string | undefined {
+        return this.address;
     }
     afterSetSigner(signer?: Signer): void {}
 }

@@ -1,7 +1,7 @@
 import { IPool } from 'bitcow';
 import { Formik, FormikHelpers } from 'formik';
 import poolAction from 'modules/pool/actions';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 
@@ -17,7 +17,7 @@ import TokenLiquidity from './TokenLiquidity';
 import useTokenBalance from '../../../hooks/useTokenBalance';
 
 const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
-  const { requestAddLiquidity } = useMerlinWallet();
+  const { requestAddLiquidity, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();
   const dispatch = useDispatch();
   const [token0Balance] = useTokenBalance(liquidityPool.token0);
   const [token1Balance] = useTokenBalance(liquidityPool.token1);
@@ -37,6 +37,19 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     },
     [dispatch, requestAddLiquidity, liquidityPool]
   );
+
+  useEffect(() => {
+    let needBalanceTokens: string[] = [];
+    if (tokenBalances[liquidityPool.token0.address] === undefined) {
+      needBalanceTokens.push(liquidityPool.token0.address);
+    }
+    if (tokenBalances[liquidityPool.token1.address] === undefined) {
+      needBalanceTokens.push(liquidityPool.token1.address);
+    }
+    if (needBalanceTokens.length) {
+      setNeedBalanceTokens(needBalanceTokens);
+    }
+  }, [tokenBalances, setNeedBalanceTokens, liquidityPool]);
 
   const validationSchema = yup.object({
     xToken: yup.object().required(),

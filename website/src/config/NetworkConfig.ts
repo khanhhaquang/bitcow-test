@@ -27,11 +27,11 @@ export const ALL_NETWORK: NetworkConfig[] = [
     rpcNodeUrl:
       'https://merlin-testnet.blockpi.network/v1/rpc/b890f4dba4f9b56ad2a8301d7bb77ddb3d1f3cc7',
     icon: '/images/merlin.png',
-    requestsPerSecond: 0.3,
+    requestsPerSecond: 0.4,
     poolsFirstPaginateCount: 8,
     poolsPaginateCount: 8,
-    tokensFirstPaginateCount: 8,
-    tokensPaginateCount: 8,
+    tokensFirstPaginateCount: 20,
+    tokensPaginateCount: 20,
     balancePaginateCount: 600,
     fetchAllTokenBalance: false
   },

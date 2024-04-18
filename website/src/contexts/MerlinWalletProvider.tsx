@@ -135,8 +135,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         currentNetwork.requestsPerSecond,
         txOption,
         undefined,
-        (message, optionalParams) => {
-          // console.log(currentNetwork.chainConfig.chainName, message, optionalParams);
+        (message) => {
+          // console.log(message);
         }
       );
       clearCache();
@@ -155,9 +155,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (timeOutCount >= 2) {
-      openErrorNotification({
-        detail: `The ${currentNetworkRef.current.chainConfig.chainName} is currently unstable. We recommend switching to a different testnet for testing.`
-      });
+      // openErrorNotification({
+      //   detail: `The ${currentNetworkRef.current.chainConfig.chainName} is currently unstable. We recommend switching to a different testnet for testing.`
+      // });
       setTimeOutArray([]);
       setTimeOutCount(0);
     }

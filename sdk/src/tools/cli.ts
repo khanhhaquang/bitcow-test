@@ -97,7 +97,7 @@ async function cacheTokenList() {
     for (const config of UTIL_CONFIGS) {
         console.log('ChainId:', config.config.chainId);
 
-        if (![200810].includes(config.config.chainId)) {
+        if ([686868, 1102, 3636].includes(config.config.chainId)) {
             if (pairsMap[config.config.chainId] === undefined) {
                 pairsMap[config.config.chainId] = [];
             }
@@ -109,11 +109,14 @@ async function cacheTokenList() {
         }
         console.log('Old pair count:', pairsMap[config.config.chainId].length);
         const provider = new ethers.JsonRpcProvider(config.URL);
-        const sdk = new Sdk(provider, config.config, 0.1);
-        const tokens = await sdk.coinList.reload(500, 500);
-        tokensMap[config.config.chainId] = tokens;
-        const stats = await sdk.fetchStats(140);
+        const sdk = new Sdk(provider, config.config, 0.2);
+
+        const stats = await sdk.fetchStats(10);
         pairsMap[config.config.chainId] = stats;
+
+        const tokens = await sdk.coinList.reload(30, 30);
+        tokensMap[config.config.chainId] = tokens;
+
         console.log();
     }
 

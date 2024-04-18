@@ -26,7 +26,7 @@ export class Sdk extends ContractRunner {
         requestsPerSecond: number,
         txOption?: TxOption,
         signer?: Signer,
-        private debug: (message?: any, ...optionalParams: any[]) => void = console.log
+        private debug: (message?: any) => void = console.log
     ) {
         super(provider, txOption, signer);
         const pairStats = (ConfigPair as Record<string, any>)[config.chainId.toString()];
@@ -41,6 +41,7 @@ export class Sdk extends ContractRunner {
             provider,
             config.tokenList,
             this.promiseThrottle,
+            new PromiseThrottle({ requestsPerSecond: requestsPerSecond }),
             config.chainId,
             config.tokensBalance,
             txOption,
@@ -53,49 +54,58 @@ export class Sdk extends ContractRunner {
     }
 
     async fetchStats(paginateCount: number = 140): Promise<any[]> {
-        let result: any[] = [];
-        const promisePair = await this.promiseThrottle.add(() => {
-            return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(0, paginateCount);
-        });
-        this.debug(`Load pools ${paginateCount} from index ${0}`);
-
-        result = result.concat(promisePair.pageStats.map(parsePairStatsToConfig));
-
-        const allCount = parseFloat(promisePair.pairCount.toString());
-        for (let i = paginateCount; i < allCount; i += paginateCount) {
-            const promisePair = await this.promiseThrottle.add(() => {
-                this.debug(`Load pools ${paginateCount} from index ${i}`);
-                return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(i, i + paginateCount);
-            });
-            result = result.concat(promisePair.pageStats.map(parsePairStatsToConfig));
-        }
-        return result;
+        const stats = await this.reloadPairStats(paginateCount, paginateCount);
+        return stats.map(parsePairStatsToConfig);
     }
 
-    async fetchPoolsPaginate(start: number, paginateCount: number): Promise<{ pools: Pool[]; allCount: number }> {
-        const pools: Pool[] = [];
-        const promisePair = await this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(
-            start,
-            start + paginateCount
-        );
-        for (const pairStat of promisePair.pageStats) {
-            pools.push(new Pool(this.provider, parsePairStats(pairStat), this.txOption, this.signer));
+    async fetchPoolsPaginate(
+        start: number,
+        paginateCount: number
+    ): Promise<{ pools: Pool[]; pageStats: any[]; allCount: number }> {
+        let times = 0;
+        while (true) {
+            try {
+                const pools: Pool[] = [];
+                const promisePair = await this.promiseThrottle.add(
+                    async () => {
+                        this.debug(`Fetch pools from ${start}`);
+                        return this.tradingPairV1ListContract.fetchPairsStatsListPaginateV2(
+                            start,
+                            start + paginateCount
+                        );
+                    },
+                    { weight: 1 }
+                );
+                for (const pairStat of promisePair.pageStats) {
+                    pools.push(new Pool(this.provider, parsePairStats(pairStat), this.txOption, this.signer));
+                }
+                const allCount = parseFloat(promisePair.pairCount.toString());
+                return { pools, pageStats: promisePair.pageStats, allCount };
+            } catch (e) {
+                times++;
+                console.log(`Retry fetch pools from ${start} times ${times}`);
+            }
         }
-        const allCount = parseFloat(promisePair.pairCount.toString());
-        return { pools, allCount };
     }
 
     async reload(
         firstPaginateCount: number,
         paginateCount: number,
         callBack?: (pools: Pool[], allCount: number) => void
-    ): Promise<Pool[]> {
+    ) {
+        await this.reloadPairStats(firstPaginateCount, paginateCount, callBack);
+        return this.pools;
+    }
+    async reloadPairStats(
+        firstPaginateCount: number,
+        paginateCount: number,
+        callBack?: (pools: Pool[], allCount: number) => void
+    ) {
         const isThisPoolsEmpty = this.pools.length === 0;
         let resultPools: Pool[] = [];
-        this.debug(`Fetch pools ${firstPaginateCount} from index ${0} `);
-        const { pools, allCount } = await this.promiseThrottle.add(async () => {
-            return this.fetchPoolsPaginate(0, firstPaginateCount);
-        });
+        let resultPageStats: any[] = [];
+        this.debug(`Fetch pools first page ${firstPaginateCount}`);
+        const { pools, pageStats, allCount } = await this.fetchPoolsPaginate(0, firstPaginateCount);
 
         callBack && callBack(pools, allCount);
         if (isThisPoolsEmpty) {
@@ -103,28 +113,31 @@ export class Sdk extends ContractRunner {
         } else {
             resultPools = resultPools.concat(pools);
         }
+        resultPageStats = resultPageStats.concat(pageStats);
         if (pools.length < allCount) {
+            this.debug(`Start others ${allCount - pools.length}, paginate count ${paginateCount}`);
             const promise = [];
             for (let i = firstPaginateCount; i < allCount; i += paginateCount) {
-                promise.push(async () => {
-                    this.debug(`Fetch pools ${paginateCount} from index ${i} of ${allCount}`);
+                const fn = async () => {
                     const pools = await this.fetchPoolsPaginate(i, paginateCount);
                     if (isThisPoolsEmpty) {
                         this.pools = this.pools.concat(pools.pools);
                     } else {
                         resultPools = resultPools.concat(pools.pools);
                     }
+                    resultPageStats = resultPageStats.concat(pools.pageStats);
                     callBack && callBack(isThisPoolsEmpty ? this.pools : resultPools, pools.allCount);
-                });
+                };
+                promise.push(fn());
             }
-            await this.promiseThrottle.addAll(promise);
+            await Promise.all(promise);
         }
 
         if (!isThisPoolsEmpty) {
             this.pools = resultPools;
         }
-        this.debug('Pools count ', this.pools.length);
-        return resultPools;
+        this.debug(`Pools count ${this.pools.length}`);
+        return resultPageStats;
     }
     async getTokensBalance(pageFetchCount: number, poolsLpTokenFirst = true) {
         let tokens;
@@ -263,7 +276,7 @@ export class Sdk extends ContractRunner {
         const twoHopOutput = twoHopQuote?.outAmt ?? 0;
         const threeHopOutput = threeHopQuote?.outAmt ?? 0;
 
-        this.debug('Get quote', [directOutput, twoHopOutput, threeHopOutput]);
+        this.debug(`Get quote [${directOutput} ${twoHopOutput} ${threeHopOutput}]`);
         const maxOutput = Math.max(directOutput, twoHopOutput, threeHopOutput);
         if (directOutput === maxOutput) {
             return directQuote;

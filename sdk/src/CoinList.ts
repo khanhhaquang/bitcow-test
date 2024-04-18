@@ -23,11 +23,12 @@ export class CoinList extends ContractRunner {
         provider: Provider,
         public tokenListAddress: string,
         private promiseThrottle: PromiseThrottle,
+        private promiseThrottleBalance: PromiseThrottle,
         chainId: number,
         tokensBalance: string,
         txOption?: TxOption,
         signer?: Signer,
-        private debug: (message?: any, ...optionalParams: any[]) => void = console.log
+        private debug: (message?: any) => void = console.log
     ) {
         super(provider, txOption, signer);
         this.tokens = (ConfigTokens as Record<string, any>)[chainId.toString()];
@@ -39,14 +40,28 @@ export class CoinList extends ContractRunner {
     async getCreateFee() {
         return await this.tokenListContract.createFee();
     }
-
+    async fetchTokenListPaginate(start: number, paginateCount: number) {
+        let times = 0;
+        while (true) {
+            try {
+                return await this.promiseThrottle.add(
+                    async () => {
+                        this.debug(`Fetch tokens from index ${start}`);
+                        return this.tokenListContract.fetchTokenListPaginate(start, start + paginateCount);
+                    },
+                    { weight: 1 }
+                );
+            } catch (e) {
+                times++;
+                this.debug(`Retry fetch tokens from index ${start} times ${times}`);
+            }
+        }
+    }
     async reload(firstPaginateCount: number, paginateCount: number, callBack?: (tokens: TokenInfo[]) => void) {
         let resultTokens: TokenInfo[] = [];
         const isThisTokensEmpty = this.tokens.length === 0;
-        this.debug(`Fetch tokens ${firstPaginateCount} from index 0`);
-        const fetchResult = await this.promiseThrottle.add(async () => {
-            return this.tokenListContract.fetchTokenListPaginate(0, firstPaginateCount);
-        });
+        this.debug(`Fetch tokens first page ${firstPaginateCount}`);
+        const fetchResult = await this.fetchTokenListPaginate(0, firstPaginateCount);
         const fetchTokens = fetchResult[0].map(parseTokenInfo);
         const allTokensCount = parseFloat(fetchResult[1].toString());
         if (isThisTokensEmpty) {
@@ -58,11 +73,11 @@ export class CoinList extends ContractRunner {
 
         callBack && callBack(isThisTokensEmpty ? this.tokens : resultTokens);
         if (fetchResult[0].length < allTokensCount) {
+            this.debug(`Start other ${allTokensCount - fetchTokens.length}`);
             const promise = [];
             for (let i = firstPaginateCount; i < allTokensCount; i += paginateCount) {
-                promise.push(async () => {
-                    this.debug(`Fetch tokens ${paginateCount} from index ${i} of ${allTokensCount}`);
-                    const fetchResult = await this.tokenListContract.fetchTokenListPaginate(i, i + paginateCount);
+                const fn = async () => {
+                    const fetchResult = await this.fetchTokenListPaginate(i, paginateCount);
                     const fetchTokens = fetchResult[0].map(parseTokenInfo);
                     if (isThisTokensEmpty) {
                         this.tokens = this.tokens.concat(fetchTokens);
@@ -71,16 +86,17 @@ export class CoinList extends ContractRunner {
                         resultTokens = resultTokens.concat(fetchTokens);
                     }
                     callBack && callBack(isThisTokensEmpty ? this.tokens : resultTokens);
-                });
+                };
+                promise.push(fn());
             }
-            await this.promiseThrottle.addAll(promise);
+            await Promise.all(promise);
         }
 
         if (!isThisTokensEmpty) {
             this.tokens = resultTokens;
             this.buildCache();
         }
-        this.debug('Tokens count ', this.tokens.length);
+        this.debug(`Tokens count ${this.tokens.length}`);
         return this.tokens;
     }
 
@@ -117,10 +133,25 @@ export class CoinList extends ContractRunner {
             return await this.contracts[token.address].allowance(userAddress, spender);
         }
     }
-
+    async fetchBalances(userAddress: string, fetchTokens: string[], index: number) {
+        while (true) {
+            try {
+                return await this.promiseThrottleBalance.add(
+                    async () => {
+                        this.debug(`Fetch token balance from index ${index}`);
+                        return await this.tokensBalanceContract.balances(userAddress, fetchTokens);
+                    },
+                    { weight: 1 }
+                );
+            } catch (e) {
+                this.debug(`Retry fetch token balance from index ${index}`);
+            }
+        }
+    }
     async getBalances(pageFetchCount: number, tokens = this.getAllToken().map((token) => token.address)) {
         const userAddress = this.getAddress();
         if (userAddress) {
+            this.debug(`Fetch tokens ${tokens.length} balance with page count ${pageFetchCount}`);
             const fetchTokens: string[][] = [];
             for (let i = 0; i < tokens.length; i += pageFetchCount) {
                 fetchTokens.push(tokens.slice(i, i + pageFetchCount));
@@ -128,14 +159,13 @@ export class CoinList extends ContractRunner {
             const promise = [];
             let index = 0;
             for (const fetchToken of fetchTokens) {
-                const indexInner = index;
-                promise.push(async () => {
-                    this.debug(`Fetch token balance ${pageFetchCount} from index ${indexInner} of ${tokens.length}`);
-                    return this.tokensBalanceContract.balances(userAddress, fetchToken);
-                });
+                const fn = async () => {
+                    return this.fetchBalances(userAddress, fetchToken, index);
+                };
+                promise.push(fn());
                 index += fetchToken.length;
             }
-            const balances = await this.promiseThrottle.addAll(promise);
+            const balances = await Promise.all(promise);
             this.debug('Fetch tokens balance end');
             const balancesResult: Record<string, bigint> = {};
             tokens.forEach((token, index) => {

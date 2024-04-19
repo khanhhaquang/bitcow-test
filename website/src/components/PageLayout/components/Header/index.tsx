@@ -74,19 +74,17 @@ const PageHeader: React.FC = () => {
       </div>
     ) : (
       <PixelButton
-        className="mr-[60px]"
-        width={177}
+        className="text-white"
+        width={246}
         height={44}
         borderWidth={4}
-        color="var(--bitcow-color-text-white)"
-        isSolid
         onClick={() => nav('/swap')}>
-        <span className="text-2xl uppercase text-bc-blue">Launch app</span>
+        <span className="text-2xl uppercase">Launch app</span>
       </PixelButton>
     );
   };
 
-  const rednerMobileMenu = () => {
+  const renderMobileMenu = () => {
     return (
       <div className="flex h-full flex-col justify-between bg-whiteBg">
         <div className="flex flex-col items-start">
@@ -118,31 +116,25 @@ const PageHeader: React.FC = () => {
 
   return (
     <Header className={cx('z-10 h-[140px] w-full bg-transparent px-0 pt-[59px] tablet:pt-0')}>
-      <div
-        className={cx(
-          'tablet:item-center relative top-0 left-0 mx-auto flex h-full items-start tablet:justify-between tablet:px-4'
-        )}>
-        <div className={cx('h-full pl-[60px] tablet:pl-0')}>
-          <Link to="/" className={cx('flex h-full items-center justify-center hover:-rotate-12')}>
-            <div
-              className={cx('hidden', {
-                'tablet:block': currentPageName !== 'Home'
-              })}>
-              <img src={LogoBitCow} className="block h-auto w-12" alt="Logo" />
-            </div>
-            <div
-              className={cx('block', {
-                'tablet:hidden': currentPageName !== 'Home'
-              })}>
-              <img src={LogoBitCow} className="block h-auto w-[81px]" alt="Logo" />
-            </div>
-          </Link>
-        </div>
+      <div className={cx('relative flex h-full items-center justify-between px-20')}>
+        <Link to="/" className={cx('flex h-full items-center justify-center hover:-rotate-12')}>
+          <div
+            className={cx('hidden', {
+              'tablet:block': currentPageName !== 'Home'
+            })}>
+            <img src={LogoBitCow} className="block h-auto w-12" alt="Logo" />
+          </div>
+          <div
+            className={cx('block', {
+              'tablet:hidden': currentPageName !== 'Home'
+            })}>
+            <img src={LogoBitCow} className="block h-auto w-[81px]" alt="Logo" />
+          </div>
+        </Link>
         {/* Desktop */}
         <div
           className={cx('block tablet:hidden', {
-            grow: currentPageName !== 'Home',
-            'ml-auto h-full': currentPageName === 'Home'
+            grow: currentPageName !== 'Home'
           })}>
           {renderDesktop()}
         </div>
@@ -158,15 +150,8 @@ const PageHeader: React.FC = () => {
         {/* Mobile - home page */}
         {currentPageName === 'Home' && (
           <div className="hidden h-full items-center tablet:flex">
-            <PixelButton
-              className=""
-              width={177}
-              height={44}
-              borderWidth={4}
-              color="var(--bitcow-color-text-white)"
-              isSolid
-              onClick={() => nav('/swap')}>
-              <span className="text-2xl uppercase text-bc-blue">Launch app</span>
+            <PixelButton width={246} height={44} borderWidth={4} onClick={() => nav('/swap')}>
+              <span className="text-2xl uppercase text-white">Launch app</span>
             </PixelButton>
           </div>
         )}
@@ -178,7 +163,7 @@ const PageHeader: React.FC = () => {
         placement="right"
         width="212px"
         onClose={() => setIsSideMenuOpen(false)}>
-        {rednerMobileMenu()}
+        {renderMobileMenu()}
         {/* <SideMenu
           currentPageName={currentPageName}
           onRouteSelected={() => setIsSideMenuOpen(false)}

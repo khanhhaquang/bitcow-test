@@ -7,6 +7,7 @@ import usePools from 'hooks/usePools';
 import styles from './Home2.module.scss';
 
 import useMerlinWallet from '../../hooks/useMerlinWallet';
+import { cn } from 'utils/cn';
 
 export default function Home2() {
   const { getTotalPoolsTVL, getTotalPoolsVolume } = usePools();
@@ -27,16 +28,19 @@ export default function Home2() {
   }, [getTotalPoolsVolume]);
 
   return (
-    <div className="flex w-full items-center justify-center tablet:!px-[20px] mobile:!px-[10px] [@media(max-width:2199px)]:flex-col [@media(max-width:2199px)]:px-[40px] [@media(max-width:2199px)]:pt-[40px]">
-      <div
+    <div className="flex w-full items-center justify-between px-20 tablet:!px-[20px] mobile:!px-[10px] [@media(max-width:2199px)]:flex-col">
+      <p
         className={classNames(
           styles.leftLabel,
           'tablet:text-[64px] mobile:!ml-0 mobile:!w-[170px] mobile:text-[32px] [@media(max-width:2199px)]:ml-[10%] [@media(max-width:2199px)]:self-start'
         )}>
         STABLE & CONCENTRATED
-      </div>
+      </p>
       <div className="flex flex-col items-center">
-        <img className={classNames(styles.center, 'tablet:w-full')} src="/images/homeCow.webp" />
+        <img
+          className={cn('h-[587px] w-[774px] max-w-[1757px] flex-1', 'tablet:w-full')}
+          src="/images/homeCow.webp"
+        />
         <div className="flex justify-center gap-x-12 tablet:flex-col tablet:justify-center tablet:gap-y-4">
           <div className="space-x-3">
             <img className="block" src="/images/tvl.png" alt="TVL" width={424} height={20} />
@@ -59,14 +63,8 @@ export default function Home2() {
           styles.rightLabel,
           'flex flex-col items-end tablet:!mr-0 tablet:!self-center mobile:!w-full [@media(max-width:2199px)]:mt-12 [@media(max-width:2199px)]:mr-[10%] [@media(max-width:2199px)]:self-end'
         )}>
-        <div className={classNames(styles.main, 'mobile:!text-[32px]')}>TO THE MOO!</div>
-        <img
-          width={142}
-          height={24}
-          src="/images/poweredBy.png"
-          alt="powered by smiley"
-          className={styles.poweredBy}
-        />
+        <div className={classNames(styles.main, 'mobile:!text-[32px]')}>TO THE MOOOO!</div>
+        <img width={252} height={43} src="/images/poweredBy.png" alt="powered by smiley" />
       </div>
     </div>
   );

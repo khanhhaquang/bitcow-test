@@ -1,0 +1,33 @@
+.leftLabel {
+  color: #fff;
+  text-shadow: 0px 7.061px 0px #005fad;
+  -webkit-text-stroke-width: 1.5;
+  -webkit-text-stroke-color: fff;
+  font-family: 'Pixter Display';
+  font-size: 88.159px;
+  line-height: 100%;
+  text-transform: uppercase;
+  width: 700px;
+  flex-shrink: 0;
+}
+
+.center {
+  max-width: 1757px;
+  flex: 1 1 0%;
+}
+
+.rightLabel {
+  width: 434px;
+  flex-shrink: 0;
+  .main {
+    color: var(--White, #fff);
+    text-align: right;
+    text-shadow: 0px 7.061px 0px #005fad;
+    -webkit-text-stroke-width: 1.5;
+    -webkit-text-stroke-color: var(--White, #fff);
+    font-family: 'Pixter Display';
+    font-size: 88.159px;
+    line-height: 100%;
+    text-transform: uppercase;
+  }
+}

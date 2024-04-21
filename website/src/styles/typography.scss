@@ -1,6 +1,35 @@
 @font-face {
-  font-family: "Neue Pixel Grotesk";
-  src: local("Neue Pixel Grotesk"), url("../resources/fonts/NeuePixelGrotesk/Neue-Pixel-Grotesk.otf") format("truetype");
+  font-family: 'Neue Pixel Grotesk';
+  src: local('Neue Pixel Grotesk'),
+    url('../resources/fonts/NeuePixelGrotesk/Neue-Pixel-Grotesk.otf') format('truetype');
   font-weight: normal;
   font-display: fallback;
+}
+
+@font-face {
+  font-family: 'Micro';
+  src: url('../resources/fonts/micro-webfont.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pixter Display';
+  src: url('../resources/fonts/Pixter Display.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pixter Granular Bold';
+  src: url('../resources/fonts/pixter_granular_bold-webfont.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pixter Granular';
+  src: url('../resources/fonts/pixter_granular-webfont.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }

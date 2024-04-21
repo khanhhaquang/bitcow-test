@@ -26,13 +26,17 @@ export default function PixelButton({
   return (
     <button
       className={classNames(
-        'relative flex cursor-pointer items-center justify-center',
+        'relative flex cursor-pointer items-center justify-center text-white',
+        'shadow-[2px_2px_0px_0px_rgba(0,0,0,0.05),_4px_4px_0px_0px_rgba(0,0,0,0.10)]',
+        'hover:!bg-white/30 active:!bg-white/10 active:!text-black/20',
         { 'cursor-not-allowed opacity-60': disabled },
         { 'cursor-wait': isLoading },
+        { 'text-black': isSolid },
         className
       )}
-      style={{ width, height, color: isSolid ? 'black' : color }}
-      onClick={!disabled ? onClick : undefined}
+      disabled={disabled}
+      style={{ width, height, ...rest.style }}
+      onClick={onClick}
       {...rest}>
       <div
         className="absolute left-0"
@@ -45,7 +49,8 @@ export default function PixelButton({
           borderStyle: 'solid',
           borderColor: color,
           backgroundColor: isSolid ? color : 'transparent'
-        }}></div>
+        }}
+      />
       <div
         className="absolute top-0"
         style={{
@@ -57,10 +62,9 @@ export default function PixelButton({
           borderStyle: 'solid',
           borderColor: color,
           backgroundColor: isSolid ? color : 'transparent'
-        }}></div>
-      <span className="z-10 flex w-full items-center justify-center">
-        {children} {isLoading && '...'}
-      </span>
+        }}
+      />
+      {children} {isLoading && '...'}
     </button>
   );
 }

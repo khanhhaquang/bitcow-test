@@ -26,7 +26,7 @@ const ExternalLink = ({ href, children }: { href: string; children: any }) => {
 
 const SocialBtnGroups = () => {
   return (
-    <div className="flex items-center gap-10 tablet:w-full tablet:justify-center">
+    <div className="flex items-center gap-x-4 tablet:w-full tablet:justify-center">
       {/* <ExternalLink href={URLs.medium}>
         <MediumIcon />
       </ExternalLink>
@@ -55,16 +55,10 @@ const PageFooter: React.FC<TProps> = ({ className }) => {
     <Fragment>
       <Footer
         className={classNames(
-          'z-10 flex justify-between bg-transparent tablet:flex-col-reverse tablet:items-center tablet:gap-y-2 tablet:pb-12 tablet:pt-24',
+          'z-10 flex justify-between bg-transparent px-20 pb-20 tablet:flex-col-reverse tablet:items-center tablet:gap-y-2 tablet:pb-12 tablet:pt-24',
           className
         )}>
-        <img
-          className="mr-auto tablet:mr-0"
-          src="/images/copyright.png"
-          width={306}
-          height={25}
-          alt="copyright"
-        />
+        <img src="/images/copyright.png" width={306} height={25} alt="copyright" />
         <SocialBtnGroups />
       </Footer>
     </Fragment>

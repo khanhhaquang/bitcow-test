@@ -28,7 +28,7 @@ export default function Home2() {
   }, [getTotalPoolsVolume]);
 
   return (
-    <div className="flex w-full items-center justify-between px-20 tablet:!px-[20px] mobile:!px-[10px] [@media(max-width:2199px)]:flex-col">
+    <div className="relative flex w-full items-center justify-between px-20 tablet:!px-[20px] mobile:!px-[10px] [@media(max-width:2199px)]:flex-col">
       <p
         className={classNames(
           styles.leftLabel,
@@ -36,7 +36,7 @@ export default function Home2() {
         )}>
         STABLE & CONCENTRATED
       </p>
-      <div className="flex flex-col items-center">
+      <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
         <img
           className={cn('h-[587px] w-[774px] max-w-[1757px] flex-1', 'tablet:w-full')}
           src="/images/homeCow.webp"
@@ -63,7 +63,7 @@ export default function Home2() {
           styles.rightLabel,
           'flex flex-col items-end tablet:!mr-0 tablet:!self-center mobile:!w-full [@media(max-width:2199px)]:mt-12 [@media(max-width:2199px)]:mr-[10%] [@media(max-width:2199px)]:self-end'
         )}>
-        <div className={classNames(styles.main, 'mobile:!text-[32px]')}>TO THE MOOOO!</div>
+        <p className={classNames(styles.main, 'mobile:!text-[32px]')}>TO THE MOOOO!</p>
         <img width={252} height={43} src="/images/poweredBy.png" alt="powered by smiley" />
       </div>
     </div>

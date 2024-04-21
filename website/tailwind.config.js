@@ -1,4 +1,5 @@
 const plugin = require('tailwindcss/plugin');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   darkMode: 'class',
@@ -52,18 +53,18 @@ module.exports = {
             50: 'rgba(255, 255, 255, 0.5)',
             60: 'rgba(255, 255, 255, 0.6)',
             70: 'rgba(255, 255, 255, 0.7)',
-            80: 'rgba(255, 255, 255, 0.8)',
+            80: 'rgba(255, 255, 255, 0.8)'
           },
           main: 'var(--bitcow-color-text-main)',
           red: 'var(--bitcow-color-text-red)',
           orange: 'var(--bitcow-color-text-orange)',
           gold: 'var(--bitcow-color-text-gold)',
-          blue: '#0083FE',
+          blue: '#0083FE'
         },
 
         'bc-grey-transparent': 'rgba(0, 0, 0, 0.05)',
         'bc-grey-transparent2': 'rgba(0, 0, 0, 0.1)',
-        'bc-input': 'rgba(0, 0, 0, 0.2)',
+        'bc-input': 'rgba(0, 0, 0, 0.2)'
       },
       height: {
         13: '3.25rem',
@@ -88,14 +89,14 @@ module.exports = {
         accountBg: 'url(resources/img/accountBg.svg)',
 
         'bc-swap': 'url(resources/img/swapBg.svg)',
-        'bc-pool': 'url(resources/img/poolBg.svg)',
+        'bc-pool': 'url(resources/img/poolBg.svg)'
       }
     },
     screens: {
       desktop: { max: '99999px' }, // desktop first
       laptop: { max: '1440px' },
       tablet: { max: '1024px' },
-      mobile: { max: '768px' },
+      mobile: { max: '768px' }
     },
     backgroundColor: (theme) => ({
       ...theme('colors'),
@@ -113,11 +114,16 @@ module.exports = {
       home: '-4px 8px 32px rgba(211, 207, 230, 0.4)',
       dropdown: '0px 4px 8px rgba(0, 0, 0, 0.1)',
 
-      'bc-swap': '18px 18px 0px 0px rgba(0, 0, 0, 0.05), 12px 12px 0px 0px rgba(0, 0, 0, 0.10), 6px 6px 0px 0px rgba(0, 0, 0, 0.10)',
+      'bc-swap':
+        '18px 18px 0px 0px rgba(0, 0, 0, 0.05), 12px 12px 0px 0px rgba(0, 0, 0, 0.10), 6px 6px 0px 0px rgba(0, 0, 0, 0.10)'
     },
     fontFamily: {
       Furore: 'Furore, sans-serif',
-      Rany: 'Rany, sans-serif'
+      Rany: 'Rany, sans-serif',
+      micro: ['Micro', ...defaultTheme.fontFamily.sans],
+      pd: ['Pixter Display', ...defaultTheme.fontFamily.sans],
+      pgb: ['Pixter Granular Bold', ...defaultTheme.fontFamily.sans],
+      pg: ['Pixter Granular', ...defaultTheme.fontFamily.sans]
     }
   },
   plugins: [

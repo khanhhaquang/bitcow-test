@@ -115,7 +115,7 @@ const PageHeader: React.FC = () => {
   };
 
   return (
-    <Header className={cx('z-10 h-[140px] w-full bg-transparent px-0 pt-[59px] tablet:pt-0')}>
+    <Header className={cx('z-10 h-[140px] w-full bg-transparent px-0 pt-12 tablet:pt-0')}>
       <div className={cx('relative flex h-full items-center justify-between px-20')}>
         <Link to="/" className={cx('flex h-full items-center justify-center hover:-rotate-12')}>
           <div

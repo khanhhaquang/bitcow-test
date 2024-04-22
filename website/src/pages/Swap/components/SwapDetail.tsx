@@ -1,7 +1,7 @@
 import { TokenInfo } from 'bitcow';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Collapse } from 'components/Antd';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
@@ -27,6 +27,7 @@ const SwapDetail = ({
   fromUiAmt: number;
   impact: number;
 }) => {
+  let [openPanel, setOpenPanel] = useState('');
   const [tokenAmountFormatter] = useTokenAmountFormatter();
   const { values } = useFormikContext<ISwapSettings>();
   const [swapRate, outputUiAmt, priceImpact, minimumOutput] = useMemo(() => {
@@ -108,7 +109,9 @@ const SwapDetail = ({
     <div className={classNames('mt-9', styles.collapse)}>
       <Collapse
         ghost
-        defaultActiveKey={['1']}
+        accordion={false}
+        onChange={(v) => setOpenPanel(v as string)}
+        defaultActiveKey={openPanel}
         expandIconPosition="end"
         expandIcon={({ isActive }) => (
           <div>

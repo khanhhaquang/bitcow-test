@@ -39,16 +39,13 @@ const AppPageDecorators = () => {
         height={87}
         rootClassName="absolute right-0 top-1/3"
       />
-      <Image
-        src="/images/clouds/cloud5.webp"
-        width={350}
-        height={58}
-        rootClassName="absolute left-0 top-1/3"
-      />
-      <Image src="/images/clouds/cloud6.webp" width={305} height={128} rootClassName="absolute" />
 
-      <div className="absolute top-3/4 right-1/3 h-[150px] w-[400px]">
+      <div className="absolute left-0 top-1/3 h-[100px] w-[350px]">
         <SmallCloudRive />
+      </div>
+
+      <div className="absolute right-[20%] top-3/4 h-[150px] w-[400px]">
+        <Image src="/images/clouds/cloud6.webp" width={305} height={128} />
       </div>
     </>
   );

@@ -35,12 +35,13 @@ const TokenSwap = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
   const toToken = values.currencyTo?.token;
-  const fromUiAmt = values.currencyFrom?.amount;
+  const fromUiAmt = values.currencyFrom?.amount || 1;
   const swapRate = values.currencyTo?.amount;
   const { isTablet } = useBreakpoint('tablet');
   const [priceImpact, setPriceImpact] = useState(0);
   const [uiBalance, isReady] = useTokenBalance(values.currencyFrom.token);
   const { currentNetwork } = useNetwork();
+
   const sufficientBalance = useMemo(() => {
     if (!wallet || (!uiBalance && isReady)) return false;
     return uiBalance >= fromUiAmt;

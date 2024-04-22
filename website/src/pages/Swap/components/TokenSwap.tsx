@@ -35,7 +35,7 @@ const TokenSwap = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const fromToken = values.currencyFrom?.token;
   const toToken = values.currencyTo?.token;
-  const fromUiAmt = values.currencyFrom?.amount || 1;
+  const fromUiAmt = values.currencyFrom?.amount;
   const swapRate = values.currencyTo?.amount;
   const { isTablet } = useBreakpoint('tablet');
   const [priceImpact, setPriceImpact] = useState(0);

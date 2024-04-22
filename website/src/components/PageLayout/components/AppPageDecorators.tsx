@@ -10,6 +10,12 @@ const AppPageDecorators = () => {
     autoplay: true
   });
 
+  const { RiveComponent: BigCloudRive } = useRive({
+    src: '/riv/big-cloud.riv',
+    stateMachines: 'State Machine 1',
+    autoplay: true
+  });
+
   if (!['Swap', 'Pools'].includes(currentPageName)) return null;
 
   return (
@@ -31,7 +37,7 @@ const AppPageDecorators = () => {
         className=" top-4"
         width={65}
         height={23}
-        rootClassName="absolute top-3/4 left-1/3"
+        rootClassName="absolute top-3/4 left-1/2"
       />
       <Image
         src="/images/clouds/cloud4.webp"
@@ -40,12 +46,12 @@ const AppPageDecorators = () => {
         rootClassName="absolute right-0 top-1/3"
       />
 
-      <div className="absolute left-0 top-1/3 h-[100px] w-[350px]">
+      <div className="absolute -left-1 top-1/3 h-[200px] w-[350px]">
         <SmallCloudRive />
       </div>
 
-      <div className="absolute right-[20%] top-3/4 h-[150px] w-[400px]">
-        <Image src="/images/clouds/cloud6.webp" width={305} height={128} />
+      <div className="absolute top-1/2 right-[15%] h-[300px] w-[400px]">
+        <BigCloudRive />
       </div>
     </>
   );

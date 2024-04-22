@@ -34,7 +34,7 @@ const PageHeader: React.FC = () => {
           className={'group !bg-transparent'}>
           <Link
             to={path || '/'}
-            className="tablet: text-[24px] font-normal uppercase leading-none !text-bc-white-60 group-hover:!text-bc-white tablet:!text-color_text_2">
+            className="font-micro text-2xl uppercase leading-none !text-bc-white-60 group-hover:!text-bc-white tablet:!text-color_text_2">
             {name}
           </Link>
         </Menu.Item>
@@ -44,42 +44,20 @@ const PageHeader: React.FC = () => {
 
   const renderDesktop = () => {
     return currentPageName !== 'Home' ? (
-      <div className="flex w-full items-center">
-        <div className="h-full grow">
-          <Menu
-            mode="horizontal"
-            theme="dark"
-            className={cx(
-              styles.menu,
-              'flex h-full w-full min-w-[200px] justify-center !bg-transparent'
-            )}
-            selectedKeys={[currentPageName]}>
-            {renderNavItems()}
-          </Menu>
-        </div>
-        <div className="relative flex h-full items-center justify-center pr-[40px]">
-          {/*
-          <img width={132} height={27} src="/images/bitSmiley.svg" alt="bitSmiley" />
-            */}
-          <div className="relative ml-9">
-            <WalletConnector />
-            <div className="absolute top-full">
-              <NetworkSelect className="mt-3" />
-            </div>
-          </div>
-          {/*
-          <ThemeToggler />
-            */}
+      <div className="relative flex w-full grow items-center justify-end pr-10">
+        <WalletConnector />
+        <div className="absolute top-full">
+          <NetworkSelect className="mt-3" />
         </div>
       </div>
     ) : (
       <PixelButton
-        className="text-white"
+        className="font-micro text-2xl uppercase"
         width={246}
         height={44}
         borderWidth={4}
         onClick={() => nav('/swap')}>
-        <span className="text-2xl uppercase">Launch app</span>
+        Launch app
       </PixelButton>
     );
   };
@@ -132,6 +110,20 @@ const PageHeader: React.FC = () => {
           </div>
         </Link>
         {/* Desktop */}
+        {currentPageName !== 'Home' && (
+          <div className="absolute left-1/2 z-10 h-full grow -translate-x-1/2 tablet:hidden">
+            <Menu
+              mode="horizontal"
+              theme="dark"
+              className={cx(
+                styles.menu,
+                'flex h-full w-full min-w-[200px] justify-center gap-x-6 !bg-transparent'
+              )}
+              selectedKeys={[currentPageName]}>
+              {renderNavItems()}
+            </Menu>
+          </div>
+        )}
         <div
           className={cx('block tablet:hidden', {
             grow: currentPageName !== 'Home'
@@ -150,9 +142,13 @@ const PageHeader: React.FC = () => {
         {/* Mobile - home page */}
         {currentPageName === 'Home' && (
           <div className="hidden h-full items-center tablet:flex">
-            <PixelButton width={246} height={44} borderWidth={4} onClick={() => nav('/swap')}>
-              <span className="text-2xl uppercase text-white">Launch app</span>
-            </PixelButton>
+            <PixelButton
+              className="font-micro text-2xl uppercase text-white"
+              width={246}
+              height={44}
+              borderWidth={4}
+              onClick={() => nav('/swap')}
+            />
           </div>
         )}
       </div>

@@ -17,10 +17,10 @@ import { bigintTokenBalanceToNumber } from '../../../../utils/formatter';
 
 interface TProps {
   actionType: 'currencyTo' | 'currencyFrom';
-  dismissiModal: () => void;
+  onClose: () => void;
 }
 
-const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
+const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
   const { tokenList, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();
   const { coinPrices: coinInPools } = usePools();
@@ -51,9 +51,9 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
       if (tokenBalances[token.address] === undefined) {
         setNeedBalanceTokens([token.address]);
       }
-      dismissiModal();
+      onClose();
     },
-    [actionType, values, setFieldValue, dismissiModal, setNeedBalanceTokens, tokenBalances]
+    [actionType, values, setFieldValue, onClose, setNeedBalanceTokens, tokenBalances]
   );
 
   const getFilteredTokenListWithBalance = useCallback(() => {
@@ -94,12 +94,11 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
 
   const renderHeaderSearch = useMemo(() => {
     return (
-      <div className="flex flex-col gap-2  tablet:gap-0">
-        <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">Select a token</div>
-        <hr className="my-4 h-[1px] border-0 bg-bc-white-20 tablet:my-0" />
-        <div className="relative tablet:mx-5 tablet:mt-6 tablet:mb-4">
+      <div className="flex flex-col font-pg">
+        <div className="border-b border-white/20 pb-3 font-micro text-2xl">Token</div>
+        <div className="relative mt-6">
           <Input
-            className="h-15 w-full !bg-bc-input py-5 px-4 text-base leading-4 text-bc-white outline-none tablet:py-[18px] tablet:text-base tablet:leading-4"
+            className="h-9 w-full !bg-black/10 p-2 text-lg text-bc-white outline-none"
             value={filter}
             bordered={false}
             onChange={(e) => setFilter(e.target.value.toLowerCase())}
@@ -107,7 +106,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
           />
           <SearchIcon className="absolute top-1/2 right-[14px] -translate-y-1/2 fill-bc-white-60" />
         </div>
-        <div className="mt-2 mb-2 flex flex-wrap gap-2 tablet:px-5">
+        <div className="my-3 flex flex-wrap gap-2">
           {commonCoins.map((coin) => (
             <CommonCoinButton
               coin={coin}
@@ -123,14 +122,14 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   const renderTokenList = useMemo(() => {
     return (
       <List
-        className="max-h-[354px] overflow-y-scroll border-2 border-bc-orange bg-bc-grey-transparent2 no-scrollbar tablet:mx-5 tablet:mb-6"
+        className="max-h-[354px] overflow-y-scroll border border-white/40 bg-black/10 no-scrollbar"
         rowKey={(item) => `list-row-${(item as TokenInfo).address}`}>
         <VirtualList
           data={tokenListBalance || []}
           itemKey={(item) => `list-item-${item.token.address}`}>
           {(item) => (
             <List.Item
-              className="cursor-pointer !border-0 !px-0 !py-2 hover:bg-bc-white-10"
+              className="cursor-pointer !border-0 !px-0 !py-2 font-pg hover:bg-white/10 active:bg-black/10"
               onClick={() => onSelectToken(item.token)}>
               <CoinRow item={item} />
             </List.Item>
@@ -141,7 +140,7 @@ const CoinSelector: React.FC<TProps> = ({ dismissiModal, actionType }) => {
   }, [tokenListBalance, onSelectToken]);
 
   return (
-    <div className="flex flex-col gap-2 bg-bc-swap p-5 text-bc-white">
+    <div className="flex flex-col gap-2 bg-bc-swap px-4 pt-4 pb-6 text-white">
       {renderHeaderSearch}
       {renderTokenList}
     </div>

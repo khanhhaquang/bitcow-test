@@ -12,6 +12,7 @@
     "@react-three/drei": "^9.52.2",
     "@react-three/fiber": "^8.10.0",
     "@reduxjs/toolkit": "^1.8.5",
+    "@rive-app/react-canvas": "^4.8.9",
     "@types/three": "^0.148.0",
     "@web3-react/coinbase-wallet": "^8.2.3",
     "@web3-react/core": "8.2.3",

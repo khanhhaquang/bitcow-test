@@ -1,8 +1,8 @@
 import { TokenInfo } from 'bitcow';
-import classNames from 'classnames';
 
 import CoinIcon from 'components/CoinIcon';
 import { ReactComponent as CoinSelectIcon } from 'resources/icons/coinSelect.svg';
+import { cn } from 'utils/cn';
 
 const CoinSelectButton = ({
   className = '',
@@ -17,8 +17,9 @@ const CoinSelectButton = ({
 }) => {
   return (
     <div
-      className={classNames(
-        'flex w-fit cursor-pointer items-center gap-2 border border-bc-white-60 bg-bc-white-10 fill-color_text_1 p-2 text-lg font-bold  leading-4',
+      className={cn(
+        'flex w-fit cursor-pointer items-center gap-2 p-3 font-pg text-4xl',
+        'hover:bg-white/10',
         {
           'pointer-events-none cursor-not-allowed': isDisabled
         },
@@ -26,14 +27,14 @@ const CoinSelectButton = ({
       )}
       onClick={onClick}>
       {token?.symbol ? (
-        <div className="flex items-center gap-2 text-bc-white">
-          <CoinIcon token={token} size={20} />
+        <div className="flex items-center gap-x-2 text-4xl uppercase text-white">
+          <CoinIcon token={token} size={26} />
           {token.symbol}
         </div>
       ) : (
-        <div className="small">--</div>
+        <p className="small text-4xl">--</p>
       )}
-      <CoinSelectIcon />
+      <CoinSelectIcon width={24} height={24} />
     </div>
   );
 };

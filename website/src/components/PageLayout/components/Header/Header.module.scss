@@ -20,7 +20,7 @@
     }
 
     .ant-menu-item {
-      @apply flex items-center border-0 pl-28 tablet:m-0 tablet:mb-10 tablet:pl-0 tablet:text-lg #{!important};
+      @apply flex items-center border-0 tablet:m-0 tablet:mb-10 tablet:pl-0 tablet:text-lg #{!important};
     }
 
     .ant-menu-item::after,

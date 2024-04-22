@@ -14,7 +14,7 @@ import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import useTokenBalance from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
-import { ReactComponent as PixelCloseIcon } from 'resources/icons/pixelClose.svg';
+import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 
 import CoinSelectButton from './CoinSelectButton';
 import CoinSelector from './CoinSelector';
@@ -62,7 +62,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
   );
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-y-1.5">
       <div className="flex w-full justify-between">
         <CoinSelectButton
           onClick={() => setIsCoinSelectorVisible(true)}
@@ -76,21 +76,17 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           maxDecimals={values[actionType]?.token?.decimals || 9}
           isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
-          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl font-bold text-bc-white placeholder:text-bc-white-60"
+          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-4xl text-white placeholder:text-white/60"
           inputAmount={selectedCurrency?.amount || 0}
           onAmountChange={onAmountChange}
         />
       </div>
-      <div
-        className={cx(
-          // styles.currencyInput,
-          'flex justify-between  text-color_text_3'
-        )}>
-        <small className="flex items-end text-sm text-bc-white-60">
+      <div className="flex justify-between text-color_text_3">
+        <small className="flex items-end text-lg text-white/60">
           Balance:
           <span
             className={classNames('ml-1', {
-              'pointer-events-auto cursor-pointer text-bc-white-60 underline':
+              'pointer-events-auto cursor-pointer text-white/60 underline':
                 actionType === 'currencyFrom' && !isDisableAmountInput && isReady
             })}
             onClick={() => {
@@ -104,20 +100,17 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
             {isReady ? tokenAmountFormatter(uiBalance, selectedToken) : 0}
           </span>
         </small>
-        <small className="text-sm text-bc-white-60">
-          ~${getTokenBalanceInUSD(uiBalance, selectedToken)}
-        </small>
+        <p className="text-lg text-white/60">~${getTokenBalanceInUSD(uiBalance, selectedToken)}</p>
       </div>
       <BitcowModal
         onCancel={() => setIsCoinSelectorVisible(false)}
-        className=""
         wrapClassName={styles.modal}
         open={isCoinSelectorVisible}
         bodyStyle={{ padding: 0 }}
-        closeIcon={<PixelCloseIcon className="relative top-[24px]" />}>
+        closeIcon={<CloseIcon className="top-4" />}>
         <CoinSelector
           actionType={actionType}
-          dismissiModal={() => setIsCoinSelectorVisible(!isCoinSelectorVisible)}
+          onClose={() => setIsCoinSelectorVisible(!isCoinSelectorVisible)}
         />
       </BitcowModal>
     </div>

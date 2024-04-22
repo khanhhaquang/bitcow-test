@@ -1,30 +1,33 @@
-import classNames from 'classnames';
 import { ReactNode, useEffect, useState } from 'react';
 
 import { ReactComponent as SelectUnfoldIcon } from 'resources/icons/selectUnfold.svg';
 
 import useNetwork from '../hooks/useNetwork';
 import { useEvmConnectContext, WalletType } from '../wallet';
+import { cn } from 'utils/cn';
 
 function SelectRow({
   icon,
   label,
   suffix,
+  className,
   isHoverEnabled
 }: {
   icon: string;
   label: string;
   suffix?: ReactNode;
   isHoverEnabled?: boolean;
+  className?: string;
 }) {
   return (
     <div
-      className={classNames(
-        'flex h-[28px] w-[133px] cursor-pointer items-center justify-start gap-x-[3px] border border-transparent bg-bc-white-10 px-2 py-1',
-        { 'hover:border-bc-white-60': isHoverEnabled }
+      className={cn(
+        'flex cursor-pointer items-center justify-start gap-x-2 bg-transparent p-1.5',
+        isHoverEnabled ? 'bg-white/5 hover:bg-white/10 active:bg-white/5 active:text-black/50' : '',
+        className
       )}>
-      <img className="h-[15px] w-[15px] rounded-full" src={icon} alt={`${label} icon`} />
-      <div className="truncate text-lg">{label}</div>
+      <img className="h-5 w-5 rounded-full" src={icon} alt={`${label} icon`} />
+      <div className="truncate font-pg text-lg">{label}</div>
       {suffix && <div className="ml-auto">{suffix}</div>}
     </div>
   );
@@ -75,7 +78,7 @@ export default function Select() {
             return (
               <div
                 key={network.chainConfig.chainId}
-                className="mt-[2px]"
+                className="mt-0.5"
                 onClick={async () => {
                   if (await setCurrentChain(network.chainConfig)) {
                     setCurrentNetwork(network);

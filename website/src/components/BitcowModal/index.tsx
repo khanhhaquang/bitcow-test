@@ -25,7 +25,11 @@ const BitcowModal: React.FC<TProps> = ({ className, ...rest }) => {
   return (
     <Fragment>
       {!isTablet ? (
-        <Modal className={cx('block tablet:hidden', className)} footer={null} {...rest} />
+        <Modal
+          className={cx('block tablet:hidden [&>.ant-modal-content]:bg-transparent', className)}
+          footer={null}
+          {...rest}
+        />
       ) : (
         <Drawer
           open={rest.open}

@@ -10,9 +10,9 @@ import { CancelIcon } from 'resources/icons';
 import AccountDetails from './components/AccountDetails';
 import styles from './WalletConnector.module.scss';
 
-const WALLET_WIDTH = 224;
+const WALLET_WIDTH = 246;
 const WALLET_HEIGHT = 46;
-const WALLET_BORDER_WIDTH = 3;
+const WALLET_BORDER_WIDTH = 4;
 
 const WalletConnector = () => {
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
@@ -52,18 +52,20 @@ const WalletConnector = () => {
         width={WALLET_WIDTH}
         borderWidth={WALLET_BORDER_WIDTH}
         onClick={() => setIsDisconnectModalOpen(!isDisconnectModalOpen)}
-        className="bc-wallet-connector-active group text-2xl uppercase">
+        className="bc-wallet-connector-active group w-[246px] text-2xl uppercase">
         {walletAddressEllipsis(wallet?.accounts[0].evm || '')}
         {isDisconnectModalOpen && (
-          <div className="absolute" style={{ top: WALLET_HEIGHT - WALLET_BORDER_WIDTH, left: 0 }}>
+          <div
+            className="absolute z-10"
+            style={{ top: WALLET_HEIGHT - WALLET_BORDER_WIDTH, left: 0 }}>
             <PixelButton
               width={WALLET_WIDTH}
               height={WALLET_HEIGHT}
               borderWidth={WALLET_BORDER_WIDTH}
               onClick={() => disconnect()}
               isSolid={true}
-              className="uppercase">
-              <span className="text-bc-blue">Disconnect</span>
+              className="uppercase text-bc-blue">
+              Disconnect
             </PixelButton>
           </div>
         )}

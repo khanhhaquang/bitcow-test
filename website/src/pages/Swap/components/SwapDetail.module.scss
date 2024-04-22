@@ -3,21 +3,18 @@
     .ant-collapse {
       .ant-collapse-item {
         .ant-collapse-header {
-          @apply text-white py-6 px-5 text-xs;
+          @apply border-t border-b border-white/20 py-3 px-0 text-sm text-white;
           .ant-collapse-expand-icon {
-            @apply font-bold text-sm;
+            @apply text-sm;
+          }
+          .ant-collapse-arrow {
+            @apply right-0;
           }
         }
         .ant-collapse-content-box {
-          @apply pt-0 px-5 #{!important};
+          @apply px-0 pt-0 #{!important};
         }
       }
     }
   }
-}
-
-.priceImpact {
-  display: inline-block;
-  padding: 2px 4px;
-  @apply text-white bg-bc-red;
 }

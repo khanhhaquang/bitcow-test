@@ -1,16 +1,16 @@
 import { TokenInfo } from 'bitcow';
 import classNames from 'classnames';
-import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { useCallback, useMemo } from 'react';
 
 import { Collapse } from 'components/Antd';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
-import { ReactComponent as MoreIcon } from 'resources/icons/unfoldDetails.svg';
 
 import styles from './SwapDetail.module.scss';
 
 import { ISwapSettings } from '../types';
+import { DropDownArrowIcon } from 'resources/icons';
+import { cn } from 'utils/cn';
 
 const { Panel } = Collapse;
 
@@ -66,16 +66,15 @@ const SwapDetail = ({
       },
       {
         label: 'Price Impact',
-        value: priceImpact,
-        className: styles.priceImpact
+        value: priceImpact
       }
     ];
     return (
-      <div className={classNames('flex flex-col gap-1')}>
+      <div className={classNames('mt-2.5 flex flex-col gap-y-2.5')}>
         {details.map((detail) => (
           <div className="flex justify-between text-xs text-bc-white" key={detail.label}>
-            <div className="">{detail.label}</div>
-            <div className={detail.className}>{detail.value}</div>
+            <span>{detail.label}</span>
+            <span>{detail.value}</span>
           </div>
         ))}
       </div>
@@ -94,11 +93,11 @@ const SwapDetail = ({
       }
     ];
     return (
-      <div className={classNames('flex flex-col gap-1')}>
+      <div className={classNames('mt-2.5 flex flex-col gap-y-2.5')}>
         {details.map((detail) => (
-          <div className="flex justify-between text-xs text-bc-white-60" key={detail.label}>
-            <div className="">{detail.label}</div>
-            <div className="">{detail.value}</div>
+          <div className="flex justify-between text-xs text-white" key={detail.label}>
+            <span>{detail.label}</span>
+            <span>{detail.value}</span>
           </div>
         ))}
       </div>
@@ -106,14 +105,14 @@ const SwapDetail = ({
   }, [fromToken.symbol, minimumOutput, toToken.symbol, values.slipTolerance]);
 
   return (
-    <div className={classNames('mt-2 bg-bc-grey-transparent2', styles.collapse)}>
+    <div className={classNames('mt-9', styles.collapse)}>
       <Collapse
         ghost
         defaultActiveKey={['1']}
         expandIconPosition="end"
         expandIcon={({ isActive }) => (
           <div>
-            <MoreIcon className={cx(isActive ? '-rotate-180' : '0')} />
+            <DropDownArrowIcon className={cn('text-white', isActive ? '-rotate-180' : '0')} />
           </div>
         )}>
         <Panel
@@ -121,7 +120,6 @@ const SwapDetail = ({
           key="1"
           className="text-bc-white">
           {renderOutput()}
-          <hr className="my-4 h-[1px] w-full border-0 bg-bc-white-10" />
           {renderDetails()}
         </Panel>
       </Collapse>

@@ -6,20 +6,19 @@ import BitcowModal from 'components/BitcowModal';
 import Button from 'components/Button';
 import Card from 'components/Card';
 import PixelButton from 'components/PixelButton';
-import PixelDivider from 'components/PixelDivider';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import useTokenBalance from 'hooks/useTokenBalance';
 import { SettingsIcon } from 'resources/icons';
 import { ReactComponent as CoinSwapIcon } from 'resources/icons/coinSwap.svg';
-import { ReactComponent as PiexlCloseIcon } from 'resources/icons/pixelClose.svg';
+import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 import { openErrorNotification } from 'utils/notifications';
 
 import CurrencyInput from './CurrencyInput';
 import SwapDetail from './SwapDetail';
 import SwapSetting from './SwapSetting';
 
-import useNetwork from '../../../hooks/useNetwork';
+import useNetwork from 'hooks/useNetwork';
 import { ISwapSettings } from '../types';
 
 const TokenSwap = () => {
@@ -154,7 +153,7 @@ const TokenSwap = () => {
     } else if ((!uiBalance && isReady) || !fromUiAmt) {
       return 'SWAP';
     } else if (!sufficientBalance) {
-      return 'Insufficent Balance';
+      return 'Insufficient Balance';
     } else {
       return 'SWAP';
     }
@@ -162,11 +161,13 @@ const TokenSwap = () => {
 
   const renderCardHeader = () => (
     <Fragment>
-      <div className="relative flex w-full items-center text-bc-white">
-        <div className="leading-0 mr-auto text-[36px]">Swap</div>
+      <div className="relative flex w-full items-center">
+        <h2 className="mr-auto font-micro text-4xl text-white">Swap</h2>
         <Tooltip title="Setting" zIndex={isTablet ? -1 : 10} openClassName="tablet:hidden">
-          <button className="" onClick={() => setIsSettingsOpen(true)}>
-            <SettingsIcon />
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="h-9 w-9 bg-transparent p-0.5 text-white hover:bg-white/10 active:bg-white/10 active:text-black/20">
+            <SettingsIcon width={34} height={34} />
           </button>
         </Tooltip>
       </div>
@@ -174,30 +175,32 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[512px] flex-col bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none py-6 px-5 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
+    <Card className="dark-stroke-white relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none p-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
       {renderCardHeader()}
-      <div className="mt-5 flex w-full flex-col tablet:mt-4">
+      <div className="flex w-full flex-col font-pg">
         <div className="relative flex flex-col">
-          <div className="relative border-t-2 border-l-2 border-r-2 border-bc-orange bg-bc-grey-transparent p-4">
-            <div className="mb-2 text-xs uppercase text-bc-white-60">Pay</div>
+          <div className="relative">
+            <div className="mb-2 font-pg text-lg text-white/60">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
-            <PixelDivider
-              className="absolute left-[-1px] bottom-0 right-[-1px] translate-y-1/2"
-              color="var(--bitcow-color-text-orange)"
-            />
           </div>
-          <Button
-            variant="icon"
-            className="group absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-transparent p-0"
-            onClick={onClickSwapToken}>
-            <CoinSwapIcon />
-          </Button>
-          <div className="border-b-2 border-l-2 border-r-2 border-bc-orange bg-bc-grey-transparent p-4">
-            <div className="mb-2 text-xs uppercase text-bc-white-60">RECEIVE</div>
+          <div className="relative my-1.5 flex w-full items-center justify-between">
+            <span className="h-[1.5px] flex-1 bg-white/20" />
+            <div className="px-3">
+              <Button
+                variant="icon"
+                className="bg-transparent hover:opacity-90 active:opacity-50"
+                onClick={onClickSwapToken}>
+                <CoinSwapIcon />
+              </Button>
+            </div>
+            <span className="h-[1.5px] flex-1 bg-white/20" />
+          </div>
+          <div className="relative">
+            <div className="mb-2 font-pg text-lg text-white/60">Receive</div>
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>
-        {swapRate > 0 && fromUiAmt > 0 && fromToken && toToken && (
+        {fromToken && toToken && (
           <SwapDetail
             swapRateQuote={swapRate}
             impact={priceImpact}
@@ -206,29 +209,24 @@ const TokenSwap = () => {
             fromUiAmt={fromUiAmt}
           />
         )}
-        <div className="flex justify-center">
-          <PixelButton
-            isLoading={isSubmitting}
-            width={206}
-            height={48}
-            borderWidth={4}
-            className="mt-5 bg-bc-white-10 uppercase"
-            disabled={wallet && (!isValid || !dirty || !sufficientBalance)}
-            onClick={!wallet ? openWalletModal : submitForm}>
-            {buttonCaption}
-          </PixelButton>
-        </div>
+      </div>
+      <div className="flex justify-center">
+        <PixelButton
+          isLoading={isSubmitting}
+          width={280}
+          height={46}
+          className="text-2xl uppercase"
+          disabled={wallet && (!isValid || !dirty || !sufficientBalance)}
+          onClick={!wallet ? openWalletModal : submitForm}>
+          {buttonCaption}
+        </PixelButton>
       </div>
       <BitcowModal
         onCancel={() => setIsSettingsOpen(false)}
-        className=""
-        // wrapClassName={styles.modal}
         open={isSettingsOpen}
-        closeIcon={<PiexlCloseIcon className="top-[24px]" />}
-        width={424}
-        bodyStyle={{ padding: 0 }}
-        // mobileHeight={556}
-      >
+        closeIcon={<CloseIcon className="top-7" />}
+        width={352}
+        bodyStyle={{ padding: 0 }}>
         <SwapSetting onClose={() => setIsSettingsOpen(false)} />
       </BitcowModal>
     </Card>

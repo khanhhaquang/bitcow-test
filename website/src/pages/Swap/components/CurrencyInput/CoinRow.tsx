@@ -6,7 +6,6 @@ import CoinIcon from 'components/CoinIcon';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { TokenBalance } from 'types/bitcow';
 
-import { walletAddressEllipsis } from '../../../../components/utils/utility';
 import useMerlinWallet from '../../../../hooks/useMerlinWallet';
 
 interface TProps {
@@ -19,14 +18,10 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
   return (
     <div className="flex h-[48px] w-full items-center justify-between gap-2 px-4  text-bc-white">
       <div className="flex items-center gap-2">
-        <CoinIcon size={32} token={item.token} />
+        <CoinIcon size={34} token={item.token} />
         <div className="flex flex-col justify-start">
-          <small className="text-xs text-bc-white-50">
-            <span>{item.token.name}</span>
-          </small>
-          <div className="text-base leading-4">
-            <small>{walletAddressEllipsis(item.token.address)}</small>
-          </div>
+          <small className="text-xs text-white/50">{item.token.name}</small>
+          <span className="text-lg">{item.token.symbol}</span>
         </div>
       </div>
       <small className="text-base font-bold">
@@ -37,8 +32,7 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
         )}
         {wallet && item.balance != undefined && item.balance >= 0 && (
           <div>
-            <span>{tokenAmountFormatter(item.balance, item.token)}</span>
-            <small className="ml-2">{item.token.symbol}</small>
+            <span className="text-2xl">{tokenAmountFormatter(item.balance, item.token)}</span>
           </div>
         )}
       </small>

@@ -4,9 +4,9 @@ import swapAction from 'modules/swap/actions';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-import Button from 'components/Button';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import { ISwapSettings } from 'pages/Swap/types';
+import PixelButton from 'components/PixelButton';
 
 interface TProps {
   onClose: () => void;
@@ -14,8 +14,8 @@ interface TProps {
 
 const SubTitle = ({ children }: { children: string }) => {
   return (
-    <div className="mb-4 flex items-center gap-2">
-      <div className="text-base">{children}</div>
+    <div className="mb-2 flex items-center gap-2">
+      <span className="text-lg">{children}</span>
       {/* <Tooltip title={children}>
         <HintIcon className="dark:opacity-30 dark:hover:opacity-100" />
       </Tooltip> */}
@@ -46,20 +46,20 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   // }, [setFieldValue]);
 
   return (
-    <div className="w-full bg-bc-swap p-5  text-bc-white">
-      <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
-        Transaction Settings
+    <div className="w-full bg-bc-swap px-4 pt-4 pb-6 text-white">
+      <div className="border-b border-white/20 pb-3 font-micro text-2xl tablet:px-5 tablet:py-[22px]">
+        Settings
       </div>
-      <div className="mt-6 tablet:mx-5">
+      <div className="mt-9 font-pg">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">
-          <div className="relative flex h-10 w-full items-center">
+          <div className="relative flex h-10 w-full items-center text-lg">
             <PositiveFloatNumInput
               inputAmount={values.slipTolerance}
               min={0}
               max={10}
               placeholder="Custom"
-              className={classNames('h-full w-full bg-bc-input py-3 px-4 text-bc-white')}
+              className={classNames('h-full w-full bg-bc-input py-3 px-4 text-white')}
               onAmountChange={(v) => setFieldValue('slipTolerance', v)}
             />
             <div className={'absolute right-3 text-base text-bc-white-60'}>%</div>
@@ -72,9 +72,9 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
           </Button> */}
         </div>
       </div>
-      <div className="mt-6 tablet:mx-5">
+      <div className="mt-3 font-pg">
         <SubTitle>Transaction Deadline</SubTitle>
-        <div className="relative flex h-10 w-full items-center gap-x-4">
+        <div className="relative flex h-10 w-full items-center gap-x-4 text-lg">
           <PositiveFloatNumInput
             className={classNames('h-full w-full bg-bc-input py-3 px-4 text-bc-white')}
             inputAmount={values.trasactionDeadline}
@@ -109,25 +109,15 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
         />
       </div> */}
       {/* Mobile */}
-      <div className="hidden bg-color_bg_panel p-4 tablet:block">
-        <Button
-          variant="pixelFrame"
+      <div className="mt-9 flex justify-center">
+        <PixelButton
+          className="text-2xl"
+          width={206}
+          height={44}
           // disabled={activeWallet && (!isValid || !dirty)}
           onClick={onConfirm}>
           SAVE
-        </Button>
-      </div>
-      {/* Desktop */}
-      <div className="mt-5 flex justify-center tablet:hidden">
-        <Button
-          className=""
-          variant="pixelFrame"
-          width="206px"
-          height="40px"
-          // disabled={activeWallet && (!isValid || !dirty)}
-          onClick={onConfirm}>
-          SAVE
-        </Button>
+        </PixelButton>
       </div>
     </div>
   );

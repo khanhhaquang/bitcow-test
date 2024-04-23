@@ -97,7 +97,7 @@ async function cacheTokenList() {
     for (const config of UTIL_CONFIGS) {
         console.log('ChainId:', config.config.chainId);
 
-        if ([686868, 1102, 3636].includes(config.config.chainId)) {
+        if (![686868].includes(config.config.chainId)) {
             if (pairsMap[config.config.chainId] === undefined) {
                 pairsMap[config.config.chainId] = [];
             }

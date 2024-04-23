@@ -32,7 +32,7 @@ const CoinSelectButton = ({
           {token.symbol}
         </div>
       ) : (
-        <p className="small text-4xl">--</p>
+        <p className="text-4xl text-white">--</p>
       )}
       <CoinSelectIcon width={24} height={24} />
     </div>

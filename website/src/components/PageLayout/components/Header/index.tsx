@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { routes } from 'App.routes';
 import cx from 'classnames';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Drawer, Layout, Menu } from 'components/Antd';
@@ -24,7 +24,7 @@ const PageHeader: React.FC = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const nav = useNavigate();
 
-  const renderNavItems = useCallback(() => {
+  const navItems = useMemo(() => {
     return routes.map(({ name, path, hidden }) => {
       if (path === '*' || hidden) return null;
       return (
@@ -82,7 +82,7 @@ const PageHeader: React.FC = () => {
               'flex h-full w-full flex-col justify-center !bg-transparent'
             )}
             selectedKeys={[currentPageName]}>
-            {renderNavItems()}
+            {navItems}
           </Menu>
         </div>
         {/*
@@ -111,16 +111,16 @@ const PageHeader: React.FC = () => {
         </Link>
         {/* Desktop */}
         {currentPageName !== 'Home' && (
-          <div className="absolute left-1/2 z-10 h-full grow -translate-x-1/2 tablet:hidden">
+          <div className="absolute left-1/2 z-10 flex h-full grow -translate-x-1/2 items-center tablet:hidden">
             <Menu
               mode="horizontal"
               theme="dark"
               className={cx(
                 styles.menu,
-                'flex h-full w-full min-w-[200px] justify-center gap-x-6 !bg-transparent'
+                'flex h-fit w-full min-w-[200px] items-center justify-center gap-x-4 !bg-transparent'
               )}
               selectedKeys={[currentPageName]}>
-              {renderNavItems()}
+              {navItems}
             </Menu>
           </div>
         )}

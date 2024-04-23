@@ -1,0 +1,26 @@
+.tabs {
+  :global {
+    .ant-tabs-tab {
+      @apply font-pg text-lg;
+    }
+
+    .ant-table-content {
+      @apply font-pg;
+    }
+    .ant-table-cell {
+      @apply p-6;
+    }
+
+    .ant-table-thead {
+      .ant-table-cell {
+        @apply mb-0 border-b-0 py-3 text-lg #{!important};
+      }
+    }
+
+    .ant-table-tbody {
+      .ant-table-cell {
+        @apply uppercase #{!important};
+      }
+    }
+  }
+}

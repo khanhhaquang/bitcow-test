@@ -87,10 +87,10 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           return (
             <div className="flex w-full items-center justify-between" key={key}>
               <div className="flex items-center gap-2">
-                <CoinIcon token={token} size={20} />
-                <div className="text-[18px]">{key}</div>
+                <CoinIcon token={token} size={26} />
+                <div className="text-lg uppercase">{key}</div>
               </div>
-              <div className="text-sm">
+              <div className="text-4xl text-white/60">
                 {tokenAmountFormatter(
                   percent ? (pool.coins[key] * percent) / 100 : pool.coins[key],
                   token
@@ -115,14 +115,18 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
       validationSchema={validationSchema}
       onSubmit={onSubmit}>
       {(props) => (
-        <div className="w-full bg-bc-pool p-5 text-bc-white">
-          <div className="text-lg tablet:px-5 tablet:py-[22px] tablet:leading-5">
-            Remove liquidity
-          </div>
-          <div className="mt-5 flex w-full flex-col items-center justify-center gap-3 tablet:mt-6 tablet:px-5 tablet:pb-[88px]">
-            <div className="w-full border-2 border-bc-blue bg-bc-grey-transparent p-4">
-              <div className="mb-2 text-xs text-bc-white-60">Available to Withdraw</div>
-              <div className="mt-4 flex flex-col gap-y-2">{renderCoinRow()}</div>
+        <div className="w-full bg-bc-pool px-4 pt-4 pb-6 text-white">
+          <h2 className="pb-3 font-micro text-2xl uppercase text-white">Remove liquidity</h2>
+          <hr className="h-[1.5px] border-0 bg-white/20" />
+          <div className="mt-9 flex w-full flex-col items-center justify-center px-5 tablet:pb-[88px]">
+            <div className="relative w-full overflow-hidden bg-white/5 px-6 py-4 font-pg">
+              <span className="absolute top-0 left-0 h-2 w-2 bg-blue2" />
+              <span className="absolute top-0 right-0 h-2 w-2 bg-blue2" />
+              <span className="absolute bottom-0 left-0 h-2 w-2 bg-blue2" />
+              <span className="absolute bottom-0 right-0 h-2 w-2 bg-blue2" />
+              <div className="flex flex-col gap-y-2">{renderCoinRow()}</div>
+            </div>
+            <div>
               <SliderInput
                 className="mx-0 mt-6 mb-0 tablet:hidden"
                 min={0}
@@ -137,7 +141,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     <Button
                       key={option}
                       onClick={() => onAmountChange(option, props)}
-                      className="h-6 grow rounded-none bg-bc-white-20 text-sm text-bc-white-80 hover:text-bc-white">
+                      className="h-6 grow rounded-none bg-white/20 text-sm text-white/60 hover:text-bc-white">
                       {option}%
                     </Button>
                   ))}
@@ -149,7 +153,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                     max={100}
                     maxDecimals={2}
                     placeholder="0.00"
-                    className="relative z-[2] mt-6 w-full bg-transparent pr-2 pl-1 text-right text-3xl tablet:text-left"
+                    className="relative z-[2] mt-6 w-full bg-transparent pr-2 pl-1 text-right font-micro text-3xl tablet:text-left"
                     inputAmount={props.values.percent || 0}
                     onAmountChange={(a) => onAmountChange(a, props)}
                     suffix={isTablet ? '%' : null}
@@ -175,8 +179,12 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             </div>
             {props.values.percent > 0 && (
               <>
-                <RmLiqIcon className="" />
-                <div className="w-full border-2 border-bc-blue bg-bc-grey-transparent p-4">
+                <RmLiqIcon className="mb-2" />
+                <div className="relative w-full bg-white/5 px-6 py-4 font-pg">
+                  <span className="absolute top-0 left-0 h-2 w-2 bg-blue2" />
+                  <span className="absolute top-0 right-0 h-2 w-2 bg-blue2" />
+                  <span className="absolute bottom-0 left-0 h-2 w-2 bg-blue2" />
+                  <span className="absolute bottom-0 right-0 h-2 w-2 bg-blue2" />
                   <div className="mb-2 text-xs text-bc-white-60">Amount to receive</div>
                   <div className="mt-4 flex flex-col gap-4">
                     {renderCoinRow(props.values.percent)}

@@ -34,7 +34,7 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     placement: 'topRight',
     icon,
     className: `obric-notification obric-notification--${type}`,
-    closeIcon: <PixelCloseIcon className="relative bottom-1 h-full w-full" />,
+    closeIcon: <PixelCloseIcon className="bottom-1 h-full w-full" />,
     top: 180,
     duration: 6
   });

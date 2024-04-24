@@ -67,7 +67,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
     return getOwnedLiquidityShare(pool);
   }, [getOwnedLiquidityShare, pool]);
 
-  const owndedLiquidityUsdValue = useMemo(() => {
+  const ownedLiquidityUsdValue = useMemo(() => {
     const liquidity = getPoolTVL(pool) * ownedLiquidityShare;
     if (isTablet) {
       return numberCompactFormat(liquidity, 1);
@@ -101,7 +101,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
 
   return (
     <Fragment>
-      <div className="flex-col text-bc-white tablet:flex">
+      <div className="flex-col font-pg text-bc-white tablet:flex">
         <div className="hidden gap-6 p-4 tablet:flex tablet:bg-color_bg_table dark:tablet:bg-color_bg_row">
           <div className="flex flex-col">
             <span className="block text-sm leading-3 tablet:text-xs">
@@ -110,9 +110,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             <span className="">{numberCompactFormat(poolStats.volume) || 0}</span>
           </div>
           <div className="flex flex-col">
-            <span className="block text-sm leading-3 tablet:text-xs">
-              Fees {poolFilter.timeBasis}
-            </span>
+            <span className="block text-sm tablet:text-xs">Fees {poolFilter.timeBasis}</span>
             <span className="">
               {numberCompactFormat(poolStats.fees)
                 ? `$${numberCompactFormat(poolStats.fees)}`
@@ -123,44 +121,46 @@ const PoolRowDetail = ({ pool }: IProps) => {
         <div className="flex gap-6 tablet:flex-col tablet:bg-color_bg_panel tablet:p-4">
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[210px] grow flex-col gap-4 tablet:w-[82px]">
-              <span className="block text-sm leading-3 text-bc-white-40 tablet:text-xs">
+              <span className="block text-sm capitalize text-bc-white-40 tablet:text-xs">
                 Your Liquidity
               </span>
-              <div className="flex flex-col gap-1">
-                <span className="">{userLiquidityLine1}</span>
-                <span className="">{userLiquidityLine2}</span>
+              <div className="flex flex-col gap-2">
+                <span>{userLiquidityLine1}</span>
+                <span>{userLiquidityLine2}</span>
               </div>
             </div>
-            <div className="flex grow flex-col gap-4">
-              <span className="block text-sm leading-3 text-bc-white-40 tablet:text-xs">
+            <div className="flex grow flex-col gap-3">
+              <span className="block text-sm capitalize text-bc-white-40 tablet:text-xs">
                 Assets Pooled
               </span>
-              <div className="flex flex-col gap-1">{assetsPooled}</div>
+              <div className="flex flex-col gap-2">{assetsPooled}</div>
             </div>
-            <div className="flex grow flex-col gap-4">
-              <span className="block text-sm leading-3 text-bc-white-40 tablet:text-xs">
+            <div className="flex grow flex-col">
+              <span className="block text-sm capitalize text-bc-white-40 tablet:text-xs">
                 Your Share
               </span>
-              <span className="">{numberGroupFormat(ownedLiquidityShare * 100, 3) || 0} %</span>
-              <span className="">$ {owndedLiquidityUsdValue || 0}</span>
+              <span className="mt-3">{numberGroupFormat(ownedLiquidityShare * 100, 3) || 0} %</span>
+              <span className="mt-2">${ownedLiquidityUsdValue || 0}</span>
             </div>
           </div>
           <div className="flex h-12 w-[292px] justify-end gap-4 tablet:w-full">
             {wallet ? (
-              <PixelButton
-                width={126}
-                borderWidth={2}
-                height={34}
-                className="text-lg"
-                color="var(--bitcow-color-text-gold)"
-                isSolid={true}
-                onClick={() => handleOnClick('add')}>
-                <PlusIcon className="mr-2 fill-black" />
-                Deposit
-              </PixelButton>
+              <>
+                <PixelButton
+                  width={126}
+                  borderWidth={2}
+                  height={34}
+                  className="font-pg text-blue1"
+                  color="white"
+                  isSolid
+                  onClick={() => handleOnClick('add')}>
+                  <PlusIcon className="mr-2" width={11} height={11} />
+                  Deposit
+                </PixelButton>
+              </>
             ) : (
               <PixelButton
-                width={126}
+                width={180}
                 borderWidth={2}
                 height={34}
                 className="text-lg"
@@ -173,10 +173,10 @@ const PoolRowDetail = ({ pool }: IProps) => {
                 width={126}
                 borderWidth={2}
                 height={34}
-                className="text-lg"
-                color="var(--bitcow-color-text-gold)"
+                className="text-pg font-pg"
+                color="white"
                 onClick={() => handleOnClick('withdraw')}>
-                <MinusIcon className="mr-2 fill-bc-gold" />
+                <MinusIcon className="mr-2" />
                 Withdraw
               </PixelButton>
             )}

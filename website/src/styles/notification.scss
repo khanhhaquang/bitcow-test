@@ -1,29 +1,28 @@
 .ant-notification {
   .ant-notification-notice {
     width: 354px;
-    height: fit-content;
-    @apply relative rounded-none p-3 text-bc-white;
-    border: 2px solid #4DD12C;
-    background: rgba(0, 0, 0, 0.40);
-    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.10);
+    @apply relative h-fit rounded-none p-3 font-pg text-bc-white;
+    border: 2px solid #4dd12c;
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.1);
 
     .ant-notification-notice-message {
       @apply text-lg leading-none #{!important};
     }
     .ant-notification-notice-description {
-      @apply text-bc-white-60 text-sm;
+      @apply text-sm text-bc-white-60;
     }
 
     &.obric-notification--success {
-      border-color: #4DD12C;
+      border-color: #4dd12c;
       .ant-notification-notice-message {
-        color: #4DD12C;
+        color: #4dd12c;
       }
     }
     &.obric-notification--error {
-      border-color: #FF1F00;
+      border-color: #ff1f00;
       .ant-notification-notice-message {
-        color: #FF1F00;
+        color: #ff1f00;
       }
     }
     // &.obric-notification--warn::before {

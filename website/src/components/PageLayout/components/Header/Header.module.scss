@@ -20,12 +20,20 @@
     }
 
     .ant-menu-item {
-      @apply flex items-center border-0 tablet:m-0 tablet:mb-10 tablet:pl-0 tablet:text-lg #{!important};
+      @apply flex h-fit items-center border-0 #{!important};
+    }
+
+    .ant-menu-title-content {
+      @apply flex items-center;
     }
 
     .ant-menu-item::after,
     .ant-menu-submenu::after {
       @apply bottom-3 #{!important};
+    }
+
+    .ant-menu-item.ant-menu-item-selected a::after {
+      @apply bottom-2 #{!important};
     }
 
     .ant-menu .ant-menu-item {

@@ -65,7 +65,7 @@ export default function PixelButton({
           backgroundColor: isSolid ? color : 'transparent'
         }}
       />
-      <span className="z-10">
+      <span className="z-10 flex items-center">
         {children} {isLoading && '...'}
       </span>
     </button>

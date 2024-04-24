@@ -12,7 +12,7 @@ import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import usePools from 'hooks/usePools';
-import { ReactComponent as PiexlCloseIcon } from 'resources/icons/pixelClose.svg';
+import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
@@ -20,7 +20,7 @@ import WithdrawLiquidity from './components/WithdrawLiquidity';
 
 import useMerlinWallet from '../../hooks/useMerlinWallet';
 import useNetwork from '../../hooks/useNetwork';
-// import styles from './Pool.module.scss';
+import styles from './index.module.scss';
 
 const filterOptions = [
   {
@@ -55,6 +55,7 @@ const Pool = () => {
   const { isTablet } = useBreakpoint('tablet');
 
   const { initProvider, fetchedPoolsCount, liquidityPools } = useMerlinWallet();
+
   useEffect(() => {
     initProvider('pool');
   }, [initProvider]);
@@ -103,42 +104,42 @@ const Pool = () => {
   }, [poolFilter.timeBasis]);
 
   const renderHeader = () => (
-    <div className="flex items-center text-2xl text-bc-white tablet:flex-col">
-      <div className=" text-2xl tablet:text-lg">Pools</div>
-      {liquidityPools?.length &&
-        (fetchedPoolsCount === 0 ? (
-          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{'(loading)'}</div>
-        ) : (
-          <div className="ml-2 text-2xl tablet:ml-0 tablet:text-lg">{`(${fetchedPoolsCount})`}</div>
-        ))}
+    <div className="flex items-start text-2xl text-bc-white tablet:flex-col">
+      <h2 className="flex items-center font-micro text-4xl text-white tablet:text-2xl">
+        Pools{' '}
+        {liquidityPools?.length && (
+          <span className="ml-2 font-micro text-2xl tablet:ml-0 tablet:text-lg">
+            {fetchedPoolsCount === 0 ? '(loading)' : `(${fetchedPoolsCount})`}
+          </span>
+        )}
+      </h2>
 
-      <div className="ml-auto flex gap-2 text-lg leading-4 text-bc-gold tablet:mt-4">
-        <div className="flex items-center px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+      <div className="ml-auto flex items-start gap-2 font-pgb text-lg text-bc-gold tablet:mt-4">
+        <div className="flex items-center tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
           <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
-          <div className="">
+          <p>
             TVL <span className="tablet:hidden">:</span>
-          </div>
-          <div className="tablet:text-2xl">
+          </p>
+          <div className="ml-1 tablet:text-2xl">
             ${' '}
             {isTablet
               ? numberCompactFormat(getTotalPoolsTVL())
               : numberCompactFormat(getTotalPoolsTVL(), 1)}
           </div>
         </div>
-        {false && (
-          <div className="flex items-center px-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
-            <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
-            <div className="">
-              Volume 24H <span className="tablet:hidden">:</span>
-            </div>
-            <div className="tablet:text-2xl">
-              ${' '}
-              {isTablet
-                ? numberCompactFormat(getTotalPoolsVolume())
-                : numberCompactFormat(getTotalPoolsVolume(), 1)}
-            </div>
+
+        <div className="flex items-center pl-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+          <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
+          <p>
+            Volume 24H <span className="tablet:hidden">:</span>
+          </p>
+          <div className="ml-1 tablet:text-2xl">
+            ${' '}
+            {isTablet
+              ? numberCompactFormat(getTotalPoolsVolume())
+              : numberCompactFormat(getTotalPoolsVolume(), 1)}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
@@ -199,13 +200,13 @@ const Pool = () => {
   }, [filteredPools, checkIfInvested, tabs]);
 
   return (
-    <div className="mt-[5%] flex h-fit max-w-[1206px] flex-col bg-bc-pool bg-cover bg-no-repeat p-9 text-bc-white shadow-bc-swap tablet:mt-4">
+    <div className="mt-11 flex h-fit max-w-[1134px] flex-col bg-bc-pool p-9 text-bc-white shadow-bc-swap backdrop-blur-lg tablet:mt-4">
       {renderHeader()}
       <div className="pt-6 tablet:border-0 tablet:bg-color_bg_1 tablet:p-0">
         <div className={cx('hidden tablet:block')}>
           <Radio.Group onChange={(e) => setActiveTab(e.target.value)} value={activeTab}>
             {tabs.map((tab) => (
-              <Radio.Button value={tab.id} key={tab.id}>
+              <Radio.Button value={tab.id} key={tab.id} className="font-pg text-lg">
                 {tab.label}
               </Radio.Button>
             ))}
@@ -213,16 +214,16 @@ const Pool = () => {
         </div>
         <Tabs
           activeKey={activeTab}
-          // className={styles.tabs}
+          className={styles.tabs}
           onChange={(key) => setActiveTab(key)}
           tabBarExtraContent={{
             right: (
-              <div className="flex gap-4 tablet:flex-col-reverse">
+              <div className="flex tablet:flex-col-reverse">
                 {/* Mobile */}
                 <div className="hidden gap-2 tablet:flex">
                   <SelectInput
                     className={
-                      "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Sort_by'] tablet:before:top-[14px]"
+                      "relative !w-1/2 font-pg text-lg before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Sort_by'] tablet:before:top-[14px]"
                     }
                     value={poolFilter.sortBy[poolFilter.sortBy.length - 1].field}
                     options={SortOptions()}
@@ -230,7 +231,7 @@ const Pool = () => {
                   />
                   <SelectInput
                     className={
-                      "relative !w-1/2 before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Time_Basis'] tablet:before:top-[14px]"
+                      "relative !w-1/2 font-pg text-lg before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Time_Basis'] tablet:before:top-[14px]"
                     }
                     value={poolFilter.timeBasis}
                     options={filterOptions}
@@ -249,7 +250,8 @@ const Pool = () => {
                 />
                 */}
                 <SearchInput
-                  className={'w-full tablet:mt-4 tablet:w-full'}
+                  placeholder="Search name or paste address"
+                  className={'w-full font-pg tablet:mt-4 tablet:w-full'}
                   value={poolFilter.text}
                   onChange={(val) => onUpdateFilter(val, 'text')}
                   onSearch={() => {}}
@@ -266,7 +268,7 @@ const Pool = () => {
         maskClosable={false}
         // wrapClassName={styles.modal}
         open={!!liquidityModal}
-        closeIcon={<PiexlCloseIcon className="relative top-[28px]" />}
+        closeIcon={<CloseIcon className="relative top-4" />}
         bodyStyle={{ padding: 0 }}
         width={512}
         destroyOnClose>

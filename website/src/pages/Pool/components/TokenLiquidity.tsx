@@ -80,14 +80,14 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
   );
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-3">
       <div className="flex w-full items-center justify-between">
-        <div className="flex gap-2">
-          <div className="flex gap-2">
-            <CoinIcon token={token} size={20} />
-            <div className="">{token.symbol}</div>
+        <div className="flex">
+          <div className="flex items-center gap-2">
+            <CoinIcon token={token} size={26} />
+            <span className="text-lg uppercase">{token.symbol}</span>
           </div>
-          <div className="flex gap-2 border-l border-bc-white-20 pl-2">
+          <div className="ml-2 flex items-center gap-2">
             <Button
               className="h-5 w-[31px] rounded-none bg-bc-white-20 p-1 text-xs text-bc-white-80"
               onClick={() => {
@@ -110,7 +110,7 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
           maxDecimals={tokenInputDecimals.current}
           // isDisabled={actionType === 'currencyTo' || isDisableAmountInput}
           placeholder="0.00"
-          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-3xl"
+          className="w-2/3 bg-transparent pr-0 pl-1 text-right text-4xl"
           inputAmount={values[type] || 0}
           onInputChange={onAmountChange}
           onAmountChange={onAmountChange}

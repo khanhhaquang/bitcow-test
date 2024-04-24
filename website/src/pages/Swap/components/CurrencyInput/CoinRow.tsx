@@ -5,8 +5,9 @@ import { Skeleton } from 'antd';
 import CoinIcon from 'components/CoinIcon';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { TokenBalance } from 'types/bitcow';
-
+import { Tooltip } from 'components/Antd';
 import useMerlinWallet from '../../../../hooks/useMerlinWallet';
+import { displayAddress } from 'wallet/utils/formatter';
 
 interface TProps {
   item: TokenBalance;
@@ -20,8 +21,12 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
       <div className="flex items-center gap-2">
         <CoinIcon size={34} token={item.token} />
         <div className="flex flex-col justify-start">
-          <small className="text-xs text-white/50">{item.token.name}</small>
           <span className="text-lg">{item.token.symbol}</span>
+          <Tooltip title={item.token.address}>
+            <span className="text-xs text-white/50">
+              {displayAddress(item.token.address, 4, 5)}
+            </span>
+          </Tooltip>
         </div>
       </div>
       <small className="text-base font-bold">

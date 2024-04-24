@@ -225,7 +225,7 @@ const TokenSwap = () => {
       <BitcowModal
         onCancel={() => setIsSettingsOpen(false)}
         open={isSettingsOpen}
-        closeIcon={<CloseIcon className="top-7" />}
+        closeIcon={<CloseIcon className="top-4" />}
         width={352}
         bodyStyle={{ padding: 0 }}>
         <SwapSetting onClose={() => setIsSettingsOpen(false)} />

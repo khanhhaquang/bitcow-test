@@ -100,7 +100,9 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
             {isReady ? tokenAmountFormatter(uiBalance, selectedToken) : 0}
           </span>
         </small>
-        <p className="text-lg text-white/60">~${getTokenBalanceInUSD(uiBalance, selectedToken)}</p>
+        <p className="text-lg text-white/60">
+          ~${getTokenBalanceInUSD(selectedCurrency?.amount, selectedToken)}
+        </p>
       </div>
       <BitcowModal
         onCancel={() => setIsCoinSelectorVisible(false)}

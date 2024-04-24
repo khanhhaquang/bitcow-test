@@ -95,7 +95,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const renderHeaderSearch = useMemo(() => {
     return (
       <div className="flex flex-col font-pg">
-        <div className="border-b border-white/20 pb-3 font-micro text-2xl">Token</div>
+        <h2 className="border-b border-white/20 pb-3 font-micro text-2xl text-white">Token</h2>
         <div className="relative mt-6">
           <Input
             className="h-9 w-full !bg-black/10 p-2 text-lg text-bc-white outline-none"

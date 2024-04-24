@@ -7,6 +7,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        blue1: '#1B7ADB',
+        blue2: '#2B70C2',
         gray_01: 'rgba(255, 255, 255, 0.1)',
         gray_05: 'rgba(255, 255, 255, 0.5)',
         white_gray_01: 'rgba(4, 18, 25, 0.1)',
@@ -71,8 +73,6 @@ module.exports = {
         15: '3.75rem'
       },
       backgroundImage: {
-        'bc-swap':
-          'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)',
         landingBgDark: 'url(resources/img/landingPage/dark-bg.png)',
         landingBgWhite: 'url(resources/img/landingPage/white-bg.png)',
         darkBg: 'url(resources/img/bg.png)',
@@ -89,8 +89,10 @@ module.exports = {
         accountGradientBg:
           'linear-gradient(51.34deg, rgba(255, 104, 39, 0.3) 0%, #FF792C 24.54%, #FF9C37 48.97%, #FF6827 70.53%, rgba(255, 104, 39, 0.3) 95.27%)',
         accountBg: 'url(resources/img/accountBg.svg)',
-
-        'bc-pool': 'url(resources/img/poolBg.svg)'
+        'bc-swap':
+          'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)',
+        'bc-pool':
+          'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)'
       }
     },
     screens: {

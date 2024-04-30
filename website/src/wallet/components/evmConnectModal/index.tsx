@@ -57,7 +57,7 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
 
       <div className="w-full">
         {showBtcWallets && <div className="mb-2 font-micro text-lg">{'EVM Wallets'}</div>}
-        <div className="flex w-full justify-center gap-x-16">
+        <div className="grid w-full grid-cols-4 gap-16">
           {evmConnectors.map((connector) => (
             <EvmWalletButton
               connector={connector}

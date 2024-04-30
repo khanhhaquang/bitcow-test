@@ -9,9 +9,10 @@
     }
   }
   .ant-tabs-tab {
-    @apply tablet:hidden;
+    @apply hidden;
+
     .ant-tabs-tab-btn {
-      @apply text-lg leading-4 text-bc-white-60;
+      @apply text-lg text-white;
     }
     &.ant-tabs-tab-active .ant-tabs-tab-btn {
       @apply text-bc-white;

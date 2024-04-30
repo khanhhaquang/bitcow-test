@@ -2,8 +2,7 @@ import { ReactNode } from 'react';
 
 import { notification } from 'components/Antd';
 import TextLink from 'components/TextLink';
-import { NotiErrorIcon, HintIcon, NotiSuccessIcon } from 'resources/icons';
-import { ReactComponent as PixelCloseIcon } from 'resources/icons/pixelClose.svg';
+import { NotiErrorIcon, HintIcon, NotiSuccessIcon, CloseIcon } from 'resources/icons';
 
 type NotificationType = 'success' | 'error' | 'info' | 'warn';
 
@@ -34,7 +33,7 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     placement: 'topRight',
     icon,
     className: `obric-notification obric-notification--${type}`,
-    closeIcon: <PixelCloseIcon className="bottom-1 h-full w-full" />,
+    closeIcon: <CloseIcon className="bottom-1 h-full w-full" />,
     top: 180,
     duration: 6
   });

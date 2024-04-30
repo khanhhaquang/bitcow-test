@@ -97,7 +97,8 @@ module.exports = {
     },
     screens: {
       desktop: { max: '99999px' }, // desktop first
-      laptop: { max: '1440px' },
+      laptop: { max: '2199px' },
+      smallLaptop: { max: '1440px' },
       tablet: { max: '1024px' },
       mobile: { max: '768px' }
     },
@@ -116,7 +117,7 @@ module.exports = {
       main1: '0px 4px 35px rgba(0, 0, 0, 0.05)',
       home: '-4px 8px 32px rgba(211, 207, 230, 0.4)',
       dropdown: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-
+      'wallet-hover': '6px 6px 0px 0px rgba(0, 0, 0, 0.10), 3px 3px 0px 0px rgba(0, 0, 0, 0.10)',
       'bc-swap':
         '18px 18px 0px 0px rgba(0, 0, 0, 0.05), 12px 12px 0px 0px rgba(0, 0, 0, 0.10), 6px 6px 0px 0px rgba(0, 0, 0, 0.10)'
     },

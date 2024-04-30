@@ -10,7 +10,7 @@
           right: -19px;
           bottom: 3px;
           content: '';
-          background-image: url('../../../../resources/icons/downArrow.svg');
+          background-image: url('../../../../resources/img/dropdownArrow.webp');
           background-size: contain;
           background-repeat: no-repeat;
           height: 12px;
@@ -54,7 +54,7 @@
 .drawer {
   :global {
     .ant-drawer-body {
-      @apply px-6 pb-10 pt-[45px] #{!important};
+      @apply bg-transparent bg-bc-swap px-6 pb-10 pt-[45px] #{!important};
     }
   }
 }

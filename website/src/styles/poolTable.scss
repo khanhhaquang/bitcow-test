@@ -14,7 +14,7 @@
       &:before {
         @apply hidden #{!important};
       }
-      @apply border-white bg-transparent text-base leading-4 text-bc-white;
+      @apply border-white bg-transparent text-base text-bc-white;
 
       .ant-table-column-sorters {
         @apply justify-start gap-2;
@@ -62,7 +62,7 @@
             @apply border-r;
           }
         }
-        &:has(+ .expanded-pool:not([style*="display: none"])) {
+        &:has(+ .expanded-pool:not([style*='display: none'])) {
           td {
             @apply border-bc-white-40;
           }
@@ -86,7 +86,7 @@
         }
       }
       .ant-table-cell {
-        @apply rounded-none border-b-0 border-t-0 bg-transparent tablet:bg-color_bg_table tablet:p-4;
+        @apply rounded-none border-b-0 border-t-0 bg-transparent tablet:p-4;
       }
     }
 
@@ -105,7 +105,7 @@
 .ant-radio-button-wrapper {
   @apply h-[40px] rounded-none border-color_bg_panel bg-transparent py-3 px-4 leading-[14px] text-color_text_2 #{!important};
   &.ant-radio-button-wrapper-checked {
-    @apply border-color_main bg-color_main text-white #{!important};
+    @apply border-b border-white bg-transparent text-white #{!important};
   }
 }
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover::before {

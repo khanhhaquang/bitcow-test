@@ -1,7 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { BN, IPool, Token } from 'bitcow';
-import cx from 'classnames';
-import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { useCallback, useEffect, useRef } from 'react';
 
@@ -116,17 +114,13 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
           onAmountChange={onAmountChange}
         />
       </div>
-      <div
-        className={cx(
-          // styles.TokenLiquidity,
-          'flex justify-between text-bc-white-80'
-        )}>
+      <div className={'flex justify-between text-bc-white-80'}>
         <small className="flex items-end text-sm">
           Balance:
-          <span className={classNames('ml-1')}>{tokenAmountFormatter(uiBalance, token) || 0}</span>
+          <span className={'ml-1'}>{tokenAmountFormatter(uiBalance, token) || 0}</span>
         </small>
         <small className="flex items-end text-sm">
-          ~$<span className={classNames('ml-1')}>{getTokenBalanceInUSD(uiBalance, token)}</span>
+          ~$<span className={'ml-1'}>{getTokenBalanceInUSD(values[type], token)}</span>
         </small>
       </div>
     </div>

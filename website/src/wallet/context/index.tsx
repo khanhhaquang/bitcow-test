@@ -265,6 +265,7 @@ export const EvmConnectProvider = ({
   autoConnect?: boolean;
 }) => {
   const allEip6963Injectors = useInjectedProviderDetails();
+
   const allEvmConnectors = useMemo(() => {
     const selectedEip6963Injectors = getSelectedInjectors(
       allEip6963Injectors,

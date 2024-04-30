@@ -6,7 +6,6 @@ import BitcowModal from 'components/BitcowModal';
 import Button from 'components/Button';
 import Card from 'components/Card';
 import PixelButton from 'components/PixelButton';
-import { useBreakpoint } from 'hooks/useBreakpoint';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import useTokenBalance from 'hooks/useTokenBalance';
 import { SettingsIcon } from 'resources/icons';
@@ -37,7 +36,6 @@ const TokenSwap = () => {
   const toToken = values.currencyTo?.token;
   const fromUiAmt = values.currencyFrom?.amount;
   const swapRate = values.currencyTo?.amount;
-  const { isTablet } = useBreakpoint('tablet');
   const [priceImpact, setPriceImpact] = useState(0);
   const [uiBalance, isReady] = useTokenBalance(values.currencyFrom.token);
   const { currentNetwork } = useNetwork();
@@ -164,7 +162,7 @@ const TokenSwap = () => {
     <Fragment>
       <div className="relative flex w-full items-center">
         <h2 className="mr-auto font-micro text-4xl text-white">Swap</h2>
-        <Tooltip title="Setting" zIndex={isTablet ? -1 : 10} openClassName="tablet:hidden">
+        <Tooltip title="Setting">
           <button
             onClick={() => setIsSettingsOpen(true)}
             className="h-9 w-9 bg-transparent p-0.5 text-white hover:bg-white/10 active:bg-white/10 active:text-black/20">
@@ -176,7 +174,7 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none p-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
+    <Card className="dark-stroke-white table:w-full relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none p-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
       {renderCardHeader()}
       <div className="flex w-full flex-col font-pg">
         <div className="relative flex flex-col">

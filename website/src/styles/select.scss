@@ -26,7 +26,7 @@
 }
 
 .ant-select-dropdown {
-  @apply bg-bc-orange #{!important};
+  @apply bg-blue1 #{!important};
 
   .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
     @apply bg-bc-grey-transparent text-bc-white;

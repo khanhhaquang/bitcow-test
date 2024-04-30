@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import cx from 'classnames';
 
 import { Select, SelectProps } from 'components/Antd';
 import { CaretIcon, CheckIcon } from 'resources/icons';
+import { cn } from 'utils/cn';
 // import styles from './Select.module.scss';
 
 interface OptionProps {
@@ -19,8 +19,8 @@ interface TProps extends SelectProps {
 
 const SelectInput: React.FC<TProps> = ({ className, options, ...rest }) => {
   return (
-    <div className={cx('selectInput', className)}>
-      <Select suffixIcon={<CaretIcon className="fill-black" />} {...rest}>
+    <div className={cn('selectInput', className)}>
+      <Select suffixIcon={<CaretIcon className="fill-white" />} {...rest}>
         {options.map((option) => {
           const { label, value, ...optRest } = option;
           return (

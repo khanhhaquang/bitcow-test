@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 
 import type { EIP6963AnnounceProviderEvent, EIP6963ProviderDetail } from './types';
 import { EIP6963Event } from './types';
+import { applyOverrideIcon } from './utils';
 
 // TODO(WEB-3241) - Once Mutable<T> utility type is consolidated, use it here
 type MutableInjectedProviderMap = Map<string, EIP6963ProviderDetail>;
@@ -27,8 +28,7 @@ class EIP6963ProviderManager {
   private onAnnounceProvider(event: EIP6963AnnounceProviderEvent) {
     // if (!isEIP6963ProviderDetail(event.detail)) return;
 
-    // const detail = applyOverrideIcon(event.detail);
-    const detail = event.detail;
+    const detail = applyOverrideIcon(event.detail);
 
     // TODO(WEB-3225): update coinbase to display via eip6963 once we move coinbase wallet-link behind the fold
     // if (isCoinbaseProviderDetail(detail)) return;

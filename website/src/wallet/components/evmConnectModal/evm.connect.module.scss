@@ -1,19 +1,6 @@
 .evmConnectModal {
   gap: 12px;
 
-  .title {
-    font-size: 18px;
-    margin-bottom: 4px;
-    font-weight: bold;
-  }
-
-  .closeBtn {
-    cursor: pointer;
-    position: absolute;
-    top: 30px;
-    right: 30px;
-  }
-
   .backBtn {
     cursor: pointer;
     position: absolute;
@@ -21,27 +8,7 @@
     left: 16px;
   }
 
-  .walletsAndTitle{
-    width: 100%;
-    height: auto;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .walletTypeTitle{
-    flex-grow: 1;
-    text-align: left;
-    font-size: 14px;
-    line-height: 42px;
-  }
-
-  .wallets {
-    width: 100%;
-    height: auto;
-    display: flex;
-  }
-
-  .separate{
+  .separate {
     border-width: 0px 0px 1px;
     border-image: initial;
     border-color: rgb(204, 204, 204);
@@ -99,5 +66,4 @@
       margin-top: 20px;
     }
   }
-
 }

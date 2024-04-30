@@ -10,6 +10,7 @@ import { createPortal } from 'react-dom';
 import { RemoveScroll } from 'react-remove-scroll';
 
 import styles from './modal.module.scss';
+import { cn } from 'utils/cn';
 
 interface ModalProp {
   open: boolean;
@@ -57,7 +58,12 @@ export const Modal = ({
             <RemoveScroll enabled={bodyScrollable}>
               <div className={styles.container} onClick={handleBackdropClick}>
                 <div
-                  className={styles.modal + (contentClassName ? ` ${contentClassName}` : '')}
+                  className={cn(
+                    'relative m-4 max-h-[80%] max-w-full overflow-auto bg-bc-swap',
+                    'shadow-bc-swap backdrop:blur-lg',
+                    'font-sm flex flex-col items-center p-4',
+                    contentClassName
+                  )}
                   style={contentStyle}
                   onClick={stopPropagation}>
                   {children}

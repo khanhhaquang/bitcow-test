@@ -176,7 +176,7 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none p-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
+    <Card className="dark-stroke-white table:w-full relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none p-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
       {renderCardHeader()}
       <div className="flex w-full flex-col font-pg">
         <div className="relative flex flex-col">

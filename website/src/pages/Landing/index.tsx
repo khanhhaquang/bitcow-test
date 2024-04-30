@@ -1,15 +1,14 @@
-import classNames from 'classnames';
 import { useEffect, useMemo } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import usePools from 'hooks/usePools';
 
-import styles from './Home2.module.scss';
+import styles from './Landing.module.scss';
 
 import useMerlinWallet from '../../hooks/useMerlinWallet';
 import { cn } from 'utils/cn';
 
-export default function Home2() {
+export default function Landing() {
   const { getTotalPoolsTVL, getTotalPoolsVolume } = usePools();
   const { initProvider } = useMerlinWallet();
 
@@ -28,15 +27,15 @@ export default function Home2() {
   }, [getTotalPoolsVolume]);
 
   return (
-    <div className="relative flex w-full items-center justify-between px-20 [@media(max-width:2199px)]:flex-col [@media(max-width:2199px)]:pt-20">
+    <div className="relative flex w-full items-center justify-between px-20 laptop:flex-col laptop:pt-20">
       <p
-        className={classNames(
+        className={cn(
           styles.leftLabel,
-          'tablet:text-[64px] mobile:!ml-0 mobile:!w-[170px] mobile:text-[32px] [@media(max-width:2199px)]:self-start'
+          'laptop:self-start smallLaptop:!text-6xl tablet:text-5xl mobile:!ml-0 mobile:!w-[170px] mobile:text-3xl'
         )}>
         STABLE & CONCENTRATED
       </p>
-      <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+      <div className="laptop:scale-70 smallLaptop:scale-60 absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center tablet:scale-90">
         <img
           className={cn('h-[587px] w-[774px] max-w-[1757px] flex-1', 'tablet:w-full')}
           src="/images/homeCow.webp"
@@ -49,7 +48,7 @@ export default function Home2() {
           <div className="space-x-3">
             <img
               className="block"
-              src="/images/24hvol.png"
+              src="/images/24h-vol.png"
               alt="24h Volume"
               width={425}
               height={20}
@@ -59,11 +58,10 @@ export default function Home2() {
         </div>
       </div>
       <div
-        className={classNames(
-          styles.rightLabel,
-          'flex flex-col items-end mobile:!w-full [@media(max-width:2199px)]:mt-12 [@media(max-width:2199px)]:self-end'
-        )}>
-        <p className={classNames(styles.main, 'mobile:!text-[32px]')}>TO THE MOOOO!</p>
+        className={cn(styles.rightLabel, 'flex flex-col items-end laptop:self-end mobile:!w-full')}>
+        <p className={cn(styles.main, 'smallLaptop:!text-6xl tablet:!text-5xl mobile:!text-3xl')}>
+          TO THE MOOOO!
+        </p>
         <img width={252} height={43} src="/images/poweredBy.png" alt="powered by smiley" />
       </div>
     </div>

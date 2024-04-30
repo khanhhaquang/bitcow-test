@@ -102,11 +102,9 @@ const PoolRowDetail = ({ pool }: IProps) => {
   return (
     <Fragment>
       <div className="flex-col font-pg text-bc-white tablet:flex">
-        <div className="hidden gap-6 p-4 tablet:flex tablet:bg-color_bg_table dark:tablet:bg-color_bg_row">
+        <div className="hidden gap-6 p-4 tablet:flex">
           <div className="flex flex-col">
-            <span className="block text-sm leading-3 tablet:text-xs">
-              Volume {poolFilter.timeBasis}
-            </span>
+            <span className="block text-sm tablet:text-xs">Volume {poolFilter.timeBasis}</span>
             <span className="">{numberCompactFormat(poolStats.volume) || 0}</span>
           </div>
           <div className="flex flex-col">
@@ -118,7 +116,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
             </span>
           </div>
         </div>
-        <div className="flex gap-6 tablet:flex-col tablet:bg-color_bg_panel tablet:p-4">
+        <div className="flex gap-6 tablet:flex-col tablet:p-4">
           <div className="flex grow gap-6 tablet:w-full">
             <div className="flex w-[210px] grow flex-col gap-4 tablet:w-[82px]">
               <span className="block text-sm capitalize text-bc-white-40 tablet:text-xs">

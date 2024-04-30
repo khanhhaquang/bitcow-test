@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 
 import { Drawer, Modal } from 'components/Antd';
 import { useBreakpoint } from 'hooks/useBreakpoint';
-import { CancelIcon } from 'resources/icons';
+import { CloseIcon } from 'resources/icons';
 
 interface TProps {
   className?: string;
@@ -41,11 +41,11 @@ const BitcowModal: React.FC<TProps> = ({ className, ...rest }) => {
           width="100%"
           height={rest.mobileHeight || ''}
           onClose={rest.onCancel}>
-          <div
+          <button
             className="drawer-close-icon absolute right-0 top-0 flex h-16 w-16 items-center justify-center"
             onClick={rest.onCancel}>
-            <CancelIcon className="h-6 w-6" />
-          </div>
+            <CloseIcon />
+          </button>
           {rest.children}
         </Drawer>
       )}

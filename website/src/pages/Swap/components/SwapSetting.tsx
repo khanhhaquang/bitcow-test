@@ -47,9 +47,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
 
   return (
     <div className="w-full bg-bc-swap px-4 pt-4 pb-6 text-white">
-      <div className="border-b border-white/20 pb-3 font-micro text-2xl tablet:px-5 tablet:py-[22px]">
-        Settings
-      </div>
+      <div className="border-b border-white/20 pb-3 font-micro text-2xl">Settings</div>
       <div className="mt-9 font-pg">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">

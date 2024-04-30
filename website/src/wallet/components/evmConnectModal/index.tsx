@@ -6,23 +6,23 @@ import styles from './evm.connect.module.scss';
 import type { BaseConnector } from '../../connector';
 import { EVM_CURRENT_CONNECTOR_ID } from '../../const';
 import { useEvmConnectContext } from '../../context';
-import close from '../../icons/close.svg';
 import type { EvmConnector } from '../../types/types';
 import Modal from '../modal';
 import { BtcWalletButton, EvmWalletButton } from '../wallet';
+import { CloseIcon } from 'resources/icons';
 
 export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const { evmConnectors, btcConnectors, closeModal, btcConnect, evmConnect, currentChain } =
     useEvmConnectContext();
+
   const showBtcWallets = useMemo(() => {
-    if (currentChain) {
-      return (
-        chains.getEVMChainInfoById(currentChain.chainId) !== undefined && btcConnectors.length > 0
-      );
-    } else {
-      return false;
-    }
+    if (!currentChain) return false;
+
+    return (
+      chains.getEVMChainInfoById(currentChain.chainId) !== undefined && btcConnectors.length > 0
+    );
   }, [currentChain, btcConnectors]);
+
   const onBtcConnect = useCallback(
     async (connector: BaseConnector) => {
       if (connector.isReady()) {
@@ -47,41 +47,31 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
   );
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      isDismissable={false}
-      contentClassName={styles.evmConnectModal}>
-      <div className={styles.title}>{'Choose Wallet'}</div>
-      <img className={styles.closeBtn} src={close} onClick={onClose}></img>
-      {showBtcWallets && (
-        <div className={styles.walletsAndTitle}>
-          <div className={styles.walletTypeTitle}>{'BTC Wallets'}</div>
-          <div className={styles.wallets}>
-            {btcConnectors.map((connector) => {
-              return (
-                <BtcWalletButton
-                  connector={connector}
-                  key={connector.metadata.id}
-                  btcConnect={onBtcConnect}></BtcWalletButton>
-              );
-            })}
-          </div>
-        </div>
-      )}
-      {showBtcWallets && <hr className={styles.separate} />}
+    <Modal open={open} onClose={onClose} isDismissable={false} contentClassName="!min-w-[400px]">
+      <div className="mb-9 flex w-full items-center justify-between border-b border-white/20 pb-3 font-micro text-white">
+        <h2 className="text-2xl text-white">Choose Wallet</h2>
+        <button onClick={onClose} className={styles.closeBtn}>
+          <CloseIcon />
+        </button>
+      </div>
 
-      <div className={styles.walletsAndTitle}>
-        {showBtcWallets && <div className={styles.walletTypeTitle}>{'EVM Wallets'}</div>}
-        <div className={styles.wallets}>
-          {evmConnectors.map((connector) => {
-            return (
-              <EvmWalletButton
+      <div className="w-full">
+        {showBtcWallets && <div className="mb-2 font-micro text-lg">{'EVM Wallets'}</div>}
+        <div className="flex w-full justify-center gap-x-16">
+          {evmConnectors.map((connector) => (
+            <EvmWalletButton
+              connector={connector}
+              key={connector[0].metadata.id}
+              evmConnect={onEvmConnect}></EvmWalletButton>
+          ))}
+          {showBtcWallets &&
+            btcConnectors.map((connector) => (
+              <BtcWalletButton
                 connector={connector}
-                key={connector[0].metadata.id}
-                evmConnect={onEvmConnect}></EvmWalletButton>
-            );
-          })}
+                key={connector.metadata.id}
+                btcConnect={onBtcConnect}
+              />
+            ))}
         </div>
       </div>
     </Modal>

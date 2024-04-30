@@ -1,5 +1,4 @@
 import { IPool } from 'bitcow';
-import cx from 'classnames';
 import poolAction from 'modules/pool/actions';
 import { getLiquidityModal } from 'modules/pool/reducer';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -109,18 +108,16 @@ const Pool = () => {
         Pools{' '}
         {liquidityPools?.length && (
           <span className="ml-2 font-micro text-2xl tablet:ml-0 tablet:text-lg">
-            {fetchedPoolsCount === 0 ? '(loading)' : `(${fetchedPoolsCount})`}
+            {fetchedPoolsCount === 0 ? '' : `(${fetchedPoolsCount})`}
           </span>
         )}
       </h2>
 
-      <div className="ml-auto flex items-start gap-2 font-pgb text-lg text-bc-gold tablet:mt-4">
-        <div className="flex items-center tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+      <div className="ml-auto flex items-start gap-2 font-pgb text-lg text-bc-gold">
+        <div className="flex items-center">
           <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
-          <p>
-            TVL <span className="tablet:hidden">:</span>
-          </p>
-          <div className="ml-1 tablet:text-2xl">
+          <p>TVL :</p>
+          <div className="ml-1">
             ${' '}
             {isTablet
               ? numberCompactFormat(getTotalPoolsTVL())
@@ -128,12 +125,10 @@ const Pool = () => {
           </div>
         </div>
 
-        <div className="flex items-center pl-6 tablet:w-1/2 tablet:grow tablet:flex-col-reverse tablet:p-4 tablet:text-color_text_2">
+        <div className="flex items-center pl-6">
           <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
-          <p>
-            Volume 24H <span className="tablet:hidden">:</span>
-          </p>
-          <div className="ml-1 tablet:text-2xl">
+          <p>Volume 24H :</p>
+          <div className="ml-1">
             ${' '}
             {isTablet
               ? numberCompactFormat(getTotalPoolsVolume())
@@ -202,11 +197,11 @@ const Pool = () => {
   return (
     <div className="mt-11 flex h-fit max-w-[1134px] flex-col bg-bc-pool p-9 text-bc-white shadow-bc-swap backdrop-blur-lg tablet:mt-4">
       {renderHeader()}
-      <div className="pt-6 tablet:border-0 tablet:bg-color_bg_1 tablet:p-0">
-        <div className={cx('hidden tablet:block')}>
+      <div className="pt-6 tablet:border-0 tablet:p-0">
+        <div className={'mt-6 hidden tablet:block'}>
           <Radio.Group onChange={(e) => setActiveTab(e.target.value)} value={activeTab}>
             {tabs.map((tab) => (
-              <Radio.Button value={tab.id} key={tab.id} className="font-pg text-lg">
+              <Radio.Button value={tab.id} key={tab.id} className="bg-transparent font-pg text-lg">
                 {tab.label}
               </Radio.Button>
             ))}
@@ -223,7 +218,7 @@ const Pool = () => {
                 <div className="hidden gap-2 tablet:flex">
                   <SelectInput
                     className={
-                      "relative !w-1/2 font-pg text-lg before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Sort_by'] tablet:before:top-[14px]"
+                      "relative !w-1/2 font-pg text-lg before:absolute before:top-3 before:left-3 before:z-10 before:font-pg before:text-white before:content-['Sort_by']"
                     }
                     value={poolFilter.sortBy[poolFilter.sortBy.length - 1].field}
                     options={SortOptions()}
@@ -231,7 +226,7 @@ const Pool = () => {
                   />
                   <SelectInput
                     className={
-                      "relative !w-1/2 font-pg text-lg before:absolute before:top-2 before:left-3 before:z-10 before:text-color_text_2 before:content-['Time_Basis'] tablet:before:top-[14px]"
+                      "relative !w-1/2 font-pg text-lg before:absolute before:top-3 before:left-3 before:z-10 before:font-pg before:text-white before:content-['Time_Basis']"
                     }
                     value={poolFilter.timeBasis}
                     options={filterOptions}
@@ -251,7 +246,7 @@ const Pool = () => {
                 */}
                 <SearchInput
                   placeholder="Search name or paste address"
-                  className={'w-full font-pg tablet:mt-4 tablet:w-full'}
+                  className={'w-full font-pg tablet:my-4 tablet:w-full'}
                   value={poolFilter.text}
                   onChange={(val) => onUpdateFilter(val, 'text')}
                   onSearch={() => {}}
@@ -264,9 +259,7 @@ const Pool = () => {
       </div>
       <BitcowModal
         onCancel={() => dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null))}
-        className=""
         maskClosable={false}
-        // wrapClassName={styles.modal}
         open={!!liquidityModal}
         closeIcon={<CloseIcon className="relative top-4" />}
         bodyStyle={{ padding: 0 }}

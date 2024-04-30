@@ -96,9 +96,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           return (
             <div className="flex tablet:flex-col">
               <span className="hidden text-xs tablet:block">TVL</span>
-              <span className="whitespace-pre tablet:text-color_text_1">
-                ${numberCompactFormat(tvl, 1) || 0}
-              </span>
+              <span className="whitespace-pre">${numberCompactFormat(tvl, 1) || 0}</span>
             </div>
           );
         },
@@ -239,9 +237,9 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
         expandedRowRender: (record, index, indent, expanded) => {
           if (expanded) {
             return <PoolRowDetail pool={record} />;
-          } else {
-            return undefined;
           }
+
+          return undefined;
         },
         expandIcon: ({ expanded, onExpand, record }) => {
           return <PoolUnfoldIcon className={cx({ 'rotate-180': expanded })} />;

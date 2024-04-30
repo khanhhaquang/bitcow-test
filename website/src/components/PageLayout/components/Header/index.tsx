@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { routes } from 'App.routes';
-import cx from 'classnames';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { cn } from 'utils/cn';
 import { Drawer, Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
 // import ThemeToggler from 'components/ThemeToggler';
@@ -42,44 +42,48 @@ const PageHeader: React.FC = () => {
     });
   }, []);
 
+  const isLandingPage = useMemo(() => currentPageName === 'Home', [currentPageName]);
+
   const renderDesktop = () => {
-    return currentPageName !== 'Home' ? (
+    if (isLandingPage) {
+      return (
+        <PixelButton
+          className="font-micro text-2xl uppercase"
+          width={246}
+          height={44}
+          borderWidth={4}
+          onClick={() => nav('/swap')}>
+          Launch app
+        </PixelButton>
+      );
+    }
+
+    return (
       <div className="relative flex w-full grow items-center justify-end pr-10">
         <WalletConnector />
         <div className="absolute top-full">
           <NetworkSelect className="mt-3" />
         </div>
       </div>
-    ) : (
-      <PixelButton
-        className="font-micro text-2xl uppercase"
-        width={246}
-        height={44}
-        borderWidth={4}
-        onClick={() => nav('/swap')}>
-        Launch app
-      </PixelButton>
     );
   };
 
   const renderMobileMenu = () => {
     return (
-      <div className="flex h-full flex-col justify-between bg-whiteBg">
+      <div className="flex h-full flex-col justify-between">
         <div className="flex flex-col items-start">
           <Link
             to="/"
             onClick={() => setIsSideMenuOpen(false)}
-            className={cx('mb-24 flex h-full items-center justify-center')}>
-            <div className={cx('block w-[109px]')}>
-              <img src={LogoBitCow} className="block h-full w-full" alt="Logo" />
-            </div>
+            className={'mb-20 flex h-full items-center justify-center'}>
+            <img width={80} height={80} src={LogoBitCow} alt="Logo" />
           </Link>
           <Menu
             mode="vertical"
             theme="dark"
-            className={cx(
+            className={cn(
               styles.menu,
-              'flex h-full w-full flex-col justify-center !bg-transparent'
+              'flex h-full w-full flex-col justify-center gap-8 !bg-transparent'
             )}
             selectedKeys={[currentPageName]}>
             {navItems}
@@ -93,29 +97,29 @@ const PageHeader: React.FC = () => {
   };
 
   return (
-    <Header className={cx('z-10 h-[140px] w-full bg-transparent px-0 pt-12 tablet:pt-0')}>
-      <div className={cx('relative flex h-full items-center justify-between px-20')}>
-        <Link to="/" className={cx('flex h-full items-center justify-center hover:-rotate-12')}>
+    <Header className={'z-10 h-[140px] w-full bg-transparent px-0 pt-12 tablet:pt-0'}>
+      <div className={'relative flex h-full items-center justify-between px-20 tablet:px-12'}>
+        <Link to="/" className={'flex h-full items-center justify-center hover:-rotate-12'}>
           <div
-            className={cx('hidden', {
-              'tablet:block': currentPageName !== 'Home'
+            className={cn('hidden', {
+              'tablet:block': !isLandingPage
             })}>
             <img src={LogoBitCow} className="block h-auto w-12" alt="Logo" />
           </div>
           <div
-            className={cx('block', {
-              'tablet:hidden': currentPageName !== 'Home'
+            className={cn('block', {
+              'tablet:hidden': !isLandingPage
             })}>
             <img src={LogoBitCow} className="block h-auto w-[81px]" alt="Logo" />
           </div>
         </Link>
         {/* Desktop */}
-        {currentPageName !== 'Home' && (
+        {!isLandingPage && (
           <div className="absolute left-1/2 z-10 flex h-full grow -translate-x-1/2 items-center tablet:hidden">
             <Menu
               mode="horizontal"
               theme="dark"
-              className={cx(
+              className={cn(
                 styles.menu,
                 'flex h-fit w-full min-w-[200px] items-center justify-center gap-x-4 !bg-transparent'
               )}
@@ -125,13 +129,13 @@ const PageHeader: React.FC = () => {
           </div>
         )}
         <div
-          className={cx('block tablet:hidden', {
-            grow: currentPageName !== 'Home'
+          className={cn('block tablet:hidden', {
+            grow: !isLandingPage
           })}>
           {renderDesktop()}
         </div>
         {/* Mobile - non home page */}
-        {currentPageName !== 'Home' && (
+        {!isLandingPage && (
           <div className="hidden h-full items-center gap-x-2 tablet:flex">
             <WalletConnector />
             <Button className="h-8 w-8" variant="icon" onClick={() => setIsSideMenuOpen(true)}>
@@ -140,21 +144,22 @@ const PageHeader: React.FC = () => {
           </div>
         )}
         {/* Mobile - home page */}
-        {currentPageName === 'Home' && (
+        {isLandingPage && (
           <div className="hidden h-full items-center tablet:flex">
             <PixelButton
-              className="font-micro text-2xl uppercase text-white"
+              className="font-micro text-2xl uppercase"
               width={246}
               height={44}
               borderWidth={4}
-              onClick={() => nav('/swap')}
-            />
+              onClick={() => nav('/swap')}>
+              Launch app
+            </PixelButton>
           </div>
         )}
       </div>
       <Drawer
         open={isSideMenuOpen}
-        className={cx(styles.drawer, 'hidden tablet:block')}
+        className={cn(styles.drawer, 'hidden tablet:block')}
         closable={false}
         placement="right"
         width="212px"

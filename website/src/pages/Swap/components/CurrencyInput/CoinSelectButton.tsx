@@ -1,8 +1,8 @@
-import { TokenInfo } from 'bitcow';
-
 import CoinIcon from 'components/CoinIcon';
 import { ReactComponent as CoinSelectIcon } from 'resources/icons/coinSelect.svg';
 import { cn } from 'utils/cn';
+
+import { TokenInfo } from '../../../../sdk';
 
 const CoinSelectButton = ({
   className = '',

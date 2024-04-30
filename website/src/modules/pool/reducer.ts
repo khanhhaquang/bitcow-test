@@ -1,11 +1,13 @@
 import { createReducer } from '@reduxjs/toolkit';
+
 // import { sortBy } from 'lodash';
-import { IPool } from 'bitcow';
 import { RootState } from 'modules/rootReducer';
 
 import { LiquidityModal } from 'types/pool';
 
 import actions from './actions';
+
+import { IPool } from '../../sdk';
 
 interface SwapState {
   isFetching: boolean;

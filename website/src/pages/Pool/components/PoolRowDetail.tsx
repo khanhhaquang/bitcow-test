@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { IUserLiquidity, IPool } from 'bitcow';
 import poolAction from 'modules/pool/actions';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -15,6 +14,8 @@ import { useBreakpoint } from 'hooks/useBreakpoint';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import { MinusIcon, PlusIcon } from 'resources/icons';
+
+import { IUserLiquidity, IPool } from '../../../sdk';
 
 interface ExpandedDataType {
   typename: string;

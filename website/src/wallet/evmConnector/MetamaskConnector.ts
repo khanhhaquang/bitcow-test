@@ -1,8 +1,8 @@
 import { MetaMask } from '@web3-react/metamask';
 
 import type { WalletMetadata } from '../connector';
-import type { Metadata } from '../types/types';
 import metamaskIcon from '../icons/wallet/metamask.svg';
+import type { Metadata } from '../types/types';
 
 export class MetamaskConnector extends MetaMask implements Metadata {
   get metadata(): WalletMetadata {

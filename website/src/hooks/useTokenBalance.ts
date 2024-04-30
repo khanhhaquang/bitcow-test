@@ -1,8 +1,9 @@
 import BigNumber from 'bignumber.js';
-import { Token, TokenInfo } from 'bitcow';
 import { useMemo } from 'react';
 
 import useMerlinWallet from './useMerlinWallet';
+
+import { Token, TokenInfo } from '../sdk';
 
 export type Balance = number | null;
 

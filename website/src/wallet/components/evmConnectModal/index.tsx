@@ -1,6 +1,8 @@
 import { chains } from '@particle-network/chains';
 import { useCallback, useMemo } from 'react';
 
+import { CloseIcon } from 'resources/icons';
+
 import styles from './evm.connect.module.scss';
 
 import type { BaseConnector } from '../../connector';
@@ -9,7 +11,6 @@ import { useEvmConnectContext } from '../../context';
 import type { EvmConnector } from '../../types/types';
 import Modal from '../modal';
 import { BtcWalletButton, EvmWalletButton } from '../wallet';
-import { CloseIcon } from 'resources/icons';
 
 export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const { evmConnectors, btcConnectors, closeModal, btcConnect, evmConnect, currentChain } =

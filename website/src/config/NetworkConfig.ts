@@ -1,6 +1,6 @@
 import { AddEthereumChainParameter } from '@web3-react/types';
-import { CONFIG } from 'bitcow/dist/configs';
 
+import { CONFIG } from '../sdk';
 import { NetworkConfig } from '../types/bitcow';
 
 const BTC: AddEthereumChainParameter['nativeCurrency'] = {
@@ -8,35 +8,16 @@ const BTC: AddEthereumChainParameter['nativeCurrency'] = {
   symbol: 'BTC',
   decimals: 18
 };
-/*
+
 const ETH: AddEthereumChainParameter['nativeCurrency'] = {
   name: 'Ether',
   symbol: 'ETH',
   decimals: 18
 };
-*/
 
 export const ALL_NETWORK: NetworkConfig[] = [
-  {
-    chainConfig: {
-      chainId: 200901,
-      chainName: 'Bitlayer',
-      nativeCurrency: BTC,
-      rpcUrls: ['https://rpc.bitlayer.org'],
-      blockExplorerUrls: ['https://www.btrscan.com']
-    },
-    sdkConfig: CONFIG.bitlayer,
-    rpcNodeUrl: 'https://rpc.bitlayer.org',
-    icon: '/images/bitlayer.png',
-    requestsPerSecond: 8,
-    poolsFirstPaginateCount: 20,
-    poolsPaginateCount: 20,
-    tokensFirstPaginateCount: 20,
-    tokensPaginateCount: 20,
-    balancePaginateCount: 100,
-    fetchAllTokenBalance: true
-  }
   /*
+  ,
   {
     chainConfig: {
       chainId: 4200,
@@ -56,6 +37,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
     balancePaginateCount: 100,
     fetchAllTokenBalance: true
   },
+  */
   {
     chainConfig: {
       chainId: 686868,
@@ -156,6 +138,24 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensPaginateCount: 600,
     balancePaginateCount: 600,
     fetchAllTokenBalance: true
+  },
+  {
+    chainConfig: {
+      chainId: 200901,
+      chainName: 'Bitlayer',
+      nativeCurrency: BTC,
+      rpcUrls: ['https://rpc.bitlayer.org'],
+      blockExplorerUrls: ['https://www.btrscan.com']
+    },
+    sdkConfig: CONFIG.bitlayer,
+    rpcNodeUrl: 'https://rpc.bitlayer.org',
+    icon: '/images/bitlayer.png',
+    requestsPerSecond: 8,
+    poolsFirstPaginateCount: 20,
+    poolsPaginateCount: 20,
+    tokensFirstPaginateCount: 20,
+    tokensPaginateCount: 20,
+    balancePaginateCount: 100,
+    fetchAllTokenBalance: true
   }
-  */
 ];

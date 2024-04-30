@@ -1,4 +1,4 @@
-import { IPool } from 'bitcow';
+import { IPool } from '../sdk';
 
 export interface IPoolToken {
   id: string;

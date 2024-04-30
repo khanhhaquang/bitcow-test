@@ -1,4 +1,4 @@
-import { TokenInfo, Quote } from 'bitcow';
+import { TokenInfo, Quote } from '../../sdk';
 
 export interface ISwapSettings {
   slipTolerance: number;

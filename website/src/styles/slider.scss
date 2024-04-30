@@ -8,6 +8,6 @@
     @apply bg-bc-white #{!important};
   }
   .ant-slider-handle {
-    @apply relative bottom-[2px] border-bc-white rounded-none w-[14px] h-[19px] border-4 bg-bc-blue #{!important};
+    @apply relative bottom-[2px] h-[19px] w-[14px] rounded-none border-4 border-bc-white bg-bc-blue #{!important};
   }
 }

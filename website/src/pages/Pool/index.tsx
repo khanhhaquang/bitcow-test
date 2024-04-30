@@ -1,4 +1,3 @@
-import { IPool } from 'bitcow';
 import poolAction from 'modules/pool/actions';
 import { getLiquidityModal } from 'modules/pool/reducer';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -16,10 +15,11 @@ import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 import AddLiquidity from './components/AddLiquidity';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
+import styles from './index.module.scss';
 
 import useMerlinWallet from '../../hooks/useMerlinWallet';
 import useNetwork from '../../hooks/useNetwork';
-import styles from './index.module.scss';
+import { IPool } from '../../sdk';
 
 const filterOptions = [
   {

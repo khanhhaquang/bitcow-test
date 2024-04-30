@@ -2,16 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import BigNumber from 'bignumber.js';
-import {
-  TokenInfo,
-  Token,
-  IPool,
-  Quote,
-  Sdk as BitcowSDK,
-  TxOption,
-  UserLpAmount,
-  CreateTokenInfo
-} from 'bitcow';
 import { Eip1193Provider, ethers } from 'ethers';
 import { createContext, FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -22,6 +12,16 @@ import {
 } from 'utils/notifications';
 
 import useNetwork from '../hooks/useNetwork';
+import {
+  TokenInfo,
+  Token,
+  IPool,
+  Quote,
+  Sdk as BitcowSDK,
+  TxOption,
+  UserLpAmount,
+  CreateTokenInfo
+} from '../sdk';
 import { NetworkConfig } from '../types/bitcow';
 import { useEvmConnectContext, Wallet } from '../wallet';
 interface MerlinWalletContextType {

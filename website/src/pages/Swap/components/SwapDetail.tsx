@@ -1,16 +1,16 @@
-import { TokenInfo } from 'bitcow';
 import classNames from 'classnames';
 import { useFormikContext } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
 
 import { Collapse } from 'components/Antd';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
+import { DropDownArrowIcon } from 'resources/icons';
+import { cn } from 'utils/cn';
 
 import styles from './SwapDetail.module.scss';
 
+import { TokenInfo } from '../../../sdk';
 import { ISwapSettings } from '../types';
-import { DropDownArrowIcon } from 'resources/icons';
-import { cn } from 'utils/cn';
 
 const { Panel } = Collapse;
 

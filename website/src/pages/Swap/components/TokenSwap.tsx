@@ -7,6 +7,7 @@ import Button from 'components/Button';
 import Card from 'components/Card';
 import PixelButton from 'components/PixelButton';
 import useMerlinWallet from 'hooks/useMerlinWallet';
+import useNetwork from 'hooks/useNetwork';
 import useTokenBalance from 'hooks/useTokenBalance';
 import { SettingsIcon } from 'resources/icons';
 import { ReactComponent as CoinSwapIcon } from 'resources/icons/coinSwap.svg';
@@ -17,7 +18,6 @@ import CurrencyInput from './CurrencyInput';
 import SwapDetail from './SwapDetail';
 import SwapSetting from './SwapSetting';
 
-import useNetwork from 'hooks/useNetwork';
 import { ISwapSettings } from '../types';
 
 const TokenSwap = () => {

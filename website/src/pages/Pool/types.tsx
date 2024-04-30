@@ -1,4 +1,4 @@
-import { Token } from 'bitcow';
+import { Token } from '../../sdk';
 
 export interface AddLiquidity {
   xToken: Token;

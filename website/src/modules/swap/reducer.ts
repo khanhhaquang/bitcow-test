@@ -1,11 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { TokenInfo } from 'bitcow';
 import { RootState } from 'modules/rootReducer';
 
 import { ISwapSettings } from 'pages/Swap/types';
 
 // import { ITokenInfo } from 'types/tokenList';
 import actions from './actions';
+
+import { TokenInfo } from '../../sdk';
 
 interface SwapState {
   isFetching: boolean;

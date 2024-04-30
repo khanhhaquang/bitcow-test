@@ -1,9 +1,10 @@
-import { Token, TokenInfo } from 'bitcow';
 import { useMemo } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 
 import useMerlinWallet from './useMerlinWallet';
+
+import { Token, TokenInfo } from '../sdk';
 
 const useTokenAmountFormatter = () => {
   const { bitcowSDK } = useMerlinWallet();

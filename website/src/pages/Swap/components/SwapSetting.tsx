@@ -4,9 +4,9 @@ import swapAction from 'modules/swap/actions';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
+import PixelButton from 'components/PixelButton';
 import PositiveFloatNumInput from 'components/PositiveFloatNumInput';
 import { ISwapSettings } from 'pages/Swap/types';
-import PixelButton from 'components/PixelButton';
 
 interface TProps {
   onClose: () => void;

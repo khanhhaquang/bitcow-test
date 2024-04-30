@@ -2,11 +2,11 @@ import { useEffect, useMemo } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import usePools from 'hooks/usePools';
+import { cn } from 'utils/cn';
 
 import styles from './Landing.module.scss';
 
 import useMerlinWallet from '../../hooks/useMerlinWallet';
-import { cn } from 'utils/cn';
 
 export default function Landing() {
   const { getTotalPoolsTVL, getTotalPoolsVolume } = usePools();

@@ -1,4 +1,3 @@
-import { TokenInfo } from 'bitcow';
 import { useFormikContext } from 'formik';
 import VirtualList from 'rc-virtual-list';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -13,6 +12,7 @@ import { TokenBalance } from 'types/bitcow';
 import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';
 
+import { TokenInfo } from '../../../../sdk';
 import { bigintTokenBalanceToNumber } from '../../../../utils/formatter';
 
 interface TProps {

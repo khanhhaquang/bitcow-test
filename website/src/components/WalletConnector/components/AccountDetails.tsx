@@ -1,4 +1,3 @@
-import { BTC } from 'bitcow/dist/configs';
 import cx from 'classnames';
 import { useState } from 'react';
 
@@ -14,6 +13,7 @@ import { copyToClipboard } from 'utils/copy';
 
 import styles from './AccountDetails.module.scss';
 
+import { BTC } from '../../../sdk';
 import { useEvmConnectContext } from '../../../wallet';
 
 let timer: NodeJS.Timeout;

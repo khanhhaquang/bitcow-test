@@ -4,7 +4,6 @@ import { routes } from 'App.routes';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { cn } from 'utils/cn';
 import { Drawer, Layout, Menu } from 'components/Antd';
 import Button from 'components/Button';
 // import ThemeToggler from 'components/ThemeToggler';
@@ -14,6 +13,7 @@ import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { MenuIcon } from 'resources/icons';
 import LogoBitCow from 'resources/img/logoBitCow.png';
+import { cn } from 'utils/cn';
 
 import styles from './Header.module.scss';
 

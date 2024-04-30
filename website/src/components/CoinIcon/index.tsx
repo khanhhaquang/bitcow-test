@@ -1,9 +1,10 @@
-import { Token, TokenInfo } from 'bitcow';
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';
 import useMerlinWallet from 'hooks/useMerlinWallet';
+
+import { Token, TokenInfo } from '../../sdk';
 
 interface TProps {
   className?: string;

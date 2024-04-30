@@ -1,13 +1,14 @@
 // import { TokenInfo } from '@manahippo/hippo-sdk/dist/generated/coin_registry/coin_registry';
 
 import { Skeleton } from 'antd';
+import { displayAddress } from 'wallet/utils/formatter';
 
+import { Tooltip } from 'components/Antd';
 import CoinIcon from 'components/CoinIcon';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { TokenBalance } from 'types/bitcow';
-import { Tooltip } from 'components/Antd';
+
 import useMerlinWallet from '../../../../hooks/useMerlinWallet';
-import { displayAddress } from 'wallet/utils/formatter';
 
 interface TProps {
   item: TokenBalance;

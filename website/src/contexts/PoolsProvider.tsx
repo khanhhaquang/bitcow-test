@@ -1,9 +1,10 @@
-import { IPool, IUserLiquidity, TokenInfo, Token } from 'bitcow';
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { numberGroupFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { IPoolFilters } from 'types/pool';
+
+import { IPool, IUserLiquidity, TokenInfo, Token } from '../sdk';
 
 interface PoolsContextType {
   activePools: IPool[];

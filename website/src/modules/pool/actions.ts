@@ -1,7 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Pool } from 'bitcow';
 
 import { IPoolFilters, LiquidityModal } from 'types/pool';
+
+import { Pool } from '../../sdk';
 
 const SET_IS_FETCHING = createAction<boolean>('pool/SET_IS_FETCHING');
 const TOGGLE_LIQUIDITY_MODAL = createAction<LiquidityModal>('pool/TOGGLE_LIQUIDITY_MODAL');

@@ -1,10 +1,10 @@
 import { ReactNode, useEffect, useState } from 'react';
 
 import { ReactComponent as SelectUnfoldIcon } from 'resources/icons/selectUnfold.svg';
+import { cn } from 'utils/cn';
 
 import useNetwork from '../hooks/useNetwork';
 import { useEvmConnectContext, WalletType } from '../wallet';
-import { cn } from 'utils/cn';
 
 function SelectRow({
   icon,

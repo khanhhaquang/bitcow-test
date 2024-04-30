@@ -1,11 +1,11 @@
 .switch {
   :global {
     .ant-switch {
-      @apply w-20 h-9 bg-color_bg_2 rounded-none p-[2px];
+      @apply h-9 w-20 rounded-none bg-color_bg_2 p-[2px];
       .ant-switch-handle {
         @apply h-8 w-8 rounded-none bg-color_main;
         &::before {
-          @apply bg-color_main rounded-none;
+          @apply rounded-none bg-color_main;
         }
       }
     }

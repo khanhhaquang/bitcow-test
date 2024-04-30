@@ -1,7 +1,9 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TokenInfo } from 'bitcow';
 
 import { ISwapSettings } from 'pages/Swap/types';
+
+import { TokenInfo } from '../../sdk';
+
 // import { ITokenInfo } from 'types/tokenList';
 
 const SET_IS_FETCHING = createAction<boolean>('swap/SET_IS_FETCHING');

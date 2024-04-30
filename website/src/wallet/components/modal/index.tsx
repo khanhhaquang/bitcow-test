@@ -9,8 +9,9 @@ import {
 import { createPortal } from 'react-dom';
 import { RemoveScroll } from 'react-remove-scroll';
 
-import styles from './modal.module.scss';
 import { cn } from 'utils/cn';
+
+import styles from './modal.module.scss';
 
 interface ModalProp {
   open: boolean;

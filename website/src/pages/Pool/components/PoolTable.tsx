@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { IPool } from 'bitcow';
 import cx from 'classnames';
 import { useCallback } from 'react';
 
@@ -15,6 +14,8 @@ import { ReactComponent as PoolUnfoldIcon } from 'resources/icons/poolUnfold.svg
 
 import PoolRowDetail from './PoolRowDetail';
 import TokenPair from './TokenPair';
+
+import { IPool } from '../../../sdk';
 
 interface TProps {
   activePools: IPool[];

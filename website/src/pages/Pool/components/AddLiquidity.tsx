@@ -1,4 +1,3 @@
-import { IPool } from 'bitcow';
 import { Formik, FormikHelpers } from 'formik';
 import poolAction from 'modules/pool/actions';
 import { useCallback, useEffect } from 'react';
@@ -8,12 +7,13 @@ import * as yup from 'yup';
 import PixelButton from 'components/PixelButton';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { AddLiquidity as AddLiquidityProps } from 'pages/Pool/types';
+import { PlusIcon } from 'resources/icons';
 import { openErrorNotification } from 'utils/notifications';
 
 import TokenLiquidity from './TokenLiquidity';
 
 import useTokenBalance from '../../../hooks/useTokenBalance';
-import { PlusIcon } from 'resources/icons';
+import { IPool } from '../../../sdk';
 
 const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
   const { requestAddLiquidity, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();

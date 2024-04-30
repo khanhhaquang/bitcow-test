@@ -1,4 +1,3 @@
-import { BN, IPool } from 'bitcow';
 import cx from 'classnames';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import poolAction from 'modules/pool/actions';
@@ -19,6 +18,8 @@ import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { WithdrawLiquidity as WithdrawLiquidityProps } from 'pages/Pool/types';
 import { ReactComponent as RmLiqIcon } from 'resources/icons/rmLiq.svg';
 import { openErrorNotification } from 'utils/notifications';
+
+import { BN, IPool } from '../../../sdk';
 
 const percentageOptions = [25, 50, 75, 100];
 

@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import { BN, IPool, Token } from 'bitcow';
 import { useFormikContext } from 'formik';
 import { useCallback, useEffect, useRef } from 'react';
 
@@ -12,6 +11,8 @@ import usePools from 'hooks/usePools';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import useTokenBalance from 'hooks/useTokenBalance';
 import { ISwapSettings } from 'pages/Swap/types';
+
+import { BN, IPool, Token } from '../../../sdk';
 
 interface TProps {
   xToken: Token;

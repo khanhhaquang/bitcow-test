@@ -1,6 +1,6 @@
-import { TokenInfo } from 'bitcow';
-
 import CoinIcon from 'components/CoinIcon';
+
+import { TokenInfo } from '../../../sdk';
 
 interface TProps {
   token0: TokenInfo;

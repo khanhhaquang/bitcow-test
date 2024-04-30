@@ -1,5 +1,6 @@
 import { useRive } from '@rive-app/react-canvas';
 import { Image } from 'antd';
+
 import useCurrentPage from 'hooks/useCurrentPage';
 
 const AppPageDecorators = () => {

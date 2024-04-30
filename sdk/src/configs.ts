@@ -12,12 +12,30 @@ export const BTC: TokenInfo = {
 };
 
 export const CONFIG: {
+    merlin: Config;
+    bitlayer: Config;
     merlinTestnet: Config;
     botanixTestnet: Config;
     b2Testnet: Config;
     bobTestnet: Config;
     bitlayerTestnet: Config;
 } = {
+    merlin: {
+        chainId: 4200,
+        tokenList: '0x177bc036887327a066765A3F0fA5F84Dbb0ebb3c',
+        tradingPairV1List: '0xB6d73e9a9Cf70dDF396afCd677FDAfe7073AA026',
+        tradingPairV1Creator: '',
+        swapRouter: '0xF42F777538911510a38c80aD28B5E358a110b88A',
+        tokensBalance: '0xD9739A22415FC1519d2a820Feb8739B09a85bD19',
+    },
+    bitlayer: {
+        chainId: 200901,
+        tokenList: '0x177bc036887327a066765A3F0fA5F84Dbb0ebb3c',
+        tradingPairV1List: '0xB6d73e9a9Cf70dDF396afCd677FDAfe7073AA026',
+        tradingPairV1Creator: '',
+        swapRouter: '0xF42F777538911510a38c80aD28B5E358a110b88A',
+        tokensBalance: '0xD9739A22415FC1519d2a820Feb8739B09a85bD19',
+    },
     merlinTestnet: {
         chainId: 686868,
         tokenList: '0xc8E4075b246721c010a079e4c3d70268A7c44E17',

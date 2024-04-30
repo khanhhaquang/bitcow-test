@@ -66,6 +66,22 @@ async function withdraw(xToken: string, yToken: string, lpAmount: string) {
 }
 main.command('withdraw').argument('xToken').argument('yToken').argument('lpAmount').action(withdraw);
 
+async function updatePrice(xToken: string, yToken: string, xPrice: string, yPrice: string) {
+    const pool = await getPool(xToken, yToken);
+    await pool.printMessage();
+    await sleep(1000);
+    await pool.updatePrice(parseFloat(xPrice), parseFloat(yPrice));
+    await pool.reload();
+    console.log('');
+    await pool.printMessage();
+}
+main.command('update-price')
+    .argument('xToken')
+    .argument('yToken')
+    .argument('xPrice')
+    .argument('yPrice')
+    .action(updatePrice);
+
 async function approveSdk() {
     const sdk = await getSdk();
     await checkAndApproveSdk(sdk);

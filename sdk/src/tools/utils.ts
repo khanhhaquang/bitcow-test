@@ -6,6 +6,16 @@ import fs from 'mz/fs';
 
 // export const URL = `https://rpc.particle.network/evm-chain?chainId=686868&projectUuid=4fc09dbd-b5a7-4d3a-9610-40200de091d1&projectKey=c7ImwhUKrhSx7d6kpoKbbrHJmzrWhgJGvlU0dbRH`;
 
+const merlinConfig = {
+    URL: `https://rpc.merlinchain.io`,
+    config: CONFIG.merlin
+};
+
+const bitlayerConfig = {
+    URL: `https://rpc.bitlayer.org`,
+    config: CONFIG.bitlayer
+};
+
 const merlinTestnetConfig = {
     URL: `https://merlin-testnet.blockpi.network/v1/rpc/b890f4dba4f9b56ad2a8301d7bb77ddb3d1f3cc7`,
     config: CONFIG.merlinTestnet
@@ -31,14 +41,18 @@ const bitLayerTestnetConfig = {
 };
 
 export const UTIL_CONFIGS = [
+    merlinConfig,
+    bitlayerConfig,
+    /*
     merlinTestnetConfig,
     botanixTestnetConfig,
     b2TestnetConfig,
     bobTestnetConfig,
     bitLayerTestnetConfig
+   */
 ];
 
-const currentConfig = merlinTestnetConfig;
+const currentConfig = bitlayerConfig;
 
 export const txOption = undefined;
 

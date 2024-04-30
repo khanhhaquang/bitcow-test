@@ -31,7 +31,7 @@ export class CoinList extends ContractRunner {
         private debug: (message?: any) => void = console.log
     ) {
         super(provider, txOption, signer);
-        this.tokens = (ConfigTokens as Record<string, any>)[chainId.toString()];
+        this.tokens = (ConfigTokens as Record<string, any>)[chainId.toString()] || [];
         this.buildCache();
         this.tokenListContract = new Contract(tokenListAddress, ABI_TOKEN_LIST, provider);
         this.tokensBalanceContract = new Contract(tokensBalance, ABI_TOKENS_BALANCE, provider);

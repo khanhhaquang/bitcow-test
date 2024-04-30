@@ -1,3 +1,4 @@
+import BN from 'bn.js';
 import { PairStats, StatsV1, TokenInfo } from '../types';
 import { bigintToBigNumber, bigintToBN, stringToBigNumber, stringToBN } from './common';
 
@@ -132,6 +133,12 @@ export function parseStatsV1(fetchStatsV1: any): StatsV1 {
 }
 
 function fillStats(stats: StatsV1) {
+    if (stats.multX.toNumber() === 0) {
+        stats.multX = new BN(1);
+    }
+    if (stats.multY.toNumber() === 0) {
+        stats.multY = new BN(1);
+    }
     if (stats.concentration.eqn(1)) {
         stats.bigK = stats.currentX.mul(stats.currentY);
         stats.targetX = stats.currentX;

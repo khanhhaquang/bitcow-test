@@ -8,13 +8,54 @@ const BTC: AddEthereumChainParameter['nativeCurrency'] = {
   symbol: 'BTC',
   decimals: 18
 };
+/*
 const ETH: AddEthereumChainParameter['nativeCurrency'] = {
   name: 'Ether',
   symbol: 'ETH',
   decimals: 18
 };
+*/
 
 export const ALL_NETWORK: NetworkConfig[] = [
+  {
+    chainConfig: {
+      chainId: 200901,
+      chainName: 'Bitlayer',
+      nativeCurrency: BTC,
+      rpcUrls: ['https://rpc.bitlayer.org'],
+      blockExplorerUrls: ['https://www.btrscan.com']
+    },
+    sdkConfig: CONFIG.bitlayer,
+    rpcNodeUrl: 'https://rpc.bitlayer.org',
+    icon: '/images/bitlayer.png',
+    requestsPerSecond: 8,
+    poolsFirstPaginateCount: 20,
+    poolsPaginateCount: 20,
+    tokensFirstPaginateCount: 20,
+    tokensPaginateCount: 20,
+    balancePaginateCount: 100,
+    fetchAllTokenBalance: true
+  }
+  /*
+  {
+    chainConfig: {
+      chainId: 4200,
+      chainName: 'Merlin',
+      nativeCurrency: BTC,
+      rpcUrls: ['https://rpc.merlinchain.io'],
+      blockExplorerUrls: ['https://scan.merlinchain.io']
+    },
+    sdkConfig: CONFIG.merlin,
+    rpcNodeUrl: 'https://rpc.merlinchain.io',
+    icon: '/images/merlin.png',
+    requestsPerSecond: 4,
+    poolsFirstPaginateCount: 10,
+    poolsPaginateCount: 10,
+    tokensFirstPaginateCount: 20,
+    tokensPaginateCount: 20,
+    balancePaginateCount: 100,
+    fetchAllTokenBalance: true
+  },
   {
     chainConfig: {
       chainId: 686868,
@@ -116,15 +157,5 @@ export const ALL_NETWORK: NetworkConfig[] = [
     balancePaginateCount: 600,
     fetchAllTokenBalance: true
   }
-  //   {
-  //     chainConfig: {
-  //       chainId: 4200,
-  //       chainName: 'Merlin',
-  //       nativeCurrency: BTC,
-  //       rpcUrls: ['https://rpc.merlinchain.io'],
-  //       blockExplorerUrls: ['https://scan.merlinchain.io/']
-  //     },
-  //     rpcNodeUrl: 'https://rpc.merlinchain.io',
-  //     icon: '/images/merlin.png'
-  //   }
+  */
 ];

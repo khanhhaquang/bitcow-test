@@ -291,6 +291,15 @@ export class Pool extends ContractRunner implements IPool {
         return await this.send(this.poolContract.withdraw, inputLPAmount, this.txOption);
     }
 
+    async updatePrice(xPrice: number, yPrice: number) {
+        return await this.send(
+            this.poolContract.updatePrice,
+            xPrice,
+            yPrice,
+            //this.txOption
+        );
+    }
+
     async printMessage() {
         this.printPoolMessage();
         await this.printUserMessage();

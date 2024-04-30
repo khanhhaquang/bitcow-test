@@ -16,7 +16,7 @@ import * as ConfigPair from './cache/pairs.json';
 export class Sdk extends ContractRunner {
     pools: Pool[] = [];
     coinList: CoinList;
-    poolCreator: PoolCreator;
+    poolCreator?: PoolCreator;
     private readonly routerContract: Contract;
     private tradingPairV1ListContract: Contract;
     private readonly promiseThrottle: PromiseThrottle;
@@ -48,7 +48,11 @@ export class Sdk extends ContractRunner {
             signer,
             debug
         );
-        this.poolCreator = new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer);
+        this.poolCreator =  (
+            config.tradingPairV1Creator ? 
+            new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer) : 
+            undefined
+        );
         this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
         this.tradingPairV1ListContract = new Contract(config.tradingPairV1List, ABI_SS_TRADING_PAIR_V1_LIST, provider);
     }
@@ -83,6 +87,8 @@ export class Sdk extends ContractRunner {
                 return { pools, pageStats: promisePair.pageStats, allCount };
             } catch (e) {
                 times++;
+                console.log(e);
+                console.trace(e);
                 console.log(`Retry fetch pools from ${start} times ${times}`);
             }
         }
@@ -158,7 +164,7 @@ export class Sdk extends ContractRunner {
         super.setSigner(signer, address);
         this.coinList.setSigner(signer, address);
         this.pools.forEach((pool) => pool.setSigner(signer, address));
-        this.poolCreator.setSigner(signer, address);
+        this.poolCreator?.setSigner(signer, address);
     }
     get swapRouter(): string {
         return this.config.swapRouter;

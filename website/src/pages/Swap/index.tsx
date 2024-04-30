@@ -57,7 +57,7 @@ const Swap: React.FC = () => {
   );
 
   return (
-    <div className="relative mx-auto flex h-full w-full flex-col items-center pt-[140px] laptop:pt-10 tablet:px-16">
+    <div className="relative mx-auto flex h-full w-full flex-col items-center pt-[140px] laptop:pt-10 tablet:px-8">
       <Formik
         initialValues={swapSettings}
         validationSchema={validationSchema}

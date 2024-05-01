@@ -287,15 +287,26 @@ export const EvmConnectProvider = ({
     ];
   }, [evmConnectors, allEip6963Injectors, evmConnectorMaxCount, evmSelectEip6963]);
 
-  return (
-    <BtcConnectProvider options={options} connectors={btcConnectors} autoConnect={autoConnect}>
+  // leave out btc-connect for now
+  if (false) {
+    return (
+      <BtcConnectProvider options={options} connectors={btcConnectors} autoConnect={autoConnect}>
+        <Web3ReactProvider key={new Date().toISOString()} connectors={allEvmConnectors}>
+          <EvmConnectProviderInner evmConnectors={allEvmConnectors} autoConnect={autoConnect}>
+            {children}
+          </EvmConnectProviderInner>
+        </Web3ReactProvider>
+      </BtcConnectProvider>
+    );
+  } else {
+    return (
       <Web3ReactProvider key={new Date().toISOString()} connectors={allEvmConnectors}>
         <EvmConnectProviderInner evmConnectors={allEvmConnectors} autoConnect={autoConnect}>
           {children}
         </EvmConnectProviderInner>
       </Web3ReactProvider>
-    </BtcConnectProvider>
-  );
+    );
+  }
 };
 
 export const useEvmConnectContext = () => {

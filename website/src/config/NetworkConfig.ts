@@ -9,11 +9,13 @@ const BTC: AddEthereumChainParameter['nativeCurrency'] = {
   decimals: 18
 };
 
+/*
 const ETH: AddEthereumChainParameter['nativeCurrency'] = {
   name: 'Ether',
   symbol: 'ETH',
   decimals: 18
 };
+*/
 
 export const ALL_NETWORK: NetworkConfig[] = [
   /*
@@ -37,7 +39,6 @@ export const ALL_NETWORK: NetworkConfig[] = [
     balancePaginateCount: 100,
     fetchAllTokenBalance: true
   },
-  */
   {
     chainConfig: {
       chainId: 686868,
@@ -139,6 +140,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
     balancePaginateCount: 600,
     fetchAllTokenBalance: true
   },
+  */
   {
     chainConfig: {
       chainId: 200901,

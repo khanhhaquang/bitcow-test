@@ -52,7 +52,7 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
               new BigNumber(
                 inputX.mul(liquidityPool.reserve1).div(liquidityPool.reserve0).toString()
               )
-                .div(10 ** xToken.decimals)
+                .div(10 ** yToken.decimals)
                 .toFixed(tokenInputDecimals.current)
             );
           } else {

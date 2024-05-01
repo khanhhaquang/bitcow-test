@@ -88,14 +88,14 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
           </div>
           <div className="ml-2 flex items-center gap-2">
             <Button
-              className="h-5 w-[31px] rounded-none bg-bc-white-20 p-1 text-xs text-bc-white-80"
+              className="h-5 w-8 rounded-none bg-bc-white-20 p-1 text-xs text-bc-white-80"
               onClick={() => {
                 onAmountChange(uiBalance * 0.5);
               }}>
               Half
             </Button>
             <Button
-              className="h-5 w-[31px] rounded-none bg-bc-white-20 p-1 text-xs text-bc-white-80"
+              className="h-5 w-8 rounded-none bg-bc-white-20 p-1 text-xs text-bc-white-80"
               onClick={() => {
                 onAmountChange(uiBalance);
               }}>
@@ -118,10 +118,10 @@ const TokenLiquidity: React.FC<TProps> = ({ xToken, yToken, type, liquidityPool 
       <div className={'flex justify-between text-bc-white-80'}>
         <small className="flex items-end text-sm">
           Balance:
-          <span className={'ml-1'}>{tokenAmountFormatter(uiBalance, token) || 0}</span>
+          <span className="ml-1">{tokenAmountFormatter(uiBalance, token) || 0}</span>
         </small>
         <small className="flex items-end text-sm">
-          ~$<span className={'ml-1'}>{getTokenBalanceInUSD(values[type], token)}</span>
+          ~$<span className="ml-1">{getTokenBalanceInUSD(values[type], token)}</span>
         </small>
       </div>
     </div>

@@ -67,7 +67,10 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK>();
 
   const [pendingTx, setPendingTx] = useState<boolean>(false);
-  const [txOption] = useState<TxOption>({});
+  const [txOption] = useState<TxOption>({
+    gasPrice: 100000000
+    // maxPriorityFeePerGas: 100000000
+  } as TxOption);
 
   const [tokenList, setTokenList] = useState<TokenInfo[]>();
   const [symbolToToken, setSymbolToToken] = useState<Record<string, TokenInfo>>(undefined);

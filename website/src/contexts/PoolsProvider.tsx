@@ -66,6 +66,8 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
           let rate = 0;
           if (coinInfo.symbol === 'bitusd') {
             rate = 1;
+          } else if (coinInfo.symbol === 'USDT') {
+            rate = 1;
           } else if (coinInfo.symbol === 'WBTC') {
             rate = 60000;
           }

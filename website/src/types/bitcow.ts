@@ -1,6 +1,6 @@
 import { AddEthereumChainParameter } from '@web3-react/types';
 
-import { Config, TokenInfo } from '../../../sdk';
+import { Config, TokenInfo } from '../sdk';
 
 export interface TokenBalance {
   token: TokenInfo;

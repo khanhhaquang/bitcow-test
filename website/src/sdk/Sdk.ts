@@ -191,7 +191,7 @@ export class Sdk extends ContractRunner {
   }
 
   setTxOption(txOption?: TxOption) {
-    this.txOption = txOption;
+    super.setTxOption(txOption);
     for (const pool of this.pools) {
       pool.setTxOption(txOption);
     }

@@ -185,7 +185,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     }
 
     return cols;
-  }, [getPoolTVL, getSortOrder, getSorter, isTablet, poolFilter]);
+  }, [getPoolTVL, getSortOrder, getSorter, isTablet, poolFilter, getPoolStatsByTimebasis]);
 
   const handleChange: TableProps<IPool>['onChange'] = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);

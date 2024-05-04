@@ -63,10 +63,6 @@ export class Pool extends ContractRunner implements IPool {
     return Number(this.stats?.protocolFeeShareThousandth.toString()) / 1000;
   }
 
-  setTxOption(txOption?: TxOption) {
-    this.txOption = txOption;
-  }
-
   getUserAddress() {
     return super.getAddress();
   }

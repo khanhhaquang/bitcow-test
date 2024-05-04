@@ -68,7 +68,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const [pendingTx, setPendingTx] = useState<boolean>(false);
   const [txOption] = useState<TxOption>({
-    gasPrice: 100000000
+    // gasPrice: 100000000
     // maxPriorityFeePerGas: 100000000
   } as TxOption);
 

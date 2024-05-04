@@ -150,7 +150,7 @@ export class Pool extends ContractRunner implements IPool {
         const protocolFees: [number, number] = [currFees[0] - prevFees[0], currFees[1] - prevFees[1]];
         const fullFees: [number, number] = [protocolFees[0] / feeShare, protocolFees[1] / feeShare];
         const lpFees: [number, number] = [fullFees[0] * (1 - feeShare), fullFees[1] * (1 - feeShare)];
-        const volume: [number, number] = [(currVolume - prevVolume) / 10000, 0];
+        const volume: [number, number] = [(currVolume - prevVolume) / 1000, 0];
         if (type === 'protocolFees') {
             return protocolFees;
         } else if (type === 'lpFees') {

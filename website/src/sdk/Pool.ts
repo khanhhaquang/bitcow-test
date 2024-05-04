@@ -162,8 +162,8 @@ export class Pool extends ContractRunner implements IPool {
     this.assertStats();
     const seconds = Date.now() / 1000;
     const days = Math.floor(seconds / 86400);
-    const currDay = (days + 7) % 7;
-    const prevDay = (days + 6) % 7;
+    const currDay = (days + 6) % 7;
+    const prevDay = (days + 5) % 7;
     const feeRecords = this.stats!.feeRecords;
     const currFees = [
       feeRecords.xProtocolFees[currDay].div(this.xMult).toNumber(),

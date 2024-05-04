@@ -42,7 +42,7 @@ const bitLayerTestnetConfig = {
 
 export const UTIL_CONFIGS = [
     merlinConfig,
-    bitlayerConfig,
+    bitlayerConfig
     /*
     merlinTestnetConfig,
     botanixTestnetConfig,

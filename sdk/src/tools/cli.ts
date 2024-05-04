@@ -22,7 +22,10 @@ async function print() {
 async function printSDK() {
     const sdk = await getSdk();
     await sdk.coinList.reload(500, 500);
-
+    for (const pool of sdk.pools) {
+        const volume = await pool.poolContract.cumulativeVolume()
+        console.log(volume)
+    }
     const balances = await sdk.getTokensBalance(500, false);
 
     await sdk.print();

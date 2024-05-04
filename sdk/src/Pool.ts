@@ -14,7 +14,7 @@ export class Pool extends ContractRunner implements IPool {
     xTokenContract: Contract;
     yTokenContract: Contract;
     pair: Pair;
-    stats: StatsV1 | undefined;
+    stats: StatsV1;
     public xToken: Token;
     public yToken: Token;
 
@@ -75,10 +75,10 @@ export class Pool extends ContractRunner implements IPool {
         return this.yToken;
     }
     get xMult(): number {
-        return this.xToken.mult;
+        return this.stats.multX.toNumber() // this.xToken.mult;
     }
     get yMult(): number {
-        return this.yToken.mult;
+        return this.stats.multY.toNumber() // this.yToken.mult;
     }
     get lpMult(): number {
         return this.xMult;

@@ -52,9 +52,9 @@ const TokenSwap = () => {
         fromToken === undefined ||
         bitcowSDK.coinList.getTokenByAddress(fromToken.address) === undefined
       ) {
-        setFieldValue('currencyFrom.token', symbolToToken.wBTC);
-        if (symbolToToken.wBTC) {
-          needFetchTokens.push(symbolToToken.wBTC.address);
+        setFieldValue('currencyFrom.token', symbolToToken.WBTC);
+        if (symbolToToken.WBTC) {
+          needFetchTokens.push(symbolToToken.WBTC.address);
         }
       }
       if (

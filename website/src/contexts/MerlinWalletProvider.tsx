@@ -425,7 +425,15 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             success = false;
           }
         } catch (e) {
-          checkTransactionError(e);
+          if (e.reason === 'Output amount less than min output amount') {
+            openErrorNotification({
+              detail:
+                'Pool has changed, refreshing for you, please try again after receive amount is updated'
+            });
+          } else {
+            checkTransactionError(e);
+          }
+
           success = false;
         } finally {
           setPendingTx(false);

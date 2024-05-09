@@ -32,10 +32,13 @@ interface TProviderProps {
 const PoolsContext = createContext<PoolsContextType>({} as PoolsContextType);
 
 const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
-  const { bitcowSDK, liquidityPools, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();
+  const { bitcowSDK, liquidityPools, tokenBalances, setNeedBalanceTokens, tokenList } =
+    useMerlinWallet();
   const [activePools, setActivePools] = useState<IPool[]>([]);
   const [coinPrices, setCoinPrices] = useState<Record<string, number>>();
-  // const [fetching, setFetching] = useState(false);
+  const [localCoinPrices, setLocalCoinPrices] = useState<Record<string, number>>({});
+  const [fetchCoinPrices, setFetchCoinPrices] = useState<Record<string, number>>({});
+
   const [poolFilter, setPoolFilter] = useState<IPoolFilters>({
     text: '',
     timeBasis: '24H',
@@ -56,48 +59,85 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
     },
     [coinPrices]
   );
+  const fetchTokenPriceFromCoingecko = useCallback(async (ids: string[]) => {
+    try {
+      if (ids.length === 0) {
+        return {};
+      }
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${ids.join(',')}&vs_currencies=USD`
+      );
+      return await response?.json();
+    } catch (err) {
+      return {};
+    }
+  }, []);
 
-  const populateCoinRate = useCallback(
-    async (supportedCoins: Record<string, Token>): Promise<Record<string, number>> => {
+  const defaultPrice = useCallback((symbol: string) => {
+    let price = 0;
+    if (symbol === 'bitusd') {
+      price = 1;
+    } else if (symbol === 'USDT') {
+      price = 1;
+    } else if (symbol === 'WBTC') {
+      price = 60000;
+    }
+    return price;
+  }, []);
+
+  const populateFetchTokenPrice = useCallback(async () => {
+    if (tokenList) {
       const collectedPrices = {};
-      Object.keys(supportedCoins).map(async (symbol) => {
-        const coinInfo = supportedCoins[symbol];
+      const coingeckoIds = tokenList.map((coinInfo) => coinInfo.coingeckoId);
+      const nonemptyIds = coingeckoIds.filter((id) => id !== '');
+      const prices = await fetchTokenPriceFromCoingecko(nonemptyIds);
+      tokenList.map(async (coinInfo) => {
         if (!collectedPrices[coinInfo.symbol]) {
-          let rate = 0;
-          if (coinInfo.symbol === 'bitusd') {
-            rate = 1;
-          } else if (coinInfo.symbol === 'USDT') {
-            rate = 1;
-          } else if (coinInfo.symbol === 'WBTC') {
-            rate = 60000;
+          let price = defaultPrice(coinInfo.symbol);
+          const data = prices[coinInfo.coingeckoId];
+          if (data) {
+            price = data.usd;
           }
-          collectedPrices[coinInfo.symbol] = rate;
+          collectedPrices[coinInfo.symbol] = price;
         }
+        setFetchCoinPrices(collectedPrices);
       });
-      return collectedPrices;
-    },
-    []
-  );
-  const gatherPoolTokenInfo = useCallback(async () => {
-    let supportedCoins = {};
+    }
+  }, [tokenList, fetchTokenPriceFromCoingecko]);
 
-    // Gather all tokens in pools
-    activePools.map((pool) => {
-      if (!supportedCoins[pool.token0.symbol]) {
-        supportedCoins[pool.token0.symbol] = pool.token0;
+  const populateLocalTokenPrice = useCallback(async () => {
+    if (activePools) {
+      const tokens: Record<string, Token> = {};
+      activePools.forEach((pool) => {
+        tokens[pool.token0.symbol] = pool.token0;
+        tokens[pool.token1.symbol] = pool.token1;
+      });
+      const collectedPrices = {};
+      for (const coinInfo of Object.values(tokens)) {
+        if (!collectedPrices[coinInfo.symbol]) {
+          collectedPrices[coinInfo.symbol] = defaultPrice(coinInfo.symbol);
+        }
+        setLocalCoinPrices(collectedPrices);
       }
-      if (!supportedCoins[pool.token1.symbol]) {
-        supportedCoins[pool.token1.symbol] = pool.token1;
-      }
-    });
-
-    const supportedCoinRate = await populateCoinRate(supportedCoins);
-    setCoinPrices(supportedCoinRate);
-  }, [activePools, populateCoinRate]);
+    }
+  }, [activePools]);
 
   useEffect(() => {
-    gatherPoolTokenInfo();
-  }, [activePools, gatherPoolTokenInfo]);
+    populateFetchTokenPrice();
+  }, [populateFetchTokenPrice]);
+
+  useEffect(() => {
+    populateLocalTokenPrice();
+  }, [populateLocalTokenPrice]);
+
+  // merge price
+  useEffect(() => {
+    if (Object.keys(fetchCoinPrices).length > 0) {
+      setCoinPrices(fetchCoinPrices);
+    } else {
+      setCoinPrices(localCoinPrices);
+    }
+  }, [localCoinPrices, fetchCoinPrices]);
 
   useEffect(() => {
     if (bitcowSDK && liquidityPools?.length) {

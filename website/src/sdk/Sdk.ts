@@ -240,7 +240,7 @@ export class Sdk extends ContractRunner {
     try {
       outAmount = isReversed ? pool.quoteYtoX(inputAmount) : pool.quoteXtoY(inputAmount);
     } catch (e){
-      console.log(e)
+      // console.log(e)
     }
     const outAmt = new BigNumber(outAmount.toString()).div(outputMult).toNumber();
     return {

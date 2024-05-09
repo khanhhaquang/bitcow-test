@@ -96,9 +96,6 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   }, [activePools, populateCoinRate]);
 
   useEffect(() => {
-    // console.log('gatherPoolTokenInfo');
-    // console.log(activePools.length);
-    // console.log(gatherPoolTokenInfo);
     gatherPoolTokenInfo();
   }, [activePools, gatherPoolTokenInfo]);
 

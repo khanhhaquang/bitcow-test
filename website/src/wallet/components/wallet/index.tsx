@@ -31,6 +31,7 @@ export const EvmWalletButton = ({
   connector: [EvmConnector, Web3ReactHooks];
   evmConnect: (connector: EvmConnector) => void;
 }) => {
+  console.log(connector);
   return (
     <button
       className="group flex flex-col items-center gap-y-1.5"

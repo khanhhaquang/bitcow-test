@@ -1,23 +1,16 @@
 import { useRive } from '@rive-app/react-canvas';
 import { Image } from 'antd';
 
-import useCurrentPage from 'hooks/useCurrentPage';
-
 const AppPageDecorators = () => {
-  const [currentPageName] = useCurrentPage();
   const { RiveComponent: SmallCloudRive } = useRive({
     src: '/riv/small-cloud.riv',
-    stateMachines: 'State Machine 1',
     autoplay: true
   });
 
   const { RiveComponent: BigCloudRive } = useRive({
     src: '/riv/big-cloud.riv',
-    stateMachines: 'State Machine 1',
     autoplay: true
   });
-
-  if (!['Swap', 'Pools'].includes(currentPageName)) return null;
 
   return (
     <>

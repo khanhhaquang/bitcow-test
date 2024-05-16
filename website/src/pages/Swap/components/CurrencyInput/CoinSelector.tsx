@@ -23,7 +23,7 @@ interface TProps {
 const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
   const { tokenList, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();
-  const { coinPrices: coinInPools } = usePools();
+  const { coinPrices } = usePools();
   const commonCoins = useMemo(() => {
     return tokenList
       ? tokenList.filter((token) => {
@@ -57,7 +57,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   );
 
   const getFilteredTokenListWithBalance = useCallback(() => {
-    if (coinInPools) {
+    if (coinPrices) {
       let currentTokenList = tokenList
         ? tokenList
             .sort((a, b) => (a.symbol <= b.symbol ? -1 : 1))
@@ -86,7 +86,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
     } else {
       setTokenListBalance([]);
     }
-  }, [coinInPools, filter, tokenList, tokenBalances]);
+  }, [coinPrices, filter, tokenList, tokenBalances]);
 
   useEffect(() => {
     getFilteredTokenListWithBalance();

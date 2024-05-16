@@ -186,6 +186,7 @@ export class Sdk extends ContractRunner {
     ) {
         const sdk = new Sdk(provider, config, requestsPerSecond, txOption, signer);
         await sdk.reload(100, 140, (pools) => {});
+        await sdk.coinList.reload(100,100)
         return sdk;
     }
 

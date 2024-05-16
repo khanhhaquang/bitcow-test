@@ -108,42 +108,42 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
           multiple: 2
         }
       },
-      // {
-      //   title: `Volume ${poolFilter.timeBasis}`,
-      //   dataIndex: 'volume',
-      //   render: (val, record: IPool) => {
-      //     const { volume } = getPoolStatsByTimebasis(record);
-      //     return (
-      //       <div className="tablet:hidden">
-      //         {numberCompactFormat(volume, 1)
-      //           ? `$${numberCompactFormat(volume, 1)}`
-      //           : 'Coming soon'}
-      //       </div>
-      //     );
-      //   },
-      //   sortOrder: activeSorter.field === 'volume' ? activeSorter.order : null,
-      //   sorter: {
-      //     compare: (a, b) => getPoolStatsByTimebasis(a).volume - getPoolStatsByTimebasis(b).volume,
-      //     multiple: 2
-      //   }
-      // },
-      // {
-      //   title: `Fees ${poolFilter.timeBasis}`,
-      //   dataIndex: 'fees',
-      //   render: (val, record: IPool) => {
-      //     const { fees } = getPoolStatsByTimebasis(record);
-      //     return (
-      //       <div className="tablet:hidden">
-      //         {numberCompactFormat(fees, 3) ? `$${numberCompactFormat(fees, 3)}` : 'Coming soon'}
-      //       </div>
-      //     );
-      //   },
-      //   sortOrder: activeSorter.field === 'fees' ? activeSorter.order : null,
-      //   sorter: {
-      //     compare: (a, b) => getPoolStatsByTimebasis(a).fees - getPoolStatsByTimebasis(b).fees,
-      //     multiple: 2
-      //   }
-      // },
+      {
+        title: `Volume ${poolFilter.timeBasis}`,
+        dataIndex: 'volume',
+        render: (val, record: IPool) => {
+          const { volume } = getPoolStatsByTimebasis(record);
+          return (
+            <div className="tablet:hidden">
+              {numberCompactFormat(volume, 1)
+                ? `$${numberCompactFormat(volume, 1)}`
+                : 'Coming soon'}
+            </div>
+          );
+        },
+        sortOrder: activeSorter.field === 'volume' ? activeSorter.order : null,
+        sorter: {
+          compare: (a, b) => getPoolStatsByTimebasis(a).volume - getPoolStatsByTimebasis(b).volume,
+          multiple: 2
+        }
+      },
+      {
+        title: `Fees ${poolFilter.timeBasis}`,
+        dataIndex: 'fees',
+        render: (val, record: IPool) => {
+          const { fees } = getPoolStatsByTimebasis(record);
+          return (
+            <div className="tablet:hidden">
+              {numberCompactFormat(fees, 3) ? `$${numberCompactFormat(fees, 3)}` : 'Coming soon'}
+            </div>
+          );
+        },
+        sortOrder: activeSorter.field === 'fees' ? activeSorter.order : null,
+        sorter: {
+          compare: (a, b) => getPoolStatsByTimebasis(a).fees - getPoolStatsByTimebasis(b).fees,
+          multiple: 2
+        }
+      },
       /*
       {
         title: `APR ${poolFilter.timeBasis}`,
@@ -185,7 +185,7 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
     }
 
     return cols;
-  }, [getPoolTVL, getSortOrder, getSorter, isTablet, poolFilter]);
+  }, [getPoolTVL, getSortOrder, getSorter, isTablet, poolFilter, getPoolStatsByTimebasis]);
 
   const handleChange: TableProps<IPool>['onChange'] = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);

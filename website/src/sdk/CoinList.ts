@@ -129,10 +129,6 @@ export class CoinList extends ContractRunner {
 
   afterSetSigner(signer?: Signer | undefined): void {}
 
-  setTxOption(txOption?: TxOption) {
-    this.txOption = txOption;
-  }
-
   getTokenByAddress(address: string): TokenInfo {
     return this.addressToToken[address];
   }

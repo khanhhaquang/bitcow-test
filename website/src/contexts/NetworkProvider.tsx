@@ -27,8 +27,11 @@ const NetworkProvider: FC<TConfigProps> = ({ children }) => {
     [setCurrentNetworkState]
   );
   useEffect(() => {
+    const localStorageNetwork = localStorage.getItem('current-network');
     const currentNetworkChainId =
-      localStorage.getItem('current-network') || ALL_NETWORK[0].chainConfig.chainId.toString();
+      ALL_NETWORK.find(
+        (network) => network.chainConfig.chainId.toString() === localStorageNetwork
+      )?.chainConfig.chainId.toString() || ALL_NETWORK[0].chainConfig.chainId.toString();
     if (currentNetworkChainId) {
       for (const networkConfig of ALL_NETWORK) {
         if (networkConfig.chainConfig.chainId.toString() === currentNetworkChainId) {

@@ -191,7 +191,7 @@ export class Sdk extends ContractRunner {
   }
 
   setTxOption(txOption?: TxOption) {
-    this.txOption = txOption;
+    super.setTxOption(txOption);
     for (const pool of this.pools) {
       pool.setTxOption(txOption);
     }
@@ -236,7 +236,12 @@ export class Sdk extends ContractRunner {
       ? [pool.yMult, pool.xMult]
       : [pool.xMult, pool.yMult];
     const inputAmount = new BN(new BigNumber(inAmt).times(inputMult).toFixed(0));
-    const outAmount = isReversed ? pool.quoteYtoX(inputAmount) : pool.quoteXtoY(inputAmount);
+    let outAmount = 0
+    try {
+      outAmount = isReversed ? pool.quoteYtoX(inputAmount) : pool.quoteXtoY(inputAmount);
+    } catch (e){
+      // console.log(e)
+    }
     const outAmt = new BigNumber(outAmount.toString()).div(outputMult).toNumber();
     return {
       inputToken,

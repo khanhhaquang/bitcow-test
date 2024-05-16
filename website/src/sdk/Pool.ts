@@ -63,10 +63,6 @@ export class Pool extends ContractRunner implements IPool {
     return Number(this.stats?.protocolFeeShareThousandth.toString()) / 1000;
   }
 
-  setTxOption(txOption?: TxOption) {
-    this.txOption = txOption;
-  }
-
   getUserAddress() {
     return super.getAddress();
   }
@@ -162,9 +158,26 @@ export class Pool extends ContractRunner implements IPool {
     this.assertStats();
     const seconds = Date.now() / 1000;
     const days = Math.floor(seconds / 86400);
-    const currDay = (days + 7) % 7;
-    const prevDay = (days + 6) % 7;
     const feeRecords = this.stats!.feeRecords;
+    const volumeMult = this.getVolumeMult();
+
+    const currDay = (days + 6) % 7;
+    const currVolume = feeRecords.volumes[currDay].div(volumeMult).toNumber();
+    let prevDay = 0;
+    let prevVolume = 0;
+    for (let i = 5; i > 0; i--) {
+      const day = (days + i) % 7;
+      const volume = feeRecords.volumes[day].div(volumeMult).toNumber();
+      if (volume > prevVolume) {
+        prevVolume = volume;
+        prevDay = day;
+      }
+    }
+
+    if (currVolume < prevVolume) {
+      return [0, 0];
+    }
+
     const currFees = [
       feeRecords.xProtocolFees[currDay].div(this.xMult).toNumber(),
       feeRecords.yProtocolFees[currDay].div(this.yMult).toNumber()
@@ -174,17 +187,12 @@ export class Pool extends ContractRunner implements IPool {
       feeRecords.yProtocolFees[prevDay].div(this.yMult).toNumber()
     ];
 
-    const volumeMult = this.getVolumeMult();
-
-    const currVolume = feeRecords.volumes[currDay].div(volumeMult).toNumber();
-    const prevVolume = feeRecords.volumes[prevDay].div(volumeMult).toNumber();
-
     const feeShare = this.protocolFeeShareThousandth;
 
     const protocolFees: [number, number] = [currFees[0] - prevFees[0], currFees[1] - prevFees[1]];
     const fullFees: [number, number] = [protocolFees[0] / feeShare, protocolFees[1] / feeShare];
     const lpFees: [number, number] = [fullFees[0] * (1 - feeShare), fullFees[1] * (1 - feeShare)];
-    const volume: [number, number] = [(currVolume - prevVolume) / 10000, 0];
+    const volume: [number, number] = [(currVolume - prevVolume) / 1000, 0];
     if (type === 'protocolFees') {
       return protocolFees;
     } else if (type === 'lpFees') {

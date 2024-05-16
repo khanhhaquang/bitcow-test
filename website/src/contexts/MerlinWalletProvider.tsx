@@ -67,7 +67,10 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK>();
 
   const [pendingTx, setPendingTx] = useState<boolean>(false);
-  const [txOption] = useState<TxOption>({});
+  const [txOption] = useState<TxOption>({
+    // gasPrice: 100000000
+    // maxPriorityFeePerGas: 100000000
+  } as TxOption);
 
   const [tokenList, setTokenList] = useState<TokenInfo[]>();
   const [symbolToToken, setSymbolToToken] = useState<Record<string, TokenInfo>>(undefined);
@@ -422,7 +425,15 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             success = false;
           }
         } catch (e) {
-          checkTransactionError(e);
+          if (e.reason === 'Output amount less than min output amount') {
+            openErrorNotification({
+              detail:
+                'Pool has changed, refreshing for you, please try again after receive amount is updated'
+            });
+          } else {
+            checkTransactionError(e);
+          }
+
           success = false;
         } finally {
           setPendingTx(false);

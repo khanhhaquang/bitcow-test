@@ -35,34 +35,36 @@ export default function Landing() {
         )}>
         STABLE & CONCENTRATED
       </p>
-      <div className="laptop:scale-70 smallLaptop:scale-60 absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center tablet:scale-90">
-        <img
-          className={cn('h-[587px] w-[774px] max-w-[1757px] flex-1', 'tablet:w-full')}
-          src="/images/homeCow.webp"
-        />
-        <div className="flex justify-center gap-x-12 tablet:flex-col tablet:justify-center tablet:gap-y-4">
-          <div className="space-x-3">
-            <img className="block" src="/images/tvl.png" alt="TVL" width={424} height={20} />
-            <div className="text-center text-[48px] mobile:text-[36px]">{tvl}</div>
-          </div>
-          <div className="space-x-3">
-            <img
-              className="block"
-              src="/images/24h-vol.png"
-              alt="24h Volume"
-              width={425}
-              height={20}
-            />
-            <div className="text-center text-[48px] mobile:text-[36px]">{vol24hr}</div>
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="relative flex flex-col items-center">
+          <img
+            className={cn(
+              'h-[587px] w-[774px] max-w-[1757px]',
+              'laptop:h-[415px] laptop:w-[540px]',
+              ''
+            )}
+            src="/images/homeCow.webp"
+          />
+          <div className="flex justify-center gap-x-12 tablet:flex-col tablet:justify-center tablet:gap-y-8">
+            <div className="space-x-3">
+              <img className="block" src="/images/tvl.png" alt="TVL" width={424} height={20} />
+              <p className="text-center text-5xl mobile:text-4xl">{tvl}</p>
+            </div>
+            <div className="space-x-3">
+              <img
+                className="block"
+                src="/images/24h-vol.png"
+                alt="24h Volume"
+                width={425}
+                height={20}
+              />
+              <p className="text-center text-5xl mobile:text-4xl">{vol24hr}</p>
+            </div>
           </div>
         </div>
       </div>
       <div className={cn(styles.rightLabel, 'flex flex-col items-end laptop:self-end')}>
-        <p
-          className={cn(
-            styles.main,
-            'smallLaptop:!text-6xl tablet:!text-5xl mobile:hidden mobile:!text-3xl'
-          )}>
+        <p className={cn(styles.main, 'smallLaptop:!text-6xl tablet:!text-5xl mobile:!text-3xl')}>
           TO THE MOOOO!
         </p>
         <img width={252} height={43} src="/images/poweredBy.png" alt="powered by smiley" />

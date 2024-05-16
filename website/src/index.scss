@@ -124,3 +124,24 @@ input[type=file]::-webkit-file-upload-button {
     --obric-color_disabled: rgba(255, 255, 255, 0.1);
   }
 }
+
+.page-background {
+  background: linear-gradient(230deg, #97cdff, #2589e4);
+  background-size: 400% 400%;
+  -webkit-animation: AnimationName 36s ease infinite;
+  -moz-animation: AnimationName 36s ease infinite;
+  -o-animation: AnimationName 36s ease infinite;
+  animation: AnimationName 36s ease infinite;
+}
+
+@keyframes AnimationName {
+  0% {
+    background-position: 86% 0%;
+  }
+  50% {
+    background-position: 15% 100%;
+  }
+  100% {
+    background-position: 86% 0%;
+  }
+}

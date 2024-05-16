@@ -1,10 +1,10 @@
-import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 
 import { Token, TokenInfo } from '../../sdk';
+import { cn } from 'utils/cn';
 
 interface TProps {
   className?: string;
@@ -43,16 +43,14 @@ const CoinIcon: React.FC<TProps> = ({ size = 24, className, token }) => {
 
   return (
     <div
-      className={classNames('relative', className)}
+      className={cn('relative overflow-hidden', className)}
       style={{ width: `${size}px`, height: `${size}px` }}>
-      {(!logoSrc || !isLoaded) && (
-        <Skeleton className="absolute left-0 top-0 h-full w-full" circle={true} height={'100%'} />
-      )}
+      {(!logoSrc || !isLoaded) && <Skeleton className="absolute inset-0" circle />}
       {logoSrc && (
         <img
           src={logoSrc}
-          className={classNames('h-full w-full rounded-full', {
-            invisible: !isLoaded
+          className={cn('h-full w-full rounded-full ', {
+            hidden: !isLoaded
           })}
           alt=""
           onError={onImgError}

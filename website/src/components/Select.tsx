@@ -11,19 +11,19 @@ function SelectRow({
   label,
   suffix,
   className,
-  isHoverEnabled
+  isDropdownItem
 }: {
   icon: string;
   label: string;
   suffix?: ReactNode;
-  isHoverEnabled?: boolean;
+  isDropdownItem?: boolean;
   className?: string;
 }) {
   return (
     <div
       className={cn(
-        'flex cursor-pointer items-center justify-start gap-x-2 bg-transparent p-1.5',
-        isHoverEnabled ? 'bg-white/5 hover:bg-white/10 active:bg-white/5 active:text-black/50' : '',
+        'flex cursor-pointer items-center justify-start gap-x-2 bg-transparent p-1.5 hover:bg-white/10 active:bg-transparent active:text-black/50',
+        isDropdownItem ? 'bg-white/5' : '',
         className
       )}>
       <img className="h-5 w-5 rounded-full" src={icon} alt={`${label} icon`} />
@@ -73,7 +73,7 @@ export default function Select() {
         />
       </div>
       {isUnfold && (
-        <div className="absolute left-0 top-full">
+        <div className="absolute left-0 top-full w-full">
           {networks.map((network) => {
             return (
               <div
@@ -88,7 +88,7 @@ export default function Select() {
                 <SelectRow
                   icon={network.icon}
                   label={network.chainConfig.chainName}
-                  isHoverEnabled
+                  isDropdownItem
                 />
               </div>
             );

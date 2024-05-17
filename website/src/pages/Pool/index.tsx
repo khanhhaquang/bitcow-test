@@ -44,7 +44,8 @@ const Pool = () => {
     setPoolFilter,
     poolFilter,
     getTotalPoolsTVL,
-    getTotalPoolsVolume
+    getTotalPoolsVolume,
+    isLoadingPool
   } = usePools();
   const { currentNetwork } = useNetwork();
   const [activeTab, setActiveTab] = useState('1');
@@ -53,7 +54,7 @@ const Pool = () => {
   const liquidityModal = useSelector(getLiquidityModal);
   const { isTablet } = useBreakpoint('tablet');
 
-  const { initProvider, fetchedPoolsCount, liquidityPools } = useMerlinWallet();
+  const { initProvider } = useMerlinWallet();
 
   useEffect(() => {
     initProvider('pool');
@@ -104,14 +105,7 @@ const Pool = () => {
 
   const renderHeader = () => (
     <div className="flex items-start text-2xl text-bc-white tablet:flex-col">
-      <h2 className="flex items-center font-micro text-4xl text-white tablet:text-2xl">
-        Pools{' '}
-        {liquidityPools?.length && (
-          <span className="ml-2 font-micro text-2xl tablet:ml-0 tablet:text-lg">
-            {fetchedPoolsCount === 0 ? '' : `(${fetchedPoolsCount})`}
-          </span>
-        )}
-      </h2>
+      <h2 className="flex items-center font-micro text-4xl text-white tablet:text-2xl">Pools</h2>
 
       <div className="ml-auto flex items-start gap-2 font-pgb text-lg text-bc-gold">
         <div className="flex items-center">
@@ -189,10 +183,16 @@ const Pool = () => {
       return {
         label: tab.label,
         key: tab.id,
-        children: <PoolTable activePools={currentPools} viewOwned={tab.id === '2'} />
+        children: (
+          <PoolTable
+            activePools={currentPools}
+            viewOwned={tab.id === '2'}
+            isLoading={isLoadingPool}
+          />
+        )
       };
     });
-  }, [filteredPools, checkIfInvested, tabs]);
+  }, [filteredPools, checkIfInvested, tabs, isLoadingPool]);
 
   return (
     <div className="mt-11 flex h-fit max-w-[1134px] flex-col bg-bc-pool p-9 text-bc-white shadow-bc-swap backdrop-blur-lg tablet:mt-4">

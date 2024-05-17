@@ -20,13 +20,27 @@ import { IPool } from '../../../sdk';
 interface TProps {
   activePools: IPool[];
   viewOwned: boolean;
+  isLoading: boolean;
 }
 
-const PoolTable = ({ activePools, viewOwned }: TProps) => {
+const LoadingIndicator = () => (
+  <div className="flex h-full w-full flex-col items-center justify-center gap-y-3 font-pg">
+    <img src="/images/pools-loading.webp" alt="loading" width={203} height={103} />
+    <div className="text-lg text-bc-white-80">Fetching on-chain data......</div>
+  </div>
+);
+
+const NoDataIndicator = () => (
+  <div className="flex h-full w-full flex-col items-center justify-center gap-y-3 font-pg">
+    <img src="/images/pools-no-data.webp" alt="loading" width={108} height={99} />
+    <div className="text-lg text-bc-white-80">No data</div>
+  </div>
+);
+
+const PoolTable = ({ activePools, viewOwned, isLoading }: TProps) => {
+  const showIndicator = isLoading || !activePools?.length;
   const { isTablet } = useBreakpoint('tablet');
   const { getPoolTVL, poolFilter, getPoolStatsByTimebasis, setPoolFilter } = usePools();
-
-  const loading = !activePools.length;
 
   // dirty handle mobile sort order as fields are hidden and not controlled by antd table
   const getSortOrder = useCallback(
@@ -216,16 +230,11 @@ const PoolTable = ({ activePools, viewOwned }: TProps) => {
       columns={columns()}
       dataSource={activePools}
       loading={{
-        spinning: loading,
-        indicator: (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-y-3 font-pg">
-            <img src="/images/pools-loading.webp" alt="loading" width={203} height={103} />
-            <div className="text-lg text-bc-white-80">Fetching on-chain data......</div>
-          </div>
-        )
+        spinning: showIndicator,
+        indicator: isLoading ? <LoadingIndicator /> : <NoDataIndicator />
       }}
       pagination={false}
-      className={cx('ant-pool-table', { 'ant-table-loading': loading })}
+      className={cx('ant-pool-table', { 'ant-table-loading': showIndicator })}
       onChange={handleChange}
       tableLayout="fixed"
       sortDirections={['descend', 'ascend']}

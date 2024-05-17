@@ -23,6 +23,7 @@ interface PoolsContextType {
   };
   getTotalPoolsTVL: () => number;
   getTotalPoolsVolume: () => number;
+  isLoadingPool: boolean;
 }
 
 interface TProviderProps {
@@ -34,7 +35,9 @@ const PoolsContext = createContext<PoolsContextType>({} as PoolsContextType);
 const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   const { bitcowSDK, liquidityPools, tokenBalances, setNeedBalanceTokens, tokenList } =
     useMerlinWallet();
+
   const [activePools, setActivePools] = useState<IPool[]>([]);
+  const [isLoadingPool, setIsLoadingPool] = useState<boolean>(true);
   const [coinPrices, setCoinPrices] = useState<Record<string, number>>();
   const [localCoinPrices, setLocalCoinPrices] = useState<Record<string, number>>({});
   const [fetchCoinPrices, setFetchCoinPrices] = useState<Record<string, number>>({});
@@ -140,10 +143,9 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
   }, [localCoinPrices, fetchCoinPrices]);
 
   useEffect(() => {
-    if (bitcowSDK && liquidityPools?.length) {
+    if (bitcowSDK) {
       setActivePools(liquidityPools);
-    } else {
-      setActivePools([]);
+      setIsLoadingPool(false);
     }
   }, [liquidityPools, bitcowSDK]);
 
@@ -258,7 +260,8 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         setPoolFilter,
         getPoolStatsByTimebasis,
         getTotalPoolsTVL,
-        getTotalPoolsVolume
+        getTotalPoolsVolume,
+        isLoadingPool
       }}>
       {children}
     </PoolsContext.Provider>

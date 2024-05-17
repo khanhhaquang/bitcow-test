@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Drawer, Layout, Menu } from 'components/Antd';
+import Avatar from 'components/Avatar';
 import Button from 'components/Button';
 // import ThemeToggler from 'components/ThemeToggler';
 import NetworkSelect from 'components/NetworkSelect';
@@ -13,6 +14,7 @@ import WalletConnector from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { MenuIcon } from 'resources/icons';
 import LogoBitCow from 'resources/img/logoBitCow.png';
+import LogoBitCowHover from 'resources/img/logoBitCowHover.png';
 import { cn } from 'utils/cn';
 
 import styles from './Header.module.scss';
@@ -76,7 +78,13 @@ const PageHeader: React.FC = () => {
             to="/"
             onClick={() => setIsSideMenuOpen(false)}
             className={'mb-20 flex h-full items-center justify-center'}>
-            <img width={80} height={80} src={LogoBitCow} alt="Logo" />
+            <Avatar
+              source={LogoBitCow}
+              hoverSource={LogoBitCowHover}
+              width={80}
+              height={80}
+              alt="Logo"
+            />
           </Link>
           <Menu
             mode="vertical"
@@ -104,13 +112,23 @@ const PageHeader: React.FC = () => {
             className={cn('hidden', {
               'tablet:block': !isLandingPage
             })}>
-            <img src={LogoBitCow} className="block h-auto w-12" alt="Logo" />
+            <Avatar
+              source={LogoBitCow}
+              hoverSource={LogoBitCowHover}
+              className="block h-auto w-12"
+              alt="Logo"
+            />
           </div>
           <div
             className={cn('block', {
               'tablet:hidden': !isLandingPage
             })}>
-            <img src={LogoBitCow} className="block h-auto w-[81px]" alt="Logo" />
+            <Avatar
+              source={LogoBitCow}
+              hoverSource={LogoBitCowHover}
+              className="block h-auto w-[81px]"
+              alt="Logo"
+            />
           </div>
         </Link>
         {/* Desktop */}

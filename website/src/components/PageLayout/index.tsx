@@ -20,10 +20,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [currentPageName]);
 
   return (
-    <Layout
-      className={classNames(
-        'relative min-h-screen overflow-hidden bg-whiteBg bg-cover bg-center bg-no-repeat'
-      )}>
+    <Layout className={classNames('page-background relative min-h-screen overflow-hidden ')}>
       {appBgDecorators}
       <Header />
       <Content className={classNames('relative flex justify-center', layoutPadding)}>

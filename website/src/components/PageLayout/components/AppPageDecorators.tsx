@@ -27,14 +27,13 @@ const AppPageDecorators = () => {
         rootClassName="fixed top-2/3 left-[100px]"
       />
       <Image
-        src="/images/clouds/cloud3.webp"
-        className=" top-4"
+        src="/images/clouds/cloud2.webp"
         width={65}
         height={23}
         rootClassName="fixed top-3/4 left-1/2"
       />
       <Image
-        src="/images/clouds/cloud4.webp"
+        src="/images/clouds/cloud3.webp"
         width={262}
         height={87}
         rootClassName="fixed right-0 top-1/3"

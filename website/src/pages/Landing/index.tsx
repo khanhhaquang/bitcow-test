@@ -40,8 +40,7 @@ export default function Landing() {
           <img
             className={cn(
               'h-[587px] w-[774px] max-w-[1757px]',
-              'laptop:h-[415px] laptop:w-[540px]',
-              ''
+              'laptop:h-[415px] laptop:w-[540px]'
             )}
             src="/images/homeCow.webp"
           />

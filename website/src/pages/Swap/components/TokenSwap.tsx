@@ -160,7 +160,7 @@ const TokenSwap = () => {
 
   const renderCardHeader = () => (
     <Fragment>
-      <div className="relative flex w-full items-center">
+      <div className="relative flex w-full items-center pl-3">
         <h2 className="mr-auto font-micro text-4xl text-white">Swap</h2>
         <Tooltip title="Setting">
           <button
@@ -174,15 +174,15 @@ const TokenSwap = () => {
   );
 
   return (
-    <Card className="dark-stroke-white table:w-full relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none p-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
+    <Card className="dark-stroke-white table:w-full relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none py-9 pl-6 pr-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
       {renderCardHeader()}
       <div className="flex w-full flex-col font-pg">
         <div className="relative flex flex-col">
           <div className="relative">
-            <div className="mb-2 font-pg text-lg text-white/60">Pay</div>
+            <div className="mb-1.5 pl-3 font-pg text-lg text-white/60">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
           </div>
-          <div className="relative my-1.5 flex w-full items-center justify-between">
+          <div className="relative my-1.5 flex w-full items-center justify-between pl-3">
             <span className="h-[1.5px] flex-1 bg-white/20" />
             <div className="px-3">
               <Button
@@ -195,21 +195,23 @@ const TokenSwap = () => {
             <span className="h-[1.5px] flex-1 bg-white/20" />
           </div>
           <div className="relative">
-            <div className="mb-2 font-pg text-lg text-white/60">Receive</div>
+            <div className="mb-2 pl-3 font-pg text-lg text-white/60">Receive</div>
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>
         {fromToken && toToken && (
-          <SwapDetail
-            swapRateQuote={swapRate}
-            impact={priceImpact}
-            fromToken={fromToken}
-            toToken={toToken}
-            fromUiAmt={fromUiAmt}
-          />
+          <div className="pl-3">
+            <SwapDetail
+              swapRateQuote={swapRate}
+              impact={priceImpact}
+              fromToken={fromToken}
+              toToken={toToken}
+              fromUiAmt={fromUiAmt}
+            />
+          </div>
         )}
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center pl-3">
         <PixelButton
           isLoading={isSubmitting}
           width={280}

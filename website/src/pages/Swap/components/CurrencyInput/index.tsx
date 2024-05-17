@@ -81,7 +81,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
           onAmountChange={onAmountChange}
         />
       </div>
-      <div className="flex justify-between text-color_text_3">
+      <div className="flex justify-between pl-3 text-color_text_3">
         <small className="flex items-end text-lg text-white/60">
           Balance:
           <span

@@ -96,15 +96,14 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
     return (
       <div className="flex flex-col font-pg">
         <h2 className="border-b border-white/20 pb-3 font-micro text-2xl text-white">Token</h2>
-        <div className="relative mt-6">
+        <div className="searchInput relative mt-6">
           <Input
-            className="h-9 w-full !bg-black/10 p-2 text-lg text-bc-white outline-none"
+            suffix={<SearchIcon className="fill-bc-white-60 tablet:w-6" />}
+            className="h-9 w-full p-2 text-lg"
             value={filter}
-            bordered={false}
             onChange={(e) => setFilter(e.target.value.toLowerCase())}
             placeholder="Search name or paste address"
           />
-          <SearchIcon className="absolute top-1/2 right-[14px] -translate-y-1/2 fill-bc-white-60" />
         </div>
         <div className="my-3 flex flex-wrap gap-2">
           {commonCoins.map((coin) => (

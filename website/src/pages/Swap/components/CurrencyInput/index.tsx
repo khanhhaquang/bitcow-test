@@ -105,6 +105,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
         </p>
       </div>
       <BitcowModal
+        className="!w-[443px]"
         onCancel={() => setIsCoinSelectorVisible(false)}
         wrapClassName={styles.modal}
         open={isCoinSelectorVisible}

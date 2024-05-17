@@ -244,13 +244,15 @@ const Pool = () => {
                   onChange={(val) => onUpdateFilter(val, 'timeBasis')}
                 />
                 */}
-                <SearchInput
-                  placeholder="Search name or paste address"
-                  className={'w-full font-pg tablet:my-4 tablet:w-full'}
-                  value={poolFilter.text}
-                  onChange={(val) => onUpdateFilter(val, 'text')}
-                  onSearch={() => {}}
-                />
+                <div className="flex w-full justify-end">
+                  <SearchInput
+                    placeholder="Name or address"
+                    className={'w-[238px] font-pg tablet:my-4'}
+                    value={poolFilter.text}
+                    onChange={(val) => onUpdateFilter(val, 'text')}
+                    onSearch={() => {}}
+                  />
+                </div>
               </div>
             )
           }}

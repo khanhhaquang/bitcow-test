@@ -22,6 +22,7 @@ const SearchInput = ({ onChange, value, onSearch, className, ...rest }: IProps) 
     <div className={cx('searchInput', className)}>
       <Input
         suffix={<SearchIcon className="fill-bc-white-60 tablet:w-6" />}
+        className="text-lg"
         value={value}
         onChange={handleOnChange}
         onPressEnter={() => onSearch}

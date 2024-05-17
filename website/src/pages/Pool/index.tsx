@@ -109,7 +109,7 @@ const Pool = () => {
 
       <div className="ml-auto flex items-start gap-2 font-pgb text-lg text-bc-gold">
         <div className="flex items-center">
-          <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
+          <img src="/images/coin.gif" alt="coin" className="h-6 w-[22px]" />
           <p>TVL :</p>
           <div className="ml-1">
             ${' '}
@@ -120,7 +120,7 @@ const Pool = () => {
         </div>
 
         <div className="flex items-center pl-6">
-          <img src="/images/coin.svg" alt="coin" className="h-6 w-[22px]" />
+          <img src="/images/coin.gif" alt="coin" className="h-6 w-[22px]" />
           <p>Volume 24H :</p>
           <div className="ml-1">
             ${' '}

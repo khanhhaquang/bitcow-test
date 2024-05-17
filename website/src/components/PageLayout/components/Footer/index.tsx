@@ -55,7 +55,7 @@ const PageFooter: React.FC<TProps> = ({ className }) => {
     <Fragment>
       <Footer
         className={classNames(
-          'z-10 flex justify-between bg-transparent px-20 pb-20 tablet:flex-col-reverse tablet:items-center tablet:gap-y-2 tablet:pb-12 tablet:pt-24',
+          'z-10 flex justify-between bg-transparent p-[60px] tablet:flex-col-reverse tablet:items-center tablet:gap-y-2 tablet:pb-12 tablet:pt-24',
           className
         )}>
         <img src="/images/copyright.png" width={306} height={25} alt="copyright" />

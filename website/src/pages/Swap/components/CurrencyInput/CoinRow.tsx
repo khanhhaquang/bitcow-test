@@ -22,7 +22,7 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
       <div className="flex items-center gap-2">
         <CoinIcon size={34} token={item.token} />
         <div className="flex flex-col justify-start">
-          <span className="text-lg">{item.token.symbol}</span>
+          <span className="text-lg">{item.token.symbol.replace('bitusd', 'bitUSD')}</span>
           <Tooltip title={item.token.address}>
             <span className="text-xs text-white/50">
               {displayAddress(item.token.address, 4, 5)}
@@ -31,7 +31,7 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
         </div>
       </div>
       <small className="text-base font-bold">
-        {!wallet && <small className="ml-2">{item.token.symbol}</small>}
+        {!wallet && <small className="ml-2">{item.token.symbol.replace('bitusd', 'bitUSD')}</small>}
         {wallet && item.balance === -2 && <small className="ml-2">{item.token.symbol}</small>}
         {wallet && item.balance === -1 && (
           <Skeleton.Button className="!h-4 !w-10 !min-w-0" active />

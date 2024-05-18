@@ -14,7 +14,7 @@ const CommonCoinButton: React.FC<TProps> = ({ coin, onClickToken }) => {
       onClick={onClickToken}
       className="flex gap-x-2 !rounded-none bg-white/10 px-3 py-2 text-lg text-bc-white hover:bg-bc-grey-transparent2">
       <CoinIcon token={coin} size={20} />
-      {coin.symbol}
+      {coin.symbol.replace('bitusd', 'bitUSD')}
     </Button>
   );
 };

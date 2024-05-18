@@ -48,7 +48,11 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
   );
 
   return (
-    <Modal open={open} onClose={onClose} isDismissable={false} contentClassName="!min-w-[400px]">
+    <Modal
+      open={open}
+      onClose={onClose}
+      isDismissable={false}
+      contentClassName={styles.evmConnectModal}>
       <div className="mb-9 flex w-full items-center justify-between border-b border-white/20 pb-3 font-micro text-white">
         <h2 className="text-2xl text-white">Choose Wallet</h2>
         <button onClick={onClose} className={styles.closeBtn}>

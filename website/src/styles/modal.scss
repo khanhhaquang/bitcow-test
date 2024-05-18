@@ -5,10 +5,19 @@
       @apply p-5;
     }
     .ant-modal-close {
-      @apply top-0 right-0 fill-color_text_2 hover:fill-color_text_1;
+      @apply top-0 right-0 fill-color_text_2 hover:fill-color_text_1;   
       .ant-modal-close-x svg {
         @apply absolute bottom-4 left-4;
       }
+    }
+    .ant-modal-close:hover .ant-modal-close-x svg path:first-child{
+      @apply fill-white/20;
+    }
+    .ant-modal-close:active .ant-modal-close-x svg path:first-child{
+      @apply fill-white/20;
+    }
+    .ant-modal-close:active .ant-modal-close-x svg path:nth-child(2){
+      @apply fill-black/30;
     }
   }
 }

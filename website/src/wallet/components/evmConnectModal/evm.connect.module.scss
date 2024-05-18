@@ -1,11 +1,24 @@
 .evmConnectModal {
   gap: 12px;
+  min-width: 400px !important;
 
   .backBtn {
     cursor: pointer;
     position: absolute;
     top: 16px;
     left: 16px;
+  }
+
+  .closeBtn:hover svg path:first-child{
+    fill: rgba(255, 255, 255, 0.2);
+  }
+
+  .closeBtn:active svg path:first-child{
+    fill: rgba(255, 255, 255, 0.2);
+  }
+
+  .closeBtn:active svg path:nth-child(2){
+    fill: rgba(0, 0, 0, 0.3);
   }
 
   .separate {

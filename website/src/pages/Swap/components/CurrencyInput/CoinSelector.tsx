@@ -121,7 +121,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const renderTokenList = useMemo(() => {
     return (
       <List
-        className="max-h-[354px] overflow-y-scroll border border-white/40 bg-black/10 no-scrollbar"
+        className="max-h-[408px] overflow-y-scroll border border-white/40 bg-black/10 no-scrollbar"
         rowKey={(item) => `list-row-${(item as TokenInfo).address}`}>
         <VirtualList
           data={tokenListBalance || []}

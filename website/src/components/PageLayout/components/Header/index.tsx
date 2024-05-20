@@ -61,7 +61,7 @@ const PageHeader: React.FC = () => {
     }
 
     return (
-      <div className="relative flex w-full grow items-center justify-end pr-10">
+      <div className="relative flex w-full grow items-center justify-end">
         <WalletConnector />
         <div className="absolute top-full">
           <NetworkSelect className="mt-3" />
@@ -106,7 +106,7 @@ const PageHeader: React.FC = () => {
 
   return (
     <Header className={'z-10 h-[140px] w-full bg-transparent px-0 pt-10 tablet:pt-0'}>
-      <div className={'relative flex h-full items-center justify-between px-[60px] tablet:px-12'}>
+      <div className={'relative flex h-full items-center justify-between px-[60px] tablet:px-4'}>
         <Link to="/" className={'flex h-full items-center justify-center hover:-rotate-12'}>
           <div
             className={cn('hidden', {

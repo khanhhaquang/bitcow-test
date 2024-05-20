@@ -80,6 +80,12 @@
           }
         }
       }
+      .ant-table-expanded-row-level-1.expanded-pool {
+        > .ant-table-cell {
+          @apply leading-none #{!important};
+          @apply py-9
+        }
+      }
       .ant-table-expanded-row-level-1 {
         > .ant-table-cell {
           @apply cursor-default border-l border-r border-b border-bc-white-40 tablet:p-0;

@@ -66,9 +66,9 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
     ];
 
     return (
-      <div className={'flex flex-col gap-2 border-y border-white/20 py-3'}>
+      <div className={'flex flex-col gap-2'}>
         {details.map((detail) => (
-          <div className="flex justify-between text-sm" key={detail.label}>
+          <div className="flex justify-between bg-white/5 p-3 text-sm" key={detail.label}>
             <span>{detail.label}</span>
             <span>{detail.value}</span>
           </div>
@@ -117,7 +117,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
                   />
                 </div>
               </div>
-              <div className={'mt-3'}>{renderDetails()}</div>
+              <div className={'mt-5'}>{renderDetails()}</div>
             </div>
             <div className="pt-9">
               <PixelButton

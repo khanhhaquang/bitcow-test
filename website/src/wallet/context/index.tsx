@@ -288,7 +288,7 @@ export const EvmConnectProvider = ({
   }, [evmConnectors, allEip6963Injectors, evmConnectorMaxCount, evmSelectEip6963]);
 
   // leave out btc-connect for now
-  if (false) {
+  if (true) {
     return (
       <BtcConnectProvider options={options} connectors={btcConnectors} autoConnect={autoConnect}>
         <Web3ReactProvider key={new Date().toISOString()} connectors={allEvmConnectors}>

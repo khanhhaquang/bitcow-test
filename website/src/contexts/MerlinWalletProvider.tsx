@@ -20,7 +20,8 @@ import {
   Sdk as BitcowSDK,
   TxOption,
   UserLpAmount,
-  CreateTokenInfo
+  CreateTokenInfo,
+  isBTC
 } from '../sdk';
 import { NetworkConfig } from '../types/bitcow';
 import { useEvmConnectContext, Wallet } from '../wallet';
@@ -367,6 +368,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     async (token: TokenInfo | Token, spender: string, minAmount: number) => {
       // todo
       try {
+        if (isBTC(token as TokenInfo)) {
+          return true;
+        }
         const result = await bitcowSDK.coinList.approve(token, spender, minAmount);
         if (result === undefined) {
           return true;

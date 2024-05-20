@@ -2,8 +2,8 @@ import type { Provider } from '@web3-react/types';
 
 import type { EIP6963ProviderDetail } from './types';
 
-import METAMASK_ICON from '../../icons/wallet/metamask.svg';
 import OKX_ICON from '../../icons/okx.svg';
+import METAMASK_ICON from '../../icons/wallet/metamask.svg';
 
 const ICON_OVERRIDE_MAP: { [rdns in string]?: string } = {
   'io.metamask': METAMASK_ICON, // MetaMask's provided icon has no padding

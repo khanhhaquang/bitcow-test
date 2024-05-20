@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import Skeleton from 'components/Skeleton';
 import useMerlinWallet from 'hooks/useMerlinWallet';
+import { cn } from 'utils/cn';
 
 import { Token, TokenInfo } from '../../sdk';
-import { cn } from 'utils/cn';
 
 interface TProps {
   className?: string;

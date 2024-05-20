@@ -1,6 +1,4 @@
 import { createReducer } from '@reduxjs/toolkit';
-
-// import { sortBy } from 'lodash';
 import { RootState } from 'modules/rootReducer';
 
 import { LiquidityModal } from 'types/pool';

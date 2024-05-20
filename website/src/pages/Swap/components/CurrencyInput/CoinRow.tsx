@@ -8,6 +8,7 @@ import CoinIcon from 'components/CoinIcon';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
 import { TokenBalance } from 'types/bitcow';
 
+import { numberGroupFormat } from '../../../../components/PositiveFloatNumInput/numberFormats';
 import useMerlinWallet from '../../../../hooks/useMerlinWallet';
 
 interface TProps {
@@ -37,8 +38,20 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
           <Skeleton.Button className="!h-4 !w-10 !min-w-0" active />
         )}
         {wallet && item.balance != undefined && item.balance >= 0 && (
-          <div>
-            <span className="text-2xl">{tokenAmountFormatter(item.balance, item.token)}</span>
+          <div className="flex flex-col justify-start">
+            <span className="text-xl">{tokenAmountFormatter(item.balance, item.token)}</span>
+            {item.value > 0 && (
+              <Tooltip title={numberGroupFormat(item.value)} className="ml-auto">
+                <span className="text-xs text-white/50">
+                  {numberGroupFormat(item.value) + ' $'}
+                </span>
+              </Tooltip>
+            )}
+            {item.value === 0 && (
+              <Tooltip title={0} className="ml-auto">
+                <span className="text-xs text-white/50"></span>
+              </Tooltip>
+            )}
           </div>
         )}
       </small>

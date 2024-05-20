@@ -43,6 +43,16 @@ export class CoinList extends ContractRunner {
     this.tokensBalanceContract = new Contract(tokensBalance, ABI_TOKENS_BALANCE, provider);
   }
 
+  getWBTCToken() {
+    if (this.symbolToToken['wBTC']) {
+      return this.symbolToToken['wBTC'];
+    } else if (this.symbolToToken['WBTC']) {
+      return this.symbolToToken['WBTC'];
+    } else {
+      return undefined;
+    }
+  }
+
   async getCreateFee() {
     return this.tokenListContract.createFee();
   }
@@ -68,13 +78,16 @@ export class CoinList extends ContractRunner {
   async reload(
     firstPaginateCount: number,
     paginateCount: number,
-    callBack?: (tokens: TokenInfo[]) => void
+    callBack?: (tokens: TokenInfo[]) => void,
+    useBTC = true
   ) {
     let resultTokens: TokenInfo[] = [];
     const isThisTokensEmpty = this.tokens.length === 0;
     this.debug(`Fetch tokens first page ${firstPaginateCount}`);
     const fetchResult = await this.fetchTokenListPaginate(0, firstPaginateCount);
-    const fetchTokens = fetchResult[0].map(parseTokenInfo);
+    const fetchTokens = useBTC
+      ? [BTC].concat(fetchResult[0].map(parseTokenInfo))
+      : fetchResult[0].map(parseTokenInfo);
     const allTokensCount = parseFloat(fetchResult[1].toString());
     if (isThisTokensEmpty) {
       this.tokens = this.tokens.concat(fetchTokens);

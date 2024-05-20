@@ -82,8 +82,6 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
       price = 1;
     } else if (symbol === 'USDT') {
       price = 1;
-    } else if (symbol === 'WBTC') {
-      price = 60000;
     }
     return price;
   }, []);
@@ -106,7 +104,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         setFetchCoinPrices(collectedPrices);
       });
     }
-  }, [tokenList, fetchTokenPriceFromCoingecko]);
+  }, [tokenList, fetchTokenPriceFromCoingecko, defaultPrice]);
 
   const populateLocalTokenPrice = useCallback(async () => {
     if (activePools) {
@@ -123,7 +121,7 @@ const PoolsProvider: React.FC<TProviderProps> = ({ children }) => {
         setLocalCoinPrices(collectedPrices);
       }
     }
-  }, [activePools]);
+  }, [activePools, defaultPrice]);
 
   useEffect(() => {
     populateFetchTokenPrice();

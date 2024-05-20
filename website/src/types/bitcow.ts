@@ -5,6 +5,7 @@ import { Config, TokenInfo } from '../sdk';
 export interface TokenBalance {
   token: TokenInfo;
   balance: number;
+  value: number;
 }
 export type NetworkConfig = {
   chainConfig: AddEthereumChainParameter;

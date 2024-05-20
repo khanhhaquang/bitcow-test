@@ -27,7 +27,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const commonCoins = useMemo(() => {
     return tokenList
       ? tokenList.filter((token) => {
-          return ['wBTC', 'bitusd'].includes(token.symbol);
+          return ['wBTC', 'WBTC', 'BTC', 'bitusd', 'USDT'].includes(token.symbol);
         })
       : [];
   }, [tokenList]);
@@ -67,21 +67,33 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
                   ? bigintTokenBalanceToNumber(t, tokenBalances[t.address])
                   : -2
                 : -1;
+
+              const value = coinPrices[t.symbol] * balance;
               return {
                 token: t,
-                balance
+                balance,
+                value,
+                price: coinPrices[t.symbol]
               };
             })
-            .sort((a, b) => b.balance - a.balance)
-        : []; // TODO: sort by values
-
+            .sort((a, b) => {
+              if (a.value > 0 && b.value > 0) {
+                return b.value - a.value;
+              } else if (a.value > 0 && b.value === 0) {
+                return -a.value;
+              } else if (a.value === 0 && b.value > 0) {
+                return b.value;
+              } else if (a.value === 0 && b.value === 0) {
+                return b.balance - a.balance;
+              }
+            })
+        : [];
       if (filter) {
         currentTokenList = currentTokenList?.filter((token) => {
           const keysForFilter = [token.token.name, token.token.symbol].join(',').toLowerCase();
           return keysForFilter.includes(filter);
         });
       }
-
       setTokenListBalance(currentTokenList);
     } else {
       setTokenListBalance([]);

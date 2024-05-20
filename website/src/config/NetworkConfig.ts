@@ -140,7 +140,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
     balancePaginateCount: 600,
     fetchAllTokenBalance: true
   },
-  */
+ */
   {
     chainConfig: {
       chainId: 200901,

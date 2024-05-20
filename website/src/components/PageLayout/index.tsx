@@ -1,11 +1,11 @@
 import classNames from 'classnames';
+import { useMemo } from 'react';
 
 import { Layout } from 'components/Antd';
 import useCurrentPage from 'hooks/useCurrentPage';
 
 import { Footer, Header } from './components';
 import AppPageDecorators from './components/AppPageDecorators';
-import { useMemo } from 'react';
 
 const { Content } = Layout;
 

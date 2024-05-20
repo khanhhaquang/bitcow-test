@@ -10,8 +10,8 @@ import { CoinList } from './CoinList';
 import { ContractRunner } from './ContractRunner';
 import { Pool } from './Pool';
 import { PoolCreator } from './PoolCreator';
-import { TokenInfo, Config, Quote, TxOption } from './types';
-import { isBTC } from './utils';
+import {TokenInfo, Config, Quote, TxOption, Step} from './types';
+import {isBTC, isWBTC} from './utils';
 import { parsePairFromConfig, parsePairStats, parsePairStatsToConfig } from './utils/statsV1';
 
 export class Sdk extends ContractRunner {
@@ -210,18 +210,16 @@ export class Sdk extends ContractRunner {
     return sdk;
   }
 
-  getDirectQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
+  private getDirectQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
     let pool: Pool | undefined;
     let isReversed: boolean | undefined;
-    const fromToken = inputToken;
-    const toToken = outputToken;
     for (const pool_ of this.pools) {
-      if (pool_.xToken.address === fromToken.address && pool_.yToken.address === toToken.address) {
+      if (pool_.xToken.address === inputToken.address && pool_.yToken.address === outputToken.address) {
         pool = pool_;
         isReversed = false;
       } else if (
-        pool_.xToken.address === toToken.address &&
-        pool_.yToken.address === fromToken.address
+        pool_.xToken.address === outputToken.address &&
+        pool_.yToken.address === inputToken.address
       ) {
         pool = pool_;
         isReversed = true;
@@ -262,21 +260,19 @@ export class Sdk extends ContractRunner {
     };
   }
 
-  getBest2HopQuote(
+  private getBest2HopQuote(
     inputToken: TokenInfo,
     outputToken: TokenInfo,
     inAmt: number
   ): Quote | undefined {
     let bestQuote: Quote | undefined;
-    const fromToken = inputToken;
-    const toToken = outputToken;
     for (const mToken of this.coinList.tokens) {
-      if (mToken.address === fromToken.address || mToken.address === toToken.address) {
+      if (mToken.address === inputToken.address || mToken.address === outputToken.address) {
         continue;
       }
-      const inToM = this.getDirectQuote(fromToken, mToken, inAmt);
+      const inToM = this.getDirectQuote(inputToken, mToken, inAmt);
       if (!inToM) continue;
-      const mToOut = this.getDirectQuote(mToken, toToken, inToM.outAmt);
+      const mToOut = this.getDirectQuote(mToken, outputToken, inToM.outAmt);
       if (!mToOut) continue;
       if (!bestQuote || mToOut.outAmt > bestQuote.outAmt) {
         bestQuote = {
@@ -291,21 +287,19 @@ export class Sdk extends ContractRunner {
     return bestQuote;
   }
 
-  getBest3HopQuote(
+  private getBest3HopQuote(
     inputToken: TokenInfo,
     outputToken: TokenInfo,
     inAmt: number
   ): Quote | undefined {
     let bestQuote: Quote | undefined;
-    const fromToken = inputToken;
-    const toToken = outputToken;
     for (const mToken of this.coinList.tokens) {
-      if (mToken.address === fromToken.address || mToken.address === toToken.address) {
+      if (mToken.address === inputToken.address || mToken.address === outputToken.address) {
         continue;
       }
-      const inToM = this.getBest2HopQuote(fromToken, mToken, inAmt);
+      const inToM = this.getBest2HopQuote(inputToken, mToken, inAmt);
       if (!inToM) continue;
-      const mToOut = this.getDirectQuote(mToken, toToken, inToM.outAmt);
+      const mToOut = this.getDirectQuote(mToken, outputToken, inToM.outAmt);
       if (!mToOut) continue;
       if (!bestQuote || mToOut.outAmt > bestQuote.outAmt) {
         bestQuote = {
@@ -321,9 +315,23 @@ export class Sdk extends ContractRunner {
   }
 
   getQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
-    const directQuote = this.getDirectQuote(inputToken, outputToken, inAmt);
-    const twoHopQuote = this.getBest2HopQuote(inputToken, outputToken, inAmt);
-    const threeHopQuote = this.getBest3HopQuote(inputToken, outputToken, inAmt);
+    if ((isBTC(inputToken) && isWBTC(outputToken)) || (isWBTC(inputToken) && isBTC(outputToken))){
+      return {
+        inputToken,
+        outputToken,
+        inAmt,
+        steps: [],
+        outAmt: inAmt
+      }
+    }
+    const erc20InputToken = isBTC(inputToken) ? this.coinList.getWBTCToken() : inputToken;
+    const erc20OutputToken = isBTC(outputToken) ? this.coinList.getWBTCToken() : outputToken;
+    if (erc20InputToken === undefined || erc20OutputToken === undefined) {
+      return undefined;
+    }
+    const directQuote = this.getDirectQuote(erc20InputToken, erc20OutputToken, inAmt);
+    const twoHopQuote = this.getBest2HopQuote(erc20InputToken, erc20OutputToken, inAmt);
+    const threeHopQuote = this.getBest3HopQuote(erc20InputToken, erc20OutputToken, inAmt);
     if (!directQuote && !twoHopQuote && !threeHopQuote) {
       return undefined;
     }
@@ -333,15 +341,19 @@ export class Sdk extends ContractRunner {
 
     this.debug(`Get quote [${directOutput} ${twoHopOutput} ${threeHopOutput}]`);
     const maxOutput = Math.max(directOutput, twoHopOutput, threeHopOutput);
+    let optimalQuote = undefined;
     if (directOutput === maxOutput) {
-      return directQuote;
+      optimalQuote = directQuote;
     } else if (twoHopOutput === maxOutput) {
-      return twoHopQuote;
+      optimalQuote = twoHopQuote;
     } else if (threeHopOutput === maxOutput) {
-      return threeHopQuote;
-    } else {
-      return undefined;
+      optimalQuote = threeHopQuote;
     }
+    if (optimalQuote != undefined) {
+      optimalQuote.inputToken = inputToken;
+      optimalQuote.outputToken = outputToken;
+    }
+    return optimalQuote;
   }
 
   getQuoteSymbol(inputSymbol: string, outputSymbol: string, inAmt: number): Quote | undefined {
@@ -357,22 +369,39 @@ export class Sdk extends ContractRunner {
   async swap(quote: Quote, minOutput?: number) {
     if (this.routerContract) {
       if (isBTC(quote.inputToken)) {
-        return this.send(
-          this.routerContract.swapWithBTCInput,
-          quote.steps.map((step) => step.pool.poolAddress),
-          quote.steps.map((step) => step.isReversed),
-          Sdk.getOutputAmount(quote, minOutput),
-          { value: Sdk.getInputAmount(quote), ...this.txOption }
-        );
+        if (isWBTC(quote.outputToken)){
+          return this.send(
+            this.routerContract.swapBTCtoWBTC,
+            quote.outputToken.address,
+            { value: Sdk.getInputAmount(quote), ...this.txOption }
+          );
+        } else {
+          return this.send(
+            this.routerContract.swapBTCtoERC20,
+            quote.steps.map((step) => step.pool.poolAddress),
+            quote.steps.map((step) => !step.isReversed),
+            Sdk.getOutputAmount(quote, minOutput),
+            { value: Sdk.getInputAmount(quote), ...this.txOption }
+          );
+        }
       } else if (isBTC(quote.outputToken)) {
-        return this.send(
-          this.routerContract.swapWithBTCInput,
-          Sdk.getInputAmount(quote),
-          quote.steps.map((step) => step.pool.poolAddress),
-          quote.steps.map((step) => step.isReversed),
-          Sdk.getOutputAmount(quote, minOutput),
-          this.txOption
-        );
+        if (isWBTC(quote.inputToken)){
+          return this.send(
+            this.routerContract.swapWBTCtoBTC,
+            quote.inputToken.address,
+            Sdk.getInputAmount(quote),
+            this.txOption
+          );
+        } else {
+          return this.send(
+            this.routerContract.swapERC20toBTC,
+            Sdk.getInputAmount(quote),
+            quote.steps.map((step) => step.pool.poolAddress),
+            quote.steps.map((step) => !step.isReversed),
+            Sdk.getOutputAmount(quote, minOutput),
+            this.txOption
+          );
+        }
       } else {
         return this.send(
           this.routerContract.swap,

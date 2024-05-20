@@ -120,19 +120,6 @@ export const ABI_SWAP_ROUTER = [
     },
     {
         inputs: [],
-        name: 'WBTC',
-        outputs: [
-            {
-                internalType: 'address',
-                name: '',
-                type: 'address'
-            }
-        ],
-        stateMutability: 'view',
-        type: 'function'
-    },
-    {
-        inputs: [],
         name: 'acceptOwnership',
         outputs: [],
         stateMutability: 'nonpayable',
@@ -186,13 +173,7 @@ export const ABI_SWAP_ROUTER = [
         type: 'function'
     },
     {
-        inputs: [
-            {
-                internalType: 'address',
-                name: 'WBTC_',
-                type: 'address'
-            }
-        ],
+        inputs: [],
         name: 'initialize',
         outputs: [],
         stateMutability: 'nonpayable',
@@ -303,7 +284,7 @@ export const ABI_SWAP_ROUTER = [
                 type: 'uint256'
             }
         ],
-        name: 'swapWithBTCInput',
+        name: 'swapBTCtoERC20',
         outputs: [
             {
                 internalType: 'uint256',
@@ -311,6 +292,32 @@ export const ABI_SWAP_ROUTER = [
                 type: 'uint256'
             }
         ],
+        stateMutability: 'payable',
+        type: 'function'
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'wbtc',
+                type: 'address'
+            }
+        ],
+        name: 'swapBTCtoWBTC',
+        outputs: [],
+        stateMutability: 'payable',
+        type: 'function'
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'wbtc',
+                type: 'address'
+            }
+        ],
+        name: 'swapBTCtoWBTCV2',
+        outputs: [],
         stateMutability: 'payable',
         type: 'function'
     },
@@ -337,7 +344,7 @@ export const ABI_SWAP_ROUTER = [
                 type: 'uint256'
             }
         ],
-        name: 'swapWithBTCOutput',
+        name: 'swapERC20toBTC',
         outputs: [
             {
                 internalType: 'uint256',
@@ -345,7 +352,77 @@ export const ABI_SWAP_ROUTER = [
                 type: 'uint256'
             }
         ],
-        stateMutability: 'payable',
+        stateMutability: 'nonpayable',
+        type: 'function'
+    },
+    {
+        inputs: [
+            {
+                internalType: 'uint256',
+                name: 'inputAmount',
+                type: 'uint256'
+            },
+            {
+                internalType: 'address[]',
+                name: 'pools',
+                type: 'address[]'
+            },
+            {
+                internalType: 'bool[]',
+                name: 'isXtoYs',
+                type: 'bool[]'
+            },
+            {
+                internalType: 'uint256',
+                name: 'minOutputAmount',
+                type: 'uint256'
+            }
+        ],
+        name: 'swapERC20toBTCV2',
+        outputs: [
+            {
+                internalType: 'uint256',
+                name: '',
+                type: 'uint256'
+            }
+        ],
+        stateMutability: 'nonpayable',
+        type: 'function'
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'wbtc',
+                type: 'address'
+            },
+            {
+                internalType: 'uint256',
+                name: 'amount',
+                type: 'uint256'
+            }
+        ],
+        name: 'swapWBTCtoBTC',
+        outputs: [],
+        stateMutability: 'nonpayable',
+        type: 'function'
+    },
+    {
+        inputs: [
+            {
+                internalType: 'address',
+                name: 'wbtc',
+                type: 'address'
+            },
+            {
+                internalType: 'uint256',
+                name: 'amount',
+                type: 'uint256'
+            }
+        ],
+        name: 'swapWBTCtoBTCV2',
+        outputs: [],
+        stateMutability: 'nonpayable',
         type: 'function'
     },
     {

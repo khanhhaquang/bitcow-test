@@ -27,7 +27,7 @@ export default function Landing() {
   }, [getTotalPoolsVolume]);
 
   return (
-    <div className="relative flex w-full items-center justify-between px-[60px] tablet:flex-col mobile:pt-8">
+    <div className="relative flex w-full items-center justify-between px-[60px] tablet:flex-col tablet:px-4 mobile:pt-8">
       <p
         className={cn(
           styles.leftLabel,

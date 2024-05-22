@@ -27,11 +27,11 @@ export default function Landing() {
   }, [getTotalPoolsVolume]);
 
   return (
-    <div className="relative flex w-full items-center justify-between px-20 laptop:flex-col laptop:pt-20 mobile:pt-8">
+    <div className="relative flex w-full items-center justify-between px-[60px] tablet:flex-col mobile:pt-8">
       <p
         className={cn(
           styles.leftLabel,
-          'laptop:self-start smallLaptop:!text-6xl tablet:text-5xl mobile:!ml-0 mobile:!w-[170px] mobile:!text-3xl'
+          'smallLaptop:text-7xl tablet:self-start tablet:text-6xl mobile:!ml-0 mobile:!w-[170px] mobile:!text-3xl'
         )}>
         STABLE & CONCENTRATED
       </p>
@@ -62,8 +62,8 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <div className={cn(styles.rightLabel, 'flex flex-col items-end laptop:self-end')}>
-        <p className={cn(styles.main, 'smallLaptop:!text-6xl tablet:!text-5xl mobile:!text-3xl')}>
+      <div className={cn(styles.rightLabel, 'flex flex-col items-end tablet:self-end')}>
+        <p className={cn(styles.main, 'smallLaptop:!text-7xl tablet:!text-6xl mobile:!text-3xl')}>
           TO THE MOOOO!
         </p>
         <img width={252} height={43} src="/images/poweredBy.png" alt="powered by smiley" />

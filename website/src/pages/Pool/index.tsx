@@ -20,6 +20,9 @@ import styles from './index.module.scss';
 import useMerlinWallet from '../../hooks/useMerlinWallet';
 import useNetwork from '../../hooks/useNetwork';
 import { IPool } from '../../sdk';
+import PixelButton from 'components/PixelButton';
+import { PlusIcon } from 'resources/icons';
+import CreatePool from './components/CreatePool';
 
 const filterOptions = [
   {
@@ -35,7 +38,6 @@ const filterOptions = [
     value: '30D'
   }*/
 ];
-
 const Pool = () => {
   const {
     activePools,
@@ -49,6 +51,7 @@ const Pool = () => {
   } = usePools();
   const { currentNetwork } = useNetwork();
   const [activeTab, setActiveTab] = useState('1');
+  const [isCreatePoolOpen, setIsCreatePoolOpen] = useState(false);
   const dispatch = useDispatch();
   const [filteredPools, setFilteredPools] = useState(activePools);
   const liquidityModal = useSelector(getLiquidityModal);
@@ -252,6 +255,17 @@ const Pool = () => {
                     onChange={(val) => onUpdateFilter(val, 'text')}
                     onSearch={() => {}}
                   />
+                  <PixelButton
+                    width={126}
+                    borderWidth={2}
+                    height={34}
+                    className="font-pg text-blue1"
+                    color="white"
+                    isSolid
+                    onClick={() => setIsCreatePoolOpen(true)}>
+                    <PlusIcon className="mr-2" width={11} height={11} />
+                    New Pool
+                  </PixelButton>
                 </div>
               </div>
             )
@@ -273,6 +287,14 @@ const Pool = () => {
           ) : (
             <WithdrawLiquidity liquidityPool={liquidityModal.pool} />
           ))}
+      </BitcowModal>
+      <BitcowModal
+        width={652}
+        onCancel={() => setIsCreatePoolOpen(false)}
+        open={isCreatePoolOpen}
+        bodyStyle={{ padding: 0 }}
+        closeIcon={<CloseIcon className="top-4" />}>
+        <CreatePool onClose={() => setIsCreatePoolOpen(false)}></CreatePool>
       </BitcowModal>
     </div>
   );

@@ -34,7 +34,7 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
         <div className="flex flex-col space-y-1.5">
           <div className="flex flex-col space-y-3">
             <div>Amount</div>
-            <div className="flex py-1">
+            <div className="flex py-[3px]">
               <input
                 className={classNames(
                   'mr-2 h-[24px] w-[214px]',
@@ -52,7 +52,7 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
               </Button>
             </div>
           </div>
-          <div className="text-sm text-white/80">Avalable: -</div>
+          <div className="text-sm leading-none text-white/80">Avalable: -</div>
         </div>
       </div>
     </div>

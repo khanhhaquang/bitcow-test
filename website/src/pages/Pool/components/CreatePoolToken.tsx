@@ -18,9 +18,9 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
             <QuestionMarkIcon width={17} height={17} className="mr-2 self-center" />
             <input
               className={classNames(
-                'positiveFloatNumInput flex-1',
-                'focus: min-w-0 px-1 outline-none',
-                'w-2/3 bg-transparent pr-0 pl-1 text-2xl text-white placeholder:text-white/20'
+                'h-[24px] w-[247px]',
+                'focus: outline-none',
+                'bg-transparent text-2xl leading-none text-white  placeholder:text-white/20'
               )}
               placeholder="Paste here"
               inputMode="decimal"
@@ -34,12 +34,12 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
         <div className="flex flex-col space-y-1.5">
           <div className="flex flex-col space-y-3">
             <div>Amount</div>
-            <div className="flex p-1">
+            <div className="flex py-1">
               <input
                 className={classNames(
-                  'positiveFloatNumInput flex-1',
-                  'focus: min-w-0 px-1 outline-none',
-                  'w-2/3 bg-transparent pr-0 pl-1 text-2xl text-white placeholder:text-white/20'
+                  'mr-2 h-[24px] w-[214px]',
+                  'focus: outline-none',
+                  'bg-transparent text-2xl text-white placeholder:text-white/20'
                 )}
                 placeholder="0.00"
                 inputMode="decimal"
@@ -47,12 +47,12 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
               />
               <Button
                 onClick={onClickMax}
-                className="!rounded-none bg-white/40 px-3 py-1 text-sm text-bc-blue hover:bg-bc-grey-transparent2">
+                className="my-px h-[22px] !rounded-none bg-white/40 px-3 py-1 text-sm text-blue1 hover:bg-bc-grey-transparent2">
                 Max
               </Button>
             </div>
           </div>
-          <div>Avalable: -</div>
+          <div className="text-sm text-white/80">Avalable: -</div>
         </div>
       </div>
     </div>

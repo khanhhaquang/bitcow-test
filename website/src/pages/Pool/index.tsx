@@ -259,8 +259,8 @@ const Pool = () => {
                     width={126}
                     borderWidth={2}
                     height={34}
-                    className="font-pg text-blue1"
-                    color="white"
+                    className="ml-3 font-pg text-lg text-blue1"
+                    color="rgba(255, 255, 255, 0.8)"
                     isSolid
                     onClick={() => setIsCreatePoolOpen(true)}>
                     <PlusIcon className="mr-2" width={11} height={11} />

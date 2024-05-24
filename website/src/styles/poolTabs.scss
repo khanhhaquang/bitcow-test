@@ -9,13 +9,13 @@
     }
   }
   .ant-tabs-tab {
-    @apply hidden;
+    @apply pb-1;
 
     .ant-tabs-tab-btn {
-      @apply text-lg text-white;
+      @apply text-lg text-white opacity-60;
     }
     &.ant-tabs-tab-active .ant-tabs-tab-btn {
-      @apply text-bc-white;
+      @apply text-bc-white opacity-100;
     }
     & {
       @apply tablet:ml-0 #{!important};
@@ -25,7 +25,7 @@
     @apply tablet:hidden #{!important};
   }
   .ant-tabs-ink-bar {
-    @apply w-[62px] bg-bc-white tablet:hidden #{!important};
+    @apply bg-bc-white tablet:hidden #{!important};
   }
 }
 

@@ -70,10 +70,11 @@ export const CONFIG: {
   },
   bitlayerTestnet: {
     chainId: 200810,
-    tokenList: '0x5aEAdE53c354c9d8ce31d359c83E658A1F9C9B0B',
-    tradingPairV1List: '0xbe83Cf6F9eFCBd04Aa34D57D139ab4e94A5aF33d',
+    tokenList: '0xaF35f5bf3Cb362757691907C4105306fBD7dDCab',
+    tradingPairV1List: '0x7c636F35D2bf0EE52CEF4956c1B19Eb7686FaBe9',
     tradingPairV1Creator: '0x6C99BB0364123035e58Ee3Fa2dD9E28C8E547Aae',
     swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
-    tokensBalance: '0x088Ca4ad4E99862B1f402E8455A54c9e5CabB359'
+    tokensBalance: '0x088Ca4ad4E99862B1f402E8455A54c9e5CabB359',
+    pairV1Manager: '0x3677f82C2A8ce67F2AE760636d3FB1bdE4345160',
   }
 };

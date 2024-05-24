@@ -136,4 +136,6 @@ export type Config = {
   tradingPairV1Creator: string;
   swapRouter: string;
   tokensBalance: string;
+
+  pairV1Manager?:string;
 };

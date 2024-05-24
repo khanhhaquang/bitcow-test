@@ -14,9 +14,10 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
   const onClickMax = () => {};
   let iconUrl = 'https://assets.coingecko.com/coins/images/1/standard/bitcoin.png';
   let hasIcon = false;
+  let uploadedIcon = false;
   const setIconUrl = (cdnUrl) => {
     iconUrl = cdnUrl;
-    hasIcon = true;
+    uploadedIcon = true;
   };
   return (
     <div className="flex flex-1 flex-col space-y-1.5 font-pg text-lg leading-none">
@@ -25,7 +26,7 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
         <div className="flex flex-col space-y-3">
           <div>Token address</div>
           <div className="flex flex-wrap py-2">
-            {hasIcon ? (
+            {hasIcon || uploadedIcon ? (
               <img src={iconUrl} width={24} height={24} className="mr-2" />
             ) : (
               <QuestionMarkIcon width={17} height={17} className="mr-2 w-[17px] self-center" />
@@ -40,26 +41,28 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
               inputMode="decimal"
               type="text"
             />
-            <Button className="relative my-px h-[22px] w-[59px] !rounded-none bg-white/80 px-2 py-1 text-sm text-blue1 hover:bg-bc-grey-transparent2">
-              <UploadIcon className="mr-2" />
-              Icon
-              <input
-                type="file"
-                id="image-upload"
-                name="image-upload"
-                accept="image/*"
-                className="absolute inset-0 opacity-0"
-                onChange={(event) => {
-                  const maxAllowedSize = 15 * 1024; // 15kb
-                  if (event.target.files[0].size > maxAllowedSize) {
-                    event.target.value = '';
-                    return;
-                  }
+            {!hasIcon && (
+              <Button className="relative my-px h-[22px] w-[59px] !rounded-none bg-white/80 px-2 py-1 text-sm text-blue1 hover:bg-bc-grey-transparent2">
+                <UploadIcon className="mr-2" />
+                Icon
+                <input
+                  type="file"
+                  id="image-upload"
+                  name="image-upload"
+                  accept="image/*"
+                  className="absolute inset-0 opacity-0"
+                  onChange={(event) => {
+                    const maxAllowedSize = 15 * 1024; // 15kb
+                    if (event.target.files[0].size > maxAllowedSize) {
+                      event.target.value = '';
+                      return;
+                    }
 
-                  handleImgUpload(event.target.files[0], (cdnUrl) => setIconUrl(cdnUrl));
-                }}
-              />
-            </Button>
+                    handleImgUpload(event.target.files[0], (cdnUrl) => setIconUrl(cdnUrl));
+                  }}
+                />
+              </Button>
+            )}
           </div>
         </div>
         <div className="flex flex-1">

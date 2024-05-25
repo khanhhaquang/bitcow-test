@@ -70,6 +70,13 @@ export type Pair = {
   lpToken: string;
 };
 
+export type SearchPairMessage = {
+  pairAddress: string;
+  xTokenInfo: TokenInfo;
+  yTokenInfo: TokenInfo;
+  lpToken: string;
+};
+
 export type PairStats = {
   pair: Pair;
   statsV1: StatsV1;
@@ -137,5 +144,5 @@ export type Config = {
   swapRouter: string;
   tokensBalance: string;
 
-  pairV1Manager?:string;
+  pairV1Manager?: string;
 };

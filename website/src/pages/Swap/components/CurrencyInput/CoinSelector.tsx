@@ -7,13 +7,14 @@ import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
 import { ISwapSettings } from 'pages/Swap/types';
 import { SearchIcon } from 'resources/icons';
-import { TokenBalance } from 'types/bitcow';
+import { FilteredToken } from 'types/bitcow';
 
 import CoinRow from './CoinRow';
 import CommonCoinButton from './CommonCoinButton';
 
-import { TokenInfo } from '../../../../sdk';
+import { SearchPairMessage, TokenInfo } from '../../../../sdk';
 import { bigintTokenBalanceToNumber } from '../../../../utils/formatter';
+import { saveLocalPairMessages } from '../../../../utils/localPools';
 
 interface TProps {
   actionType: 'currencyTo' | 'currencyFrom';
@@ -22,7 +23,8 @@ interface TProps {
 
 const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const { values, setFieldValue } = useFormikContext<ISwapSettings>();
-  const { tokenList, tokenBalances, setNeedBalanceTokens } = useMerlinWallet();
+  const { bitcowSDK, tokenList, tokenBalances, setNeedBalanceTokens, createBitcowSDK } =
+    useMerlinWallet();
   const { coinPrices } = usePools();
   const commonCoins = useMemo(() => {
     return tokenList
@@ -32,31 +34,50 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
       : [];
   }, [tokenList]);
   const [filter, setFilter] = useState<string>('');
-  const [tokenListBalance, setTokenListBalance] = useState<TokenBalance[]>();
+  const [tokenListBalance, setTokenListBalance] = useState<FilteredToken[]>();
+  const [searchedPairMessages, setSearchedPairMessages] = useState<SearchPairMessage[]>();
 
   const onSelectToken = useCallback(
-    (token: TokenInfo) => {
-      const otherActionType: TProps['actionType'] =
-        actionType === 'currencyFrom' ? 'currencyTo' : 'currencyFrom';
-      if (token.symbol === values[otherActionType]?.token?.symbol) {
-        setFieldValue(otherActionType, {
-          ...values[otherActionType],
-          token: values[actionType]?.token
+    (token: TokenInfo, searched = false) => {
+      if (searched) {
+        saveLocalPairMessages(bitcowSDK.config.chainId, searchedPairMessages);
+        createBitcowSDK();
+      } else {
+        const otherActionType: TProps['actionType'] =
+          actionType === 'currencyFrom' ? 'currencyTo' : 'currencyFrom';
+        if (token.symbol === values[otherActionType]?.token?.symbol) {
+          setFieldValue(otherActionType, {
+            ...values[otherActionType],
+            token: values[actionType]?.token
+          });
+        }
+        setFieldValue(actionType, {
+          ...values[actionType],
+          token
         });
+        if (tokenBalances[token.address] === undefined) {
+          setNeedBalanceTokens([token.address]);
+        }
+        onClose();
       }
-      setFieldValue(actionType, {
-        ...values[actionType],
-        token
-      });
-      if (tokenBalances[token.address] === undefined) {
-        setNeedBalanceTokens([token.address]);
-      }
-      onClose();
     },
-    [actionType, values, setFieldValue, onClose, setNeedBalanceTokens, tokenBalances]
+    [
+      actionType,
+      values,
+      setFieldValue,
+      onClose,
+      setNeedBalanceTokens,
+      tokenBalances,
+      searchedPairMessages,
+      bitcowSDK,
+      createBitcowSDK
+    ]
   );
 
-  const getFilteredTokenListWithBalance = useCallback(() => {
+  const filterTokenList = useCallback(() => {
+    if (filter.length === 42) {
+      return;
+    }
     if (coinPrices) {
       let currentTokenList = tokenList
         ? tokenList
@@ -65,7 +86,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
               const balance = tokenBalances
                 ? tokenBalances[t.address] !== undefined
                   ? bigintTokenBalanceToNumber(t, tokenBalances[t.address])
-                  : -2
+                  : 0
                 : -1;
 
               const value = coinPrices[t.symbol] * balance;
@@ -73,7 +94,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
                 token: t,
                 balance,
                 value,
-                price: coinPrices[t.symbol]
+                searched: false
               };
             })
             .sort((a, b) => {
@@ -101,8 +122,34 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   }, [coinPrices, filter, tokenList, tokenBalances]);
 
   useEffect(() => {
-    getFilteredTokenListWithBalance();
-  }, [getFilteredTokenListWithBalance]);
+    filterTokenList();
+  }, [filterTokenList]);
+
+  const filterTokenListWithTokenAddress = useCallback(async () => {
+    if (filter.length != 42) {
+      return;
+    }
+    setTokenListBalance([]);
+    if (bitcowSDK && bitcowSDK.pairV1Manager) {
+      const searchPairMessages = await bitcowSDK.pairV1Manager.searchPairsAll(filter, 100);
+      if (searchPairMessages.length > 0) {
+        const pairMessage = searchPairMessages[0];
+        let tokenInfo: TokenInfo;
+        if (pairMessage.xTokenInfo.address.toLowerCase() === filter.toLowerCase()) {
+          tokenInfo = pairMessage.xTokenInfo;
+        } else {
+          tokenInfo = pairMessage.yTokenInfo;
+        }
+        // value=-1 means search token info
+        setTokenListBalance([{ token: tokenInfo, balance: -2, value: 0, searched: true }]);
+        setSearchedPairMessages(searchPairMessages);
+      }
+    }
+  }, [bitcowSDK, filter]);
+
+  useEffect(() => {
+    filterTokenListWithTokenAddress();
+  }, [filterTokenListWithTokenAddress]);
 
   const renderHeaderSearch = useMemo(() => {
     return (
@@ -141,7 +188,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
           {(item) => (
             <List.Item
               className="cursor-pointer !border-0 !px-0 !py-2 font-pg hover:bg-white/10 active:bg-black/10"
-              onClick={() => onSelectToken(item.token)}>
+              onClick={() => onSelectToken(item.token, item.searched)}>
               <CoinRow item={item} />
             </List.Item>
           )}

@@ -24,12 +24,14 @@ import {
   isBTC
 } from '../sdk';
 import { NetworkConfig } from '../types/bitcow';
+import { getLocalPairMessages } from '../utils/localPools';
 import { useEvmConnectContext, Wallet } from '../wallet';
 interface MerlinWalletContextType {
   wallet?: Wallet;
   openWalletModal: () => void;
   closeWalletModal: () => void;
   bitcowSDK: BitcowSDK;
+  createBitcowSDK: () => void;
   liquidityPools: IPool[];
   fetchedPoolsCount: number;
   tokenList: TokenInfo[];
@@ -122,7 +124,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
+  const createBitcowSDK = useCallback(() => {
     if (currentNetwork) {
       const provider = new ethers.JsonRpcProvider(
         currentNetwork.rpcNodeUrl,
@@ -137,6 +139,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         provider as any,
         currentNetwork.sdkConfig,
         currentNetwork.requestsPerSecond,
+        getLocalPairMessages(currentNetwork.chainConfig.chainId),
         txOption,
         undefined,
         (message) => {
@@ -152,6 +155,10 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       setTokensCache(sdk);
     }
   }, [currentNetwork, txOption, setTokensCache, clearCache, setTokenBalancesCache]);
+
+  useEffect(() => {
+    createBitcowSDK();
+  }, [createBitcowSDK]);
 
   const checkNetwork = useCallback(async () => {
     return setCurrentChain(currentNetworkRef.current.chainConfig);
@@ -657,7 +664,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         wallet,
         openWalletModal: openModal,
         closeWalletModal: closeModal,
-        bitcowSDK: bitcowSDK,
+        bitcowSDK,
+        createBitcowSDK,
         liquidityPools,
         fetchedPoolsCount,
         setNeedBalanceTokens,

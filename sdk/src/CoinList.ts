@@ -25,6 +25,8 @@ export class CoinList extends ContractRunner {
 
   private readonly tokensBalanceContract: Contract;
 
+  private localTokens: TokenInfo[];
+
   constructor(
     provider: Provider,
     public tokenListAddress: string,
@@ -32,12 +34,17 @@ export class CoinList extends ContractRunner {
     private promiseThrottleBalance: PromiseThrottle,
     chainId: number,
     tokensBalance: string,
+    localTokens: TokenInfo[],
     txOption?: TxOption,
     signer?: Signer,
     private debug: (message?: any) => void = console.log
   ) {
     super(provider, txOption, signer);
-    this.tokens = (ConfigTokens as Record<string, any>)[chainId.toString()] || [];
+    this.localTokens = localTokens;
+    this.tokens = this.mergeTokens(
+      (ConfigTokens as Record<string, any>)[chainId.toString()] || [],
+      localTokens
+    );
     this.buildCache();
     this.tokenListContract = new Contract(tokenListAddress, ABI_TOKEN_LIST, provider);
     this.tokensBalanceContract = new Contract(tokensBalance, ABI_TOKENS_BALANCE, provider);
@@ -90,7 +97,7 @@ export class CoinList extends ContractRunner {
       : fetchResult[0].map(parseTokenInfo);
     const allTokensCount = parseFloat(fetchResult[1].toString());
     if (isThisTokensEmpty) {
-      this.tokens = this.tokens.concat(fetchTokens);
+      this.tokens = this.tokens = this.tokens.concat(fetchTokens);
       this.buildCache();
     } else {
       resultTokens = resultTokens.concat(fetchTokens);
@@ -121,12 +128,16 @@ export class CoinList extends ContractRunner {
 
     if (!isThisTokensEmpty) {
       this.tokens = resultTokens;
-      this.buildCache();
     }
+    this.tokens = this.mergeTokens(this.tokens, this.localTokens);
+    this.buildCache();
     this.debug(`Tokens count ${this.tokens.length}`);
     return this.tokens;
   }
-
+  mergeTokens(tokens0: TokenInfo[], tokens1: TokenInfo[]) {
+    const tokens0Addresses = tokens0.map((token) => token.address);
+    return tokens0.concat(tokens1.filter((token) => !tokens0Addresses.includes(token.address)));
+  }
   buildCache() {
     this.symbolToToken = {};
     this.addressToToken = {};
@@ -152,13 +163,6 @@ export class CoinList extends ContractRunner {
 
   getAllToken() {
     return [BTC, ...this.tokens];
-  }
-
-  async getAllowance(token: TokenInfo | Token, spender: string) {
-    const userAddress = this.getAddress();
-    if (userAddress) {
-      return this.contracts[token.address].allowance(userAddress, spender);
-    }
   }
 
   async fetchBalances(userAddress: string, fetchTokens: string[], index: number) {
@@ -208,6 +212,13 @@ export class CoinList extends ContractRunner {
     }
   }
 
+  async getAllowance(token: TokenInfo | Token, spender: string) {
+    const userAddress = this.getAddress();
+    if (userAddress) {
+      return this.contracts[token.address].allowance(userAddress, spender);
+    }
+  }
+
   async approve(
     token: TokenInfo | Token,
     spender: string,
@@ -221,6 +232,25 @@ export class CoinList extends ContractRunner {
     ) {
       const tokenContract = this.contracts[token.address];
       return this.send(tokenContract.approve, spender, amount, this.txOption);
+    }
+  }
+
+  async approveWithTokenAddress(
+    tokenInfo: TokenInfo | Token,
+    spender: string,
+    minAmount: number,
+    amount: string = MAX_U256
+  ) {
+    const tokenContract = new Contract(tokenInfo.address, ABI_ERC20, this.provider);
+    const userAddress = this.getAddress();
+    if (userAddress) {
+      const allowance = await tokenContract.allowance(userAddress, spender);
+      if (
+        new BigNumber(allowance.toString()).div(10 ** tokenInfo.decimals).lt(minAmount) &&
+        this.signer
+      ) {
+        return this.send(tokenContract.approve, spender, amount, this.txOption);
+      }
     }
   }
 

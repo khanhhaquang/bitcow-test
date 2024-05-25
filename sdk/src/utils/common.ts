@@ -1,8 +1,17 @@
 import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 import { ContractTransactionReceipt, EventLog, Interface, Log } from 'ethers';
+import { Token, TokenInfo } from '../types';
 
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+export function uiAmountToContractAmount(value: number, token: Token | TokenInfo) {
+  return multUiAmount(value, token.decimals);
+}
+
+export function multUiAmount(value: number, decimals: number) {
+  return new BigNumber(value).times(10 ** decimals).toFixed(0);
+}
 
 export function stringToBigNumber(value?: string) {
   if (value) {

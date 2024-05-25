@@ -39,12 +39,13 @@ export abstract class ContractRunner {
     ...args: ContractMethodArgs<A>
   ) {
     this.requireSigner();
-    const option = args[args.length-1]
-    if(option.gasPrice === undefined){
-      const feeData = await this.provider.getFeeData()
-      args[args.length-1] = {...option, gasPrice: feeData.gasPrice}
+    const option = args[args.length - 1];
+
+    if (option.gasPrice === undefined) {
+      const feeData = await this.provider.getFeeData();
+      args[args.length - 1] = { ...option, gasPrice: feeData.gasPrice };
     }
-    console.log(args)
+    console.log(args);
     const tx = await this.signer!.sendTransaction(await method.populateTransaction(...args));
     return tx.wait();
   }

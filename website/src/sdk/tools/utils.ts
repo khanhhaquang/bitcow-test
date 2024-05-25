@@ -36,28 +36,28 @@ const bobTestnetConfig = {
   URL: 'https://sepolia-dencun.rpc.gobob.xyz/',
   config: CONFIG.bobTestnet
 };
-
+*/
 const bitLayerTestnetConfig = {
   URL: 'https://testnet-rpc.bitlayer.org',
   config: CONFIG.bitlayerTestnet
 };
-*/
 
 export const UTIL_CONFIGS = [
   merlinConfig,
-  bitlayerConfig
+  bitlayerConfig,
+  bitLayerTestnetConfig
   /*
     merlinTestnetConfig,
     botanixTestnetConfig,
     b2TestnetConfig,
     bobTestnetConfig,
-    bitLayerTestnetConfig
+
    */
 ];
 
-const currentConfig = bitlayerConfig;
+const currentConfig = bitLayerTestnetConfig;
 
-export const txOption = undefined;
+export const txOption = {};
 
 export function getProvider() {
   return new ethers.JsonRpcProvider(currentConfig.URL);
@@ -86,7 +86,39 @@ export async function getPool(xToken: string, yToken: string): Promise<Pool> {
 }
 export async function getSdk() {
   const signer = getSigner();
-  return Sdk.create(signer.provider, currentConfig.config, 0.2, txOption, signer.signer);
+  return Sdk.create(
+    signer.provider,
+    currentConfig.config,
+    0.2,
+    [
+      {
+        pairAddress: '0x04B0016421D91CfEbFD45A485C817e5a8f959C62',
+        xTokenInfo: {
+          address: '0xbFcf24768Fe4ECFBE23a198D806222d8b857841e',
+          name: 'BitcowToken0',
+          symbol: 'BT0',
+          decimals: 18,
+          description: '',
+          projectUrl: '',
+          logoUrl: '',
+          coingeckoId: ''
+        },
+        yTokenInfo: {
+          address: '0x6C9bccf47d80dBDC998142F7BE060E0476390AA9',
+          name: 'BitcowToken4',
+          symbol: 'BT4',
+          decimals: 18,
+          description: '',
+          projectUrl: '',
+          logoUrl: '',
+          coingeckoId: ''
+        },
+        lpToken: '0x2dbCb6312A9Ed60864c1d24c7c0A9030D3307d2A'
+      }
+    ],
+    txOption,
+    signer.signer
+  );
 }
 export async function checkAndApprovePool(sdk: Sdk, pool: Pool) {
   await sdk.coinList.approve(pool.xToken, pool.poolAddress, 1000000);

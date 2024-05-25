@@ -10,6 +10,7 @@
     "approve-pool": "yarn cli approve-pool wBTC bitUSD",
     "quote": "yarn cli quote BTC bitusd 0.1",
     "swap": "yarn cli swap BTC bitusd 0.00001",
+    "create-pair": "yarn cli create-pair",
     "test": "ts-node src/SdkTest.ts"
   },
   "main": "dist/index.js",

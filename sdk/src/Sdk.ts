@@ -10,14 +10,23 @@ import { CoinList } from './CoinList';
 import { ContractRunner } from './ContractRunner';
 import { Pool } from './Pool';
 import { PoolCreator } from './PoolCreator';
-import {TokenInfo, Config, Quote, TxOption, Step} from './types';
-import {isBTC, isWBTC} from './utils';
-import { parsePairFromConfig, parsePairStats, parsePairStatsToConfig } from './utils/statsV1';
+import { TokenInfo, Config, Quote, TxOption, SearchPairMessage } from './types';
+import { isBTC, isWBTC } from './utils';
+import {
+  parsePairFromConfig,
+  parsePairStats,
+  parsePairStatsToConfig,
+  parseSearchPairAndStats
+} from './utils/statsV1';
+import { uiAmountToContractAmount } from './utils/common';
+import { PairV1Manager } from './PairV1Manager';
 
 export class Sdk extends ContractRunner {
   pools: Pool[] = [];
 
   coinList: CoinList;
+
+  pairV1Manager?: PairV1Manager;
 
   poolCreator?: PoolCreator;
 
@@ -27,10 +36,13 @@ export class Sdk extends ContractRunner {
 
   private readonly promiseThrottle: PromiseThrottle;
 
+  private localPairs: SearchPairMessage[];
+
   constructor(
     provider: Provider,
     public config: Config,
     requestsPerSecond: number,
+    localPairs: SearchPairMessage[],
     txOption?: TxOption,
     signer?: Signer,
     private debug: (message?: any) => void = console.log
@@ -44,7 +56,7 @@ export class Sdk extends ContractRunner {
         );
       }
     }
-
+    this.localPairs = localPairs;
     this.promiseThrottle = new PromiseThrottle({ requestsPerSecond: requestsPerSecond });
     this.coinList = new CoinList(
       provider,
@@ -53,12 +65,23 @@ export class Sdk extends ContractRunner {
       new PromiseThrottle({ requestsPerSecond: requestsPerSecond }),
       config.chainId,
       config.tokensBalance,
+      this.getLocalTokens(localPairs),
       txOption,
       signer,
       debug
     );
     this.poolCreator = config.tradingPairV1Creator
       ? new PoolCreator(provider, config.tradingPairV1Creator, txOption, signer)
+      : undefined;
+    this.pairV1Manager = config.pairV1Manager
+      ? new PairV1Manager(
+          provider,
+          config.pairV1Manager,
+          this.promiseThrottle,
+          txOption,
+          signer,
+          debug
+        )
       : undefined;
     this.routerContract = new Contract(config.swapRouter, ABI_SWAP_ROUTER, provider);
     this.tradingPairV1ListContract = new Contract(
@@ -67,7 +90,14 @@ export class Sdk extends ContractRunner {
       provider
     );
   }
-
+  getLocalTokens(localPairs: SearchPairMessage[]) {
+    const localTokens: Record<string, TokenInfo> = {};
+    for (const localPair of localPairs) {
+      localTokens[localPair.xTokenInfo.address] = localPair.xTokenInfo;
+      localTokens[localPair.yTokenInfo.address] = localPair.yTokenInfo;
+    }
+    return Object.values(localTokens);
+  }
   async fetchStats(paginateCount: number = 140): Promise<any[]> {
     const stats = await this.reloadPairStats(paginateCount, paginateCount);
     return stats.map(parsePairStatsToConfig);
@@ -98,9 +128,8 @@ export class Sdk extends ContractRunner {
         return { pools, pageStats: promisePair.pageStats, allCount };
       } catch (e) {
         times++;
-        console.log(e);
-        console.trace(e);
-        console.log(`Retry fetch pools from ${start} times ${times}`);
+        this.debug(e);
+        this.debug(`Retry fetch pools from ${start} times ${times}`);
       }
     }
   }
@@ -134,9 +163,9 @@ export class Sdk extends ContractRunner {
       resultPools = resultPools.concat(pools);
     }
     resultPageStats = resultPageStats.concat(pageStats);
+    const promise = [];
     if (pools.length < allCount) {
       this.debug(`Start others ${allCount - pools.length}, paginate count ${paginateCount}`);
-      const promise = [];
       for (let i = firstPaginateCount; i < allCount; i += paginateCount) {
         const fn = async () => {
           const fetchedPools = await this.fetchPoolsPaginate(i, paginateCount);
@@ -150,9 +179,36 @@ export class Sdk extends ContractRunner {
         };
         promise.push(fn());
       }
-      await Promise.all(promise);
+    }
+    if (this.localPairs.length > 0 && this.pairV1Manager !== undefined) {
+      const fn = async () => {
+        const localPools: Pool[] = [];
+        const pairStats = await this.pairV1Manager!.fetchPairStats(
+          this.localPairs.map((localPair) => localPair.pairAddress),
+          50
+        );
+        for (let i = 0; i < this.localPairs.length; i++) {
+          const pair = this.localPairs[i];
+          const stats = pairStats[i];
+          localPools.push(
+            new Pool(
+              this.provider,
+              parseSearchPairAndStats(pair, stats),
+              this.txOption,
+              this.signer
+            )
+          );
+        }
+        if (isThisPoolsEmpty) {
+          this.pools = this.pools.concat(localPools);
+        } else {
+          resultPools = resultPools.concat(localPools);
+        }
+      };
+      promise.push(fn());
     }
 
+    await Promise.all(promise);
     if (!isThisPoolsEmpty) {
       this.pools = resultPools;
     }
@@ -202,19 +258,29 @@ export class Sdk extends ContractRunner {
     provider: Provider,
     config: Config,
     requestsPerSecond = 0.1,
+    localPairs: SearchPairMessage[],
     txOption?: TxOption,
     signer?: Signer
   ) {
-    const sdk = new Sdk(provider, config, requestsPerSecond, txOption, signer);
+    const sdk = new Sdk(provider, config, requestsPerSecond, localPairs, txOption, signer);
     await sdk.reload(100, 140, (pools) => {});
+    const address = await signer?.getAddress();
+    sdk.setSigner(signer, address);
     return sdk;
   }
 
-  private getDirectQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
+  private getDirectQuote(
+    inputToken: TokenInfo,
+    outputToken: TokenInfo,
+    inAmt: number
+  ): Quote | undefined {
     let pool: Pool | undefined;
     let isReversed: boolean | undefined;
     for (const pool_ of this.pools) {
-      if (pool_.xToken.address === inputToken.address && pool_.yToken.address === outputToken.address) {
+      if (
+        pool_.xToken.address === inputToken.address &&
+        pool_.yToken.address === outputToken.address
+      ) {
         pool = pool_;
         isReversed = false;
       } else if (
@@ -234,10 +300,10 @@ export class Sdk extends ContractRunner {
       ? [pool.yMult, pool.xMult]
       : [pool.xMult, pool.yMult];
     const inputAmount = new BN(new BigNumber(inAmt).times(inputMult).toFixed(0));
-    let outAmount = 0
+    let outAmount = new BN(0);
     try {
       outAmount = isReversed ? pool.quoteYtoX(inputAmount) : pool.quoteXtoY(inputAmount);
-    } catch (e){
+    } catch (e) {
       // console.log(e)
     }
     const outAmt = new BigNumber(outAmount.toString()).div(outputMult).toNumber();
@@ -315,14 +381,14 @@ export class Sdk extends ContractRunner {
   }
 
   getQuote(inputToken: TokenInfo, outputToken: TokenInfo, inAmt: number): Quote | undefined {
-    if ((isBTC(inputToken) && isWBTC(outputToken)) || (isWBTC(inputToken) && isBTC(outputToken))){
+    if ((isBTC(inputToken) && isWBTC(outputToken)) || (isWBTC(inputToken) && isBTC(outputToken))) {
       return {
         inputToken,
         outputToken,
         inAmt,
         steps: [],
         outAmt: inAmt
-      }
+      };
     }
     const erc20InputToken = isBTC(inputToken) ? this.coinList.getWBTCToken() : inputToken;
     const erc20OutputToken = isBTC(outputToken) ? this.coinList.getWBTCToken() : outputToken;
@@ -369,12 +435,11 @@ export class Sdk extends ContractRunner {
   async swap(quote: Quote, minOutput?: number) {
     if (this.routerContract) {
       if (isBTC(quote.inputToken)) {
-        if (isWBTC(quote.outputToken)){
-          return this.send(
-            this.routerContract.swapBTCtoWBTC,
-            quote.outputToken.address,
-            { value: Sdk.getInputAmount(quote), ...this.txOption }
-          );
+        if (isWBTC(quote.outputToken)) {
+          return this.send(this.routerContract.swapBTCtoWBTC, quote.outputToken.address, {
+            value: Sdk.getInputAmount(quote),
+            ...this.txOption
+          });
         } else {
           return this.send(
             this.routerContract.swapBTCtoERC20,
@@ -385,7 +450,7 @@ export class Sdk extends ContractRunner {
           );
         }
       } else if (isBTC(quote.outputToken)) {
-        if (isWBTC(quote.inputToken)){
+        if (isWBTC(quote.inputToken)) {
           return this.send(
             this.routerContract.swapWBTCtoBTC,
             quote.inputToken.address,
@@ -416,15 +481,14 @@ export class Sdk extends ContractRunner {
   }
 
   private static getInputAmount(quote: Quote): string {
-    return new BigNumber(quote.inAmt).times(10 ** quote.inputToken.decimals).toFixed(0);
+    return uiAmountToContractAmount(quote.inAmt, quote.inputToken);
   }
 
   private static getOutputAmount(quote: Quote, output?: number): string {
     if (output === undefined) {
       output = quote.outAmt;
     }
-
-    return new BigNumber(output).times(10 ** quote.outputToken.decimals).toFixed(0);
+    return uiAmountToContractAmount(output, quote.outputToken);
   }
 
   async print() {

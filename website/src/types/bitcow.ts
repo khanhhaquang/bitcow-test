@@ -2,8 +2,9 @@ import { AddEthereumChainParameter } from '@web3-react/types';
 
 import { Config, TokenInfo } from '../sdk';
 
-export interface TokenBalance {
+export interface FilteredToken {
   token: TokenInfo;
+  searched: boolean;
   balance: number;
   value: number;
 }

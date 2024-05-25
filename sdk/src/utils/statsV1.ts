@@ -2,7 +2,7 @@ import BN from 'bn.js';
 
 import { bigintToBigNumber, bigintToBN, stringToBigNumber, stringToBN } from './common';
 
-import { PairStats, StatsV1, TokenInfo } from '../types';
+import { PairStats, SearchPairMessage, StatsV1, TokenInfo } from '../types';
 
 export function parsePairFromConfig(pairStats: any): PairStats {
   const pair = pairStats.pair;
@@ -103,6 +103,49 @@ export function parsePairStats(pairStats: any): PairStats {
       lpToken: pair.lpToken
     },
     statsV1: parseStatsV1(pairStats.statsV1)
+  };
+}
+
+export function parseSearchPairAndStats(pair: SearchPairMessage, statsV1: StatsV1): PairStats {
+  return {
+    pair: {
+      pairAddress: pair.pairAddress,
+      xToken: pair.xTokenInfo.address,
+      xDecimals: pair.xTokenInfo.decimals,
+      xSymbol: pair.xTokenInfo.symbol,
+      yToken: pair.yTokenInfo.address,
+      yDecimals: pair.yTokenInfo.decimals,
+      ySymbol: pair.yTokenInfo.symbol,
+      lpToken: pair.lpToken
+    },
+    statsV1
+  };
+}
+
+export function parsePairMessage(pairStat: any) {
+  return {
+    pairAddress: pairStat.pairAddress,
+    xTokenInfo: {
+      address: pairStat.xTokenAddress,
+      name: pairStat.xTokenInfo.name,
+      symbol: pairStat.xTokenInfo.symbol,
+      decimals: Number(pairStat.xTokenInfo.decimals.toString()),
+      description: pairStat.xTokenInfo.description,
+      projectUrl: pairStat.xTokenInfo.projectUrl,
+      logoUrl: pairStat.xTokenInfo.logoUrl,
+      coingeckoId: pairStat.xTokenInfo.coingeckoId
+    },
+    yTokenInfo: {
+      address: pairStat.yTokenAddress,
+      name: pairStat.yTokenInfo.name,
+      symbol: pairStat.yTokenInfo.symbol,
+      decimals: Number(pairStat.yTokenInfo.decimals.toString()),
+      description: pairStat.yTokenInfo.description,
+      projectUrl: pairStat.yTokenInfo.projectUrl,
+      logoUrl: pairStat.yTokenInfo.logoUrl,
+      coingeckoId: pairStat.yTokenInfo.coingeckoId
+    },
+    lpToken: pairStat.lpToken
   };
 }
 

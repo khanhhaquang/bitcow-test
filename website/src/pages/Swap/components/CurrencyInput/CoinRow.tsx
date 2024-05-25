@@ -6,13 +6,13 @@ import { displayAddress } from 'wallet/utils/formatter';
 import { Tooltip } from 'components/Antd';
 import CoinIcon from 'components/CoinIcon';
 import useTokenAmountFormatter from 'hooks/useTokenAmountFormatter';
-import { TokenBalance } from 'types/bitcow';
+import { FilteredToken } from 'types/bitcow';
 
 import { numberGroupFormat } from '../../../../components/PositiveFloatNumInput/numberFormats';
 import useMerlinWallet from '../../../../hooks/useMerlinWallet';
 
 interface TProps {
-  item: TokenBalance;
+  item: FilteredToken;
 }
 
 const CoinRow: React.FC<TProps> = ({ item }) => {
@@ -32,12 +32,10 @@ const CoinRow: React.FC<TProps> = ({ item }) => {
         </div>
       </div>
       <small className="text-base font-bold">
-        {!wallet && <small className="ml-2">{item.token.symbol.replace('bitusd', 'bitUSD')}</small>}
-        {wallet && item.balance === -2 && <small className="ml-2">{item.token.symbol}</small>}
         {wallet && item.balance === -1 && (
           <Skeleton.Button className="!h-4 !w-10 !min-w-0" active />
         )}
-        {wallet && item.balance != undefined && item.balance >= 0 && (
+        {wallet && item.balance != undefined && item.balance > 0 && (
           <div className="flex flex-col justify-start">
             <span className="text-xl">{tokenAmountFormatter(item.balance, item.token)}</span>
             {item.value > 0 && (

@@ -212,6 +212,11 @@ export class Sdk extends ContractRunner {
     if (!isThisPoolsEmpty) {
       this.pools = resultPools;
     }
+    const map = new Map();
+    for (const pool of this.pools) {
+      map.set(pool.poolAddress, pool);
+    }
+    this.pools = Array.from(map.values());
     this.debug(`Pools count ${this.pools.length}`);
     return resultPageStats;
   }

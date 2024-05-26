@@ -57,7 +57,7 @@ const Pool = () => {
   const liquidityModal = useSelector(getLiquidityModal);
   const { isTablet } = useBreakpoint('tablet');
 
-  const { initProvider, bitcowSDK } = useMerlinWallet();
+  const { wallet, initProvider, bitcowSDK } = useMerlinWallet();
 
   useEffect(() => {
     initProvider('pool');
@@ -255,7 +255,7 @@ const Pool = () => {
                     onChange={(val) => onUpdateFilter(val, 'text')}
                     onSearch={() => {}}
                   />
-                  {bitcowSDK && bitcowSDK.pairV1Manager && (
+                  {wallet && bitcowSDK && bitcowSDK.pairV1Manager && (
                     <PixelButton
                       width={126}
                       borderWidth={2}

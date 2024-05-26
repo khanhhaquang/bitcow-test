@@ -631,6 +631,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               );
               success = false;
             }
+          } else {
+            success = false;
           }
         }
       } catch (error) {

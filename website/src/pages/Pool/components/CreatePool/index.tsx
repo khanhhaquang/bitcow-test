@@ -1,16 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Formik, FormikHelpers } from 'formik';
 import { useCallback } from 'react';
-import * as yup from 'yup';
 
-import PixelButton from 'components/PixelButton';
-
-import CreatePoolToken from './CreatePoolToken';
-
-// import useMerlinWallet from '../../../hooks/useMerlinWallet';
-// import usePools from '../../../hooks/usePools';
-// import { ABI_ERC20 } from '../../../sdk/abi/ERC20';
 import CreatePoolUi from './CreatePoolUi';
 import { ICreatePool } from './types';
 
@@ -23,9 +13,8 @@ interface TProps {
 
 const CreatePool: React.FC<TProps> = ({ onClose }) => {
   const { bitcowSDK, requestCreatePairWithManager, createBitcowSDK } = useMerlinWallet();
-  // const { coinPrices } = usePools();
-
   const onConfirm = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (values: ICreatePool, formikHelper: FormikHelpers<ICreatePool>) => {
       const success = await requestCreatePairWithManager(
         {
@@ -60,48 +49,8 @@ const CreatePool: React.FC<TProps> = ({ onClose }) => {
         onClose();
       }
     },
-    [onClose]
+    [bitcowSDK, createBitcowSDK, onClose, requestCreatePairWithManager]
   );
-  const validationSchema = yup.object({
-    xTokenAddress: yup
-      .string()
-      .required("Token A can't be empty")
-      .length(42, 'Token A may not an address'),
-    xTokenSymbol: yup.string().required('Token A symbol not found, the address may not a token'),
-    xTokenDecimals: yup
-      .number()
-      .moreThan(0, 'Token A decimals not found, the address may not a token'),
-    xTokenLogoUrl: yup.string().required("Token A logo can't be empty"),
-    xTokenBalance: yup.number().moreThan(0, 'Token A no available balance'),
-    xTokenAmount: yup
-      .number()
-      .required()
-      .moreThan(0, 'Token A amount must more than zero')
-      .test(
-        'max',
-        'Token A amount must less than balance',
-        (value, context) => value <= context.parent.xTokenBalance
-      ),
-    yTokenAddress: yup
-      .string()
-      .required("Token B can't be empty")
-      .length(42, 'Token B may not an address'),
-    yTokenDecimals: yup
-      .number()
-      .moreThan(0, 'Token B decimals not found, the address may not a token'),
-    yTokenSymbol: yup.string().required('Token B symbol not found, the address may not a token'),
-    yTokenLogoUrl: yup.string().required("Token y logo can't be empty"),
-    yTokenBalance: yup.number().moreThan(0, 'Token B no available balance'),
-    yTokenAmount: yup
-      .number()
-      .required()
-      .moreThan(0, 'Token B amount must more than zero')
-      .test(
-        'max',
-        'Token B amount must less than balance',
-        (value, context) => value <= context.parent.yTokenBalance
-      )
-  });
 
   return (
     <Formik
@@ -124,7 +73,6 @@ const CreatePool: React.FC<TProps> = ({ onClose }) => {
         isValidating: false,
         error: undefined
       }}
-      validationSchema={validationSchema}
       onSubmit={onConfirm}>
       <CreatePoolUi></CreatePoolUi>
     </Formik>

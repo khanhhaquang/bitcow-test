@@ -13,6 +13,4 @@ export interface ICreatePool {
   yTokenBalance: number;
   yTokenAmount: number;
   yTokenPrice: number;
-  isValidating: boolean;
-  error: string | undefined;
 }

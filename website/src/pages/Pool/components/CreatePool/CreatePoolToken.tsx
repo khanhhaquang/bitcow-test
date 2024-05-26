@@ -22,47 +22,67 @@ import { ABI_ERC20 } from '../../../../sdk/abi/ERC20';
 
 interface TProps {
   tokenType: 'xToken' | 'yToken';
+  setError: (error: string) => void;
+  setIsValidating: (isValidating: boolean) => void;
 }
 
-const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
-  const tokenTitle = tokenType === 'xToken' ? 'TOKEN A' : 'TOKEN B';
+const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidating }) => {
+  const tokenTitle = tokenType === 'xToken' ? 'Token A' : 'Token B';
 
-  const { bitcowSDK } = useMerlinWallet();
-  const { setFieldValue, values, validateForm } = useFormikContext<ICreatePool>();
+  const { bitcowSDK, wallet } = useMerlinWallet();
+  const { setFieldValue, values } = useFormikContext<ICreatePool>();
   const { handleImgUpload } = useUpload();
   const onClickMax = useCallback(() => {
-    console.log('max');
-    console.log(values[tokenType + 'Balance']);
     setFieldValue(tokenType + 'Amount', values[tokenType + 'Balance']);
   }, [setFieldValue, tokenType, values]);
 
   const onAddressChange = useCallback(
     async (address: string) => {
-      if (bitcowSDK && bitcowSDK.pairV1Manager && isAddress(address)) {
-        address = toChecksumAddress(address);
-        setFieldValue(tokenType + 'Address', address);
-        values.isValidating = true;
-        values.error = undefined;
-        let tokenInfo: TokenInfo;
+      setFieldValue(tokenType + 'Address', address);
+      if (bitcowSDK && bitcowSDK.pairV1Manager) {
+        setIsValidating(true);
+        setError(undefined);
+        if (!wallet) {
+          setError('Please connect wallet');
+          setIsValidating(false);
+          return;
+        }
+        if (address.trim().length === 0) {
+          setError(`${tokenTitle} can't be empty`);
+          setFieldValue(tokenType + 'Symbol', '', false);
+          setFieldValue(tokenType + 'Decimals', 0);
+          setFieldValue(tokenType + 'LogoUrl', '');
+          setFieldValue(tokenType + 'Balance', 0);
+          setIsValidating(false);
+          return;
+        }
+        if (!isAddress(address)) {
+          setFieldValue(tokenType + 'Symbol', '', false);
+          setFieldValue(tokenType + 'Decimals', 0);
+          setFieldValue(tokenType + 'LogoUrl', '');
+          setFieldValue(tokenType + 'Balance', 0);
+          setError(`${tokenTitle} may not an address`);
+          setIsValidating(false);
+          return;
+        }
+
+        let tokenInfo: TokenInfo = await bitcowSDK.pairV1Manager.getTokenInfo(address);
         let balanceBN: bigint;
         let decimals: number;
         let symbol: string;
-        try {
-          tokenInfo = await bitcowSDK.pairV1Manager.getTokenInfo(address);
-        } catch (e) {
-          values.error = 'Get error while check token bean used';
-        }
+
         const tokenContract = new Contract(address, ABI_ERC20, bitcowSDK.provider);
         if (tokenInfo.decimals > 0) {
+          setFieldValue(tokenType + 'LogoUrl', tokenInfo.logoUrl);
           try {
             balanceBN = await tokenContract.balanceOf(bitcowSDK.getAddress());
             decimals = tokenInfo.decimals;
             symbol = tokenInfo.symbol;
-            setFieldValue(tokenType + 'LogoUrl', tokenInfo.logoUrl);
           } catch (e) {
-            values.error = 'Get error while fetch token balance';
+            setError(`Get error while fetch ${tokenTitle} balance`);
           }
         } else {
+          setFieldValue(tokenType + 'LogoUrl', '');
           try {
             [symbol, balanceBN, decimals] = await bitcowSDK.promiseThrottle.addAll([
               async () => {
@@ -76,27 +96,19 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType }) => {
               }
             ]);
           } catch (e) {
-            console.log(e);
-            values.error = 'Get error while fetch token info';
+            setError(`Get error while fetch ${tokenTitle} info, may not a token`);
           }
-          setFieldValue(tokenType + 'LogoUrl', '');
         }
-        values.isValidating = false;
-        setFieldValue(tokenType + 'Symbol', symbol);
-        setFieldValue(tokenType + 'Decimals', decimals);
+        setFieldValue(tokenType + 'Symbol', symbol, false);
+        setFieldValue(tokenType + 'Decimals', decimals, false);
         setFieldValue(
           tokenType + 'Balance',
           new BigNumber(balanceBN.toString()).div(10 ** decimals).toNumber()
         );
-      } else {
-        setFieldValue(tokenType + 'Symbol', '');
-        setFieldValue(tokenType + 'Decimals', 0);
-        setFieldValue(tokenType + 'LogoUrl', '');
-        setFieldValue(tokenType + 'Balance', 0);
       }
-      setFieldValue(tokenType + 'Address', address);
+      setIsValidating(false);
     },
-    [bitcowSDK, setFieldValue, tokenType, values]
+    [wallet, bitcowSDK, setFieldValue, tokenType, setError, setIsValidating, tokenTitle]
   );
 
   const onAmountChange = useCallback(

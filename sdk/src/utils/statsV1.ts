@@ -195,6 +195,7 @@ function fillStats(stats: StatsV1) {
 
 export function parseTokenInfo(token: any): TokenInfo {
   return {
+    index: Number(token.index.toString()),
     address: token.tokenAddress,
     name: token.name,
     symbol: token.symbol,

@@ -5,14 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Radio, Tabs } from 'components/Antd';
 import BitcowModal from 'components/BitcowModal';
+import PixelButton from 'components/PixelButton';
 import { numberCompactFormat } from 'components/PositiveFloatNumInput/numberFormats';
 import SearchInput from 'components/SearchInput';
 import SelectInput from 'components/SelectInput';
 import { useBreakpoint } from 'hooks/useBreakpoint';
 import usePools from 'hooks/usePools';
+import { PlusIcon } from 'resources/icons';
 import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 
 import AddLiquidity from './components/AddLiquidity';
+import CreatePool from './components/CreatePool';
 import PoolTable from './components/PoolTable';
 import WithdrawLiquidity from './components/WithdrawLiquidity';
 import styles from './index.module.scss';
@@ -20,9 +23,6 @@ import styles from './index.module.scss';
 import useMerlinWallet from '../../hooks/useMerlinWallet';
 import useNetwork from '../../hooks/useNetwork';
 import { IPool } from '../../sdk';
-import PixelButton from 'components/PixelButton';
-import { PlusIcon } from 'resources/icons';
-import CreatePool from './components/CreatePool';
 
 const filterOptions = [
   {
@@ -57,7 +57,7 @@ const Pool = () => {
   const liquidityModal = useSelector(getLiquidityModal);
   const { isTablet } = useBreakpoint('tablet');
 
-  const { initProvider } = useMerlinWallet();
+  const { initProvider, bitcowSDK } = useMerlinWallet();
 
   useEffect(() => {
     initProvider('pool');
@@ -255,17 +255,19 @@ const Pool = () => {
                     onChange={(val) => onUpdateFilter(val, 'text')}
                     onSearch={() => {}}
                   />
-                  <PixelButton
-                    width={126}
-                    borderWidth={2}
-                    height={34}
-                    className="ml-3 font-pg text-lg text-blue1"
-                    color="rgba(255, 255, 255, 0.8)"
-                    isSolid
-                    onClick={() => setIsCreatePoolOpen(true)}>
-                    <PlusIcon className="mr-2" width={11} height={11} />
-                    New Pool
-                  </PixelButton>
+                  {bitcowSDK && bitcowSDK.pairV1Manager && (
+                    <PixelButton
+                      width={126}
+                      borderWidth={2}
+                      height={34}
+                      className="ml-3 font-pg text-lg text-blue1"
+                      color="rgba(255, 255, 255, 0.8)"
+                      isSolid
+                      onClick={() => setIsCreatePoolOpen(true)}>
+                      <PlusIcon className="mr-2" width={11} height={11} />
+                      New Pool
+                    </PixelButton>
+                  )}
                 </div>
               </div>
             )

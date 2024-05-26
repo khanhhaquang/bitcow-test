@@ -19,11 +19,9 @@ export class CoinList extends ContractRunner {
 
   addressToToken: Record<string, TokenInfo> = {};
 
-  private contracts: Record<string, Contract> = {};
-
   private readonly tokenListContract: Contract;
 
-  private readonly tokensBalanceContract: Contract;
+  public readonly tokensBalanceContract: Contract;
 
   private localTokens: TokenInfo[];
 
@@ -143,18 +141,14 @@ export class CoinList extends ContractRunner {
     this.addressToToken = {};
     this.tokens.forEach((token) => {
       this.symbolToToken[token.symbol] = token;
-      this.addressToToken[token.address] = token;
+      this.addressToToken[token.address.toLowerCase()] = token;
     });
-    this.contracts = {};
-    for (const token of this.tokens) {
-      this.contracts[token.address] = new Contract(token.address, ABI_ERC20, this.provider);
-    }
   }
 
   afterSetSigner(signer?: Signer | undefined): void {}
 
   getTokenByAddress(address: string): TokenInfo {
-    return this.addressToToken[address];
+    return this.addressToToken[address.toLowerCase()];
   }
 
   getTokenBySymbol(symbol: string): TokenInfo {
@@ -212,46 +206,38 @@ export class CoinList extends ContractRunner {
     }
   }
 
-  async getAllowance(token: TokenInfo | Token, spender: string) {
-    const userAddress = this.getAddress();
-    if (userAddress) {
-      return this.contracts[token.address].allowance(userAddress, spender);
-    }
-  }
-
   async approve(
     token: TokenInfo | Token,
     spender: string,
     minAmount: number,
     amount: string = MAX_U256
   ) {
-    const allowance = await this.getAllowance(token, spender);
-    if (
-      new BigNumber(allowance.toString()).div(10 ** token.decimals).lt(minAmount) &&
-      this.signer
-    ) {
-      const tokenContract = this.contracts[token.address];
-      return this.send(tokenContract.approve, spender, amount, this.txOption);
-    }
-  }
-
-  async approveWithTokenAddress(
-    tokenInfo: TokenInfo | Token,
-    spender: string,
-    minAmount: number,
-    amount: string = MAX_U256
-  ) {
-    const tokenContract = new Contract(tokenInfo.address, ABI_ERC20, this.provider);
+    const tokenContract = new Contract(token.address, ABI_ERC20, this.provider);
     const userAddress = this.getAddress();
     if (userAddress) {
       const allowance = await tokenContract.allowance(userAddress, spender);
       if (
-        new BigNumber(allowance.toString()).div(10 ** tokenInfo.decimals).lt(minAmount) &&
+        new BigNumber(allowance.toString()).div(10 ** token.decimals).lt(minAmount) &&
         this.signer
       ) {
         return this.send(tokenContract.approve, spender, amount, this.txOption);
       }
     }
+  }
+
+  async updateLogoUrl(tokenSymbol: string, logoUrl: string) {
+    const tokenInfo = this.getTokenBySymbol(tokenSymbol);
+    if (tokenInfo === undefined) {
+      throw new Error(`Token ${tokenSymbol} not found`);
+    }
+    await this.send(
+      this.tokenListContract.updateTokenInfo,
+      tokenInfo.index,
+      tokenInfo.description,
+      tokenInfo.projectUrl,
+      logoUrl,
+      this.txOption
+    );
   }
 
   async print() {

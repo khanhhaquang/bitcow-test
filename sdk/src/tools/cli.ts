@@ -41,6 +41,55 @@ async function printSDK() {
 
 main.command('print-sdk').action(printSDK);
 
+async function printTokens() {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+
+  console.log(JSON.stringify(sdk.coinList.tokens, undefined, '  '));
+}
+
+main.command('print-tokens').action(printTokens);
+
+async function updateTokenLogoUrl(tokenSymbol: string, logoUrl: string) {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+  await sdk.coinList.updateLogoUrl(tokenSymbol, logoUrl);
+}
+main
+  .command('update-token-logo-url')
+  .argument('tokenSymbol')
+  .argument('logoUrl')
+  .action(updateTokenLogoUrl);
+
+async function updateTokenInfoToManager(tokenSymbol: string) {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+  console.log(sdk.coinList.symbolToToken);
+  const tokenInfo = sdk.coinList.getTokenBySymbol(tokenSymbol);
+  if (tokenInfo === undefined) {
+    throw new Error('Token not found');
+  }
+  await sdk.pairV1Manager?.updateTokenInfo(tokenInfo);
+}
+main
+  .command('update-token-info-to-manager')
+  .argument('tokenSymbol')
+  .action(updateTokenInfoToManager);
+
+async function copyFromPairListToPairManager() {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+  for (const pool of sdk.pools) {
+    const xTokenInfo = sdk.coinList.getTokenByAddress(pool.xToken.address);
+    const yTokenInfo = sdk.coinList.getTokenByAddress(pool.yToken.address);
+    if (xTokenInfo === undefined || yTokenInfo === undefined) {
+      throw new Error('TokenInfo not found');
+    }
+    await sdk.pairV1Manager?.addPair(xTokenInfo, yTokenInfo, pool.poolAddress);
+  }
+}
+main.command('copy-from-pair-list-to-pair-manager').action(copyFromPairListToPairManager);
+
 async function approvePool(xToken: string, yToken: string) {
   const pool = await getPool(xToken, yToken);
   const sdk = await getSdk();
@@ -163,16 +212,8 @@ async function createPair() {
   for (const testToken of testTokens) {
     const yTokenInfo = await getTokenInfo(testToken, sdk.signer?.provider!);
 
-    await sdk.coinList.approveWithTokenAddress(
-      xTokenInfo,
-      sdk.config.pairV1Manager!,
-      xLiquidityAmount
-    );
-    await sdk.coinList.approveWithTokenAddress(
-      yTokenInfo,
-      sdk.config.pairV1Manager!,
-      yLiquidityAmount
-    );
+    await sdk.coinList.approve(xTokenInfo, sdk.config.pairV1Manager!, xLiquidityAmount);
+    await sdk.coinList.approve(yTokenInfo, sdk.config.pairV1Manager!, yLiquidityAmount);
     const tx = await sdk.pairV1Manager?.createPair(
       xTokenInfo,
       yTokenInfo,
@@ -198,6 +239,11 @@ async function tokenInfo(tokenAddress: string) {
   const pairAddresses = pairs!.map((pair) => pair.pairAddress);
   const stats = await sdk.pairV1Manager?.fetchPairStats(pairAddresses, 100);
   console.log(stats);
+  const poolAddress = await sdk.pairV1Manager?.isPoolExist(
+    '0x3Fb05F02FDCf7f8D603b253E06147640b4dBF38B',
+    '0xbFcf24768Fe4ECFBE23a198D806222d8b857841e'
+  );
+  console.log(poolAddress);
 }
 
 main.command('token-info').argument('tokenAddress').action(tokenInfo);

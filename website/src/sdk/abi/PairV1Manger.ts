@@ -187,6 +187,83 @@ export const ABI_PAIR_V1_MANAGER = [
         type: 'tuple'
       },
       {
+        internalType: 'address',
+        name: 'pairAddress',
+        type: 'address'
+      }
+    ],
+    name: 'addPair',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'tokenAddress',
+            type: 'address'
+          },
+          {
+            internalType: 'string',
+            name: 'description',
+            type: 'string'
+          },
+          {
+            internalType: 'string',
+            name: 'projectUrl',
+            type: 'string'
+          },
+          {
+            internalType: 'string',
+            name: 'logoUrl',
+            type: 'string'
+          },
+          {
+            internalType: 'string',
+            name: 'coingeckoId',
+            type: 'string'
+          }
+        ],
+        internalType: 'struct IPairV1Manager.AddTokenInfo',
+        name: 'xToken',
+        type: 'tuple'
+      },
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'tokenAddress',
+            type: 'address'
+          },
+          {
+            internalType: 'string',
+            name: 'description',
+            type: 'string'
+          },
+          {
+            internalType: 'string',
+            name: 'projectUrl',
+            type: 'string'
+          },
+          {
+            internalType: 'string',
+            name: 'logoUrl',
+            type: 'string'
+          },
+          {
+            internalType: 'string',
+            name: 'coingeckoId',
+            type: 'string'
+          }
+        ],
+        internalType: 'struct IPairV1Manager.AddTokenInfo',
+        name: 'yToken',
+        type: 'tuple'
+      },
+      {
         internalType: 'uint256',
         name: 'xLiquidityAmount',
         type: 'uint256'

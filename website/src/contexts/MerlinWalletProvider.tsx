@@ -46,6 +46,14 @@ interface MerlinWalletContextType {
   requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
   requestWithdrawLiquidity: (pool: IPool, amt: string) => Promise<boolean>;
+  requestCreatePairWithManager: (
+    xTokenInfo: TokenInfo,
+    yTokenInfo: TokenInfo,
+    xTokenLiquidity: number,
+    yTokenLiquidity: number,
+    xPrice: number,
+    yPrice: number
+  ) => Promise<boolean>;
   requestCreatePair: (
     tokenInfo: CreateTokenInfo,
     mintAmount: number,
@@ -578,6 +586,74 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     [bitcowSDK, wallet, checkTransactionError, checkNetwork, currentNetwork, poolPageReload]
   );
 
+  const requestCreatePairWithManager = useCallback(
+    async (
+      xTokenInfo: TokenInfo,
+      yTokenInfo: TokenInfo,
+      xTokenLiquidity: number,
+      yTokenLiquidity: number,
+      xPrice: number,
+      yPrice: number
+    ) => {
+      let success = true;
+      try {
+        if (!wallet) throw new Error('Please connect wallet first');
+        if (bitcowSDK && bitcowSDK.pairV1Manager) {
+          if (!(await checkNetwork())) {
+            return;
+          }
+          if (
+            (await checkApprove(xTokenInfo, bitcowSDK.config.pairV1Manager, xTokenLiquidity)) &&
+            (await checkApprove(yTokenInfo, bitcowSDK.config.pairV1Manager, yTokenLiquidity))
+          ) {
+            const result = await bitcowSDK.pairV1Manager.createPair(
+              xTokenInfo,
+              yTokenInfo,
+              xTokenLiquidity,
+              yTokenLiquidity,
+              300,
+              3000,
+              xPrice,
+              yPrice
+            );
+            if (result.status === 1) {
+              openTxSuccessNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
+                result.hash,
+                'Create pool success'
+              );
+              success = true;
+            } else if (result.status === 0) {
+              openTxErrorNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
+                result.hash,
+                'Failed to create pool'
+              );
+              success = false;
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        checkTransactionError(error);
+        success = false;
+      } finally {
+        setPendingTx(false);
+        tokensPageReload(false);
+        return success;
+      }
+    },
+    [
+      bitcowSDK,
+      checkApprove,
+      checkNetwork,
+      checkTransactionError,
+      currentNetwork,
+      tokensPageReload,
+      wallet
+    ]
+  );
+
   const requestCreatePair = useCallback(
     async (
       tokenInfo: CreateTokenInfo,
@@ -680,6 +756,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         requestSwap,
         requestAddLiquidity,
         requestWithdrawLiquidity,
+        requestCreatePairWithManager,
         requestCreatePair
       }}>
       {children}

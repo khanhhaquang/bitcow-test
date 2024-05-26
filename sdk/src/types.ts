@@ -22,6 +22,7 @@ export type CreateTokenInfo = {
 };
 
 export type TokenInfo = {
+  index?: number;
   address: string;
 } & CreateTokenInfo;
 

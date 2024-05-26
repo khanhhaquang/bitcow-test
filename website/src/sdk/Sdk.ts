@@ -34,12 +34,12 @@ export class Sdk extends ContractRunner {
 
   private tradingPairV1ListContract: Contract;
 
-  private readonly promiseThrottle: PromiseThrottle;
+  readonly promiseThrottle: PromiseThrottle;
 
   private localPairs: SearchPairMessage[];
 
   constructor(
-    provider: Provider,
+    public provider: Provider,
     public config: Config,
     requestsPerSecond: number,
     localPairs: SearchPairMessage[],
@@ -240,6 +240,7 @@ export class Sdk extends ContractRunner {
     this.coinList.setSigner(signer, address);
     this.pools.forEach((pool) => pool.setSigner(signer, address));
     this.poolCreator?.setSigner(signer, address);
+    this.pairV1Manager?.setSigner(signer, address);
   }
 
   get swapRouter(): string {
@@ -262,7 +263,15 @@ export class Sdk extends ContractRunner {
     txOption?: TxOption,
     signer?: Signer
   ) {
-    const sdk = new Sdk(provider, config, requestsPerSecond, localPairs, txOption, signer);
+    const sdk = new Sdk(
+      provider,
+      config,
+      requestsPerSecond,
+      localPairs,
+      txOption,
+      signer,
+      undefined
+    );
     await sdk.reload(100, 140, (pools) => {});
     const address = await signer?.getAddress();
     sdk.setSigner(signer, address);

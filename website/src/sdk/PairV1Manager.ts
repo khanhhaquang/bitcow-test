@@ -56,6 +56,31 @@ export class PairV1Manager extends ContractRunner {
     );
   }
 
+  async addPair(xToken: TokenInfo, yToken: TokenInfo, pairAddress: string) {
+    if (await this.isPoolExist(xToken.address, yToken.address)) {
+      return;
+    }
+    return this.send(
+      this.pairV1Contract.addPair,
+      {
+        tokenAddress: xToken.address,
+        description: xToken.description,
+        projectUrl: xToken.projectUrl,
+        logoUrl: xToken.logoUrl,
+        coingeckoId: xToken.coingeckoId
+      },
+      {
+        tokenAddress: yToken.address,
+        description: yToken.description,
+        projectUrl: yToken.projectUrl,
+        logoUrl: yToken.logoUrl,
+        coingeckoId: yToken.coingeckoId
+      },
+      pairAddress,
+      this.txOption
+    );
+  }
+
   private async searchPairsPaginate(tokenAddress: string, start: number, paginateCount: number) {
     let times = 0;
     while (true) {
@@ -147,6 +172,23 @@ export class PairV1Manager extends ContractRunner {
 
   async getTokenInfo(tokenAddress: string) {
     const tokenInfo = await this.pairV1Contract.tokens(tokenAddress);
-    return tokenInfo.toObject();
+    const obj = tokenInfo.toObject();
+    obj.decimals = Number(obj.decimals.toString());
+    return obj;
+  }
+  private sortAddress(address0: string, address1: string) {
+    if (address0.localeCompare(address1) > 0) {
+      return [address0, address1];
+    } else {
+      return [address1, address0];
+    }
+  }
+  async isPoolExist(xTokenAddress: string, yTokenAddress: string) {
+    const sortedAddresses = this.sortAddress(xTokenAddress, yTokenAddress);
+    const pairAddress = await this.pairV1Contract.pairByTokenAddresses(
+      sortedAddresses[0],
+      sortedAddresses[1]
+    );
+    return pairAddress !== '0x0000000000000000000000000000000000000000';
   }
 }

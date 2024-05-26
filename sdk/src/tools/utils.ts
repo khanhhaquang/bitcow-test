@@ -55,7 +55,7 @@ export const UTIL_CONFIGS = [
    */
 ];
 
-const currentConfig = bitLayerTestnetConfig;
+const currentConfig = bitlayerConfig;
 
 export const txOption = {};
 

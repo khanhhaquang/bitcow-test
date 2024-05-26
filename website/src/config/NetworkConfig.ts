@@ -55,7 +55,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensPaginateCount: 20,
     balancePaginateCount: 100,
     fetchAllTokenBalance: true
-  },
+  }
+  /*
   {
     chainConfig: {
       chainId: 200810,
@@ -79,8 +80,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensPaginateCount: 600,
     balancePaginateCount: 600,
     fetchAllTokenBalance: true
-  }
-  /*
+  },
   {
     chainConfig: {
       chainId: 686868,

@@ -132,7 +132,7 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
             )}
             <input
               className={classNames(
-                'mr-2 h-[24px] flex-1 overflow-x-auto',
+                'mr-2 h-[24px] w-0 min-w-0 flex-1 overflow-x-auto',
                 'focus: outline-none',
                 'bg-transparent text-2xl leading-none text-white  placeholder:text-white/20'
               )}
@@ -182,7 +182,7 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
                 maxDecimals={9}
                 placeholder="0.00"
                 className={classNames(
-                  'mr-2 h-[24px] flex-1 overflow-x-auto',
+                  'mr-2 h-[24px] w-0 min-w-0 flex-1 overflow-x-auto',
                   'focus: outline-none',
                   'bg-transparent text-2xl text-white placeholder:text-white/20'
                 )}

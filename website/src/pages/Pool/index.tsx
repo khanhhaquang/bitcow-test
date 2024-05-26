@@ -247,10 +247,10 @@ const Pool = () => {
                   onChange={(val) => onUpdateFilter(val, 'timeBasis')}
                 />
                 */}
-                <div className="flex w-full justify-end">
+                <div className="flex flex-wrap items-center justify-end tablet:my-4">
                   <SearchInput
                     placeholder="Name or address"
-                    className={'w-[238px] font-pg tablet:my-4'}
+                    className={'w-[220px] font-pg'}
                     value={poolFilter.text}
                     onChange={(val) => onUpdateFilter(val, 'text')}
                     onSearch={() => {}}

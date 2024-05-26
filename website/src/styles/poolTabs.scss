@@ -1,6 +1,6 @@
 .ant-tabs {
   .ant-tabs-extra-content {
-    @apply w-1/3 tablet:w-full;
+    @apply tablet:w-full;
   }
   .ant-tabs-nav {
     @apply mb-7 tablet:flex-col tablet:px-0 #{!important};

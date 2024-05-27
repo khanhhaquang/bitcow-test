@@ -20,4 +20,5 @@ export type NetworkConfig = {
   tokensPaginateCount: number;
   balancePaginateCount: number;
   fetchAllTokenBalance: boolean;
+  bridgeUrl?: string;
 };

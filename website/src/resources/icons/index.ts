@@ -44,3 +44,4 @@ export { ReactComponent as MinusIcon } from './minus.svg';
 export { ReactComponent as DocFilledIcon } from './docFilled.svg';
 export { ReactComponent as DropDownArrowIcon } from './dropdownArrow.svg';
 export { ReactComponent as CloseIcon } from './pixelClose.svg';
+export { ReactComponent as BridgeIcon } from './bridge.svg';

@@ -35,7 +35,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensFirstPaginateCount: 20,
     tokensPaginateCount: 20,
     balancePaginateCount: 100,
-    fetchAllTokenBalance: true
+    fetchAllTokenBalance: true,
+    bridgeUrl: 'https://www.bitlayer.org/bridge'
   },
   {
     chainConfig: {
@@ -54,7 +55,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensFirstPaginateCount: 20,
     tokensPaginateCount: 20,
     balancePaginateCount: 100,
-    fetchAllTokenBalance: true
+    fetchAllTokenBalance: true,
+    bridgeUrl: 'https://merlinchain.io/bridge'
   }
   /*
   {
@@ -79,7 +81,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensFirstPaginateCount: 600,
     tokensPaginateCount: 600,
     balancePaginateCount: 600,
-    fetchAllTokenBalance: true
+    fetchAllTokenBalance: true,
+    bridgeUrl: 'https://www.b itlayer.org/bridge/testnet'
   },
   {
     chainConfig: {
@@ -99,7 +102,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensFirstPaginateCount: 20,
     tokensPaginateCount: 20,
     balancePaginateCount: 600,
-    fetchAllTokenBalance: false
+    fetchAllTokenBalance: false,
+    bridgeUrl: 'https://testnet.merlinchain.io/bridge'
   },
   {
     chainConfig: {
@@ -118,7 +122,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensFirstPaginateCount: 600,
     tokensPaginateCount: 600,
     balancePaginateCount: 600,
-    fetchAllTokenBalance: true
+    fetchAllTokenBalance: true,
+    bridgeUrl: 'https://bridge.botanixlabs.dev'
   },
   {
     chainConfig: {
@@ -137,7 +142,8 @@ export const ALL_NETWORK: NetworkConfig[] = [
     tokensFirstPaginateCount: 600,
     tokensPaginateCount: 600,
     balancePaginateCount: 600,
-    fetchAllTokenBalance: true
+    fetchAllTokenBalance: true,
+    bridgeUrl: 'https://testnet.gobob.xyz/'
   },
   {
     chainConfig: {

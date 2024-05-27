@@ -10,7 +10,7 @@ import { CancelIcon } from 'resources/icons';
 import AccountDetails from './components/AccountDetails';
 import styles from './WalletConnector.module.scss';
 
-const WALLET_WIDTH = 246;
+export const WALLET_WIDTH = 246;
 const WALLET_HEIGHT = 46;
 const WALLET_BORDER_WIDTH = 4;
 

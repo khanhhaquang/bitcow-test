@@ -10,7 +10,7 @@ import Button from 'components/Button';
 // import ThemeToggler from 'components/ThemeToggler';
 import NetworkSelect from 'components/NetworkSelect';
 import PixelButton from 'components/PixelButton';
-import WalletConnector from 'components/WalletConnector';
+import WalletConnector, { WALLET_WIDTH } from 'components/WalletConnector';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { MenuIcon } from 'resources/icons';
 import LogoBitCow from 'resources/img/logoBitCow.png';
@@ -63,7 +63,7 @@ const PageHeader: React.FC = () => {
     return (
       <div className="relative flex w-full grow items-center justify-end">
         <WalletConnector />
-        <div className="absolute top-full">
+        <div className={`absolute top-full w-[${WALLET_WIDTH}px]`}>
           <NetworkSelect className="mt-3" />
         </div>
       </div>

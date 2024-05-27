@@ -46,6 +46,7 @@ const CreatePool: React.FC<TProps> = ({ onClose }) => {
         const pairs = await bitcowSDK.pairV1Manager.searchPairsAll(values.xTokenAddress, 100);
         saveLocalPairMessages(bitcowSDK.config.chainId, pairs);
         createBitcowSDK();
+        formikHelper.resetForm();
         onClose();
       }
     },

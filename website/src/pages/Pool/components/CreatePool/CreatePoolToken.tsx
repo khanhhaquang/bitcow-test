@@ -42,11 +42,6 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
       if (bitcowSDK && bitcowSDK.pairV1Manager) {
         setIsValidating(true);
         setError(undefined);
-        if (!wallet) {
-          setError('Please connect wallet');
-          setIsValidating(false);
-          return;
-        }
         if (address.trim().length === 0) {
           setError(`${tokenTitle} can't be empty`);
           setFieldValue(tokenType + 'Symbol', '', false);
@@ -61,15 +56,14 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
           setFieldValue(tokenType + 'Decimals', 0);
           setFieldValue(tokenType + 'LogoUrl', '');
           setFieldValue(tokenType + 'Balance', 0);
-          setError(`${tokenTitle} may not an address`);
           setIsValidating(false);
           return;
         }
 
         let tokenInfo: TokenInfo = await bitcowSDK.pairV1Manager.getTokenInfo(address);
-        let balanceBN: bigint;
-        let decimals: number;
-        let symbol: string;
+        let balanceBN: bigint = BigInt(0);
+        let decimals: number = 0;
+        let symbol: string = '';
 
         const tokenContract = new Contract(address, ABI_ERC20, bitcowSDK.provider);
         if (tokenInfo.decimals > 0) {
@@ -158,7 +152,10 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
                     const maxAllowedSize = 15 * 1024; // 15kb
                     if (event.target.files[0].size > maxAllowedSize) {
                       event.target.value = '';
+                      setError("Image size can't more than 15Kb");
                       return;
+                    } else {
+                      setError(undefined);
                     }
                     handleImgUpload(event.target.files[0], (cdnUrl) => {
                       setFieldValue(tokenType + 'LogoUrl', cdnUrl);

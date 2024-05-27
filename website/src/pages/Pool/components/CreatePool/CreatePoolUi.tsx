@@ -151,7 +151,7 @@ const CreatePoolUi: React.FC<TProps> = () => {
 
       setIsValidating(false);
     }
-  }, [bitcowSDK, values, coinPrices, errorY, errorX, isXValidating, isYValidating]);
+  }, [wallet, bitcowSDK, values, coinPrices, errorY, errorX, isXValidating, isYValidating]);
 
   useEffect(() => {
     validate();

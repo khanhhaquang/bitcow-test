@@ -295,7 +295,8 @@ const Pool = () => {
         onCancel={() => setIsCreatePoolOpen(false)}
         open={isCreatePoolOpen}
         bodyStyle={{ padding: 0 }}
-        closeIcon={<CloseIcon className="top-4" />}>
+        closeIcon={<CloseIcon className="top-4" />}
+        destroyOnClose>
         <CreatePool onClose={() => setIsCreatePoolOpen(false)}></CreatePool>
       </BitcowModal>
     </div>

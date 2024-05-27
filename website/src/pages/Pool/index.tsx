@@ -51,13 +51,12 @@ const Pool = () => {
   } = usePools();
   const { currentNetwork } = useNetwork();
   const [activeTab, setActiveTab] = useState('1');
-  const [isCreatePoolOpen, setIsCreatePoolOpen] = useState(false);
   const dispatch = useDispatch();
   const [filteredPools, setFilteredPools] = useState(activePools);
   const liquidityModal = useSelector(getLiquidityModal);
   const { isTablet } = useBreakpoint('tablet');
 
-  const { wallet, initProvider, bitcowSDK } = useMerlinWallet();
+  const { wallet, initProvider, bitcowSDK, openWalletModal } = useMerlinWallet();
 
   useEffect(() => {
     initProvider('pool');
@@ -255,7 +254,7 @@ const Pool = () => {
                     onChange={(val) => onUpdateFilter(val, 'text')}
                     onSearch={() => {}}
                   />
-                  {wallet && bitcowSDK && bitcowSDK.pairV1Manager && (
+                  {bitcowSDK && bitcowSDK.pairV1Manager && (
                     <PixelButton
                       width={126}
                       borderWidth={2}
@@ -263,7 +262,13 @@ const Pool = () => {
                       className="ml-3 font-pg text-lg text-blue1"
                       color="rgba(255, 255, 255, 0.8)"
                       isSolid
-                      onClick={() => setIsCreatePoolOpen(true)}>
+                      onClick={() => {
+                        if (!wallet) {
+                          openWalletModal();
+                        } else {
+                          dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL({ type: 'create' }));
+                        }
+                      }}>
                       <PlusIcon className="mr-2" width={11} height={11} />
                       New Pool
                     </PixelButton>
@@ -281,23 +286,16 @@ const Pool = () => {
         open={!!liquidityModal}
         closeIcon={<CloseIcon className="relative top-4" />}
         bodyStyle={{ padding: 0 }}
-        width={512}
+        width={liquidityModal && liquidityModal.type === 'create' ? 652 : 512}
         destroyOnClose>
         {liquidityModal &&
-          (liquidityModal.type === 'add' ? (
+          (liquidityModal.type === 'create' ? (
+            <CreatePool></CreatePool>
+          ) : liquidityModal.type === 'add' ? (
             <AddLiquidity liquidityPool={liquidityModal.pool} />
           ) : (
             <WithdrawLiquidity liquidityPool={liquidityModal.pool} />
           ))}
-      </BitcowModal>
-      <BitcowModal
-        width={652}
-        onCancel={() => setIsCreatePoolOpen(false)}
-        open={isCreatePoolOpen}
-        bodyStyle={{ padding: 0 }}
-        closeIcon={<CloseIcon className="top-4" />}
-        destroyOnClose>
-        <CreatePool onClose={() => setIsCreatePoolOpen(false)}></CreatePool>
       </BitcowModal>
     </div>
   );

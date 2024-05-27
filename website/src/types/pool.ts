@@ -16,6 +16,6 @@ export interface IPoolFilters {
 }
 
 export interface LiquidityModal {
-  type: 'add' | 'withdraw';
-  pool: IPool;
+  type: 'add' | 'withdraw' | 'create';
+  pool?: IPool;
 }

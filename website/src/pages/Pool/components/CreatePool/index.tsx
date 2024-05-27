@@ -1,5 +1,7 @@
 import { Formik, FormikHelpers } from 'formik';
+import poolAction from 'modules/pool/actions';
 import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 
 import CreatePoolUi from './CreatePoolUi';
 import { ICreatePool } from './types';
@@ -7,12 +9,11 @@ import { ICreatePool } from './types';
 import useMerlinWallet from '../../../../hooks/useMerlinWallet';
 import { saveLocalPairMessages } from '../../../../utils/localPools';
 
-interface TProps {
-  onClose: () => void;
-}
+interface TProps {}
 
-const CreatePool: React.FC<TProps> = ({ onClose }) => {
+const CreatePool: React.FC<TProps> = () => {
   const { bitcowSDK, requestCreatePairWithManager, createBitcowSDK } = useMerlinWallet();
+  const dispatch = useDispatch();
   const onConfirm = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (values: ICreatePool, formikHelper: FormikHelpers<ICreatePool>) => {
@@ -47,10 +48,11 @@ const CreatePool: React.FC<TProps> = ({ onClose }) => {
         saveLocalPairMessages(bitcowSDK.config.chainId, pairs);
         createBitcowSDK();
         formikHelper.resetForm();
-        onClose();
+        dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null));
       }
+      formikHelper.setSubmitting(false);
     },
-    [bitcowSDK, createBitcowSDK, onClose, requestCreatePairWithManager]
+    [bitcowSDK, createBitcowSDK, requestCreatePairWithManager]
   );
 
   return (

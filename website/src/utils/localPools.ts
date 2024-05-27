@@ -22,18 +22,28 @@ export function getLocalTokens(chainId: number) {
   return Object.values(localTokens);
 }
 
+/**
+ *
+ * @param chainId
+ * @param searchedPairMessages
+ * @return is there new pairs
+ */
 export function saveLocalPairMessages(chainId: number, searchedPairMessages: SearchPairMessage[]) {
   const oldSearchPairMessages = getLocalPairMessages(chainId);
   if (oldSearchPairMessages.length === 0) {
     localStorage.setItem('local-pools-' + chainId, JSON.stringify(searchedPairMessages));
   }
   const oldPairAddresses = oldSearchPairMessages.map((pool) => pool.pairAddress);
-  localStorage.setItem(
-    'local-pools-' + chainId,
-    JSON.stringify(
-      oldSearchPairMessages.concat(
-        searchedPairMessages.filter((pair) => !oldPairAddresses.includes(pair.pairAddress))
-      )
-    )
+  const newMessages = searchedPairMessages.filter(
+    (pair) => !oldPairAddresses.includes(pair.pairAddress)
   );
+  if (newMessages.length > 0) {
+    localStorage.setItem(
+      'local-pools-' + chainId,
+      JSON.stringify(oldSearchPairMessages.concat(newMessages))
+    );
+    return true;
+  } else {
+    return false;
+  }
 }

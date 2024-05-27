@@ -40,28 +40,27 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const onSelectToken = useCallback(
     (token: TokenInfo, searched = false) => {
       if (searched) {
-        saveLocalPairMessages(bitcowSDK.config.chainId, searchedPairMessages);
-        createBitcowSDK();
+        if (saveLocalPairMessages(bitcowSDK.config.chainId, searchedPairMessages)) {
+          createBitcowSDK();
+        }
         setFilter('');
-        onClose();
-      } else {
-        const otherActionType: TProps['actionType'] =
-          actionType === 'currencyFrom' ? 'currencyTo' : 'currencyFrom';
-        if (token.symbol === values[otherActionType]?.token?.symbol) {
-          setFieldValue(otherActionType, {
-            ...values[otherActionType],
-            token: values[actionType]?.token
-          });
-        }
-        setFieldValue(actionType, {
-          ...values[actionType],
-          token
-        });
-        if (tokenBalances[token.address] === undefined) {
-          setNeedBalanceTokens([token.address]);
-        }
-        onClose();
       }
+      const otherActionType: TProps['actionType'] =
+        actionType === 'currencyFrom' ? 'currencyTo' : 'currencyFrom';
+      if (token.symbol === values[otherActionType]?.token?.symbol) {
+        setFieldValue(otherActionType, {
+          ...values[otherActionType],
+          token: values[actionType]?.token
+        });
+      }
+      setFieldValue(actionType, {
+        ...values[actionType],
+        token
+      });
+      if (tokenBalances[token.address] === undefined) {
+        setNeedBalanceTokens([token.address]);
+      }
+      onClose();
     },
     [
       actionType,

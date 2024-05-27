@@ -179,6 +179,7 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
               <PositiveFloatNumInput
                 min={0}
                 max={values[tokenType + 'Balance']}
+                isDisabled={values[tokenType + 'Balance'] <= 0}
                 maxDecimals={9}
                 placeholder="0.00"
                 className={classNames(

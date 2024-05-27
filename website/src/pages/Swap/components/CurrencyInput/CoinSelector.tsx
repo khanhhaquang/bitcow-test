@@ -42,6 +42,8 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
       if (searched) {
         saveLocalPairMessages(bitcowSDK.config.chainId, searchedPairMessages);
         createBitcowSDK();
+        setFilter('');
+        onClose();
       } else {
         const otherActionType: TProps['actionType'] =
           actionType === 'currencyFrom' ? 'currencyTo' : 'currencyFrom';

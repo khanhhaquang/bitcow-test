@@ -14,11 +14,10 @@ import cornerTopLeft from 'resources/img/cornerTopLeft.svg';
 import cornerTopRight from 'resources/img/cornerTopRight.svg';
 import cornerBottomLeft from 'resources/img/cornerBottomLeft.svg';
 import cornerBottomRight from 'resources/img/cornerBottomRight.svg';
-import imageNextTime from 'resources/img/nextTime.svg';
-import imageChestAmount from 'resources/img/chestAmount.svg';
 import { Image } from 'antd';
 import styles from './LuckyCard.module.scss';
 import { cn } from 'utils/cn';
+import ChestAmount from './ChestAmount';
 
 interface TProps {}
 
@@ -66,11 +65,7 @@ const LuckyCard: React.FC<TProps> = ({}) => {
                 finishPercent={80}
                 onComplete={() => console.log('complete')}>
                 <div className="flex h-full w-full items-center justify-center">
-                  {value > 0 ? (
-                    <Image src={imageChestAmount} width={39} height={43} />
-                  ) : (
-                    <Image src={imageNextTime} width={51} height={34} />
-                  )}
+                  <ChestAmount amount={value} />
                 </div>
               </ScratchCard>
             ))}
@@ -139,7 +134,8 @@ const LuckyCard: React.FC<TProps> = ({}) => {
                       className={cn(
                         styles.strokeText,
                         'flex justify-center font-pdb text-[22px] leading-none'
-                      )}>
+                      )}
+                      data-storke={value}>
                       {value}
                     </div>
                   </ScratchCard>

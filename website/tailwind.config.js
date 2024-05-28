@@ -126,6 +126,7 @@ module.exports = {
       Rany: 'Rany, sans-serif',
       micro: ['Micro', ...defaultTheme.fontFamily.sans],
       pd: ['Pixter Display', ...defaultTheme.fontFamily.sans],
+      pdb: ['Pixter Display Bold', ...defaultTheme.fontFamily.sans],
       pgb: ['Pixter Granular Bold', ...defaultTheme.fontFamily.sans],
       pg: ['Pixter Granular', ...defaultTheme.fontFamily.sans]
     }

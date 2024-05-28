@@ -133,7 +133,7 @@ const PageHeader: React.FC = () => {
         </Link>
         {/* Desktop */}
         {!isLandingPage && (
-          <div className="absolute left-1/2 z-10 flex h-full grow -translate-x-1/2 items-center tablet:hidden">
+          <div className="absolute left-[140px] z-10 flex h-full grow items-center tablet:hidden">
             <Menu
               mode="horizontal"
               theme="dark"

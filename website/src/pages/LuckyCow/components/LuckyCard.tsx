@@ -1,15 +1,15 @@
 import { useRef } from 'react';
 import Card from 'components/Card';
 import ScratchCard from './SratchCard';
-import { ReactComponent as LuckyCardBgTop } from 'resources/img/luckyCardBgTop.svg';
-import { ReactComponent as LuckyCardBgLeft } from 'resources/img/luckyCardBgLeft.svg';
-import { ReactComponent as LuckyCardBgRight } from 'resources/img/luckyCardBgRight.svg';
-import imageScratchChest from 'resources/img/scratchChest.png';
-import imageScratchToken from 'resources/img/scratchToken.png';
-import imageScratchAmount from 'resources/img/scratchAmount.png';
-import imageLuckyToken from 'resources/img/luckyCardToken.svg';
-import imageLuckyAmount from 'resources/img/luckyCardAmount.svg';
-import imageLuckyTitle from 'resources/img/luckyCardTitle.svg';
+import imageScratchChest from 'resources/img/scratchChest.webp';
+import imageScratchToken from 'resources/img/scratchToken.webp';
+import imageScratchAmount from 'resources/img/scratchAmount.webp';
+import imageLuckyToken from 'resources/img/luckyCardToken.webp';
+import imageLuckyAmount from 'resources/img/luckyCardAmount.webp';
+import imageLuckyTitle from 'resources/img/luckyCardTitle.webp';
+import imageLuckyTop from 'resources/img/luckyCardBgTop.webp';
+import imageLuckyLeft from 'resources/img/luckyCardBgLeft.webp';
+import imageLuckyRight from 'resources/img/luckyCardBgRight.webp';
 import cornerTopLeft from 'resources/img/cornerTopLeft.svg';
 import cornerTopRight from 'resources/img/cornerTopRight.svg';
 import cornerBottomLeft from 'resources/img/cornerBottomLeft.svg';
@@ -43,14 +43,20 @@ const LuckyCard: React.FC<TProps> = ({}) => {
   const amountList = [20, 200, 20, 20, 20, 20, 20, 20, 200, 20];
 
   return (
-    <Card className="dark-stroke-white table:w-full relative flex w-[414px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
+    <Card className="dark-stroke-white table:w-full relative flex w-[414px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full">
       <div className="relative h-[600px] w-[414px] border-[3px] border-black bg-[#FD8900]">
-        <LuckyCardBgTop width={333} height={175} className="absolute top-1 left-1/2 -ml-[166px]" />
-        <LuckyCardBgLeft width={138} height={132} className="absolute bottom-0 left-0" />
-        <LuckyCardBgRight width={132} height={130} className="absolute bottom-0 right-0" />
-        <div className="absolute mt-[20px] flex h-full w-full flex-col">
-          <div className="mb-[70px] flex justify-center">
-            <Image src={imageLuckyTitle} width={342} height={64} />
+        <img
+          src={imageLuckyTop}
+          alt="loading"
+          width={345}
+          height={84}
+          className="absolute top-[78px] left-1/2 -ml-[166px]"
+        />
+        <img src={imageLuckyLeft} width={138} height={132} className="absolute bottom-0 left-0" />
+        <img src={imageLuckyRight} width={132} height={130} className="absolute bottom-0 right-0" />
+        <div className="absolute flex h-full w-full flex-col">
+          <div className="mb-[59px] flex justify-center">
+            <Image src={imageLuckyTitle} width={342} height={94} />
           </div>
           <div className="flex justify-center gap-x-5">
             {chestList.map((value, index) => (

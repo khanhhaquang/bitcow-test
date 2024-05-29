@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react';
+import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 
-import ButtonBorder from 'resources/img/lucky-draw/buttonBorder.png';
+import PixelButton from 'components/PixelButton';
 
 import FrontCard, { CardStatus } from './FrontCard';
 
@@ -72,19 +72,23 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
           />
         ))}
       </div>
-      {isPickEnoughCards ? (
-        <div className="z-20 -mt-[20px] border-y-4 border-x-4 border-black bg-color_yellow_1 px-20 py-3 font-micro text-2xl uppercase text-black">
-          scratch them!
-        </div>
-      ) : (
-        <div
-          className="z-20 -mt-[20px] overflow-hidden rounded-xl border-4 bg-white px-28 py-3 font-pd text-2xl text-pink-950"
-          style={{
-            borderImage: `url(${ButtonBorder}) 16 / 2 / 1 round`
-          }}>
-          Pick {numsOfSelectedCard - currentSelected?.length} cards
-        </div>
-      )}
+      <div className="z-20 -mt-[20px]">
+        {isPickEnoughCards ? (
+          <PixelButton width={286} height={38} borderWidth={4} color="#000000">
+            <div className="flex h-[30px] w-[278px] items-center justify-center bg-color_yellow_1 font-micro text-2xl uppercase text-black">
+              scratch them!
+            </div>
+          </PixelButton>
+        ) : (
+          <PixelButton width={407} height={77} borderWidth={4} color="#6B001E">
+            <PixelButton width={399} height={69} borderWidth={4} color="#FFB500">
+              <div className="flex h-[61px] w-[391px] items-center justify-center bg-white font-pd text-2xl text-pink-950">
+                Pick {numsOfSelectedCard - currentSelected?.length} cards
+              </div>
+            </PixelButton>
+          </PixelButton>
+        )}
+      </div>
     </div>
   );
 };

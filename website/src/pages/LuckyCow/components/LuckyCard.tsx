@@ -43,7 +43,7 @@ const LuckyCard: React.FC<TProps> = ({}) => {
   const amountList = [20, 200, 20, 20, 20, 20, 20, 20, 200, 20];
 
   return (
-    <Card className="dark-stroke-white table:w-full relative flex w-[414px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full">
+    <Card className="dark-stroke-white table:w-full relative flex w-[414px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
       <div className="relative h-[600px] w-[414px] border-[3px] border-black bg-[#FD8900]">
         <img
           src={imageLuckyTop}

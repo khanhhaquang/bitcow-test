@@ -47,3 +47,8 @@ export { ReactComponent as CloseIcon } from './pixelClose.svg';
 export { ReactComponent as BridgeIcon } from './bridge.svg';
 export { ReactComponent as LuckyRedeemBorderOuterIcon } from './lucky-redeem-border-outer.svg';
 export { ReactComponent as LuckyRedeemBorderInnerIcon } from './lucky-redeem-border-inner.svg';
+export { ReactComponent as LuckyCardsCounterIcon } from './lucky-cards-counter.svg';
+export { ReactComponent as LuckyBuyBtnIcon } from './lucky-buy-btn.svg';
+export { ReactComponent as CounterUpIcon } from './counter-up.svg';
+export { ReactComponent as CounterDownIcon } from './counter-down.svg';
+export { ReactComponent as BitUsdIcon } from './bit-usd.svg';

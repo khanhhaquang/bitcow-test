@@ -1,19 +1,25 @@
-import LuckyCardSlider from './components/LuckyCardSlider';
-// import StrachLuckyCard from './ScratchLuckyCard';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import Loader from './components/Loader';
-// import { Redeem } from './components/LuckyShop';
+import { Buy, NotConnected, Redeem } from './components/LuckyShop';
+import { useMemo, useState } from 'react';
 
 const LuckyCow = () => {
+  const { wallet } = useMerlinWallet();
+  const [isRedeem] = useState(false);
+
   const isLoadingAccess = false;
 
-  if (isLoadingAccess) return <Loader />;
+  const content = useMemo(() => {
+    if (!wallet) return <NotConnected />;
 
-  return (
-    <div className="flex flex-col items-center pt-20">
-      {/* <Redeem /> */}
-      <LuckyCardSlider></LuckyCardSlider>
-    </div>
-  );
+    if (isRedeem) return <Redeem />;
+
+    return <Buy />;
+  }, [wallet, isRedeem]);
+
+  if (wallet && isLoadingAccess) return <Loader />;
+
+  return <div className="flex flex-col items-center pt-20">{content}</div>;
 };
 
 export default LuckyCow;

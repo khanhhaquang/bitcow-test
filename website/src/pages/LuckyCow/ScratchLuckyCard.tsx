@@ -8,7 +8,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 // import { useRef } from 'react';
-import styles from './StratchLuckyCard.module.scss';
+import styles from './ScratchLuckyCard.module.scss';
 
 import SlideButton from './components/SlideButton';
 

@@ -19,14 +19,12 @@ import imageJackpot from 'resources/img/jackpot.webp';
 import { Image } from 'antd';
 import styles from './LuckyCard.module.scss';
 import { cn } from 'utils/cn';
-// import { useSwiperSlide } from 'swiper/react';
 
 interface TProps {
   disabled?: boolean;
 }
 
 const LuckyCard: React.FC<TProps> = ({ disabled }) => {
-  // const swiperSlide = useSwiperSlide();
   const cardRef = useRef<ScratchCard>(null);
 
   // const onClickReset = () => {

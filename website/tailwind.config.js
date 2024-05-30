@@ -93,7 +93,9 @@ module.exports = {
         'bc-swap':
           'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)',
         'bc-pool':
-          'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)'
+          'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)',
+        'lucky-redeem-btn-hover':
+          'linear-gradient(0deg, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.30) 100%)'
       }
     },
     screens: {

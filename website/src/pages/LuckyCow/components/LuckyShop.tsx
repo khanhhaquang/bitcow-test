@@ -10,7 +10,7 @@ type LuckyShopProps = {
 
 const LuckyShopWrapper: FC<LuckyShopProps> = ({ children, text }) => {
   return (
-    <div className="relative mb-20 flex flex-col items-center">
+    <div className="relative flex flex-col items-center">
       <Image
         src="/images/luckyDraw/lucky-shop.webp"
         alt="shop"
@@ -46,7 +46,14 @@ const Redeem: FC = () => {
             <h3 className="w-[266px] text-center font-pd text-2xl leading-none text-[#6B001E]">
               Your <b className="font-pgb text-[#FF8D00]">LUCKY COW lottery card</b> is ready
             </h3>
-            <PixelButton width={286} height={38} color="#000" className="bg-[#FFC700] text-black">
+            <PixelButton
+              onClick={() => {
+                //TODO: goto card pick
+              }}
+              width={286}
+              height={38}
+              color="#000"
+              className="bg-[#FFC700] text-black">
               Redeem now
             </PixelButton>
           </div>

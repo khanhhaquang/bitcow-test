@@ -1,9 +1,13 @@
-// import Loader from './components/Loader';
+import Loader from './components/Loader';
 import { Redeem } from './components/LuckyShop';
 
 const LuckyCow = () => {
+  const isLoadingAccess = false;
+
+  if (isLoadingAccess) return <Loader />;
+
   return (
-    <div className="flex items-center">
+    <div className="flex flex-col items-center pt-20">
       <Redeem />
     </div>
   );

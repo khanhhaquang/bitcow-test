@@ -85,7 +85,6 @@ const WalletConnector = () => {
       )}
       <BitcowModal
         onCancel={() => setDetailModalOpen(false)}
-        className=""
         wrapClassName={wallet ? styles.walletDetail : styles.walletsModal}
         open={detailModalOpen}
         closeIcon={<CancelIcon />}>

@@ -44,7 +44,7 @@ const BitcowModal: React.FC<TProps> = ({ className, ...rest }) => {
           <button
             className="drawer-close-icon absolute right-0 top-0 flex h-16 w-16 items-center justify-center"
             onClick={rest.onCancel}>
-            <CloseIcon />
+            <CloseIcon className="text-white" />
           </button>
           {rest.children}
         </Drawer>

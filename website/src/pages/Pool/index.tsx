@@ -284,7 +284,7 @@ const Pool = () => {
         onCancel={() => dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null))}
         maskClosable={false}
         open={!!liquidityModal}
-        closeIcon={<CloseIcon className="relative top-4" />}
+        closeIcon={<CloseIcon className="relative top-4 text-white" />}
         bodyStyle={{ padding: 0 }}
         width={liquidityModal && liquidityModal.type === 'create' ? 652 : 512}
         destroyOnClose>

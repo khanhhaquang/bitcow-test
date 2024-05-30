@@ -56,7 +56,7 @@ export const EvmConnectModal = ({ open, onClose }: { open: boolean; onClose: () 
       <div className="mb-9 flex w-full items-center justify-between border-b border-white/20 pb-3 font-micro text-white">
         <h2 className="text-2xl text-white">Choose Wallet</h2>
         <button onClick={onClose} className={styles.closeBtn}>
-          <CloseIcon />
+          <CloseIcon className="text-white" />
         </button>
       </div>
 

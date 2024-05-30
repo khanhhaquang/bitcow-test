@@ -43,7 +43,11 @@ const LuckyShopWrapper: FC<LuckyShopProps> = ({ children, text }) => {
   );
 };
 
-const Redeem: FC = () => {
+const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
+  const handleRedeem = () => {
+    onClickRedeem();
+  };
+
   return (
     <LuckyShopWrapper text="Wise choice!  Good luck and win some juicy prizes!">
       <div className="absolute top-[440px]">
@@ -55,9 +59,7 @@ const Redeem: FC = () => {
               Your <b className="font-pdb text-[#FF8D00]">LUCKY COW lottery card</b> is ready
             </h3>
             <PixelButton
-              onClick={() => {
-                //TODO: goto card pick
-              }}
+              onClick={handleRedeem}
               width={286}
               height={38}
               color="#000"
@@ -71,7 +73,7 @@ const Redeem: FC = () => {
   );
 };
 
-const Buy: FC = () => {
+const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
   const [cardsAmount, setCardsAmount] = useState(1);
 
   const MAX = 10;
@@ -135,8 +137,10 @@ const Buy: FC = () => {
 
             <a
               className="relative mt-3 font-pd text-lg text-[#FF8D00] underline hover:text-[#FF8D00] hover:underline"
-              href="#"
-              onClick={() => {}}>
+              href={undefined}
+              onClick={() => {
+                onClickRedeemCode();
+              }}>
               I have a redeem code
             </a>
           </div>

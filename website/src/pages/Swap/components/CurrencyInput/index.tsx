@@ -110,7 +110,7 @@ const CurrencyInput: React.FC<TProps> = ({ actionType, isDisableAmountInput = fa
         wrapClassName={styles.modal}
         open={isCoinSelectorVisible}
         bodyStyle={{ padding: 0 }}
-        closeIcon={<CloseIcon className="top-4" />}>
+        closeIcon={<CloseIcon className="top-4 text-white" />}>
         <CoinSelector
           actionType={actionType}
           onClose={() => setIsCoinSelectorVisible(!isCoinSelectorVisible)}

@@ -1,0 +1,18 @@
+.slidePrev{
+  width: 73px;
+  height: 110px;
+  margin-top: -55px;
+  left: 0;
+}
+.slidePrev::after{
+  content: "";
+}
+.slideNext{
+  width: 73px;
+  height: 110px;
+  margin-top: -55px;
+  right: 0;
+}
+.slideNext::after{
+  content: "";
+}

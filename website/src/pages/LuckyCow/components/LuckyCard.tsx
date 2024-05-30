@@ -18,10 +18,12 @@ import { Image } from 'antd';
 import styles from './LuckyCard.module.scss';
 import { cn } from 'utils/cn';
 import ChestAmount from './ChestAmount';
+import { useSwiperSlide } from 'swiper/react';
 
 interface TProps {}
 
-const LuckyCard: React.FC<TProps> = ({}) => {
+const LuckyCard: React.FC<TProps> = () => {
+  const swiperSlide = useSwiperSlide();
   const cardRef = useRef<ScratchCard>(null);
 
   // const onClickReset = () => {
@@ -67,6 +69,7 @@ const LuckyCard: React.FC<TProps> = ({}) => {
                 height={57}
                 image={imageScratchChest}
                 brushSize={10}
+                disabled={!swiperSlide.isActive}
                 fadeOutOnComplete={false}
                 finishPercent={80}
                 onComplete={() => console.log('complete')}>
@@ -103,6 +106,7 @@ const LuckyCard: React.FC<TProps> = ({}) => {
                     height={26}
                     image={imageScratchToken}
                     brushSize={10}
+                    disabled={!swiperSlide.isActive}
                     fadeOutOnComplete={false}
                     finishPercent={80}
                     onComplete={() => console.log('complete')}>
@@ -132,6 +136,7 @@ const LuckyCard: React.FC<TProps> = ({}) => {
                     width={48}
                     height={45}
                     image={imageScratchAmount}
+                    disabled={!swiperSlide.isActive}
                     brushSize={10}
                     fadeOutOnComplete={false}
                     finishPercent={80}

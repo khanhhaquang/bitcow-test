@@ -22,6 +22,7 @@ interface Props {
   width: number;
   height: number;
   image: any;
+  disabled?: boolean;
   finishPercent?: number;
   triggerPercent?: number;
   onComplete?: () => void;
@@ -187,11 +188,13 @@ class ScratchCard extends Component<Props, State> {
   }
 
   handleMouseDown = (e: any) => {
+    if (this.props.disabled) return;
     this.isDrawing = true;
     this.lastPoint = this.getMouse(e, this.canvas);
   };
 
   handleMouseMove = (e: any) => {
+    if (this.props.disabled) return;
     if (!this.isDrawing) {
       return;
     }
@@ -230,6 +233,7 @@ class ScratchCard extends Component<Props, State> {
   };
 
   handleMouseUp = () => {
+    if (this.props.disabled) return;
     this.isDrawing = false;
   };
 
@@ -247,7 +251,8 @@ class ScratchCard extends Component<Props, State> {
     const canvasStyle = {
       position: 'absolute' as const,
       top: 0,
-      zIndex: 1
+      zIndex: 1,
+      cursor: this.props.disabled ? 'auto' : 'pointer'
     };
 
     const resultStyle = {

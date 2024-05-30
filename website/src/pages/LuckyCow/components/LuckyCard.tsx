@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import Card from 'components/Card';
-import ScratchCard from './SratchCard';
+import ScratchCard from './ScratchCard';
 import imageScratchChest from 'resources/img/scratchChest.webp';
 import imageScratchToken from 'resources/img/scratchToken.webp';
 import imageScratchAmount from 'resources/img/scratchAmount.webp';
@@ -14,16 +14,17 @@ import cornerTopLeft from 'resources/img/cornerTopLeft.svg';
 import cornerTopRight from 'resources/img/cornerTopRight.svg';
 import cornerBottomLeft from 'resources/img/cornerBottomLeft.svg';
 import cornerBottomRight from 'resources/img/cornerBottomRight.svg';
+import imageNextTime from 'resources/img/nextTime.webp';
+import imageJackpot from 'resources/img/jackpot.webp';
 import { Image } from 'antd';
 import styles from './LuckyCard.module.scss';
 import { cn } from 'utils/cn';
-import ChestAmount from './ChestAmount';
-import { useSwiperSlide } from 'swiper/react';
 
-interface TProps {}
+interface TProps {
+  disabled?: boolean;
+}
 
-const LuckyCard: React.FC<TProps> = () => {
-  const swiperSlide = useSwiperSlide();
+const LuckyCard: React.FC<TProps> = ({ disabled }) => {
   const cardRef = useRef<ScratchCard>(null);
 
   // const onClickReset = () => {
@@ -69,12 +70,16 @@ const LuckyCard: React.FC<TProps> = () => {
                 height={57}
                 image={imageScratchChest}
                 brushSize={10}
-                disabled={!swiperSlide.isActive}
+                disabled={disabled}
                 fadeOutOnComplete={false}
                 finishPercent={80}
                 onComplete={() => console.log('complete')}>
                 <div className="flex h-full w-full items-center justify-center">
-                  <ChestAmount amount={value} />
+                  {value > 0 ? (
+                    <Image src={imageJackpot} width={58} height={39} />
+                  ) : (
+                    <Image src={imageNextTime} width={51} height={34} />
+                  )}
                 </div>
               </ScratchCard>
             ))}
@@ -106,7 +111,7 @@ const LuckyCard: React.FC<TProps> = () => {
                     height={26}
                     image={imageScratchToken}
                     brushSize={10}
-                    disabled={!swiperSlide.isActive}
+                    disabled={disabled}
                     fadeOutOnComplete={false}
                     finishPercent={80}
                     onComplete={() => console.log('complete')}>
@@ -136,7 +141,7 @@ const LuckyCard: React.FC<TProps> = () => {
                     width={48}
                     height={45}
                     image={imageScratchAmount}
-                    disabled={!swiperSlide.isActive}
+                    disabled={disabled}
                     brushSize={10}
                     fadeOutOnComplete={false}
                     finishPercent={80}

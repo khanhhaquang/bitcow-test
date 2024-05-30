@@ -1,7 +1,5 @@
-import StrachLuckyCard from './StratchLuckyCard';
-
 const LuckyCow = () => {
-  return <StrachLuckyCard></StrachLuckyCard>;
+  return <div></div>;
 };
 
 export default LuckyCow;

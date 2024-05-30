@@ -45,7 +45,7 @@ module.exports = {
         table_row_bg: '#1E1E1E',
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
         white_color_list_hover: '#EBEDF4',
-        'pink-950': '#6B001E',
+        pink_950: '#6B001E',
 
         bc: {
           white: {
@@ -113,7 +113,9 @@ module.exports = {
       color_mask: 'rgba(0, 0, 0, 0.9)',
       color_tooltip: '#363B42',
       color_list_hover: 'rgba(255, 255, 255, 0.08)',
-      color_yellow_1: '#FFC700'
+      color_yellow_1: '#FFC700',
+      color_yellow_2: '#FF8D00',
+      color_red_1: '#BA3800',
     }),
     boxShadow: {
       sm: '4px 4px 0px #2D2D2D',

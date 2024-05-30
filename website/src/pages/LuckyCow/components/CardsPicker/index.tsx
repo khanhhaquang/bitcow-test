@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 
-import Button from 'components/Button';
 import PixelButton from 'components/PixelButton';
 
 import FrontCard, { CardStatus } from './FrontCard';
@@ -9,6 +8,7 @@ interface CardsPickerProps {
   numsOfCard: number;
   numsOfSelectedCard: number;
 }
+
 const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
   const [cardsStatus, setCardsStatus] = useState<Array<CardStatus>>([]);
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
@@ -50,7 +50,7 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
     setCardsStatus(Array(numsOfCard).fill(CardStatus.NOT_SELECT));
   }, [numsOfCard]);
 
-  useEffect(onCalculateMarginRight, [containerRef?.current?.clientWidth]);
+  useEffect(onCalculateMarginRight, [containerRef?.current?.clientWidth, numsOfCard]);
 
   useEffect(() => {
     window.addEventListener('resize', onCalculateMarginRight);
@@ -76,17 +76,15 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
       <div className="z-20 -mt-[20px]">
         {isPickEnoughCards ? (
           <PixelButton width={286} height={38} borderWidth={4} color="#000000">
-            <Button className="flex h-[30px] w-[278px] items-center justify-center bg-color_yellow_1 font-micro text-2xl uppercase text-black">
+            <div className="flex h-[30px] w-[278px] items-center justify-center bg-color_yellow_1 font-micro text-2xl uppercase text-black">
               scratch them!
-            </Button>
+            </div>
           </PixelButton>
         ) : (
           <PixelButton width={407} height={77} borderWidth={4} color="#6B001E">
-            <PixelButton width={399} height={69} borderWidth={4} color="#FFB500">
-              <Button className="flex h-[61px] w-[391px] items-center justify-center bg-white font-pd text-2xl text-pink-950">
-                Pick {numsOfSelectedCard - currentSelected?.length} cards
-              </Button>
-            </PixelButton>
+            <div className="flex h-[69px] w-[399px] items-center justify-center border-4 border-[#FFB500] bg-white font-pd text-2xl text-pink_950">
+              Pick {numsOfSelectedCard - currentSelected?.length} cards
+            </div>
           </PixelButton>
         )}
       </div>

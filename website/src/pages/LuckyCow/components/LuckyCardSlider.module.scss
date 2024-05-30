@@ -1,0 +1,37 @@
+.slideContainer {
+  position: relative;
+  perspective: 928px;
+  transform-style: preserve-3d;
+  margin: 0 auto;
+  width: 414px;
+}
+.slide {
+  // width: 362px;
+  // height: 272px;
+  transition: transform 500ms ease 0s, opacity 500ms ease 0s,
+    visibility 500ms ease 0s;
+  position: absolute;
+  top: 0;
+  // border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.slidePrev{
+  width: 73px;
+  height: 110px;
+  margin-top: -55px;
+  left: 0;
+  top: 50%;
+  position: absolute;
+  z-index: 10;
+}
+.slideNext{
+  width: 73px;
+  height: 110px;
+  margin-top: -55px;
+  right: 0;
+  top: 50%;
+  position: absolute;
+  z-index: 10;
+}

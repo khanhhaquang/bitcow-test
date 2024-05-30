@@ -18,7 +18,7 @@ const StrachLuckyCard = () => {
 
   return (
     <div className="mt-5 flex flex-col">
-      <div className="h-[600px] w-[928px]">
+      <div className="relative h-[600px] w-[928px]">
         <Swiper
           className="px-[50px]"
           effect={'coverflow'}
@@ -56,18 +56,32 @@ const StrachLuckyCard = () => {
             <SlideButton type="next" />
           </div>
         </Swiper>
+        <div className="absolute -right-[100px] bottom-0">
+          <PixelButton
+            onClick={() => {
+              //TODO: goto card pick
+            }}
+            width={178}
+            height={38}
+            color="#000"
+            className="bg-[#FFC700] text-2xl uppercase leading-none text-black">
+            REVEAL ALL
+          </PixelButton>
+        </div>
       </div>
-      <div className="mt-12 justify-center font-pd text-2xl leading-none text-white">
-        Only claim when you finish revealing all the cards
+      <div className="mt-4 items-center justify-center text-center font-pd text-2xl leading-none text-white">
+        Only claim when you finish
+        <br />
+        revealing all the cards
       </div>
-      <div className="mt-12 flex justify-center pl-3">
+      <div className="mt-5 flex justify-center pl-3">
         <PixelButton
           isLoading={isSubmitting}
           width={178}
-          height={46}
+          height={38}
           color="black"
           className="!bg-white text-2xl uppercase leading-none text-black">
-          REDEEM
+          claim
         </PixelButton>
       </div>
     </div>

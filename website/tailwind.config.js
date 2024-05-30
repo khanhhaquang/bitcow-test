@@ -115,6 +115,7 @@ module.exports = {
       color_list_hover: 'rgba(255, 255, 255, 0.08)',
       color_yellow_1: '#FFC700',
       color_yellow_2: '#FF8D00',
+      color_yellow_3: '#FAF1D4',
       color_red_1: '#BA3800',
     }),
     boxShadow: {

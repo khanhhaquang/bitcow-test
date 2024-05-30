@@ -25,6 +25,7 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
   const currentSelected = cardsStatus.filter((status) => status === CardStatus.SELECTED);
 
   const isPickEnoughCards = useMemo(() => {
+    // return true;
     if (numsOfSelectedCard === 0) return false;
     return currentSelected?.length === numsOfSelectedCard;
   }, [currentSelected, numsOfSelectedCard]);
@@ -70,24 +71,31 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
             marginRight={cardMarginRight}
             onSelectCard={onSelectCard}
             status={status}
+            enableHover={status === CardStatus.NOT_SELECT && !isPickEnoughCards}
           />
         ))}
       </div>
-      <div className="z-20 -mt-[20px]">
-        {isPickEnoughCards ? (
-          <PixelButton width={286} height={38} borderWidth={4} color="#000000">
-            <div className="flex h-[30px] w-[278px] items-center justify-center bg-color_yellow_1 font-micro text-2xl uppercase text-black">
-              scratch them!
-            </div>
-          </PixelButton>
-        ) : (
-          <PixelButton width={407} height={77} borderWidth={4} color="#6B001E">
-            <div className="flex h-[69px] w-[399px] items-center justify-center border-4 border-[#FFB500] bg-white font-pd text-2xl text-pink_950">
-              Pick {numsOfSelectedCard - currentSelected?.length} cards
-            </div>
-          </PixelButton>
-        )}
-      </div>
+      {isPickEnoughCards ? (
+        <PixelButton
+          width={286}
+          height={38}
+          borderWidth={4}
+          color="#000000"
+          className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black">
+          scratch them!
+        </PixelButton>
+      ) : (
+        <PixelButton
+          width={407}
+          height={77}
+          borderWidth={4}
+          color="#6B001E"
+          className="z-20 -mt-[20px]">
+          <span className="flex h-[77px] w-[407px] items-center justify-center border-4 border-[#FFB500] bg-white font-pd text-2xl text-pink_950">
+            Pick {numsOfSelectedCard - currentSelected?.length} cards
+          </span>
+        </PixelButton>
+      )}
     </div>
   );
 };

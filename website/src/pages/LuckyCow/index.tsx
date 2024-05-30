@@ -1,8 +1,10 @@
-import useMerlinWallet from 'hooks/useMerlinWallet';
-import Loader from './components/Loader';
-import { Buy, NotConnected, Redeem } from './components/LuckyShop';
 import { useMemo, useState } from 'react';
+
+import useMerlinWallet from 'hooks/useMerlinWallet';
+
+import Loader from './components/Loader';
 import LuckyCodeModal from './components/LuckyCodeModal';
+import { Buy, NotConnected, Redeem } from './components/LuckyShop';
 
 export enum LuckyCowStatus {
   PRELOADING,

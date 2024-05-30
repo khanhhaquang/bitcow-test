@@ -45,3 +45,5 @@ export { ReactComponent as DocFilledIcon } from './docFilled.svg';
 export { ReactComponent as DropDownArrowIcon } from './dropdownArrow.svg';
 export { ReactComponent as CloseIcon } from './pixelClose.svg';
 export { ReactComponent as BridgeIcon } from './bridge.svg';
+export { ReactComponent as LuckyRedeemBorderOuterIcon } from './lucky-redeem-border-outer.svg';
+export { ReactComponent as LuckyRedeemBorderInnerIcon } from './lucky-redeem-border-inner.svg';

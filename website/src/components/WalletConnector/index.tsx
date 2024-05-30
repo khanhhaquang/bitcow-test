@@ -63,7 +63,7 @@ const WalletConnector = () => {
               height={WALLET_HEIGHT}
               borderWidth={WALLET_BORDER_WIDTH}
               onClick={() => disconnect()}
-              isSolid={true}
+              isSolid
               className="uppercase text-bc-blue">
               Disconnect
             </PixelButton>

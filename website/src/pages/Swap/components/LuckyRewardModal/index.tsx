@@ -13,18 +13,18 @@ interface RewardOptionProps {
 }
 const RewardOption = ({ title, buttonElement }: RewardOptionProps) => {
   return (
-    <div className="flex h-[186px] flex-1 cursor-pointer flex-col items-center justify-center gap-4 rounded-lg bg-[#FD981B] px-3 text-white  hover:bg-white/40 hover:text-black">
+    <button className="flex h-[186px] flex-1 cursor-pointer flex-col items-center justify-center gap-4 rounded-lg bg-[#FD981B] px-3 text-white  hover:bg-white/40 hover:text-black">
       {title}
       {buttonElement}
-    </div>
+    </button>
   );
 };
 
-interface LuckyCowInvitationProps {
+interface LuckyRewardModalProps {
   open?: boolean;
   onClose?: () => void;
 }
-const LuckyCowInvitation: FC<LuckyCowInvitationProps> = ({ open, onClose }) => {
+const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
   return (
     <BitcowModal onCancel={onClose} maskClosable={true} open={open} width="100vw" destroyOnClose>
       <div className="-mt-[100px] flex h-screen w-full items-center justify-center bg-contain tablet:mt-0 tablet:h-fit">
@@ -88,4 +88,4 @@ const LuckyCowInvitation: FC<LuckyCowInvitationProps> = ({ open, onClose }) => {
   );
 };
 
-export default LuckyCowInvitation;
+export default LuckyRewardModal;

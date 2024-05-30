@@ -43,11 +43,15 @@ const LuckyShopWrapper: FC<LuckyShopProps> = ({ children, text }) => {
   );
 };
 
+<<<<<<< HEAD
 const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
   const handleRedeem = () => {
     onClickRedeem();
   };
 
+=======
+const Redeem: FC = () => {
+>>>>>>> 8138c44 (fix: 🐛 Reset component LuckyCow)
   return (
     <LuckyShopWrapper text="Wise choice!  Good luck and win some juicy prizes!">
       <div className="absolute top-[440px]">
@@ -59,7 +63,11 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
               Your <b className="font-pdb text-[#FF8D00]">LUCKY COW lottery card</b> is ready
             </h3>
             <PixelButton
+<<<<<<< HEAD
               onClick={handleRedeem}
+=======
+              onClick={() => {}}
+>>>>>>> 8138c44 (fix: 🐛 Reset component LuckyCow)
               width={286}
               height={38}
               color="#000"

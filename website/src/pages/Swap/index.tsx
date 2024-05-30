@@ -9,7 +9,7 @@ import * as yup from 'yup';
 
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { openErrorNotification } from 'utils/notifications';
-import LuckyCowInvitation from './components/LuckyCowInvitation';
+import LuckyCowInvitation from './components/LuckyRewardModal';
 import TokenSwap from './components/TokenSwap';
 import { ISwapSettings } from './types';
 

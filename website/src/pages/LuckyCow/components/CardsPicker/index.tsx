@@ -7,9 +7,10 @@ import FrontCard, { CardStatus } from './FrontCard';
 interface CardsPickerProps {
   numsOfCard: number;
   numsOfSelectedCard: number;
+  onStartScratching: () => void;
 }
 
-const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
+const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: CardsPickerProps) => {
   const [cardsStatus, setCardsStatus] = useState<Array<CardStatus>>([]);
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
@@ -25,7 +26,6 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
   const currentSelected = cardsStatus.filter((status) => status === CardStatus.SELECTED);
 
   const isPickEnoughCards = useMemo(() => {
-    // return true;
     if (numsOfSelectedCard === 0) return false;
     return currentSelected?.length === numsOfSelectedCard;
   }, [currentSelected, numsOfSelectedCard]);
@@ -81,6 +81,7 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard }: CardsPickerProps) => {
           height={38}
           borderWidth={4}
           color="#000000"
+          onClick={onStartScratching}
           className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black">
           scratch them!
         </PixelButton>

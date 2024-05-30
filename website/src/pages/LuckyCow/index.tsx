@@ -12,7 +12,13 @@ export enum LuckyCowStatus {
   CARDS_PICKING,
   CARDS_SCRATCHING
 }
+import CardsPicker from './components/CardsPicker';
 
+enum LuckyCowGameState {
+  BUYING,
+  REDEEM,
+  CARD_PICKER
+}
 const LuckyCow = () => {
   const { wallet } = useMerlinWallet();
   const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.BUY);

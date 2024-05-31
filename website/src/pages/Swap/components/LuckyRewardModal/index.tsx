@@ -6,7 +6,7 @@ import { LuckyRewardBitUSDTicketBg } from 'resources/icons';
 import { ReactComponent as BitUSDLuckyIcon } from 'resources/icons/bitUSDLucky.svg';
 import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 import InvitationFirework from 'resources/img/lucky-draw/invitation-firework.webp';
-import LotteryTicket from 'resources/img/lucky-draw/lotteryTicket.png';
+import LotteryTicket from 'resources/img/lucky-draw/lotteryTicket.webp';
 
 interface RewardOptionProps {
   title: React.ReactElement;

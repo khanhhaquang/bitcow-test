@@ -1,6 +1,7 @@
 import { Image } from 'antd';
-import PixelButton from 'components/PixelButton';
 import { FC, ReactNode, useState } from 'react';
+
+import PixelButton from 'components/PixelButton';
 import {
   CounterUpIcon,
   CounterDownIcon,

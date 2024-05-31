@@ -1,8 +1,11 @@
-import useMerlinWallet from 'hooks/useMerlinWallet';
-import Loader from './components/Loader';
-import { Buy, NotConnected, Redeem } from './components/LuckyShop';
 import { useMemo, useState } from 'react';
+
+import useMerlinWallet from 'hooks/useMerlinWallet';
+
+import Loader from './components/Loader';
+import LuckyCardsPicker from './components/LuckyCardsPicker';
 import LuckyCodeModal from './components/LuckyCodeModal';
+import { Buy, NotConnected, Redeem } from './components/LuckyShop';
 
 export enum LuckyCowStatus {
   PRELOADING,
@@ -15,7 +18,7 @@ export enum LuckyCowStatus {
 
 const LuckyCow = () => {
   const { wallet } = useMerlinWallet();
-  const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.BUY);
+  const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.REDEEM);
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
 
   const isLoadingAccess = false;
@@ -36,6 +39,16 @@ const LuckyCow = () => {
         return <Buy onClickRedeemCode={() => setIsLuckyCodeOpen(true)} />;
       case LuckyCowStatus.LOADING_CARDS:
         return <Loader>Preparing your cards...</Loader>;
+      case LuckyCowStatus.CARDS_PICKING:
+        return (
+          <LuckyCardsPicker
+            numsOfCard={10}
+            numsOfSelectedCard={4}
+            onStartScratching={() => {
+              setStatus(LuckyCowStatus.CARDS_SCRATCHING);
+            }}
+          />
+        );
       default:
         return <Loader />;
     }

@@ -22,14 +22,15 @@ import { cn } from 'utils/cn';
 
 interface TProps {
   disabled?: boolean;
+  revealed?: boolean;
 }
 
-const LuckyCard: React.FC<TProps> = ({ disabled }) => {
+const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
   const cardRef = useRef<ScratchCard>(null);
+  const finishPercent = 70;
+  const fadeOutOnComplete = true;
+  const brushSize = 10;
 
-  // const onClickReset = () => {
-  //   cardRef.current?.reset();
-  // };
   const chestList = [1000, 1000, 0, 0];
   const tokenList = [
     'USDT',
@@ -69,11 +70,12 @@ const LuckyCard: React.FC<TProps> = ({ disabled }) => {
                 width={70}
                 height={57}
                 image={imageScratchChest}
-                brushSize={10}
+                brushSize={brushSize}
                 disabled={disabled}
-                fadeOutOnComplete={false}
-                finishPercent={80}
-                onComplete={() => console.log('complete')}>
+                revealed={revealed}
+                fadeOutOnComplete={fadeOutOnComplete}
+                finishPercent={finishPercent}
+                onComplete={() => console.log('complete', index)}>
                 <div className="flex h-full w-full items-center justify-center">
                   {value > 0 ? (
                     <Image src={imageJackpot} width={58} height={39} />
@@ -110,11 +112,12 @@ const LuckyCard: React.FC<TProps> = ({ disabled }) => {
                     width={60}
                     height={26}
                     image={imageScratchToken}
-                    brushSize={10}
+                    brushSize={brushSize}
                     disabled={disabled}
-                    fadeOutOnComplete={false}
-                    finishPercent={80}
-                    onComplete={() => console.log('complete')}>
+                    revealed={revealed}
+                    fadeOutOnComplete={fadeOutOnComplete}
+                    finishPercent={finishPercent}
+                    onComplete={() => console.log('complete', index)}>
                     <div className="flex h-full w-full items-center justify-center">
                       <Image src={'https://bitcow.xyz/images/bitusd.svg'} width={13} height={13} />
                       <div className="ml-1 h-[13px] text-sm leading-none">{value}</div>
@@ -142,10 +145,11 @@ const LuckyCard: React.FC<TProps> = ({ disabled }) => {
                     height={45}
                     image={imageScratchAmount}
                     disabled={disabled}
-                    brushSize={10}
-                    fadeOutOnComplete={false}
-                    finishPercent={80}
-                    onComplete={() => console.log('complete')}>
+                    revealed={revealed}
+                    brushSize={brushSize}
+                    fadeOutOnComplete={fadeOutOnComplete}
+                    finishPercent={finishPercent}
+                    onComplete={() => console.log('complete', index)}>
                     <div
                       className={cn(
                         styles.strokeText,

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import useMerlinWallet from 'hooks/useMerlinWallet';
 
@@ -6,6 +6,7 @@ import Loader from './components/Loader';
 import LuckyCardsPicker from './components/LuckyCardsPicker';
 import LuckyCodeModal from './components/LuckyCodeModal';
 import { Buy, NotConnected, Redeem } from './components/LuckyShop';
+import useUserInfo from 'hooks/useUserInfo';
 
 export enum LuckyCowStatus {
   PRELOADING,
@@ -18,10 +19,9 @@ export enum LuckyCowStatus {
 
 const LuckyCow = () => {
   const { wallet } = useMerlinWallet();
-  const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.BUY);
+  const { data: userInfo, isLoading: isLoadingUserInfo } = useUserInfo();
+  const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.PRELOADING);
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
-
-  const isLoadingAccess = false;
 
   const content = useMemo(() => {
     if (!wallet) return <NotConnected />;
@@ -54,7 +54,17 @@ const LuckyCow = () => {
     }
   }, [wallet, status]);
 
-  if (wallet && isLoadingAccess) return <Loader />;
+  useEffect(() => {
+    if (userInfo) {
+      if (userInfo.isGameActive) {
+        setStatus(LuckyCowStatus.REDEEM);
+      } else {
+        setStatus(LuckyCowStatus.BUY);
+      }
+    }
+  }, [userInfo?.isGameActive]);
+
+  if (wallet && isLoadingUserInfo) return <Loader />;
 
   return (
     <div className="flex flex-col items-center pt-20">

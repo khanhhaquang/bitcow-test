@@ -1,6 +1,11 @@
 import { IResponse } from 'types/common';
 import { axiosInstance } from 'config/axios';
 
+export interface UserInfo {
+  isGameActive: boolean;
+  //TODO: update more
+}
+
 //TODO:  sync from
 // http://ec2-13-213-40-242.ap-southeast-1.compute.amazonaws.com:8866/swagger-ui/index.html
 export const UserService = {
@@ -17,5 +22,10 @@ export const UserService = {
       axiosInstance
         .get<IResponse<{}>>('user/login', { params: { address, signature } })
         .then((res) => res.data)
+  },
+  getUserInfo: {
+    key: 'user.getUserInfo',
+    call: (address: string) =>
+      axiosInstance.get<IResponse<UserInfo>>(`user/getUserInfo/${address}`).then((res) => res.data)
   }
 };

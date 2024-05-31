@@ -3,9 +3,18 @@
 
 import BigNumber from 'bignumber.js';
 import { Eip1193Provider, ethers } from 'ethers';
-import { createContext, FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-
 import {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+
+import openNotification, {
   openErrorNotification,
   openTxErrorNotification,
   openTxSuccessNotification
@@ -29,6 +38,7 @@ import { UserService } from 'services/user';
 import { axiosSetupInterceptors } from 'config/axios';
 interface MerlinWalletContextType {
   wallet?: Wallet;
+  walletAddress?: string;
   openWalletModal: () => void;
   closeWalletModal: () => void;
   bitcowSDK: BitcowSDK;
@@ -65,6 +75,7 @@ interface MerlinWalletContextType {
     protocolFeeAddress: string,
     addTokenListFee: string
   ) => Promise<boolean>;
+  isLoggedIn: boolean;
 }
 
 interface TProviderProps {
@@ -98,9 +109,12 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [bitusdToken, setBitusdToken] = useState<TokenInfo>();
   const [fetchedPoolsCount, setFetchedPoolsCount] = useState(0);
   const [startInit, setStartInit] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const { currentNetwork } = useNetwork();
   const currentNetworkRef = useRef<NetworkConfig>();
+
+  const walletAddress = useMemo(() => wallet?.accounts?.[0]?.evm || '', [wallet?.accounts]);
 
   const setTokenBalancesCache = useCallback((tokenBalancesInner: Record<string, bigint>) => {
     if (!currentNetworkRef.current.fetchAllTokenBalance && tokenBalancesInner === undefined) {
@@ -292,12 +306,16 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         if (wallet.accounts[0].evm != bitcowSDK.getAddress()) {
           const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
           const signer = await browserProvider.getSigner();
-          const newSignature = await signer.signMessage(
-            `hello play bitcow ${wallet.accounts[0].evm}`
-          );
-          const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
-          if (loginResult.message === 'successful') {
-            axiosSetupInterceptors(newSignature);
+          try {
+            const newSignature = await signer.signMessage('hello play bitcow');
+            const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
+            if (loginResult?.code === 0) {
+              setIsLoggedIn(true);
+              openNotification({ type: 'success', detail: 'You have logged in' });
+              axiosSetupInterceptors(newSignature);
+            }
+          } catch (error) {
+            openNotification({ type: 'error', detail: 'Logging failed' });
           }
 
           bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
@@ -750,6 +768,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     <MerlinWalletContext.Provider
       value={{
         wallet,
+        walletAddress,
+        isLoggedIn,
         openWalletModal: openModal,
         closeWalletModal: closeModal,
         bitcowSDK,

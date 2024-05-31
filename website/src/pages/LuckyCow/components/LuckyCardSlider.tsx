@@ -10,9 +10,9 @@ import LuckyPrizeModal from './LuckyPrizeModal';
 
 function LuckyCardSlider() {
   const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(true);
-  const [activeIndex, setactiveSlide] = useState(2);
   const [revealedAll, setRevealedAll] = useState(false);
   const data = [1, 2, 3, 4, 5];
+  const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));
   const isSubmitting = false;
 
   const next = () =>
@@ -20,9 +20,6 @@ function LuckyCardSlider() {
 
   const prev = () =>
     activeIndex > 0 ? setactiveSlide(activeIndex - 1) : setactiveSlide(data.length - 1);
-  // const width = 928;
-  // // const height = 600;
-  // const cardWidth = 414;
 
   const onClickRevealAll = () => {
     setRevealedAll(true);
@@ -49,23 +46,26 @@ function LuckyCardSlider() {
             );
           })}
         </div>
-
-        <div className={cn(styles.slidePrev, 'swiper-button-prev')}>
-          <Button
-            variant="icon"
-            className="bg-transparent hover:opacity-90 active:opacity-50"
-            onClick={prev}>
-            <SlidePrevIcon width={73} height={110} />
-          </Button>
-        </div>
-        <div className={cn(styles.slideNext, 'swiper-button-next')}>
-          <Button
-            variant="icon"
-            className="bg-transparent hover:opacity-90 active:opacity-50"
-            onClick={next}>
-            <SlideNextIcon width={73} height={110} />
-          </Button>
-        </div>
+        {data.length > 1 && (
+          <div className={cn(styles.slidePrev, 'swiper-button-prev')}>
+            <Button
+              variant="icon"
+              className="bg-transparent hover:opacity-90 active:opacity-50"
+              onClick={prev}>
+              <SlidePrevIcon width={73} height={110} />
+            </Button>
+          </div>
+        )}
+        {data.length > 1 && (
+          <div className={cn(styles.slideNext, 'swiper-button-next')}>
+            <Button
+              variant="icon"
+              className="bg-transparent hover:opacity-90 active:opacity-50"
+              onClick={next}>
+              <SlideNextIcon width={73} height={110} />
+            </Button>
+          </div>
+        )}
         <div className="absolute -right-[100px] bottom-0">
           <PixelButton
             onClick={onClickRevealAll}

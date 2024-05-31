@@ -1,11 +1,12 @@
+import { motion } from 'framer-motion';
 import { FC } from 'react';
+
 import BitcowModal from 'components/BitcowModal';
-import PixelButton from 'components/PixelButton';
+import { LuckyRewardBitUSDTicketBg } from 'resources/icons';
 import { ReactComponent as BitUSDLuckyIcon } from 'resources/icons/bitUSDLucky.svg';
 import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
-import LotteryTicket from 'resources/img/lucky-draw/lotteryTicket.png';
 import InvitationFirework from 'resources/img/lucky-draw/invitation-firework.webp';
-import { motion } from 'framer-motion';
+import LotteryTicket from 'resources/img/lucky-draw/lotteryTicket.png';
 
 interface RewardOptionProps {
   title: React.ReactElement;
@@ -50,20 +51,14 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
               <RewardOption
                 title={<div className="text-center text-lg leading-4">Receive bitUSD airdrop</div>}
                 buttonElement={
-                  <PixelButton
-                    className="bg-color_yellow_2 font-micro text-2xl uppercase hover:!bg-color_yellow_2"
-                    width={169}
-                    height={94}
-                    color="#6B001E"
-                    borderWidth={4}>
-                    <div className="flex h-[94px] w-[169px] items-center justify-between border-4 border-[#FF6B00] p-3">
-                      <BitUSDLuckyIcon />
-                      <div className="flex h-fit flex-col items-end text-pink_950">
-                        <div className="text-5xl">3.5</div>
-                        <div className="text-sm">bitUSD</div>
-                      </div>
+                  <div className="relative flex h-[82px] w-[169px] items-center justify-center bg-color_yellow_2 bg-clip-content py-2 px-1">
+                    <LuckyRewardBitUSDTicketBg className="absolute inset-0 left-0" />
+                    <BitUSDLuckyIcon />
+                    <div className="flex flex-col items-end text-pink_950">
+                      <div className="text-5xl">3.5</div>
+                      <div className="-mt-2 text-sm">bitUSD</div>
                     </div>
-                  </PixelButton>
+                  </div>
                 }
               />
               <RewardOption

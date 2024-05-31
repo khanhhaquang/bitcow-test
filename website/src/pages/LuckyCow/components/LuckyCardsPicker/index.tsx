@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 
 import PixelButton from 'components/PixelButton';
+import { LuckyCardPickingBorderInner, LuckyCardPickingBorderOuter } from 'resources/icons';
 
-import FrontCard, { CardStatus } from './FrontCard';
+import LuckyFrontCard, { CardPickingStatus } from './LuckyFrontCard';
 
 interface CardsPickerProps {
   numsOfCard: number;
@@ -11,7 +12,7 @@ interface CardsPickerProps {
 }
 
 const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: CardsPickerProps) => {
-  const [cardsStatus, setCardsStatus] = useState<Array<CardStatus>>([]);
+  const [cardsStatus, setCardsStatus] = useState<Array<CardPickingStatus>>([]);
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
 
@@ -23,7 +24,7 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: Card
     setCardMarginRight(remainWidth / (numsOfCard - 1) - cardWidth);
   };
 
-  const currentSelected = cardsStatus.filter((status) => status === CardStatus.SELECTED);
+  const currentSelected = cardsStatus.filter((status) => status === CardPickingStatus.SELECTED);
 
   const isPickEnoughCards = useMemo(() => {
     if (numsOfSelectedCard === 0) return false;
@@ -33,22 +34,24 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: Card
   const onSelectCard = useCallback(
     (index) => {
       const newCard =
-        cardsStatus[index] === CardStatus.SELECTED ? CardStatus.NOT_SELECT : CardStatus.SELECTED;
+        cardsStatus[index] === CardPickingStatus.SELECTED
+          ? CardPickingStatus.NOT_SELECT
+          : CardPickingStatus.SELECTED;
 
-      if (newCard === CardStatus.SELECTED && isPickEnoughCards) return;
+      if (newCard === CardPickingStatus.SELECTED && isPickEnoughCards) return;
 
-      const newCardStatus = [
+      const newCardPickingStatus = [
         ...cardsStatus.slice(0, index),
         newCard,
         ...cardsStatus.slice(index + 1)
       ];
-      setCardsStatus(newCardStatus);
+      setCardsStatus(newCardPickingStatus);
     },
     [cardsStatus, isPickEnoughCards]
   );
 
   useEffect(() => {
-    setCardsStatus(Array(numsOfCard).fill(CardStatus.NOT_SELECT));
+    setCardsStatus(Array(numsOfCard).fill(CardPickingStatus.NOT_SELECT));
   }, [numsOfCard]);
 
   useEffect(onCalculateMarginRight, [containerRef?.current?.clientWidth, numsOfCard]);
@@ -64,14 +67,14 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: Card
     <div className="flex flex-col items-center">
       <div className="relative flex w-[80vw]" ref={containerRef}>
         {cardsStatus.map((status, index) => (
-          <FrontCard
+          <LuckyFrontCard
             key={`${index}_${status}`}
             index={index}
             zIndex={numsOfCard - index}
             marginRight={cardMarginRight}
             onSelectCard={onSelectCard}
             status={status}
-            enableHover={status === CardStatus.NOT_SELECT && !isPickEnoughCards}
+            enableHover={status === CardPickingStatus.NOT_SELECT && !isPickEnoughCards}
           />
         ))}
       </div>
@@ -86,16 +89,11 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: Card
           scratch them!
         </PixelButton>
       ) : (
-        <PixelButton
-          width={407}
-          height={77}
-          borderWidth={4}
-          color="#6B001E"
-          className="z-20 -mt-[20px]">
-          <span className="flex h-[77px] w-[407px] items-center justify-center border-4 border-[#FFB500] bg-white font-pd text-2xl text-pink_950">
-            Pick {numsOfSelectedCard - currentSelected?.length} cards
-          </span>
-        </PixelButton>
+        <div className="relative z-20 -mt-[30px] flex h-[77px] w-[407px] items-center justify-center bg-white bg-clip-content p-1 font-pd text-2xl text-pink_950">
+          <LuckyCardPickingBorderOuter className="absolute" />
+          <LuckyCardPickingBorderInner className="absolute" />
+          <span>Pick {numsOfSelectedCard - currentSelected?.length} cards </span>
+        </div>
       )}
     </div>
   );

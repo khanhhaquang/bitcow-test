@@ -9,7 +9,8 @@ import * as yup from 'yup';
 
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { openErrorNotification } from 'utils/notifications';
-import LuckyCowInvitation from './components/LuckyRewardModal';
+
+// import LuckyCowInvitation from './components/LuckyRewardModal';
 import TokenSwap from './components/TokenSwap';
 import { ISwapSettings } from './types';
 
@@ -64,7 +65,7 @@ const Swap: React.FC = () => {
         onSubmit={onSubmitSwap}>
         <TokenSwap />
       </Formik>
-      <LuckyCowInvitation />
+      {/* <LuckyCowInvitation /> */}
     </div>
   );
 };

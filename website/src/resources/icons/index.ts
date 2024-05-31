@@ -52,4 +52,7 @@ export { ReactComponent as LuckyBuyBtnIcon } from './lucky-buy-btn.svg';
 export { ReactComponent as CounterUpIcon } from './counter-up.svg';
 export { ReactComponent as CounterDownIcon } from './counter-down.svg';
 export { ReactComponent as BitUsdIcon } from './bit-usd.svg';
-export { ReactComponent as CoinLuckyIcon } from './coinLucky.svg';
+export { ReactComponent as LuckyCoin } from './lucky-coin.svg';
+export { ReactComponent as LuckyCardPickingBorderInner } from './lucky-card-picking-border-inner.svg';
+export { ReactComponent as LuckyCardPickingBorderOuter } from './lucky-card-picking-border-outer.svg';
+export { ReactComponent as LuckyRewardBitUSDTicketBg } from './lucky-reward-bit-usd-ticket-bg.svg';

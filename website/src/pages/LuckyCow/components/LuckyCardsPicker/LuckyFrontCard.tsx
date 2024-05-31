@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import FrontCardImg from 'resources/img/lucky-draw/frontCard.jpeg';
 import { cn } from 'utils/cn';
 
-export enum CardStatus {
+export enum CardPickingStatus {
   NOT_SELECT,
   SELECTED
 }
@@ -12,7 +12,7 @@ interface FrontCardProps {
   zIndex: number;
   index: number;
   onSelectCard: (index: number) => void;
-  status: CardStatus;
+  status: CardPickingStatus;
   marginRight: number;
   enableHover: boolean;
 }
@@ -25,7 +25,7 @@ const FrontCard = ({
   marginRight,
   enableHover
 }: FrontCardProps) => {
-  const isSelected = status === CardStatus.SELECTED;
+  const isSelected = status === CardPickingStatus.SELECTED;
   return (
     <motion.div
       className={cn(

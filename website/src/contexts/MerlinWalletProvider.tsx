@@ -36,6 +36,7 @@ import { getLocalPairMessages } from '../utils/localPools';
 import { useEvmConnectContext, Wallet } from '../wallet';
 import { UserService } from 'services/user';
 import { axiosSetupInterceptors } from 'config/axios';
+import { LuckyDrawService } from 'services/luckyDraw';
 interface MerlinWalletContextType {
   wallet?: Wallet;
   walletAddress?: string;
@@ -54,7 +55,11 @@ interface MerlinWalletContextType {
   bitusdToken: TokenInfo;
   clearCache: () => void;
   pendingTx: boolean;
-  requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
+  requestSwap: (
+    quote: Quote,
+    minOutputAmt: number,
+    onSuccessCallback?: () => void
+  ) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
   requestWithdrawLiquidity: (pool: IPool, amt: string) => Promise<boolean>;
   requestCreatePairWithManager: (
@@ -86,7 +91,6 @@ const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinW
 
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const { wallet, openModal, closeModal, setCurrentChain } = useEvmConnectContext();
-
   const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK>();
 
   const [pendingTx, setPendingTx] = useState<boolean>(false);
@@ -438,7 +442,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     [bitcowSDK, checkTransactionError, currentNetwork]
   );
   const requestSwap = useCallback(
-    async (quote, minOutputAmt) => {
+    async (quote, minOutputAmt, onSuccessCallback) => {
       let success = false;
       if (!wallet) throw new Error('Please connect wallet first');
       const fromToken = quote.inputToken;
@@ -462,6 +466,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               result.hash,
               `Swapped ${quote.inAmt} ${fromToken.symbol} to ${toToken.symbol}`
             );
+            LuckyDrawService.getTxnLucky
+              .call(result.hash)
+              .then((resp) => {
+                if (resp.code === 0) onSuccessCallback?.();
+              })
+              .catch((e) => {
+                console.log('Check Lucky chance:', e);
+              });
             success = true;
           } else if (result.status === 0) {
             openTxErrorNotification(

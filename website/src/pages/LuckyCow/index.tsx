@@ -8,6 +8,7 @@ import LuckyCodeModal from './components/LuckyCodeModal';
 import { Buy, NotConnected, Redeem } from './components/LuckyShop';
 import useUserInfo from 'hooks/useUserInfo';
 import LuckyCardSlider from './components/LuckyCardSlider';
+import { useLocation } from 'react-router-dom';
 
 export enum LuckyCowStatus {
   PRELOADING,
@@ -19,9 +20,14 @@ export enum LuckyCowStatus {
 }
 
 const LuckyCow = () => {
+  const { state } = useLocation();
+  const { isFromLuckyChance } = state as { isFromLuckyChance?: boolean };
+
   const { wallet } = useMerlinWallet();
   const { data: userInfo, isLoading: isLoadingUserInfo } = useUserInfo();
-  const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.PRELOADING);
+  const [status, setStatus] = useState<LuckyCowStatus>(
+    isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
+  );
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
 
   const content = useMemo(() => {

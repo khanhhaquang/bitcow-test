@@ -5,6 +5,7 @@ import Pool from 'pages/Pool';
 import Swap from 'pages/Swap';
 import Tokens from 'pages/Tokens';
 import LuckyCow from 'pages/LuckyCow';
+import useUserInfo from 'hooks/useUserInfo';
 
 // import Faucet from 'pages/Faucet';
 // import { useSelector } from 'react-redux';
@@ -62,6 +63,7 @@ export const routes: TRoute[] = [
 ];
 
 const Routes = () => {
+  useUserInfo();
   const activeRoutes = [...routes];
   // const isResourcesNotFound = useSelector(getIsResourcesNotFound);
   // const nav = useNavigate();

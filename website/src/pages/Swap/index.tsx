@@ -10,7 +10,7 @@ import * as yup from 'yup';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { openErrorNotification } from 'utils/notifications';
 
-import LuckyCowInvitation from './components/LuckyRewardModal';
+import LuckyRewardModal from './components/LuckyRewardModal';
 import TokenSwap from './components/TokenSwap';
 import { ISwapSettings } from './types';
 
@@ -27,9 +27,11 @@ const validationSchema = yup.object({
 const Swap: React.FC = () => {
   const swapSettings = useSelector(getSwapSettings);
   const { requestSwap, initProvider } = useMerlinWallet();
+  const [isLuckyRewardOpen, setIsLuckyRewardOpen] = useState(false);
   useEffect(() => {
     initProvider('swap');
   }, [initProvider]);
+
   const onSubmitSwap = useCallback(
     async (values: ISwapSettings, formikHelper: FormikHelpers<ISwapSettings>) => {
       const fromToken = values.currencyFrom?.token;
@@ -38,7 +40,10 @@ const Swap: React.FC = () => {
       const inputAmt = values.currencyFrom?.amount;
       const minOutputAmt = values.currencyTo?.amount * (1 - values.slipTolerance / 100);
       if (fromToken && toToken && inputAmt && minOutputAmt && quote) {
-        const result = await requestSwap(quote, quote.outAmt * 0.9);
+        const result = await requestSwap(quote, quote.outAmt * 0.9, () => {
+          setIsLuckyRewardOpen(true);
+        });
+
         if (result) {
           formikHelper.setFieldValue('currencyFrom', {
             ...values.currencyFrom,
@@ -65,7 +70,7 @@ const Swap: React.FC = () => {
         onSubmit={onSubmitSwap}>
         <TokenSwap />
       </Formik>
-      <LuckyCowInvitation />
+      <LuckyRewardModal onClose={() => setIsLuckyRewardOpen(false)} open={isLuckyRewardOpen} />
     </div>
   );
 };

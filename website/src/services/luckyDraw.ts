@@ -1,5 +1,3 @@
-import { Hash } from 'viem';
-
 import { IResponse } from 'types/common';
 import { axiosInstance } from 'config/axios';
 
@@ -23,7 +21,7 @@ export enum RewardChoice {
 export const LuckyDrawService = {
   getTxnLucky: {
     key: 'luckyDraw.getTxnLucky',
-    call: (txn: Hash) =>
+    call: (txn: string) =>
       axiosInstance
         .get<IResponse<ITxnLucky>>(`luckyDraw/swap/isLucky/${txn}`)
         .then((res) => res.data)

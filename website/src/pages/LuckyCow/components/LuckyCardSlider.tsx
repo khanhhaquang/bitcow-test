@@ -6,9 +6,12 @@ import { ReactComponent as SlidePrevIcon } from 'resources/icons/slideLeft.svg';
 import { ReactComponent as SlideNextIcon } from 'resources/icons/slideRight.svg';
 import Button from 'components/Button';
 import PixelButton from 'components/PixelButton';
+import LuckyPrizeModal from './LuckyPrizeModal';
 
 function LuckyCardSlider() {
+  const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(true);
   const [activeIndex, setactiveSlide] = useState(2);
+  const [revealedAll, setRevealedAll] = useState(false);
   const data = [1, 2, 3, 4, 5];
   const isSubmitting = false;
 
@@ -20,6 +23,10 @@ function LuckyCardSlider() {
   // const width = 928;
   // // const height = 600;
   // const cardWidth = 414;
+
+  const onClickRevealAll = () => {
+    setRevealedAll(true);
+  };
 
   const getStyles = (index) => {
     console.log(activeIndex);
@@ -79,7 +86,7 @@ function LuckyCardSlider() {
                 style={{
                   ...getStyles(index)
                 }}>
-                <LuckyCard disabled={index != activeIndex}></LuckyCard>
+                <LuckyCard disabled={index != activeIndex} revealed={revealedAll}></LuckyCard>
               </div>
             );
           })}
@@ -103,9 +110,7 @@ function LuckyCardSlider() {
         </div>
         <div className="absolute -right-[100px] bottom-0">
           <PixelButton
-            onClick={() => {
-              //TODO:
-            }}
+            onClick={onClickRevealAll}
             width={178}
             height={38}
             color="#000"
@@ -122,6 +127,9 @@ function LuckyCardSlider() {
       <div className="mt-5 flex justify-center pl-3">
         <PixelButton
           isLoading={isSubmitting}
+          onClick={() => {
+            setIsLuckyPrizeOpen(true);
+          }}
           width={178}
           height={38}
           color="black"
@@ -129,6 +137,7 @@ function LuckyCardSlider() {
           claim
         </PixelButton>
       </div>
+      <LuckyPrizeModal open={isLuckyPrizeOpen} onCancel={() => setIsLuckyPrizeOpen(false)} />
     </div>
   );
 }

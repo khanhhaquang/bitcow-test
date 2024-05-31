@@ -24,13 +24,15 @@ export const LuckyDrawService = {
   getTxnLucky: {
     key: 'luckyDraw.getTxnLucky',
     call: (txn: Hash) =>
-      axiosInstance.post<IResponse<ITxnLucky>>(`/luckyDraw/swap?txn=${txn}`).then((res) => res.data)
+      axiosInstance
+        .get<IResponse<ITxnLucky>>(`luckyDraw/swap/isLucky/${txn}`)
+        .then((res) => res.data)
   },
-  selectRewardOption: {
+  chooseRewardOption: {
     key: 'luckyDraw.selectRewardOption',
     call: (luckyId: string, choice: RewardChoice) =>
       axiosInstance
-        .post<IResponse<ITxnLucky>>(`/luckyDraw/swap/choice?luckId=${luckyId}&choice=${choice}`)
+        .post<IResponse<ITxnLucky>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
         .then((res) => res.data)
   }
 };

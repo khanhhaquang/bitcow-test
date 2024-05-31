@@ -12,6 +12,7 @@ interface TProps {
   open: boolean;
   closable?: boolean;
   closeIcon?: React.ReactNode;
+  drawerCloseIcon?: React.ReactNode;
   maskClosable?: boolean;
   children: React.ReactNode;
   width?: number | string;
@@ -20,7 +21,7 @@ interface TProps {
   bodyStyle?: React.CSSProperties;
 }
 
-const BitcowModal: React.FC<TProps> = ({ className, ...rest }) => {
+const BitcowModal: React.FC<TProps> = ({ className, drawerCloseIcon, ...rest }) => {
   const { isTablet } = useBreakpoint('tablet');
   return (
     <Fragment>
@@ -44,7 +45,7 @@ const BitcowModal: React.FC<TProps> = ({ className, ...rest }) => {
           <button
             className="drawer-close-icon absolute right-0 top-0 flex h-16 w-16 items-center justify-center"
             onClick={rest.onCancel}>
-            <CloseIcon className="text-white" />
+            {drawerCloseIcon ? drawerCloseIcon : <CloseIcon className="text-white" />}
           </button>
           {rest.children}
         </Drawer>

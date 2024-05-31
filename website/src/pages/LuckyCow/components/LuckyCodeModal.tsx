@@ -1,7 +1,9 @@
 import BitcowModal from 'components/BitcowModal';
 import PixelButton from 'components/PixelButton';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 import { FC, useState } from 'react';
 import { CloseIcon } from 'resources/icons';
+import { UserService } from 'services/user';
 
 type LuckyCodeModalProps = {
   open: boolean;
@@ -10,10 +12,20 @@ type LuckyCodeModalProps = {
 };
 
 const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) => {
+  const { wallet } = useMerlinWallet();
   const [code, setCode] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = () => {
-    onSubmit();
+  const handleSubmit = async () => {
+    try {
+      const result = await UserService.activateInviteCode.call(wallet?.accounts[0].evm, code);
+      if (result.code > 0) {
+        onSubmit();
+      }
+    } catch (e) {
+      console.log('🚀 ~ Check lucky code error:', e);
+      setError('Invalid code');
+    }
   };
 
   return (
@@ -23,10 +35,15 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
       open={open}
       width={572}
       bodyStyle={{ padding: 0 }}
-      onCancel={() => onCancel()}
-      className="h-[300px] border-[4px] border-black bg-[#FF8D00]"
-      closeIcon={<CloseIcon className="relative top-4 text-black" />}>
-      <div className="flex w-full flex-col items-center gap-y-6 pt-3 pb-6">
+      onCancel={() => {
+        setCode('');
+        setError('');
+        onCancel();
+      }}
+      className="h-[300px] border-[4px] border-black"
+      closeIcon={<CloseIcon className="relative top-4 text-black" />}
+      drawerCloseIcon={<CloseIcon className="text-black" />}>
+      <div className="flex w-full flex-col items-center gap-y-6 bg-[#FF8D00] pt-3 pb-6">
         <h3 className="text-center font-micro text-4xl text-black">Lucky Code?</h3>
         <div className="relative mb-5 flex h-[30px] w-[370px] items-center justify-center">
           <p className="absolute -top-1 left-0 h-1 w-full bg-white/40" />
@@ -36,9 +53,12 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
           <input
             className="text-pd h-full w-full bg-white/20 px-4 py-2 outline-0"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={(e) => {
+              setCode(e.target.value);
+              if (error) setError('');
+            }}
           />
-          <span className="absolute -bottom-8 left-0 text-red-500">This code is not valid</span>
+          {!!error && <span className="absolute -bottom-8 left-0 text-red-500">{error}</span>}
         </div>
 
         <p className="text-center font-pd text-lg text-white">
@@ -47,6 +67,7 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
         </p>
 
         <PixelButton
+          disabled={!code}
           width={278}
           height={38}
           color="#000"

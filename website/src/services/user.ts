@@ -1,5 +1,3 @@
-import { Address } from 'viem';
-
 import { IResponse } from 'types/common';
 import { axiosInstance } from 'config/axios';
 
@@ -8,9 +6,16 @@ import { axiosInstance } from 'config/axios';
 export const UserService = {
   activateInviteCode: {
     key: 'user.activateInviteCode',
-    call: (address: Address, inviteCode: string) =>
+    call: (address: string, inviteCode: string) =>
       axiosInstance
-        .get<IResponse<{}>>(`/user/activateInviteCode`, { params: { address, inviteCode } })
+        .get<IResponse<{}>>('user/activateInviteCode', { params: { address, inviteCode } })
+        .then((res) => res.data)
+  },
+  login: {
+    key: 'user.login',
+    call: (address: string, signature: string) =>
+      axiosInstance
+        .get<IResponse<{}>>('user/login', { params: { address, signature } })
         .then((res) => res.data)
   }
 };

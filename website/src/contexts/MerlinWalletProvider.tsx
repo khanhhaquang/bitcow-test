@@ -19,13 +19,14 @@ import {
   Quote,
   Sdk as BitcowSDK,
   TxOption,
-  UserLpAmount,
   CreateTokenInfo,
   isBTC
 } from '../sdk';
 import { NetworkConfig } from '../types/bitcow';
 import { getLocalPairMessages } from '../utils/localPools';
 import { useEvmConnectContext, Wallet } from '../wallet';
+import { UserService } from 'services/user';
+import { axiosSetupInterceptors } from 'config/axios';
 interface MerlinWalletContextType {
   wallet?: Wallet;
   openWalletModal: () => void;
@@ -97,6 +98,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [bitusdToken, setBitusdToken] = useState<TokenInfo>();
   const [fetchedPoolsCount, setFetchedPoolsCount] = useState(0);
   const [startInit, setStartInit] = useState(false);
+
   const { currentNetwork } = useNetwork();
   const currentNetworkRef = useRef<NetworkConfig>();
 
@@ -290,6 +292,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         if (wallet.accounts[0].evm != bitcowSDK.getAddress()) {
           const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
           const signer = await browserProvider.getSigner();
+          const newSignature = await signer.signMessage(
+            `hello play bitcow ${wallet.accounts[0].evm}`
+          );
+          const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
+          if (loginResult.message === 'successful') {
+            axiosSetupInterceptors(newSignature);
+          }
+
           bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
           fetchTokenBalances(true, 'set signer');
         }

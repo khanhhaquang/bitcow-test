@@ -144,6 +144,15 @@ export type Config = {
   tradingPairV1Creator: string;
   swapRouter: string;
   tokensBalance: string;
-
+  lottery?: string;
   pairV1Manager?: string;
+};
+
+export type CardInfo = {
+  price: number;
+  cardId: number;
+  purchaseCap: number;
+  totalSupply: number;
+  totalSold: number;
+  enableActive: boolean;
 };

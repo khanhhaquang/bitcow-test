@@ -27,51 +27,14 @@ function LuckyCardSlider() {
   const onClickRevealAll = () => {
     setRevealedAll(true);
   };
-
-  const getStyles = (index) => {
-    console.log(activeIndex);
-    if (activeIndex === index)
-      return {
-        opacity: 1,
-        transform: 'translateX(0px) translateZ(0px)',
-        zIndex: 10
-      };
-    else if (activeIndex - 1 === index || activeIndex + 4 === index)
-      return {
-        opacity: 1,
-        transform: 'translateX(-240px) translateZ(-300px)',
-        zIndex: 9
-      };
-    else if (activeIndex + 1 === index || activeIndex - 4 === index)
-      return {
-        opacity: 1,
-        transform: 'translateX(240px) translateZ(-300px)',
-        zIndex: 9
-      };
-    else if (activeIndex - 2 === index || activeIndex + 3 === index)
-      return {
-        opacity: 1,
-        transform: 'translateX(-480px) translateZ(-600px)',
-        zIndex: 8
-      };
-    else if (activeIndex + 2 === index || activeIndex - 3 === index)
-      return {
-        opacity: 1,
-        transform: 'translateX(480px) translateZ(-600px)',
-        zIndex: 8
-      };
-    else if (index < activeIndex - 2)
-      return {
-        opacity: 0,
-        transform: 'translateX(-480px) translateZ(-500px)',
-        zIndex: 7
-      };
-    else if (index > activeIndex + 2)
-      return {
-        opacity: 0,
-        transform: 'translateX(480px) translateZ(-500px)',
-        zIndex: 7
-      };
+  const getClassName = (index) => {
+    if (activeIndex === index) return styles.slideActive;
+    else if (activeIndex - 1 === index || activeIndex + 4 === index) return styles.slideSecondLeft;
+    else if (activeIndex + 1 === index || activeIndex - 4 === index) return styles.slideSecondRight;
+    else if (activeIndex - 2 === index || activeIndex + 3 === index) return styles.slideThirdLeft;
+    else if (activeIndex + 2 === index || activeIndex - 3 === index) return styles.slideThirdRight;
+    else if (index < activeIndex - 2) return styles.slideBackLeft;
+    else if (index > activeIndex + 2) return styles.slideBackRight;
   };
 
   return (
@@ -80,12 +43,7 @@ function LuckyCardSlider() {
         <div className={cn(styles.slideContainer, 'relative h-[600px]')}>
           {data.map((value, index) => {
             return (
-              <div
-                key={`lucky-card-${index}`}
-                className={styles.slide}
-                style={{
-                  ...getStyles(index)
-                }}>
+              <div key={`lucky-card-${index}`} className={cn(styles.slide, getClassName(index))}>
                 <LuckyCard disabled={index != activeIndex} revealed={revealedAll}></LuckyCard>
               </div>
             );

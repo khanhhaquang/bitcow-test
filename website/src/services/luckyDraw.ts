@@ -18,7 +18,8 @@ export enum RewardChoice {
   RECEIVE_AIRDROP = 0,
   SCRATCH_CARDS = 1
 }
-
+//TODO:  sync from
+// http://ec2-13-213-40-242.ap-southeast-1.compute.amazonaws.com:8866/swagger-ui/index.html
 export const LuckyDrawService = {
   getTxnLucky: {
     key: 'luckyDraw.getTxnLucky',

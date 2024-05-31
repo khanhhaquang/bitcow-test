@@ -57,6 +57,31 @@ export const ALL_NETWORK: NetworkConfig[] = [
     balancePaginateCount: 100,
     fetchAllTokenBalance: true,
     bridgeUrl: 'https://merlinchain.io/bridge'
+  },
+  {
+    chainConfig: {
+      chainId: 200810,
+      chainName: 'Bitlayer Testnet',
+      nativeCurrency: BTC,
+      rpcUrls: [
+        'https://testnet-rpc.bitlayer.org',
+        'https://testnet-rpc.bitlayer.org',
+        'https://rpc.ankr.com/bitlayer_testnet'
+      ],
+
+      blockExplorerUrls: ['https://testnet.btrscan.com']
+    },
+    sdkConfig: CONFIG.bitlayerTestnet,
+    rpcNodeUrl: 'https://testnet-rpc.bitlayer.org',
+    icon: '/images/bitlayer.png',
+    requestsPerSecond: 5,
+    poolsFirstPaginateCount: 140,
+    poolsPaginateCount: 140,
+    tokensFirstPaginateCount: 600,
+    tokensPaginateCount: 600,
+    balancePaginateCount: 600,
+    fetchAllTokenBalance: true,
+    bridgeUrl: 'https://www.bitlayer.org/bridge/testnet'
   }
   /*
   {

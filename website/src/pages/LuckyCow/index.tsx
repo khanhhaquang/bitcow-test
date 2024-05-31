@@ -18,7 +18,7 @@ export enum LuckyCowStatus {
 
 const LuckyCow = () => {
   const { wallet } = useMerlinWallet();
-  const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.REDEEM);
+  const [status, setStatus] = useState<LuckyCowStatus>(LuckyCowStatus.BUY);
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
 
   const isLoadingAccess = false;

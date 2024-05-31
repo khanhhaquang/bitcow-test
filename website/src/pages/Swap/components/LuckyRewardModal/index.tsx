@@ -30,7 +30,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
     <BitcowModal onCancel={onClose} maskClosable={true} open={open} width="100vw" destroyOnClose>
       <div className="-mt-[100px] flex h-screen w-full items-center justify-center bg-contain tablet:mt-0 tablet:h-fit">
         <motion.div
-          className="absolute h-full w-full bg-contain"
+          className="pointer-events-none absolute h-full w-full bg-contain"
           animate={{
             backgroundImage: `url('${InvitationFirework}')`,
             opacity: [1, 0],

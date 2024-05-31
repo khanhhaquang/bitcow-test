@@ -11,6 +11,7 @@ import {
   LuckyBuyBtnIcon,
   BitUsdIcon
 } from 'resources/icons';
+import useLuckyCard from 'hooks/useLuckyCard';
 
 type LuckyShopProps = {
   children?: ReactNode;
@@ -75,12 +76,14 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
 };
 
 const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
+  const { data: luckyCard } = useLuckyCard();
+  console.log('🚀 ~ luckyCard:', luckyCard);
   const [cardsAmount, setCardsAmount] = useState(1);
 
   const MAX = 10;
 
   const handleChangeAmount = (nextValue: number) => {
-    if (cardsAmount < 1 && nextValue < cardsAmount) return;
+    if (cardsAmount <= 1 && nextValue < cardsAmount) return;
     if (cardsAmount === MAX && nextValue > cardsAmount) return;
 
     setCardsAmount(nextValue);

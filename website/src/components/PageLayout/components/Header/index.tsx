@@ -63,7 +63,7 @@ const PageHeader: React.FC = () => {
     return (
       <div className="relative flex w-full grow items-center justify-end">
         <WalletConnector />
-        <div className={`absolute top-full w-[${WALLET_WIDTH}px]`}>
+        <div className={`absolute top-full min-w-[${WALLET_WIDTH}px]`}>
           <NetworkSelect className="mt-3" />
         </div>
       </div>

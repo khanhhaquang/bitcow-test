@@ -4,7 +4,7 @@ import { BridgeIcon } from 'resources/icons';
 const BridgeNavigator = () => {
   const { currentNetwork } = useNetwork();
 
-  if (!currentNetwork?.bridgeUrl) return <div />;
+  if (!currentNetwork?.bridgeUrl) return null;
 
   return (
     <a

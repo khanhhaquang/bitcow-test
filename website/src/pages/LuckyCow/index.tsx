@@ -7,6 +7,7 @@ import LuckyCardsPicker from './components/LuckyCardsPicker';
 import LuckyCodeModal from './components/LuckyCodeModal';
 import { Buy, NotConnected, Redeem } from './components/LuckyShop';
 import useUserInfo from 'hooks/useUserInfo';
+import LuckyCardSlider from './components/LuckyCardSlider';
 
 export enum LuckyCowStatus {
   PRELOADING,
@@ -49,6 +50,8 @@ const LuckyCow = () => {
             }}
           />
         );
+      case LuckyCowStatus.CARDS_SCRATCHING:
+        return <LuckyCardSlider />;
       default:
         return <Loader />;
     }

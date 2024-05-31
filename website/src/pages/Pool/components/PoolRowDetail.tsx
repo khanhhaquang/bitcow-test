@@ -149,7 +149,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
                   width={126}
                   borderWidth={2}
                   height={34}
-                  className="font-pg text-blue1"
+                  className="bg-white font-pg text-blue1"
                   color="white"
                   isSolid
                   onClick={() => handleOnClick('add')}>

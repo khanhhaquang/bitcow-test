@@ -259,7 +259,7 @@ const Pool = () => {
                       width={126}
                       borderWidth={2}
                       height={34}
-                      className="ml-3 font-pg text-lg text-blue1"
+                      className="ml-3 bg-white/80 font-pg text-lg text-blue1"
                       color="rgba(255, 255, 255, 0.8)"
                       isSolid
                       onClick={() => {

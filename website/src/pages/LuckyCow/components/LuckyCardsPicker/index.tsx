@@ -11,7 +11,11 @@ interface CardsPickerProps {
   onStartScratching: () => void;
 }
 
-const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: CardsPickerProps) => {
+const LuckyCardPickers = ({
+  numsOfCard,
+  numsOfSelectedCard,
+  onStartScratching
+}: CardsPickerProps) => {
   const [cardsStatus, setCardsStatus] = useState<Array<CardPickingStatus>>([]);
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
@@ -99,4 +103,4 @@ const CardsPicker = ({ numsOfCard, numsOfSelectedCard, onStartScratching }: Card
   );
 };
 
-export default CardsPicker;
+export default LuckyCardPickers;

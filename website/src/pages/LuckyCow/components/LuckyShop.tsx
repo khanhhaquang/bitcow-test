@@ -77,10 +77,11 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
 
 const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
   const { data: luckyCard } = useLuckyCard();
-  console.log('🚀 ~ luckyCard:', luckyCard);
   const [cardsAmount, setCardsAmount] = useState(1);
 
   const MAX = 10;
+
+  const cardPrice = luckyCard?.price || 0;
 
   const handleChangeAmount = (nextValue: number) => {
     if (cardsAmount <= 1 && nextValue < cardsAmount) return;
@@ -132,7 +133,7 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
                 <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                   <BitUsdIcon />
                   <span className=" flex items-baseline pt-2">
-                    {cardsAmount * 10}
+                    {cardsAmount * cardPrice}
                     <small className="text-sm">bitUSD</small>
                   </span>
                 </p>

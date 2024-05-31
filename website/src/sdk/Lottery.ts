@@ -22,7 +22,7 @@ export class Lottery extends ContractRunner {
     return this.send(this.lotteryContract.purchase, cardId, quantity, token);
   }
 
-  async getCardInfo(id: number): Promise<CardInfo> {
+  async getCardInfo(id: number): Promise<CardInfo | undefined> {
     try {
       const card = await this.lotteryContract.getCardInfo(id);
       if (card) {

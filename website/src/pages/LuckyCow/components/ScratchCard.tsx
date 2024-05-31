@@ -23,6 +23,7 @@ interface Props {
   height: number;
   image: any;
   disabled?: boolean;
+  revealed?: boolean;
   finishPercent?: number;
   triggerPercent?: number;
   onComplete?: () => void;
@@ -81,6 +82,11 @@ class ScratchCard extends Component<Props, State> {
     this.canvas.style.opacity = '1';
     this.ctx.globalCompositeOperation = 'source-over';
     this.ctx.drawImage(this.image, 0, 0, this.props.width, this.props.height);
+  };
+
+  reveal = () => {
+    this.canvas.style.transition = '1s';
+    this.canvas.style.opacity = '0';
   };
 
   getFilledInPixels(stride: number) {
@@ -252,7 +258,8 @@ class ScratchCard extends Component<Props, State> {
       position: 'absolute' as const,
       top: 0,
       zIndex: 1,
-      cursor: this.props.disabled ? 'auto' : 'pointer'
+      cursor: this.props.disabled ? 'auto' : 'pointer',
+      visibility: this.props.revealed ? ('hidden' as const) : ('visible' as const)
     };
 
     const resultStyle = {

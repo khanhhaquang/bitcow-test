@@ -30,7 +30,7 @@ export const LuckyDrawService = {
     key: 'luckyDraw.selectRewardOption',
     call: (luckyId: string, choice: RewardChoice) =>
       axiosInstance
-        .post<IResponse<ITxnLucky>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
+        .get<IResponse<{}>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
         .then((res) => res.data)
   }
 };

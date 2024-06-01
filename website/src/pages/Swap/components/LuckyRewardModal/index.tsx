@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FC } from 'react';
+import { ButtonHTMLAttributes, FC } from 'react';
 
 import BitcowModal from 'components/BitcowModal';
 import {
@@ -14,23 +14,21 @@ import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 import InvitationFirework from 'resources/img/lucky-draw/invitation-firework.webp';
 import LotteryTicket from 'resources/img/lucky-draw/lotteryTicket.webp';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { LuckyDrawService, RewardChoice } from 'services/luckyDraw';
 
-interface RewardOptionProps {
-  title: React.ReactElement;
-  buttonElement: React.ReactElement;
-  onClick: () => void;
-}
-const RewardOption = ({ title, buttonElement, onClick }: RewardOptionProps) => {
+interface RewardOptionProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+const RewardOption = ({ disabled, children, ...rest }: RewardOptionProps) => {
   return (
     <button
-      onClick={onClick}
-      className="relative flex h-[186px] flex-1 cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-white/10 px-3 font-pd  text-white hover:bg-white/40 hover:text-black">
+      disabled={disabled}
+      className="relative flex h-[186px] flex-1 cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-white/10 px-3 font-pd  text-white hover:bg-white/40 hover:text-black"
+      {...rest}>
       <CardCornerTopLeft className="absolute top-0 left-0" />
       <CardCornerTopRight className="absolute top-0 right-0" />
       <CardCornerBottomLeft className="absolute bottom-0 left-0" />
       <CardCornerBottomRight className="absolute bottom-0 right-0" />
-      {title}
-      {buttonElement}
+      {children}
     </button>
   );
 };
@@ -41,6 +39,11 @@ interface LuckyRewardModalProps {
 }
 const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
   const navigate = useNavigate();
+
+  const { mutateAsync: chooseOptionRequest, isPending } = useMutation({
+    mutationFn: (data: { luckyId: string; choice: RewardChoice }) =>
+      LuckyDrawService.chooseRewardOption.call(data.luckyId, data.choice)
+  });
 
   return (
     <BitcowModal onCancel={onClose} maskClosable open={open} width="100vw" destroyOnClose>
@@ -67,40 +70,43 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
             </div>
             <div className="flex w-full justify-between gap-6">
               <RewardOption
+                disabled={isPending}
                 onClick={() => {
-                  //TODO: FIRE BITCOW SDK RECEIVE AIRDROP
-                }}
-                title={<h3 className="text-center text-lg leading-4">Receive bitUSD airdrop</h3>}
-                buttonElement={
-                  <div className="relative flex h-[82px] w-[169px] items-center justify-center bg-color_yellow_2 bg-clip-content py-2 px-1">
-                    <LuckyRewardBitUSDTicketBg className="absolute inset-0 left-0" />
-                    <BitUSDLuckyIcon />
-                    <p className="flex flex-col items-end font-pdb text-pink_950">
-                      <span className="text-5xl [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
-                        3.5
-                      </span>
-                      <span className="-mt-2 text-sm">bitUSD</span>
-                    </p>
-                  </div>
-                }
-              />
+                  chooseOptionRequest({ luckyId: '', choice: RewardChoice.RECEIVE_AIRDROP })
+                    .then((result) => console.log(result))
+                    .catch((e) => console.log(e));
+                }}>
+                <h3 className="text-center text-lg leading-4">Receive bitUSD airdrop</h3>
+                <div className="relative flex h-[82px] w-[169px] items-center justify-center bg-color_yellow_2 bg-clip-content py-2 px-1">
+                  <LuckyRewardBitUSDTicketBg className="absolute inset-0 left-0" />
+                  <BitUSDLuckyIcon />
+                  <p className="flex flex-col items-end font-pdb text-pink_950">
+                    <span className="text-5xl [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
+                      3.5
+                    </span>
+                    <span className="-mt-2 text-sm">bitUSD</span>
+                  </p>
+                </div>
+              </RewardOption>
               <RewardOption
+                disabled={isPending}
                 onClick={() => {
-                  navigate('/lucky-cow', { state: { isFromLuckyChance: true } });
-                }}
-                title={
-                  <p className="flex h-9 flex-col items-center gap-1 text-center text-lg leading-4">
-                    <span>Redeem</span>
-                    <span className="font-pdb text-pink_950">LUCKY COW lottery</span>
-                  </p>
-                }
-                buttonElement={
-                  <p className="flex flex-col items-center gap-1">
-                    <img src={LotteryTicket} alt="lottery-ticket" className="h-[75px] w-[146px]" />
-                    <span className="text-pink_950">(worth 10$)</span>
-                  </p>
-                }
-              />
+                  chooseOptionRequest({ luckyId: '', choice: RewardChoice.RECEIVE_AIRDROP })
+                    .then((result) => {
+                      console.log('🚀 ~ .then ~ result:', result);
+                      navigate('/lucky-cow', { state: { isFromLuckyChance: true } });
+                    })
+                    .catch((e) => console.log(e));
+                }}>
+                <p className="flex h-9 flex-col items-center gap-1 text-center text-lg leading-4">
+                  <span>Redeem</span>
+                  <span className="font-pdb text-pink_950">LUCKY COW lottery</span>
+                </p>
+                <p className="flex flex-col items-center gap-1">
+                  <img src={LotteryTicket} alt="lottery-ticket" className="h-[75px] w-[146px]" />
+                  <span className="text-pink_950">(worth 10$)</span>
+                </p>
+              </RewardOption>
             </div>
           </div>
         </div>

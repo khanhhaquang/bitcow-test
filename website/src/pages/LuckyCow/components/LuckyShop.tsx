@@ -15,6 +15,7 @@ import useLuckyCard from 'hooks/useLuckyCard';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { openTxErrorNotification, openTxSuccessNotification } from 'utils/notifications';
 import useNetwork from 'hooks/useNetwork';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 
 type LuckyShopProps = {
   children?: ReactNode;
@@ -49,8 +50,17 @@ const LuckyShopWrapper: FC<LuckyShopProps> = ({ children, text }) => {
 };
 
 const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
-  const handleRedeem = () => {
-    onClickRedeem();
+  const { freePlayGame } = useLuckyGame();
+  const handleRedeem = async () => {
+    try {
+      const result = await freePlayGame();
+      console.log(result);
+      if (result.code === 0) {
+        onClickRedeem();
+      }
+    } catch (e) {
+      console.log('🚀 ~ Check lucky code error:', e);
+    }
   };
 
   return (

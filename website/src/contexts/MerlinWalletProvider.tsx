@@ -407,7 +407,12 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       openErrorNotification({ detail: 'User rejected' });
       return;
     }
-    console.log(e);
+    if (e.message?.includes('missing revert data')) {
+      openErrorNotification({
+        detail: 'You may want to try to refresh page or increase your gas fee. '
+      });
+      return;
+    }
     openErrorNotification({ detail: e.message });
   }, []);
 

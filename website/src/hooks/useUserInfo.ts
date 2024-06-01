@@ -7,7 +7,7 @@ const useUserInfo = () => {
 
   return useQuery({
     queryKey: [UserService.getUserInfo.key, walletAddress],
-    queryFn: () => UserService.getUserInfo.call(walletAddress),
+    queryFn: () => (walletAddress ? UserService.getUserInfo.call(walletAddress) : undefined),
     select: (data) => data?.data,
     enabled: isLoggedIn
   });

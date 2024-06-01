@@ -5,8 +5,8 @@ const useLuckyCard = (id: number = 1) => {
   const { bitcowSDK } = useMerlinWallet();
 
   return useQuery({
-    queryKey: ['bitcowSDK.lottery.getCardInfo', id],
-    queryFn: () => bitcowSDK.lottery.getCardInfo(id),
+    queryKey: ['bitcowSDK.lottery.getCardInfo', bitcowSDK, id],
+    queryFn: () => bitcowSDK?.lottery?.getCardInfo(id),
     enabled: true
   });
 };

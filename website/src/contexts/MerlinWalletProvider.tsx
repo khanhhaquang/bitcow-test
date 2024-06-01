@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import BigNumber from 'bignumber.js';
 import { Eip1193Provider, ethers } from 'ethers';
 import {
@@ -14,6 +13,9 @@ import {
   useState
 } from 'react';
 
+import { axiosSetupInterceptors } from 'config/axios';
+import { UserService } from 'services/user';
+import { LuckyDrawService } from 'services/luckyDraw';
 import openNotification, {
   openErrorNotification,
   openTxErrorNotification,
@@ -34,15 +36,13 @@ import {
 import { NetworkConfig } from '../types/bitcow';
 import { getLocalPairMessages } from '../utils/localPools';
 import { useEvmConnectContext, Wallet } from '../wallet';
-import { UserService } from 'services/user';
-import { axiosSetupInterceptors } from 'config/axios';
-import { LuckyDrawService } from 'services/luckyDraw';
+
 interface MerlinWalletContextType {
   wallet?: Wallet;
-  walletAddress?: string;
+  walletAddress: string;
   openWalletModal: () => void;
   closeWalletModal: () => void;
-  bitcowSDK: BitcowSDK;
+  bitcowSDK?: BitcowSDK;
   createBitcowSDK: () => void;
   liquidityPools: IPool[];
   fetchedPoolsCount: number;
@@ -91,7 +91,7 @@ const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinW
 
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const { wallet, openModal, closeModal, setCurrentChain } = useEvmConnectContext();
-  const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK>();
+  const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK | undefined>();
 
   const [pendingTx, setPendingTx] = useState<boolean>(false);
   const [txOption] = useState<TxOption>({

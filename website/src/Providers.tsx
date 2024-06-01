@@ -11,6 +11,7 @@ import { PoolsProvider } from 'contexts/PoolsProvider';
 import ConnectProvider from './components/ConnectProvider';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
@@ -36,6 +37,7 @@ const Providers: React.FC<TProps> = (props: TProps) => {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={isDevelopmentMode} />
         <ConnectProvider walletConnectProjectId={'a6cc11517a10f6f12953fd67b1eb67e7'}>
           <NetworkProvider>
             <MerlinWalletProvider>

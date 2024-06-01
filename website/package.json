@@ -14,6 +14,7 @@
     "@reduxjs/toolkit": "^1.8.5",
     "@rive-app/react-canvas": "^4.8.9",
     "@tanstack/react-query": "^5.40.0",
+    "@tanstack/react-query-devtools": "^5.40.0",
     "@types/three": "^0.148.0",
     "@web3-react/coinbase-wallet": "^8.2.3",
     "@web3-react/core": "8.2.3",

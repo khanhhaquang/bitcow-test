@@ -32,5 +32,10 @@ export const LuckyDrawService = {
       axiosInstance
         .get<IResponse<{}>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
         .then((res) => res.data)
+  },
+  requestPlayGame: {
+    key: 'luckyDraw.requestPlayGame',
+    call: (txn: string) =>
+      axiosInstance.get<IResponse<{}>>(`luckDraw/playGame/${txn}`).then((res) => res.data)
   }
 };

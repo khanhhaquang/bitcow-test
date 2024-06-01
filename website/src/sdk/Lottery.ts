@@ -16,7 +16,6 @@ export class Lottery extends ContractRunner {
   ) {
     super(provider, txOption, signer);
     this.lotteryContract = new Contract(contractAddress, LOTTERY_ABI, provider);
-    this.address = contractAddress;
   }
 
   async purchase(cardId: number, quantity: number, token: string) {

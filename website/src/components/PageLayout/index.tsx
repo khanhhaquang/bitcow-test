@@ -7,6 +7,7 @@ import useCurrentPage from 'hooks/useCurrentPage';
 import { Footer, Header } from './components';
 import AppPageDecorators from './components/AppPageDecorators';
 import LuckyCowDecorator from './components/LuckyCowDecorator';
+import LuckyResultHighlight from './components/LuckyCowResultHighlight';
 
 const { Content } = Layout;
 
@@ -26,12 +27,18 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return <LuckyCowDecorator />;
   }, [currentPageName]);
 
+  const luckyCowHighLight = useMemo(() => {
+    if (!isLuckyCowPage) return null;
+    return <LuckyResultHighlight />;
+  }, [currentPageName]);
+
   return (
     <Layout
       className={classNames(
         'relative min-h-screen overflow-hidden',
         isLuckyCowPage ? 'bg-lucky-cow' : 'page-background'
       )}>
+      {luckyCowHighLight}
       {luckyCowDecorator}
       {appBgDecorators}
       <Header />
@@ -39,6 +46,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {children}
       </Content>
       <Footer />
+      {luckyCowHighLight}
     </Layout>
   );
 };

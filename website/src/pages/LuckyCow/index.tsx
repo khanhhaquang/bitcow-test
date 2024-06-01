@@ -64,14 +64,15 @@ const LuckyCow = () => {
   }, [wallet, status]);
 
   useEffect(() => {
-    if (userInfo) {
-      if (userInfo.isGameActive) {
-        setStatus(LuckyCowStatus.REDEEM);
-      } else {
-        setStatus(LuckyCowStatus.BUY);
-      }
+    if (userInfo?.freePlayGame) {
+      setStatus(LuckyCowStatus.REDEEM);
+      return;
     }
-  }, [userInfo?.isGameActive]);
+    if (userInfo?.isGameActive) {
+      setStatus(LuckyCowStatus.BUY);
+      return;
+    }
+  }, [userInfo?.isGameActive, userInfo?.freePlayGame]);
 
   if (wallet && isLoadingUserInfo) return <Loader />;
 

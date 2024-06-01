@@ -54,6 +54,18 @@ export const openTxSuccessNotification = (url: string, txHash: string, content: 
   return openNotification({ detail, title: 'Transaction Success' });
 };
 
+export const openTxPendingNotification = (url: string, txHash: string, content: string) => {
+  const detail = (
+    <div>
+      <span>{content}</span>
+      <TextLink href={`${url}/tx/${txHash}`} className="block !text-bc-blue">
+        View Transaction
+      </TextLink>
+    </div>
+  );
+  return openNotification({ detail, title: 'Transaction pending' });
+};
+
 export const openTxErrorNotification = (url: string, txHash: string, content: string) => {
   const detail = (
     <div>

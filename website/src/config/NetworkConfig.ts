@@ -63,11 +63,7 @@ export const ALL_NETWORK: NetworkConfig[] = [
       chainId: 200810,
       chainName: 'Bitlayer Testnet',
       nativeCurrency: BTC,
-      rpcUrls: [
-        'https://testnet-rpc.bitlayer.org',
-        'https://testnet-rpc.bitlayer.org',
-        'https://rpc.ankr.com/bitlayer_testnet'
-      ],
+      rpcUrls: ['https://testnet-rpc.bitlayer.org', 'https://rpc.ankr.com/bitlayer_testnet'],
 
       blockExplorerUrls: ['https://testnet.btrscan.com']
     },

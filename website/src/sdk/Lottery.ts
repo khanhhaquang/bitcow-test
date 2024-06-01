@@ -19,7 +19,7 @@ export class Lottery extends ContractRunner {
   }
 
   async purchase(cardId: number, quantity: number, token: string) {
-    return this.send(this.lotteryContract.purchase, cardId, quantity, token);
+    return this.send(this.lotteryContract.purchase, cardId, quantity, token, {});
   }
 
   async getCardInfo(id: number): Promise<CardInfo | undefined> {

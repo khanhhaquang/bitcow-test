@@ -3,7 +3,10 @@ import { axiosInstance } from 'config/axios';
 
 export interface UserInfo {
   isGameActive: boolean;
-  //TODO: update more
+  freePlayGame: boolean;
+  freePlayCount: number;
+  freePlayOrderID: number;
+  gameProgress: number;
 }
 
 //TODO:  sync from

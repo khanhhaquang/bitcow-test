@@ -15,7 +15,7 @@ import {
 
 import { axiosSetupInterceptors } from 'config/axios';
 import { UserService } from 'services/user';
-import { LuckyDrawService } from 'services/luckyDraw';
+import { ITxnLucky, LuckyDrawService } from 'services/luckyDraw';
 import openNotification, {
   openErrorNotification,
   openTxErrorNotification,
@@ -58,7 +58,7 @@ interface MerlinWalletContextType {
   requestSwap: (
     quote: Quote,
     minOutputAmt: number,
-    onSuccessCallback?: (luckyId: string) => void
+    onSuccessCallback?: (luckyTxn: ITxnLucky) => void
   ) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
   requestWithdrawLiquidity: (pool: IPool, amt: string) => Promise<boolean>;
@@ -407,6 +407,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       openErrorNotification({ detail: 'User rejected' });
       return;
     }
+    console.log('Txn error: ', e);
     if (e.message?.includes('missing revert data')) {
       openErrorNotification({
         detail: 'You may want to try to refresh page or increase your gas fee. '
@@ -475,7 +476,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               .call(result.hash)
               .then((resp) => {
                 if (resp.code === 0 && resp.data.isLucky) {
-                  onSuccessCallback?.(resp.data.luckyId);
+                  onSuccessCallback?.(resp.data);
                 }
               })
               .catch((e) => {

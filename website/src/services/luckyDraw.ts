@@ -3,8 +3,9 @@ import { axiosInstance } from 'config/axios';
 
 export interface ITxnLucky {
   isLucky: boolean;
-  luckyId: string;
-  amount: string;
+  luckyId: number;
+  luckyAmount: number;
+  expiryTimestamp: number;
 }
 
 export interface ISelectReward {
@@ -23,12 +24,12 @@ export const LuckyDrawService = {
     key: 'luckyDraw.getTxnLucky',
     call: (txn: string) =>
       axiosInstance
-        .get<IResponse<ITxnLucky>>(`luckyDraw/swap/isLucky/${txn}`)
+        .get<IResponse<ITxnLucky>>(`luckDraw/swap/isLucky/${txn}`)
         .then((res) => res.data)
   },
   chooseRewardOption: {
     key: 'luckyDraw.selectRewardOption',
-    call: (luckyId: string, choice: RewardChoice) =>
+    call: (luckyId: number, choice: RewardChoice) =>
       axiosInstance
         .get<IResponse<{}>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
         .then((res) => res.data)

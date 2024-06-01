@@ -15,7 +15,7 @@ import InvitationFirework from 'resources/img/lucky-draw/invitation-firework.web
 import LotteryTicket from 'resources/img/lucky-draw/lotteryTicket.webp';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { LuckyDrawService, RewardChoice } from 'services/luckyDraw';
+import { ITxnLucky, LuckyDrawService, RewardChoice } from 'services/luckyDraw';
 
 interface RewardOptionProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 const RewardOption = ({ disabled, children, ...rest }: RewardOptionProps) => {
@@ -36,17 +36,18 @@ const RewardOption = ({ disabled, children, ...rest }: RewardOptionProps) => {
 interface LuckyRewardModalProps {
   open?: boolean;
   onClose?: () => void;
+  luckyTxn?: ITxnLucky;
 }
-const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
+const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
   const navigate = useNavigate();
 
   const { mutateAsync: chooseOptionRequest, isPending } = useMutation({
-    mutationFn: (data: { luckyId: string; choice: RewardChoice }) =>
+    mutationFn: (data: { luckyId: number; choice: RewardChoice }) =>
       LuckyDrawService.chooseRewardOption.call(data.luckyId, data.choice)
   });
 
   return (
-    <BitcowModal onCancel={onClose} maskClosable open={open} width="100vw" destroyOnClose>
+    <BitcowModal onCancel={onClose} maskClosable open={!!luckyTxn} width="100vw" destroyOnClose>
       <div className="-mt-[100px] flex h-screen w-full items-center justify-center bg-contain tablet:mt-0 tablet:h-fit">
         <motion.div
           className="pointer-events-none absolute h-full w-full bg-contain"
@@ -72,8 +73,15 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
               <RewardOption
                 disabled={isPending}
                 onClick={() => {
-                  chooseOptionRequest({ luckyId: '', choice: RewardChoice.RECEIVE_AIRDROP })
-                    .then((result) => console.log(result))
+                  chooseOptionRequest({
+                    luckyId: luckyTxn?.luckyId,
+                    choice: RewardChoice.RECEIVE_AIRDROP
+                  })
+                    .then((result) => {
+                      onClose();
+                      console.log(result);
+                      //TODO: show airdropHash here
+                    })
                     .catch((e) => console.log(e));
                 }}>
                 <h3 className="text-center text-lg leading-4">Receive bitUSD airdrop</h3>
@@ -82,7 +90,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
                   <BitUSDLuckyIcon />
                   <p className="flex flex-col items-end font-pdb text-pink_950">
                     <span className="text-5xl [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
-                      3.5
+                      {luckyTxn?.luckyAmount.toFixed(1)}
                     </span>
                     <span className="-mt-2 text-sm">bitUSD</span>
                   </p>
@@ -91,10 +99,16 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
               <RewardOption
                 disabled={isPending}
                 onClick={() => {
-                  chooseOptionRequest({ luckyId: '', choice: RewardChoice.RECEIVE_AIRDROP })
+                  chooseOptionRequest({
+                    luckyId: luckyTxn?.luckyId,
+                    choice: RewardChoice.SCRATCH_CARDS
+                  })
                     .then((result) => {
-                      console.log('🚀 ~ .then ~ result:', result);
-                      navigate('/lucky-cow', { state: { isFromLuckyChance: true } });
+                      console.log('🚀 chooseOptionRequest ~ SCRATCH_CARDS:', result);
+                      if (result.code === 0) {
+                        onClose();
+                        navigate('/lucky-cow', { state: { isFromLuckyChance: true } });
+                      }
                     })
                     .catch((e) => console.log(e));
                 }}>

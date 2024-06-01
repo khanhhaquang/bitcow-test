@@ -13,6 +13,8 @@ import {
 } from 'resources/icons';
 import useLuckyCard from 'hooks/useLuckyCard';
 import useMerlinWallet from 'hooks/useMerlinWallet';
+import { openTxErrorNotification, openTxSuccessNotification } from 'utils/notifications';
+import useNetwork from 'hooks/useNetwork';
 
 type LuckyShopProps = {
   children?: ReactNode;
@@ -79,6 +81,7 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
 const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
   const { data: luckyCard } = useLuckyCard();
   const { bitcowSDK } = useMerlinWallet();
+  const { currentNetwork } = useNetwork();
 
   const [cardsAmount, setCardsAmount] = useState(1);
 
@@ -101,7 +104,19 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
           cardsAmount,
           '0x5cA6bE430A0E5FB022fC0C842430043FEd80cf2B'
         );
-        console.log('🚀 ~ handleBuy ~ result:', result);
+        if (result.status === 1) {
+          openTxSuccessNotification(
+            currentNetwork.chainConfig.blockExplorerUrls[0],
+            result.hash,
+            'Buy cards successfully'
+          );
+        } else if (result.status === 0) {
+          openTxErrorNotification(
+            currentNetwork.chainConfig.blockExplorerUrls[0],
+            result.hash,
+            'Failed to buy'
+          );
+        }
       } catch (e) {
         console.log('🚀 ~ handleBuy ~ e:', e);
       }

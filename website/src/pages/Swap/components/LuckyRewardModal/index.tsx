@@ -63,7 +63,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
           <button className="absolute right-4 top-4 cursor-pointer text-black" onClick={onClose}>
             <CloseIcon />
           </button>
-          <div className="pb-3 text-center font-micro text-2xl text-black">Congratulations!</div>
+          <div className="pb-3 text-center font-micro text-4xl text-black">Congratulations!</div>
           <div className="flex w-full flex-col items-center gap-6">
             <div className="h-9 w-[361px] text-center font-pd text-lg font-normal text-black">
               You have hit a lucky spot! Choose between two rewards below:

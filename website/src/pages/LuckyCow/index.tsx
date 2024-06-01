@@ -7,6 +7,8 @@ import LuckyCardsPicker from './components/LuckyCardsPicker';
 import LuckyCodeModal from './components/LuckyCodeModal';
 import { Buy, NotConnected, Redeem } from './components/LuckyShop';
 import useUserInfo from 'hooks/useUserInfo';
+import { useFreeLuckyGame } from 'hooks/useFreeLuckyGame';
+
 import LuckyCardSlider from './components/LuckyCardSlider';
 import { useLocation } from 'react-router-dom';
 
@@ -29,6 +31,8 @@ const LuckyCow = () => {
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
+
+  const { freePlayGame } = useFreeLuckyGame();
 
   const content = useMemo(() => {
     if (!wallet) return <NotConnected />;
@@ -82,8 +86,12 @@ const LuckyCow = () => {
       <LuckyCodeModal
         open={isLuckyCodeOpen}
         onCancel={() => setIsLuckyCodeOpen(false)}
-        onSubmit={() => {
-          setStatus(LuckyCowStatus.REDEEM);
+        onSubmit={async () => {
+          setStatus(LuckyCowStatus.LOADING_CARDS);
+          const result = await freePlayGame();
+          if (result.code !== 0) {
+            setStatus(LuckyCowStatus.CARDS_PICKING);
+          }
         }}
       />
     </div>

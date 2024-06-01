@@ -2,7 +2,13 @@ import { motion } from 'framer-motion';
 import { FC } from 'react';
 
 import BitcowModal from 'components/BitcowModal';
-import { LuckyRewardBitUSDTicketBg } from 'resources/icons';
+import {
+  CardCornerBottomLeft,
+  CardCornerBottomRight,
+  CardCornerTopLeft,
+  CardCornerTopRight,
+  LuckyRewardBitUSDTicketBg
+} from 'resources/icons';
 import { ReactComponent as BitUSDLuckyIcon } from 'resources/icons/bitUSDLucky.svg';
 import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 import InvitationFirework from 'resources/img/lucky-draw/invitation-firework.webp';
@@ -18,7 +24,11 @@ const RewardOption = ({ title, buttonElement, onClick }: RewardOptionProps) => {
   return (
     <button
       onClick={onClick}
-      className="flex h-[186px] flex-1 cursor-pointer flex-col items-center justify-center gap-4 rounded-lg bg-[#FD981B] px-3 text-white  hover:bg-white/40 hover:text-black">
+      className="relative flex h-[186px] flex-1 cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-white/10 px-3 font-pd  text-white hover:bg-white/40 hover:text-black">
+      <CardCornerTopLeft className="absolute top-0 left-0" />
+      <CardCornerTopRight className="absolute top-0 right-0" />
+      <CardCornerBottomLeft className="absolute bottom-0 left-0" />
+      <CardCornerBottomRight className="absolute bottom-0 right-0" />
       {title}
       {buttonElement}
     </button>
@@ -81,7 +91,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ open, onClose }) => {
                 title={
                   <p className="flex h-9 flex-col items-center gap-1 text-center text-lg leading-4">
                     <span>Redeem</span>
-                    <span className="text-pink_950">LUCKY COW lottery</span>
+                    <span className="font-pdb text-pink_950">LUCKY COW lottery</span>
                   </p>
                 }
                 buttonElement={

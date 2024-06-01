@@ -27,7 +27,8 @@ const validationSchema = yup.object({
 const Swap: React.FC = () => {
   const swapSettings = useSelector(getSwapSettings);
   const { requestSwap, initProvider } = useMerlinWallet();
-  const [isLuckyRewardOpen, setIsLuckyRewardOpen] = useState(false);
+  const [isLuckyRewardOpen, setIsLuckyRewardOpen] = useState(true);
+
   useEffect(() => {
     initProvider('swap');
   }, [initProvider]);

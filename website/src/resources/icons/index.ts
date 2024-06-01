@@ -56,3 +56,7 @@ export { ReactComponent as LuckyCoin } from './lucky-coin.svg';
 export { ReactComponent as LuckyCardPickingBorderInner } from './lucky-card-picking-border-inner.svg';
 export { ReactComponent as LuckyCardPickingBorderOuter } from './lucky-card-picking-border-outer.svg';
 export { ReactComponent as LuckyRewardBitUSDTicketBg } from './lucky-reward-bit-usd-ticket-bg.svg';
+export { ReactComponent as CardCornerTopLeft } from './cornerTopLeft.svg';
+export { ReactComponent as CardCornerTopRight } from './cornerTopRight.svg';
+export { ReactComponent as CardCornerBottomLeft } from './cornerBottomLeft.svg';
+export { ReactComponent as CardCornerBottomRight } from './cornerBottomRight.svg';

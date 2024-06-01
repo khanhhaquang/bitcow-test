@@ -10,15 +10,17 @@ import imageLuckyTitle from 'resources/img/luckyCardTitle.webp';
 import imageLuckyTop from 'resources/img/luckyCardBgTop.webp';
 import imageLuckyLeft from 'resources/img/luckyCardBgLeft.webp';
 import imageLuckyRight from 'resources/img/luckyCardBgRight.webp';
-import cornerTopLeft from 'resources/img/cornerTopLeft.svg';
-import cornerTopRight from 'resources/img/cornerTopRight.svg';
-import cornerBottomLeft from 'resources/img/cornerBottomLeft.svg';
-import cornerBottomRight from 'resources/img/cornerBottomRight.svg';
 import imageNextTime from 'resources/img/nextTime.webp';
 import imageJackpot from 'resources/img/jackpot.webp';
 import { Image } from 'antd';
 import styles from './LuckyCard.module.scss';
 import { cn } from 'utils/cn';
+import {
+  CardCornerBottomLeft,
+  CardCornerBottomRight,
+  CardCornerTopLeft,
+  CardCornerTopRight
+} from 'resources/icons';
 
 interface TProps {
   disabled?: boolean;
@@ -87,19 +89,10 @@ const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
             ))}
           </div>
           <div className="relative mx-3 my-3 flex flex-col justify-center bg-white/10 py-2">
-            <div className="absolute top-0 left-0">
-              <Image src={cornerTopLeft} width={16} height={16} />
-            </div>
-            <div className="absolute top-0 right-0">
-              <Image src={cornerTopRight} width={16} height={16} />
-            </div>
-            <div className="absolute bottom-0 left-0 h-[16px]">
-              <Image src={cornerBottomLeft} width={16} height={16} />
-            </div>
-            <div className="absolute bottom-0 right-0 h-[16px]">
-              <Image src={cornerBottomRight} width={16} height={16} />
-            </div>
-
+            <CardCornerTopLeft className="absolute top-0 left-0" />
+            <CardCornerTopRight className="absolute top-0 right-0" />
+            <CardCornerBottomLeft className="absolute bottom-0 left-0" />
+            <CardCornerBottomRight className="absolute bottom-0 right-0" />
             <div className="flex justify-center">
               <Image src={imageLuckyToken} width={103} height={36} />
             </div>

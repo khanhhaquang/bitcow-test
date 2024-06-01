@@ -59,9 +59,8 @@ const LuckyResultHighlight = () => {
     queryFn: LuckyDrawService.getNewsList.call,
     enabled: true
   });
-  // duplicated for infinity loop
+  // duplicated content for infinity loop
   const content = useMemo(() => {
-    // const data = [];
     const winners = newsData?.data || [];
     return (
       <motion.div
@@ -80,6 +79,7 @@ const LuckyResultHighlight = () => {
       </motion.div>
     );
   }, [newsData?.data]);
+
   return (
     <div className="z-10 flex w-screen items-center gap-3 overflow-hidden border-4 border-black bg-[#BA3800] py-[18px] shadow-[6px_6px_0px_0px_rgba(0,0,0,0.10),3px_3px_0px_0px_rgba(0,0,0,0.10)]">
       {content}

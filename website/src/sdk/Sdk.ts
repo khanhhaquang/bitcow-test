@@ -253,6 +253,7 @@ export class Sdk extends ContractRunner {
     this.pools.forEach((pool) => pool.setSigner(signer, address));
     this.poolCreator?.setSigner(signer, address);
     this.pairV1Manager?.setSigner(signer, address);
+    this.lottery?.setSigner(signer, address);
   }
 
   get swapRouter(): string {

@@ -27,7 +27,7 @@ const validationSchema = yup.object({
 const Swap: React.FC = () => {
   const swapSettings = useSelector(getSwapSettings);
   const { requestSwap, initProvider } = useMerlinWallet();
-  const [isLuckyRewardOpen, setIsLuckyRewardOpen] = useState(false);
+  const [luckyId, setLuckyId] = useState('');
 
   useEffect(() => {
     initProvider('swap');
@@ -41,8 +41,8 @@ const Swap: React.FC = () => {
       const inputAmt = values.currencyFrom?.amount;
       const minOutputAmt = values.currencyTo?.amount * (1 - values.slipTolerance / 100);
       if (fromToken && toToken && inputAmt && minOutputAmt && quote) {
-        const result = await requestSwap(quote, quote.outAmt * 0.9, () => {
-          setIsLuckyRewardOpen(true);
+        const result = await requestSwap(quote, quote.outAmt * 0.9, (newLuckyId) => {
+          setLuckyId(newLuckyId);
         });
 
         if (result) {
@@ -71,7 +71,7 @@ const Swap: React.FC = () => {
         onSubmit={onSubmitSwap}>
         <TokenSwap />
       </Formik>
-      <LuckyRewardModal onClose={() => setIsLuckyRewardOpen(false)} open={isLuckyRewardOpen} />
+      <LuckyRewardModal onClose={() => setLuckyId('')} open={!!luckyId} />
     </div>
   );
 };

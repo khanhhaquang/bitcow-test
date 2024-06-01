@@ -12,6 +12,7 @@ import {
   BitUsdIcon
 } from 'resources/icons';
 import useLuckyCard from 'hooks/useLuckyCard';
+import useMerlinWallet from 'hooks/useMerlinWallet';
 
 type LuckyShopProps = {
   children?: ReactNode;
@@ -77,6 +78,8 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
 
 const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
   const { data: luckyCard } = useLuckyCard();
+  const { bitcowSDK } = useMerlinWallet();
+
   const [cardsAmount, setCardsAmount] = useState(1);
 
   const MAX = 10;
@@ -88,6 +91,21 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
     if (cardsAmount === MAX && nextValue > cardsAmount) return;
 
     setCardsAmount(nextValue);
+  };
+
+  const handleBuy = async () => {
+    if (bitcowSDK) {
+      try {
+        const result = await bitcowSDK.lottery?.purchase(
+          1,
+          cardsAmount,
+          '0x5cA6bE430A0E5FB022fC0C842430043FEd80cf2B'
+        );
+        console.log('🚀 ~ handleBuy ~ result:', result);
+      } catch (e) {
+        console.log('🚀 ~ handleBuy ~ e:', e);
+      }
+    }
   };
 
   return (
@@ -128,11 +146,13 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
                 </div>
               </div>
 
-              <button className="group relative flex h-15 min-w-[162px] items-center overflow-hidden p-1.5">
+              <button
+                onClick={() => handleBuy()}
+                className="group relative flex h-15 min-w-[162px] items-center overflow-hidden p-1.5">
                 <LuckyBuyBtnIcon className="absolute inset-0 w-full text-[#FF8D00] group-hover:text-[#FFC276] group-active:text-[#E85E00]" />
                 <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                   <BitUsdIcon />
-                  <span className=" flex items-baseline pt-2">
+                  <span className="flex items-baseline pt-2">
                     {cardsAmount * cardPrice}
                     <small className="text-sm">bitUSD</small>
                   </span>

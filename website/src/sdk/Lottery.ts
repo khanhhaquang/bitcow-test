@@ -7,7 +7,7 @@ import { LOTTERY_ABI } from './abi/Lottery';
 
 export class Lottery extends ContractRunner {
   private lotteryContract: Contract;
-
+  public address: string;
   constructor(
     provider: Provider,
     public contractAddress: string,
@@ -16,6 +16,7 @@ export class Lottery extends ContractRunner {
   ) {
     super(provider, txOption, signer);
     this.lotteryContract = new Contract(contractAddress, LOTTERY_ABI, provider);
+    this.address = contractAddress;
   }
 
   async purchase(cardId: number, quantity: number, token: string) {

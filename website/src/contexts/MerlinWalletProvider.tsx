@@ -58,7 +58,7 @@ interface MerlinWalletContextType {
   requestSwap: (
     quote: Quote,
     minOutputAmt: number,
-    onSuccessCallback?: () => void
+    onSuccessCallback?: (luckyId: string) => void
   ) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
   requestWithdrawLiquidity: (pool: IPool, amt: string) => Promise<boolean>;
@@ -310,6 +310,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         if (wallet.accounts[0].evm != bitcowSDK.getAddress()) {
           const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
           const signer = await browserProvider.getSigner();
+          bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
+          fetchTokenBalances(true, 'set signer');
+
           try {
             const newSignature = await signer.signMessage('hello play bitcow');
             const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
@@ -321,9 +324,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           } catch (error) {
             openNotification({ type: 'error', detail: 'Logging failed' });
           }
-
-          bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
-          fetchTokenBalances(true, 'set signer');
         }
       } else {
         setTokenBalancesCache(undefined);
@@ -474,7 +474,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             LuckyDrawService.getTxnLucky
               .call(result.hash)
               .then((resp) => {
-                if (resp.code === 0) onSuccessCallback?.();
+                if (resp.code === 0 && resp.data.isLucky) {
+                  onSuccessCallback?.(resp.data.luckyId);
+                }
               })
               .catch((e) => {
                 console.log('Check Lucky chance:', e);

@@ -53,7 +53,7 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
           <p className="absolute -left-1 top-0 h-full w-1 bg-white/40" />
           <p className="absolute -right-1 top-0 h-full w-1 bg-white/40" />
           <input
-            className="text-pd h-full w-full bg-white/20 px-4 py-2 outline-0"
+            className="h-full w-full bg-white/20 px-4 py-2 text-center font-micro text-2xl outline-0"
             value={code}
             onChange={(e) => {
               setCode(e.target.value);

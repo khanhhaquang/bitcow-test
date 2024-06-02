@@ -7,7 +7,7 @@
     box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.1), 3px 3px 0px 0px rgba(0, 0, 0, 0.1);
 
     .ant-notification-notice-message {
-      @apply text-2xl leading-none #{!important};
+      @apply font-pdb text-2xl leading-none #{!important};
     }
     .ant-notification-notice-description {
       @apply text-lg text-bc-white-60;

@@ -27,18 +27,14 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return <LuckyCowDecorator />;
   }, [currentPageName]);
 
-  const luckyCowHighLight = useMemo(() => {
-    if (!isLuckyCowPage) return null;
-    return <LuckyResultHighlight />;
-  }, [currentPageName]);
-
   return (
     <Layout
       className={classNames(
         'relative min-h-screen overflow-hidden',
-        isLuckyCowPage ? 'bg-lucky-cow' : 'page-background'
+        isLuckyCowPage ? 'bg-lucky-cow pb-[60px] pt-10' : 'page-background'
       )}>
-      {luckyCowHighLight}
+      {isLuckyCowPage && <LuckyResultHighlight classNames="top-0" />}
+      {isLuckyCowPage && <LuckyResultHighlight classNames="bottom-0" />}
       {luckyCowDecorator}
       {appBgDecorators}
       <Header />
@@ -46,7 +42,6 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {children}
       </Content>
       <Footer />
-      {luckyCowHighLight}
     </Layout>
   );
 };

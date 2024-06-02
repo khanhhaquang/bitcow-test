@@ -29,6 +29,10 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     icon = <NotiErrorIcon className="text-[#FF8D00]" />;
   }
 
+  // DUE TO THE SPACING OF TOP HIGHLIGHT LUCKY COW
+  // PLUS 40px
+  const top = window.location.pathname.startsWith('/lucky-cow') ? 220 : 180;
+
   notification.open({
     message: title,
     description: detail,
@@ -36,7 +40,7 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     icon,
     className: `obric-notification obric-notification--${type}`,
     closeIcon: <CloseIcon className="bottom-1 h-full w-full text-white/60" />,
-    top: 180,
+    top,
     duration: 6
   });
 };

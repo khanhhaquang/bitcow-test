@@ -4,6 +4,8 @@ import { FC, useEffect, useMemo, useState } from 'react';
 
 import { LuckyCoin } from 'resources/icons';
 import { ILuckNews, LuckyDrawService } from 'services/luckyDraw';
+import { cn } from 'utils/cn';
+import { displayAddress } from 'wallet/utils/formatter';
 
 type LuckyHightLightItemProps = Pick<ILuckNews, 'address' | 'amount' | 'token' | 'tokenIcon'>;
 
@@ -25,15 +27,11 @@ const LuckyHightLightItem: FC<LuckyHightLightItemProps> = ({
   const onImgError = () => {
     setIconStatus(LuckyHighLightIconStatus.ERROR);
   };
-  const compressedAddress =
-    address?.length > 4
-      ? `${address.slice(0, 2)}...${address.slice(address.length - 2, address.length)}`
-      : address;
 
   return (
-    <div className="flex flex-nowrap items-center gap-2 text-2xl leading-6">
+    <div className="flex flex-nowrap items-center gap-x-2 text-2xl leading-6">
       <span className="whitespace-nowrap font-pd text-white">
-        {compressedAddress.toUpperCase()} just won:
+        {displayAddress(address).toUpperCase()} just won:
       </span>
       <span className="whitespace-nowrap font-pdb text-color_yellow_3">
         {amount} {token}
@@ -53,7 +51,7 @@ const LuckyHightLightItem: FC<LuckyHightLightItemProps> = ({
   );
 };
 
-const LuckyResultHighlight = () => {
+const LuckyResultHighlight: FC<{ classNames?: string }> = ({ classNames }) => {
   const {
     data: newsData,
     refetch,
@@ -92,7 +90,11 @@ const LuckyResultHighlight = () => {
   }, [isFetched, isLoading]);
 
   return (
-    <div className="z-10 flex w-screen items-center gap-3 overflow-hidden border-4 border-black bg-[#BA3800] py-[18px] shadow-[6px_6px_0px_0px_rgba(0,0,0,0.10),3px_3px_0px_0px_rgba(0,0,0,0.10)]">
+    <div
+      className={cn(
+        'fixed inset-x-0 z-10 flex h-15 w-screen items-center gap-3 overflow-hidden border-y-4 border-black bg-[#BA3800] shadow-[6px_6px_0px_0px_rgba(0,0,0,0.10),3px_3px_0px_0px_rgba(0,0,0,0.10)]',
+        classNames
+      )}>
       {content}
       {content}
     </div>

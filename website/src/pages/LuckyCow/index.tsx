@@ -85,7 +85,7 @@ const LuckyCow = () => {
     } else {
       setStatus(LuckyCowStatus.BUY);
     }
-  }, [userInfo?.isGameActive, userInfo?.freePlayGame]);
+  }, [userInfo?.isGameActive, userInfo?.freePlayGame, userInfo?.gameProgress]);
 
   useEffect(() => {
     if (playGameRequestResult?.code === 0) {

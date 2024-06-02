@@ -83,7 +83,7 @@ const LuckyCow = () => {
 
     if (userInfo?.isGameActive) {
       if (userInfo?.gameProgress === GameProgress.CARD_SELECTED) {
-        setStatus(LuckyCowStatus.CARDS_PICKING);
+        setStatus(LuckyCowStatus.CARDS_SCRATCHING);
       } else {
         setStatus(LuckyCowStatus.CARDS_PICKING);
       }

@@ -133,22 +133,6 @@ const Buy: FC<{ onBuyCallback: (hash: string) => void; onClickRedeemCode: () => 
               increaseResult.hash,
               'Increased allowance successfully'
             );
-
-            const result = await purchase({ amount: cardsAmount });
-            if (result.status === 1) {
-              openTxSuccessNotification(
-                currentNetwork.chainConfig.blockExplorerUrls[0],
-                result.hash,
-                'Buy cards successfully'
-              );
-              onBuyCallback(result.hash);
-            } else if (result.status === 0) {
-              openTxErrorNotification(
-                currentNetwork.chainConfig.blockExplorerUrls[0],
-                result.hash,
-                'Failed to buy'
-              );
-            }
           } else if (increaseResult.status === 0) {
             openTxErrorNotification(
               currentNetwork.chainConfig.blockExplorerUrls[0],
@@ -156,6 +140,22 @@ const Buy: FC<{ onBuyCallback: (hash: string) => void; onClickRedeemCode: () => 
               'Failed to increase'
             );
           }
+        }
+
+        const result = await purchase({ amount: cardsAmount });
+        if (result.status === 1) {
+          openTxSuccessNotification(
+            currentNetwork.chainConfig.blockExplorerUrls[0],
+            result.hash,
+            'Buy cards successfully'
+          );
+          onBuyCallback(result.hash);
+        } else if (result.status === 0) {
+          openTxErrorNotification(
+            currentNetwork.chainConfig.blockExplorerUrls[0],
+            result.hash,
+            'Failed to buy'
+          );
         }
       } catch (e) {
         console.log('🚀 ~ handleBuy ~ e:', e);

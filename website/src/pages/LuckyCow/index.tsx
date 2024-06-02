@@ -72,18 +72,14 @@ const LuckyCow = () => {
   }, [wallet, status]);
 
   useEffect(() => {
-    if (userInfo?.freePlayGame) {
-      setStatus(LuckyCowStatus.REDEEM);
-      return;
-    }
     if (userInfo?.isGameActive) {
       if (userInfo?.gameProgress === GameProgress.PAID) {
         setStatus(LuckyCowStatus.CARDS_PICKING);
-      }
-
-      if (userInfo?.gameProgress === GameProgress.CARD_SELECTED) {
+      } else {
         setStatus(LuckyCowStatus.CARDS_SCRATCHING);
       }
+    } else if (userInfo?.freePlayGame) {
+      setStatus(LuckyCowStatus.REDEEM);
     } else {
       setStatus(LuckyCowStatus.BUY);
     }

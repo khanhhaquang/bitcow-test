@@ -92,7 +92,7 @@ const AddLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           <div className="w-full bg-bc-pool px-4 pt-4 pb-6 text-bc-white">
             <h2 className="pb-3 font-micro text-2xl uppercase text-white">Add liquidity</h2>
             <hr className="h-[1.5px] border-0 bg-white/20" />
-            <div className="mt-9 flex w-full flex-col px-5 font-pg tablet:pb-[88px]">
+            <div className="mt-9 flex w-full flex-col px-5 font-pd tablet:pb-[88px]">
               <div className="relative flex flex-col items-center">
                 <div className="relative w-full pt-4 pb-0">
                   <TokenLiquidity

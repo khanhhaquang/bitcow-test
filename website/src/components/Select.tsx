@@ -27,7 +27,7 @@ function SelectRow({
         className
       )}>
       <img className="h-5 w-5 rounded-full" src={icon} alt={`${label} icon`} />
-      <div className="truncate font-pg text-lg">{label}</div>
+      <div className="truncate font-pd text-lg">{label}</div>
       {suffix && <div className="ml-auto">{suffix}</div>}
     </div>
   );

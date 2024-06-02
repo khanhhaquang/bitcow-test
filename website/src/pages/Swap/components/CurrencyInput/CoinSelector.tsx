@@ -154,7 +154,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
 
   const renderHeaderSearch = useMemo(() => {
     return (
-      <div className="flex flex-col font-pg">
+      <div className="flex flex-col font-pd">
         <h2 className="border-b border-white/20 pb-3 font-micro text-2xl text-white">Token</h2>
         <div className="searchInput relative mt-6">
           <Input
@@ -188,7 +188,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
           itemKey={(item) => `list-item-${item.token.address}`}>
           {(item) => (
             <List.Item
-              className="cursor-pointer !border-0 !px-0 !py-2 font-pg hover:bg-white/10 active:bg-black/10"
+              className="cursor-pointer !border-0 !px-0 !py-2 font-pd hover:bg-white/10 active:bg-black/10"
               onClick={() => onSelectToken(item.token, item.searched)}>
               <CoinRow item={item} />
             </List.Item>

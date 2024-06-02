@@ -101,7 +101,7 @@ const LuckyCow = () => {
       <LuckyCodeModal
         open={isLuckyCodeOpen}
         onCancel={() => setIsLuckyCodeOpen(false)}
-        onSubmit={async () => {
+        onSubmit={() => {
           setStatus(LuckyCowStatus.REDEEM);
           setIsLuckyCodeOpen(false);
         }}

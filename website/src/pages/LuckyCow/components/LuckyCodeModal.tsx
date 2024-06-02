@@ -61,13 +61,14 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
               if (error) setError('');
             }}
           />
-          {!!error && <span className="absolute -bottom-8 left-0 text-red-500">{error}</span>}
         </div>
 
         <p className="text-center font-pd text-lg text-white">
           Input a LUCKY CODE to redeem your <br />
           <small className="text-lg text-[#6B001E]">LUCKY COW lottery card</small>
         </p>
+
+        {!!error && <p className="text-center font-pd text-[#FF1F00]">{error}</p>}
 
         <PixelButton
           disabled={!code}

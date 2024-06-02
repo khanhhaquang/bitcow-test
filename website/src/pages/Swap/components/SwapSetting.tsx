@@ -48,7 +48,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
   return (
     <div className="w-full bg-bc-swap px-4 pt-4 pb-6 text-white">
       <div className="border-b border-white/20 pb-3 font-micro text-2xl">Settings</div>
-      <div className="mt-9 font-pg">
+      <div className="mt-9 font-pd">
         <SubTitle>Slippage Tolerance</SubTitle>
         <div className="flex gap-2">
           <div className="relative flex h-10 w-full items-center text-lg">
@@ -70,7 +70,7 @@ const SwapSetting: React.FC<TProps> = ({ onClose }) => {
           </Button> */}
         </div>
       </div>
-      <div className="mt-3 font-pg">
+      <div className="mt-3 font-pd">
         <SubTitle>Transaction Deadline</SubTitle>
         <div className="relative flex h-10 w-full items-center gap-x-4 text-lg">
           <PositiveFloatNumInput

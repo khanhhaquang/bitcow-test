@@ -173,7 +173,7 @@ const CreatePoolUi: React.FC<TProps> = () => {
         </div>
         <div className="flex flex-col items-center justify-center">
           {getError() && (
-            <div className="mb-3 font-pg text-sm leading-none text-orange-400">{getError()}</div>
+            <div className="mb-3 font-pd text-sm leading-none text-orange-400">{getError()}</div>
           )}
           <PixelButton
             className="mt-3 text-2xl"

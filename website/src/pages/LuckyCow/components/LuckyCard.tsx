@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Card from 'components/Card';
 import ScratchCard from './ScratchCard';
 import imageScratchChest from 'resources/img/scratchChest.webp';
@@ -28,10 +28,12 @@ interface TProps {
   cardInfo: ILuckyCardInfo;
   disabled?: boolean;
   revealed?: boolean;
+  onComplete: () => void;
 }
 
-const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed }) => {
+const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete }) => {
   const { data: tokenInfo } = useTokenAwardInfo();
+  const [finishedAmount, setFinishedAmount] = useState(0);
   const cardRef = useRef<ScratchCard>(null);
   const finishPercent = 70;
   const fadeOutOnComplete = true;
@@ -50,6 +52,14 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed }) => {
       return numString.substring(0, 3);
     } else {
       return numString;
+    }
+  };
+
+  const onCompleteScratch = () => {
+    setFinishedAmount(finishedAmount + 1);
+    console.log('complete', finishedAmount);
+    if (finishedAmount >= 24) {
+      onComplete();
     }
   };
 
@@ -82,7 +92,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed }) => {
                 revealed={revealed}
                 fadeOutOnComplete={fadeOutOnComplete}
                 finishPercent={finishPercent}
-                onComplete={() => console.log('complete', index)}>
+                onComplete={onCompleteScratch}>
                 <div className="flex h-full w-full items-center justify-center">
                   {value > 0 ? (
                     <Image src={imageJackpot} width={58} height={39} />
@@ -115,7 +125,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed }) => {
                     revealed={revealed}
                     fadeOutOnComplete={fadeOutOnComplete}
                     finishPercent={finishPercent}
-                    onComplete={() => console.log('complete', index)}>
+                    onComplete={onCompleteScratch}>
                     <div className="flex h-full w-full items-center justify-center">
                       <Image
                         src={tokenInfo.find((w) => w.tokenSymbol === value)?.tokenIcon}
@@ -152,7 +162,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed }) => {
                     brushSize={brushSize}
                     fadeOutOnComplete={fadeOutOnComplete}
                     finishPercent={finishPercent}
-                    onComplete={() => console.log('complete', index)}>
+                    onComplete={onCompleteScratch}>
                     <div
                       className={cn(
                         styles.strokeText,

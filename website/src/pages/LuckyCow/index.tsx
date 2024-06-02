@@ -93,10 +93,9 @@ const LuckyCow = () => {
       if (userInfo?.gameProgress === 2) {
         setStatus(LuckyCowStatus.CARDS_PICKING);
         return;
-      }else{
+      } else {
         setStatus(LuckyCowStatus.REDEEM);
       }
-      
     } else {
       setStatus(LuckyCowStatus.BUY);
       return;

@@ -16,6 +16,7 @@ interface TProps {
 }
 const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const [revealedAll, setRevealedAll] = useState(false);
+  const [completeAmount, setCompleteAmount] = useState(0);
   const { data: userInfo } = useUserInfo();
   const data = useSelector(getPickedCard);
   const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));
@@ -28,6 +29,13 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
 
   const onClickRevealAll = () => {
     setRevealedAll(true);
+  };
+  const onCompleteCard = () => {
+    setCompleteAmount(completeAmount + 1);
+    console.log('onCompleteCard', completeAmount);
+    if (completeAmount >= data.length) {
+      setRevealedAll(true);
+    }
   };
   const onClickClaim = async () => {
     try {
@@ -60,7 +68,8 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
                 <LuckyCard
                   cardInfo={value}
                   disabled={index != activeIndex}
-                  revealed={revealedAll}></LuckyCard>
+                  revealed={revealedAll}
+                  onComplete={onCompleteCard}></LuckyCard>
               </div>
             );
           })}

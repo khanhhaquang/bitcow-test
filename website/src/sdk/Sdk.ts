@@ -21,6 +21,7 @@ import {
 import { uiAmountToContractAmount } from './utils/common';
 import { PairV1Manager } from './PairV1Manager';
 import { Lottery } from './Lottery';
+import { Erc20 } from './Erc20';
 
 export class Sdk extends ContractRunner {
   pools: Pool[] = [];
@@ -32,6 +33,7 @@ export class Sdk extends ContractRunner {
   poolCreator?: PoolCreator;
 
   lottery?: Lottery;
+  lotteryToken?: Erc20;
 
   private readonly routerContract: Contract;
 
@@ -95,6 +97,10 @@ export class Sdk extends ContractRunner {
 
     this.lottery = config.lottery
       ? new Lottery(provider, config.lottery, txOption, signer)
+      : undefined;
+
+    this.lotteryToken = config.lotteryToken
+      ? new Erc20(provider, config.lotteryToken, txOption, signer)
       : undefined;
   }
   getLocalTokens(localPairs: SearchPairMessage[]) {
@@ -254,6 +260,7 @@ export class Sdk extends ContractRunner {
     this.poolCreator?.setSigner(signer, address);
     this.pairV1Manager?.setSigner(signer, address);
     this.lottery?.setSigner(signer, address);
+    this.lotteryToken?.setSigner(signer, address);
   }
 
   get swapRouter(): string {

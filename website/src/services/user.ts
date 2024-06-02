@@ -1,12 +1,17 @@
 import { IResponse } from 'types/common';
 import { axiosInstance } from 'config/axios';
 
+export enum GameProgress {
+  PAID = 1,
+  CARD_SELECTED = 2
+}
+
 export interface UserInfo {
   isGameActive: boolean;
   freePlayGame: boolean;
   freePlayCount: number;
   freePlayOrderID: number;
-  gameProgress: number;
+  gameProgress?: GameProgress;
 }
 
 //TODO:  sync from

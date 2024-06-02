@@ -13,8 +13,14 @@ import {
 } from 'resources/icons';
 import useLuckyCard from 'hooks/useLuckyCard';
 import useMerlinWallet from 'hooks/useMerlinWallet';
-import { openTxErrorNotification, openTxSuccessNotification } from 'utils/notifications';
+import {
+  openErrorNotification,
+  openTxErrorNotification,
+  openTxPendingNotification,
+  openTxSuccessNotification
+} from 'utils/notifications';
 import useNetwork from 'hooks/useNetwork';
+import useLuckyShop from 'hooks/useLuckyShop';
 
 type LuckyShopProps = {
   children?: ReactNode;
@@ -80,6 +86,8 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
 
 const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
   const { data: luckyCard } = useLuckyCard();
+  const { allowance, isIncreasingAllowance, isPurchasing, purchase, increaseAllowance } =
+    useLuckyShop();
   const { bitcowSDK } = useMerlinWallet();
   const { currentNetwork } = useNetwork();
 
@@ -87,7 +95,10 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
 
   const MAX = 10;
 
+  const isProcessing = isIncreasingAllowance || isPurchasing;
+
   const cardPrice = luckyCard?.price || 0;
+  const totalPrice = cardsAmount * cardPrice;
 
   const handleChangeAmount = (nextValue: number) => {
     if (cardsAmount <= 1 && nextValue < cardsAmount) return;
@@ -99,26 +110,42 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
   const handleBuy = async () => {
     if (bitcowSDK) {
       try {
-        const result = await bitcowSDK.lottery?.purchase(
-          1,
-          cardsAmount,
-          '0x5cA6bE430A0E5FB022fC0C842430043FEd80cf2B'
-        );
-        if (result.status === 1) {
-          openTxSuccessNotification(
-            currentNetwork.chainConfig.blockExplorerUrls[0],
-            result.hash,
-            'Buy cards successfully'
-          );
-        } else if (result.status === 0) {
-          openTxErrorNotification(
-            currentNetwork.chainConfig.blockExplorerUrls[0],
-            result.hash,
-            'Failed to buy'
-          );
+        if (allowance < totalPrice) {
+          openTxPendingNotification('Increasing allowance');
+          const increaseResult = await increaseAllowance({ amount: totalPrice });
+
+          if (increaseResult.status === 1) {
+            openTxSuccessNotification(
+              currentNetwork.chainConfig.blockExplorerUrls[0],
+              increaseResult.hash,
+              'Increased allowance successfully'
+            );
+
+            const result = await purchase({ amount: cardsAmount });
+            if (result.status === 1) {
+              openTxSuccessNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
+                result.hash,
+                'Buy cards successfully'
+              );
+            } else if (result.status === 0) {
+              openTxErrorNotification(
+                currentNetwork.chainConfig.blockExplorerUrls[0],
+                result.hash,
+                'Failed to buy'
+              );
+            }
+          } else if (increaseResult.status === 0) {
+            openTxErrorNotification(
+              currentNetwork.chainConfig.blockExplorerUrls[0],
+              increaseResult.hash,
+              'Failed to increase'
+            );
+          }
         }
       } catch (e) {
         console.log('🚀 ~ handleBuy ~ e:', e);
+        openErrorNotification({ detail: 'Failed to process purchasing' });
       }
     }
   };
@@ -141,38 +168,44 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
               <b className="font-pdb text-[#FF8D00]">LUCKY COW lottery card?</b>
             </h3>
 
-            <div className="mt-5 flex gap-x-6">
-              <div className="relative flex h-15 min-w-[101px] overflow-hidden p-1.5">
-                <LuckyCardsCounterIcon className="absolute inset-0 w-full" />
-                <p className="relative flex h-full flex-1 shrink-0 items-center justify-center bg-transparent pt-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
-                  {cardsAmount}
-                </p>
-                <div className="relative flex h-full w-7 shrink-0 flex-col justify-between border-l-[3px] border-[#FF6B00] bg-[#FF6B00]">
-                  <button
-                    onClick={() => handleChangeAmount(cardsAmount + 1)}
-                    className="flex h-[22px] items-center justify-center bg-[#FF8D00] text-[#6B001E] hover:bg-[#FFC276]">
-                    <CounterUpIcon />
-                  </button>
-                  <button
-                    onClick={() => handleChangeAmount(cardsAmount - 1)}
-                    className="flex h-[22px] items-center justify-center bg-[#FF8D00] text-[#6B001E] hover:bg-[#FFC276]">
-                    <CounterDownIcon />
-                  </button>
-                </div>
-              </div>
+            <div className="mt-5 flex justify-center gap-x-6">
+              {isProcessing ? (
+                <span className="font-pdb text-2xl text-[#FF8D00]">Processing...</span>
+              ) : (
+                <>
+                  <div className="relative flex h-15 min-w-[101px] overflow-hidden p-1.5">
+                    <LuckyCardsCounterIcon className="absolute inset-0 w-full" />
+                    <p className="relative flex h-full flex-1 shrink-0 items-center justify-center bg-transparent pt-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
+                      {cardsAmount}
+                    </p>
+                    <div className="relative flex h-full w-7 shrink-0 flex-col justify-between border-l-[3px] border-[#FF6B00] bg-[#FF6B00]">
+                      <button
+                        onClick={() => handleChangeAmount(cardsAmount + 1)}
+                        className="flex h-[22px] items-center justify-center bg-[#FF8D00] text-[#6B001E] hover:bg-[#FFC276]">
+                        <CounterUpIcon />
+                      </button>
+                      <button
+                        onClick={() => handleChangeAmount(cardsAmount - 1)}
+                        className="flex h-[22px] items-center justify-center bg-[#FF8D00] text-[#6B001E] hover:bg-[#FFC276]">
+                        <CounterDownIcon />
+                      </button>
+                    </div>
+                  </div>
 
-              <button
-                onClick={() => handleBuy()}
-                className="group relative flex h-15 min-w-[162px] items-center overflow-hidden p-1.5">
-                <LuckyBuyBtnIcon className="absolute inset-0 w-full text-[#FF8D00] group-hover:text-[#FFC276] group-active:text-[#E85E00]" />
-                <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
-                  <BitUsdIcon />
-                  <span className="flex items-baseline pt-2">
-                    {cardsAmount * cardPrice}
-                    <small className="text-sm">bitUSD</small>
-                  </span>
-                </p>
-              </button>
+                  <button
+                    onClick={() => handleBuy()}
+                    className="group relative flex h-15 min-w-[162px] items-center overflow-hidden p-1.5">
+                    <LuckyBuyBtnIcon className="absolute inset-0 w-full text-[#FF8D00] group-hover:text-[#FFC276] group-active:text-[#E85E00]" />
+                    <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
+                      <BitUsdIcon />
+                      <span className="flex items-baseline pt-2">
+                        {totalPrice}
+                        <small className="text-sm">bitUSD</small>
+                      </span>
+                    </p>
+                  </button>
+                </>
+              )}
             </div>
 
             <a

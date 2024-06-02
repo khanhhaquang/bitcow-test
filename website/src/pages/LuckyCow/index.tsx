@@ -11,6 +11,7 @@ import { useFreeLuckyGame } from 'hooks/useFreeLuckyGame';
 
 import LuckyCardSlider from './components/LuckyCardSlider';
 import { useLocation } from 'react-router-dom';
+import { GameProgress } from 'services/user';
 
 export enum LuckyCowStatus {
   PRELOADING,
@@ -73,8 +74,15 @@ const LuckyCow = () => {
       return;
     }
     if (userInfo?.isGameActive) {
+      if (userInfo?.gameProgress === GameProgress.PAID) {
+        setStatus(LuckyCowStatus.CARDS_PICKING);
+      }
+
+      if (userInfo?.gameProgress === GameProgress.CARD_SELECTED) {
+        setStatus(LuckyCowStatus.CARDS_SCRATCHING);
+      }
+    } else {
       setStatus(LuckyCowStatus.BUY);
-      return;
     }
   }, [userInfo?.isGameActive, userInfo?.freePlayGame]);
 

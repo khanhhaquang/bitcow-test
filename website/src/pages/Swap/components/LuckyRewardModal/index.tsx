@@ -1,5 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ButtonHTMLAttributes, FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import BitcowModal from 'components/BitcowModal';
 import {
@@ -11,10 +13,8 @@ import {
 } from 'resources/icons';
 import { ReactComponent as BitUSDLuckyIcon } from 'resources/icons/bitUSDLucky.svg';
 import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
-import InvitationFirework from 'resources/img/lucky-draw/invitation-firework.webp';
-import LotteryTicket from 'resources/img/lucky-draw/lotteryTicket.webp';
-import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import InvitationFirework from 'resources/img/luckyInvitationFirework.webp';
+import LotteryTicket from 'resources/img/luckyLotteryTicket.webp';
 import { ITxnLucky, LuckyDrawService, RewardChoice } from 'services/luckyDraw';
 
 interface RewardOptionProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
@@ -34,7 +34,6 @@ const RewardOption = ({ disabled, children, ...rest }: RewardOptionProps) => {
 };
 
 interface LuckyRewardModalProps {
-  open?: boolean;
   onClose?: () => void;
   luckyTxn?: ITxnLucky;
 }

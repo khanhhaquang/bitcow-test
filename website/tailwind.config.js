@@ -46,6 +46,7 @@ module.exports = {
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
         white_color_list_hover: '#EBEDF4',
         pink_950: '#6B001E',
+        color_yellow_3: '#E0A828',
 
         bc: {
           white: {

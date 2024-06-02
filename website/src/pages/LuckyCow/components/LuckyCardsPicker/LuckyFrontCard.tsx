@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-import FrontCardImg from 'resources/img/lucky-draw/frontCard.jpeg';
+import FrontCardImg from 'resources/img/luckyFrontCard.webp';
 import { cn } from 'utils/cn';
 
 export enum CardPickingStatus {

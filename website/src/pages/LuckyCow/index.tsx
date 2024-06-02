@@ -27,7 +27,7 @@ const LuckyCow = () => {
 
   const { wallet } = useMerlinWallet();
   const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
-  const { data: userInfo, isLoading: isLoadingUserInfo } = useUserInfo();
+  const { data: userInfo } = useUserInfo();
   const [status, setStatus] = useState<LuckyCowStatus>(
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );
@@ -91,7 +91,7 @@ const LuckyCow = () => {
     }
   }, [playGameRequestResult]);
 
-  if (wallet && isLoadingUserInfo) return <Loader />;
+  if (!userInfo) return <Loader />;
 
   if (isPlayGameRequesting) return <Loader>Preparing your card...</Loader>;
 

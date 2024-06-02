@@ -43,8 +43,8 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   };
   const onClickClaim = async () => {
     try {
-      const result = await LuckyDrawService.claim.call(userInfo.orderID);
-      console.log('claim order: ', userInfo.orderID);
+      const result = await LuckyDrawService.claim.call(userInfo?.orderID);
+      console.log('claim order: ', userInfo?.orderID);
       if (result.code === 0) {
         console.log('claim hash: ', result.data.claimHash);
         dispatch(luckyCowAction.SET_CLAIM_HASH(result.data.claimHash));

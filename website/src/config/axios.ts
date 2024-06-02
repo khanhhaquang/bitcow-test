@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://ec2-13-213-40-242.ap-southeast-1.compute.amazonaws.com:8866/' //TODO:: add base url
+  baseURL: 'http://ec2-13-213-40-242.ap-southeast-1.compute.amazonaws.com:8866/',
+  headers: {
+    'Cache-Control': 'no-cache'
+  }
 });
 
 const axiosSetupInterceptors = (signature: string) => {

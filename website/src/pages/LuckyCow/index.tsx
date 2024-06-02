@@ -22,6 +22,8 @@ export enum LuckyCowStatus {
   CARDS_SCRATCHING
 }
 
+const MAX_CARDS = 10;
+
 const LuckyCow = () => {
   const { state } = useLocation();
   const { isFromLuckyChance } = (state || {}) as { isFromLuckyChance?: boolean };
@@ -34,12 +36,13 @@ const LuckyCow = () => {
   );
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
   const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(false);
+
   const content = useMemo(() => {
-    if (!wallet) return <NotConnected />;
     switch (status) {
       case LuckyCowStatus.BUY:
         return (
           <Buy
+            numberOfCards={MAX_CARDS}
             onBuyCallback={(hash: string) => {
               playGame(hash);
             }}
@@ -57,8 +60,8 @@ const LuckyCow = () => {
       case LuckyCowStatus.CARDS_PICKING:
         return (
           <LuckyCardsPicker
-            numsOfCard={10}
-            numsOfSelectedCard={userInfo.quantity}
+            numsOfCard={MAX_CARDS}
+            numsOfSelectedCard={userInfo?.quantity}
             onStartScratching={() => {
               setStatus(LuckyCowStatus.CARDS_SCRATCHING);
             }}
@@ -100,6 +103,13 @@ const LuckyCow = () => {
       setStatus(LuckyCowStatus.CARDS_PICKING);
     }
   }, [playGameRequestResult]);
+
+  if (!wallet)
+    return (
+      <div className="flex flex-col items-center pt-20">
+        <NotConnected />
+      </div>
+    );
 
   if (!userInfo) return <Loader />;
 

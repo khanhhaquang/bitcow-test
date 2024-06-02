@@ -37,7 +37,10 @@ const LuckyCardPickers = ({
     setCardMarginRight(remainWidth / (numsOfCard - 1) - cardWidth);
   };
 
-  const currentSelected = cardsStatus.filter((status) => status === CardPickingStatus.SELECTED);
+  const currentSelected = useMemo(
+    () => cardsStatus.filter((status) => status === CardPickingStatus.SELECTED) || [],
+    [cardsStatus]
+  );
 
   const isPickEnoughCards = useMemo(() => {
     if (numsOfSelectedCard === 0) return false;
@@ -70,7 +73,8 @@ const LuckyCardPickers = ({
       }
       return acc;
     }, []);
-    const result = await LuckyDrawService.pickCard.call(userInfo.orderID, selectedIndex);
+
+    const result = await LuckyDrawService.pickCard.call(userInfo?.orderID, selectedIndex);
     console.log(userInfo.orderID);
     // const result = await pickCard(selectedIndex);
     if (result.code === 0) {
@@ -139,7 +143,7 @@ const LuckyCardPickers = ({
         <div className="relative z-20 -mt-[30px] flex h-[77px] w-[407px] items-center justify-center bg-white bg-clip-content p-1 font-pd text-2xl text-pink_950">
           <LuckyCardPickingBorderOuter className="absolute" />
           <LuckyCardPickingBorderInner className="absolute" />
-          <span>Pick {numsOfSelectedCard - currentSelected?.length} cards </span>
+          <span>Pick {numsOfSelectedCard - currentSelected.length} cards </span>
         </div>
       )}
     </div>

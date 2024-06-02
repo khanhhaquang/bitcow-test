@@ -72,6 +72,8 @@ const LuckyCow = () => {
   }, [wallet, status]);
 
   useEffect(() => {
+    if (isFromLuckyChance) return;
+
     if (userInfo?.isGameActive) {
       if (userInfo?.gameProgress === GameProgress.PAID) {
         setStatus(LuckyCowStatus.CARDS_PICKING);

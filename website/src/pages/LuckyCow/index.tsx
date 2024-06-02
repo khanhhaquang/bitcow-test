@@ -58,7 +58,7 @@ const LuckyCow = () => {
         return (
           <LuckyCardsPicker
             numsOfCard={10}
-            numsOfSelectedCard={userInfo.quantity}
+            numsOfSelectedCard={userInfo?.quantity}
             onStartScratching={() => {
               setStatus(LuckyCowStatus.CARDS_SCRATCHING);
             }}

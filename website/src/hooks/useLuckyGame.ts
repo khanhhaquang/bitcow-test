@@ -21,7 +21,7 @@ export const useLuckyGame = () => {
 
   const { mutateAsync: pickCard } = useMutation({
     mutationFn: (cardIndexID: string[]) =>
-      LuckyDrawService.pickCard.call(userInfo.orderID, cardIndexID) // onSuccess: (data) => data.code === 0 && refetchUserPoint()
+      LuckyDrawService.pickCard.call(userInfo?.orderID, cardIndexID) // onSuccess: (data) => data.code === 0 && refetchUserPoint()
   });
 
   return { freePlayGame, playGame, pickCard, isPlayGameRequesting, playGameRequestResult };

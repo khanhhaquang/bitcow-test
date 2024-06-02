@@ -98,10 +98,11 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
   );
 };
 
-const Buy: FC<{ onBuyCallback: (hash: string) => void; onClickRedeemCode: () => void }> = ({
-  onClickRedeemCode,
-  onBuyCallback
-}) => {
+const Buy: FC<{
+  numberOfCards: number;
+  onBuyCallback: (hash: string) => void;
+  onClickRedeemCode: () => void;
+}> = ({ onClickRedeemCode, onBuyCallback, numberOfCards }) => {
   const { data: luckyCard } = useLuckyCard();
   const { allowance, isIncreasingAllowance, isPurchasing, purchase, increaseAllowance } =
     useLuckyShop();
@@ -110,8 +111,6 @@ const Buy: FC<{ onBuyCallback: (hash: string) => void; onClickRedeemCode: () => 
 
   const [cardsAmount, setCardsAmount] = useState(1);
 
-  const MAX = 10;
-
   const isProcessing = isIncreasingAllowance || isPurchasing;
 
   const cardPrice = luckyCard?.price || 0;
@@ -119,7 +118,7 @@ const Buy: FC<{ onBuyCallback: (hash: string) => void; onClickRedeemCode: () => 
 
   const handleChangeAmount = (nextValue: number) => {
     if (cardsAmount <= 1 && nextValue < cardsAmount) return;
-    if (cardsAmount === MAX && nextValue > cardsAmount) return;
+    if (cardsAmount === numberOfCards && nextValue > cardsAmount) return;
 
     setCardsAmount(nextValue);
   };

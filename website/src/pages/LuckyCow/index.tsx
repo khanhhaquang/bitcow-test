@@ -22,6 +22,8 @@ export enum LuckyCowStatus {
   CARDS_SCRATCHING
 }
 
+const MAX_CARDS = 10;
+
 const LuckyCow = () => {
   const { state } = useLocation();
   const { isFromLuckyChance } = (state || {}) as { isFromLuckyChance?: boolean };
@@ -40,6 +42,7 @@ const LuckyCow = () => {
       case LuckyCowStatus.BUY:
         return (
           <Buy
+            numberOfCards={MAX_CARDS}
             onBuyCallback={(hash: string) => {
               playGame(hash);
             }}
@@ -57,7 +60,7 @@ const LuckyCow = () => {
       case LuckyCowStatus.CARDS_PICKING:
         return (
           <LuckyCardsPicker
-            numsOfCard={10}
+            numsOfCard={MAX_CARDS}
             numsOfSelectedCard={userInfo?.quantity}
             onStartScratching={() => {
               setStatus(LuckyCowStatus.CARDS_SCRATCHING);

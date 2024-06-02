@@ -115,7 +115,7 @@ module.exports = {
       color_tooltip: '#363B42',
       color_list_hover: 'rgba(255, 255, 255, 0.08)',
       color_yellow_1: '#FFC700',
-      color_yellow_2: '#FF8D00',
+      color_yellow_2: '#FF8D00'
     }),
     boxShadow: {
       sm: '4px 4px 0px #2D2D2D',
@@ -133,9 +133,7 @@ module.exports = {
       Rany: 'Rany, sans-serif',
       micro: ['Micro', ...defaultTheme.fontFamily.sans],
       pd: ['Pixter Display', ...defaultTheme.fontFamily.sans],
-      pdb: ['Pixter Display Bold', ...defaultTheme.fontFamily.sans],
-      pgb: ['Pixter Granular Bold', ...defaultTheme.fontFamily.sans],
-      pg: ['Pixter Granular', ...defaultTheme.fontFamily.sans]
+      pdb: ['Pixter Display Bold', ...defaultTheme.fontFamily.sans]
     }
   },
   plugins: [

@@ -16,6 +16,8 @@ import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
 import InvitationFirework from 'resources/img/luckyInvitationFirework.webp';
 import LotteryTicket from 'resources/img/luckyLotteryTicket.webp';
 import { ITxnLucky, LuckyDrawService, RewardChoice } from 'services/luckyDraw';
+import { openTxSuccessNotification } from 'utils/notifications';
+import useNetwork from 'hooks/useNetwork';
 
 interface RewardOptionProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 const RewardOption = ({ disabled, children, ...rest }: RewardOptionProps) => {
@@ -39,6 +41,7 @@ interface LuckyRewardModalProps {
 }
 const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
   const navigate = useNavigate();
+  const { currentNetwork } = useNetwork();
 
   const { mutateAsync: chooseOptionRequest, isPending } = useMutation({
     mutationFn: (data: { luckyId: number; choice: RewardChoice }) =>
@@ -77,9 +80,15 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
                     choice: RewardChoice.RECEIVE_AIRDROP
                   })
                     .then((result) => {
-                      onClose();
-                      console.log(result);
-                      //TODO: show airdropHash here
+                      console.log('🚀 chooseOptionRequest ~ RECEIVE_AIRDROP:', result);
+                      if (result.code === 0 && result.data?.airdropHash) {
+                        openTxSuccessNotification(
+                          currentNetwork.chainConfig.blockExplorerUrls[0],
+                          result.data.airdropHash,
+                          'Airdrop has been received'
+                        );
+                        onClose();
+                      }
                     })
                     .catch((e) => console.log(e));
                 }}>

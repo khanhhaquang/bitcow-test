@@ -24,14 +24,14 @@ interface TProps {
 }
 
 const LoadingIndicator = () => (
-  <div className="flex h-full w-full flex-col items-center justify-center gap-y-3 font-pg">
+  <div className="flex h-full w-full flex-col items-center justify-center gap-y-3 font-pd">
     <img src="/images/cow-loading.webp" alt="loading" width={203} height={103} />
     <div className="text-lg text-bc-white-80">Fetching on-chain data......</div>
   </div>
 );
 
 const NoDataIndicator = () => (
-  <div className="flex h-full w-full flex-col items-center justify-center gap-y-3 font-pg">
+  <div className="flex h-full w-full flex-col items-center justify-center gap-y-3 font-pd">
     <img src="/images/pools-no-data.webp" alt="loading" width={108} height={99} />
     <div className="text-lg text-bc-white-80">No data</div>
   </div>

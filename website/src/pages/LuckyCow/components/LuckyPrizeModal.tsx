@@ -58,7 +58,7 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
                   <img src={imageLuckyPrize} width={112} height={111} />
                   <div className="flex text-center text-2xl text-black">
                     <img src={item.icon} width={19} height={19} className="mr-2" />
-                    <div className="truncate font-pg text-lg">{item.token}</div>
+                    <div className="truncate font-pd text-lg">{item.token}</div>
                   </div>
                   <div className="text-center font-micro text-5xl text-black">{item.amount}</div>
                 </div>

@@ -8,6 +8,9 @@ export interface ITxnLucky {
   expiryTimestamp: number;
 }
 
+export interface ILuckyReward {
+  airdropHash?: string;
+}
 export interface ISelectReward {
   scratchId: string;
   numberCards: number;
@@ -68,7 +71,7 @@ export const LuckyDrawService = {
     key: 'luckyDraw.selectRewardOption',
     call: (luckyId: number, choice: RewardChoice) =>
       axiosInstance
-        .get<IResponse<{}>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
+        .get<IResponse<ILuckyReward>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
         .then((res) => res.data)
   },
   requestPlayGame: {

@@ -19,7 +19,6 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
   const handleSubmit = async () => {
     try {
       const result = await UserService.activateInviteCode.call(wallet?.accounts[0].evm, code);
-      console.log('submit code', result);
       if (result.code === 0) {
         onSubmit();
       } else {
@@ -27,7 +26,7 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
       }
     } catch (e) {
       console.log('🚀 ~ Check lucky code error:', e);
-      setError('Invalid code');
+      setError('Checking failed');
     }
   };
 
@@ -54,20 +53,21 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
           <p className="absolute -left-1 top-0 h-full w-1 bg-white/40" />
           <p className="absolute -right-1 top-0 h-full w-1 bg-white/40" />
           <input
-            className="text-pd h-full w-full bg-white/20 px-4 py-2 outline-0"
+            className="h-full w-full bg-white/20 px-4 py-2 text-center font-micro text-2xl outline-0"
             value={code}
             onChange={(e) => {
               setCode(e.target.value);
               if (error) setError('');
             }}
           />
-          {!!error && <span className="absolute -bottom-8 left-0 text-red-500">{error}</span>}
         </div>
 
         <p className="text-center font-pd text-lg text-white">
           Input a LUCKY CODE to redeem your <br />
           <small className="text-lg text-[#6B001E]">LUCKY COW lottery card</small>
         </p>
+
+        {!!error && <p className="text-center font-pd text-[#FF1F00]">{error}</p>}
 
         <PixelButton
           disabled={!code}

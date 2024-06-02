@@ -102,7 +102,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
 
   return (
     <Fragment>
-      <div className="flex-col font-pg text-bc-white tablet:flex">
+      <div className="flex-col font-pd text-bc-white tablet:flex">
         <div className="hidden gap-6 p-4 tablet:flex">
           <div className="flex flex-col">
             <span className="block text-sm tablet:text-xs">Volume {poolFilter.timeBasis}</span>
@@ -149,7 +149,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
                   width={126}
                   borderWidth={2}
                   height={34}
-                  className="bg-white font-pg text-blue1"
+                  className="bg-white font-pd text-blue1"
                   color="white"
                   isSolid
                   onClick={() => handleOnClick('add')}>
@@ -172,7 +172,7 @@ const PoolRowDetail = ({ pool }: IProps) => {
                 width={126}
                 borderWidth={2}
                 height={34}
-                className="text-pg font-pg"
+                className="font-pd"
                 color="white"
                 onClick={() => handleOnClick('withdraw')}>
                 <MinusIcon className="mr-2" />

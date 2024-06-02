@@ -146,6 +146,7 @@ export type Config = {
   tokensBalance: string;
   lottery?: string;
   pairV1Manager?: string;
+  lotteryToken?: string;
 };
 
 export type CardInfo = {

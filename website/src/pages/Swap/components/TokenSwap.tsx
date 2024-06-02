@@ -176,10 +176,10 @@ const TokenSwap = () => {
   return (
     <Card className="dark-stroke-white table:w-full relative flex w-[500px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none py-9 pl-6 pr-9 text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
       {renderCardHeader()}
-      <div className="flex w-full flex-col font-pg">
+      <div className="flex w-full flex-col font-pd">
         <div className="relative flex flex-col">
           <div className="relative">
-            <div className="mb-1.5 pl-3 font-pg text-lg text-white/60">Pay</div>
+            <div className="mb-1.5 pl-3 font-pd text-lg text-white/60">Pay</div>
             <CurrencyInput actionType="currencyFrom" />
           </div>
           <div className="relative my-1.5 flex w-full items-center justify-between pl-3">
@@ -195,7 +195,7 @@ const TokenSwap = () => {
             <span className="h-[1.5px] flex-1 bg-white/20" />
           </div>
           <div className="relative">
-            <div className="mb-2 pl-3 font-pg text-lg text-white/60">Receive</div>
+            <div className="mb-2 pl-3 font-pd text-lg text-white/60">Receive</div>
             <CurrencyInput actionType="currencyTo" />
           </div>
         </div>

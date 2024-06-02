@@ -1,16 +1,16 @@
 .ant-notification {
   .ant-notification-notice {
-    width: 354px;
-    @apply relative h-fit rounded-none p-3 font-pg text-bc-white;
+    width: 420px;
+    @apply relative h-fit rounded-none p-3 font-pd text-bc-white;
     border: 2px solid #4dd12c;
     background: rgba(0, 0, 0, 0.4);
-    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.1), 3px 3px 0px 0px rgba(0, 0, 0, 0.1);
 
     .ant-notification-notice-message {
-      @apply text-lg leading-none #{!important};
+      @apply font-pdb text-2xl leading-none #{!important};
     }
     .ant-notification-notice-description {
-      @apply text-sm text-bc-white-60;
+      @apply text-lg text-bc-white-60;
     }
 
     &.obric-notification--success {
@@ -25,19 +25,16 @@
         color: #ff1f00;
       }
     }
-    // &.obric-notification--warn::before {
-    //   @apply bg-warn-500;
-    // }
-    // &.obric-notification--info::before {
-    //   @apply bg-info-500;
-    // }
-    // @apply rounded-[16px];
-    // .ant-notification-notice-description {
-    //   @apply text-grey-700 body-medium;
-    // }
+
+    &.obric-notification--warn {
+      border-color: #ff8d00;
+      .ant-notification-notice-message {
+        color: #ff8d00;
+      }
+    }
 
     .ant-notification-notice-close {
-      top: 12px;
+      @apply top-3;
     }
   }
 }

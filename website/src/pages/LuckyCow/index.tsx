@@ -10,13 +10,14 @@ import useUserInfo from 'hooks/useUserInfo';
 
 import LuckyCardSlider from './components/LuckyCardSlider';
 import { useLocation } from 'react-router-dom';
+import { GameProgress } from 'services/user';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 import LuckyPrizeModal from './components/LuckyPrizeModal';
 
 export enum LuckyCowStatus {
   PRELOADING,
   REDEEM,
   BUY,
-  LOADING_CARDS,
   CARDS_PICKING,
   CARDS_SCRATCHING
 }
@@ -26,7 +27,8 @@ const LuckyCow = () => {
   const { isFromLuckyChance } = (state || {}) as { isFromLuckyChance?: boolean };
 
   const { wallet } = useMerlinWallet();
-  const { data: userInfo, isLoading: isLoadingUserInfo } = useUserInfo();
+  const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
+  const { data: userInfo } = useUserInfo();
   const [status, setStatus] = useState<LuckyCowStatus>(
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );
@@ -37,6 +39,15 @@ const LuckyCow = () => {
     if (!wallet) return <NotConnected />;
 
     switch (status) {
+      case LuckyCowStatus.BUY:
+        return (
+          <Buy
+            onBuyCallback={(hash: string) => {
+              playGame(hash);
+            }}
+            onClickRedeemCode={() => setIsLuckyCodeOpen(true)}
+          />
+        );
       case LuckyCowStatus.REDEEM:
         return (
           <Redeem
@@ -45,10 +56,6 @@ const LuckyCow = () => {
             }}
           />
         );
-      case LuckyCowStatus.BUY:
-        return <Buy onClickRedeemCode={() => setIsLuckyCodeOpen(true)} />;
-      case LuckyCowStatus.LOADING_CARDS:
-        return <Loader>Preparing your cards...</Loader>;
       case LuckyCowStatus.CARDS_PICKING:
         return (
           <LuckyCardsPicker
@@ -74,22 +81,37 @@ const LuckyCow = () => {
   }, [wallet, status]);
 
   useEffect(() => {
-    if (userInfo?.freePlayGame) {
-      setStatus(LuckyCowStatus.REDEEM);
-      return;
-    }
-    if (!userInfo?.isGameActive) {
-      setStatus(LuckyCowStatus.BUY);
-      return;
-    } else {
+    if (isFromLuckyChance) return;
+
+    if (userInfo?.isGameActive) {
+      if (userInfo?.gameProgress === GameProgress.PAID) {
+        setStatus(LuckyCowStatus.CARDS_PICKING);
+      } else {
+        setStatus(LuckyCowStatus.CARDS_SCRATCHING);
+      }
+    } else if (userInfo?.freePlayGame) {
       if (userInfo?.gameProgress === 2) {
         setStatus(LuckyCowStatus.CARDS_PICKING);
         return;
+      }else{
+        setStatus(LuckyCowStatus.REDEEM);
       }
+      
+    } else {
+      setStatus(LuckyCowStatus.BUY);
+      return;
     }
-  }, [userInfo?.isGameActive, userInfo?.freePlayGame]);
+  }, [userInfo?.isGameActive, userInfo?.freePlayGame, userInfo?.gameProgress]);
 
-  if (wallet && isLoadingUserInfo) return <Loader />;
+  useEffect(() => {
+    if (playGameRequestResult?.code === 0) {
+      setStatus(LuckyCowStatus.CARDS_PICKING);
+    }
+  }, [playGameRequestResult]);
+
+  if (!userInfo) return <Loader />;
+
+  if (isPlayGameRequesting) return <Loader>Preparing your card...</Loader>;
 
   return (
     <div className="flex flex-col items-center pt-20">
@@ -97,7 +119,7 @@ const LuckyCow = () => {
       <LuckyCodeModal
         open={isLuckyCodeOpen}
         onCancel={() => setIsLuckyCodeOpen(false)}
-        onSubmit={async () => {
+        onSubmit={() => {
           setStatus(LuckyCowStatus.REDEEM);
           setIsLuckyCodeOpen(false);
         }}

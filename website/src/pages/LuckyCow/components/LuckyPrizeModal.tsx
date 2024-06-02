@@ -2,6 +2,8 @@ import BitcowModal from 'components/BitcowModal';
 import { FC } from 'react';
 import { CloseIcon } from 'resources/icons';
 import imageLuckyPrize from 'resources/img/luckyPrize.webp';
+import { useSelector } from 'react-redux';
+import { getLuckyAward } from 'modules/luckyCow/reducer';
 
 type LuckyPrizeModalProps = {
   open: boolean;
@@ -9,33 +11,34 @@ type LuckyPrizeModalProps = {
 };
 
 const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
-  const data = [
-    {
-      token: 'SOL',
-      icon: 'images/WBTC.svg',
-      amount: 50
-    },
-    {
-      token: 'SOL',
-      icon: 'images/WBTC.svg',
-      amount: 50
-    },
-    {
-      token: 'SOL',
-      icon: 'images/WBTC.svg',
-      amount: 50
-    },
-    {
-      token: 'SOL',
-      icon: 'images/WBTC.svg',
-      amount: 50
-    },
-    {
-      token: 'SOL',
-      icon: 'images/WBTC.svg',
-      amount: 50
-    }
-  ];
+  const data = useSelector(getLuckyAward);
+  // const data = [
+  //   {
+  //     token: 'SOL',
+  //     icon: 'images/WBTC.svg',
+  //     amount: 50
+  //   },
+  //   {
+  //     token: 'SOL',
+  //     icon: 'images/WBTC.svg',
+  //     amount: 50
+  //   },
+  //   {
+  //     token: 'SOL',
+  //     icon: 'images/WBTC.svg',
+  //     amount: 50
+  //   },
+  //   {
+  //     token: 'SOL',
+  //     icon: 'images/WBTC.svg',
+  //     amount: 50
+  //   },
+  //   {
+  //     token: 'SOL',
+  //     icon: 'images/WBTC.svg',
+  //     amount: 50
+  //   }
+  // ];
   return (
     <BitcowModal
       closable

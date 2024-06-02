@@ -15,7 +15,8 @@ import useLuckyCard from 'hooks/useLuckyCard';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import { openTxErrorNotification, openTxSuccessNotification } from 'utils/notifications';
 import useNetwork from 'hooks/useNetwork';
-import { useLuckyGame } from 'hooks/useLuckyGame';
+import { LuckyDrawService } from 'services/luckyDraw';
+import useUserInfo from 'hooks/useUserInfo';
 
 type LuckyShopProps = {
   children?: ReactNode;
@@ -50,12 +51,15 @@ const LuckyShopWrapper: FC<LuckyShopProps> = ({ children, text }) => {
 };
 
 const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
-  const { freePlayGame } = useLuckyGame();
+  const { walletAddress } = useMerlinWallet();
+  const { refetch: refetchUserInfo } = useUserInfo();
   const handleRedeem = async () => {
     try {
-      const result = await freePlayGame();
-      console.log(result);
+      const result = await LuckyDrawService.freePlayGame.call(walletAddress);
+      console.log('handleRedeem', result.data.orderID);
       if (result.code === 0) {
+        const data = await refetchUserInfo();
+        console.log('refetchUserInfo', data.data.orderID);
         onClickRedeem();
       }
     } catch (e) {

@@ -6,14 +6,19 @@ import { ReactComponent as SlidePrevIcon } from 'resources/icons/slideLeft.svg';
 import { ReactComponent as SlideNextIcon } from 'resources/icons/slideRight.svg';
 import Button from 'components/Button';
 import PixelButton from 'components/PixelButton';
-import LuckyPrizeModal from './LuckyPrizeModal';
+import useUserInfo from 'hooks/useUserInfo';
+import { useSelector } from 'react-redux';
+import { getPickedCard } from 'modules/luckyCow/reducer';
+import { LuckyDrawService } from 'services/luckyDraw';
 
-function LuckyCardSlider() {
-  const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(false);
+interface TProps {
+  onClaim: () => void;
+}
+const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const [revealedAll, setRevealedAll] = useState(false);
-  const data = [1, 2, 3, 4, 5];
+  const { data: userInfo } = useUserInfo();
+  const data = useSelector(getPickedCard);
   const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));
-  const isSubmitting = false;
 
   const next = () =>
     activeIndex < data.length - 1 ? setactiveSlide(activeIndex + 1) : setactiveSlide(0);
@@ -23,6 +28,17 @@ function LuckyCardSlider() {
 
   const onClickRevealAll = () => {
     setRevealedAll(true);
+  };
+  const onClickClaim = async () => {
+    try {
+      const result = await LuckyDrawService.claim.call(userInfo.orderID);
+      console.log('claim: ', userInfo.orderID);
+      if (result.code === 0) {
+        onClaim();
+      }
+    } catch (e) {
+      console.log('🚀 ~ cliam error:', e);
+    }
   };
   const getClassName = (index) => {
     if (activeIndex === index) return styles.slideActive;
@@ -41,7 +57,10 @@ function LuckyCardSlider() {
           {data.map((value, index) => {
             return (
               <div key={`lucky-card-${index}`} className={cn(styles.slide, getClassName(index))}>
-                <LuckyCard disabled={index != activeIndex} revealed={revealedAll}></LuckyCard>
+                <LuckyCard
+                  cardInfo={value}
+                  disabled={index != activeIndex}
+                  revealed={revealedAll}></LuckyCard>
               </div>
             );
           })}
@@ -84,10 +103,8 @@ function LuckyCardSlider() {
       </div>
       <div className="mt-5 flex justify-center pl-3">
         <PixelButton
-          isLoading={isSubmitting}
-          onClick={() => {
-            setIsLuckyPrizeOpen(true);
-          }}
+          disabled={!revealedAll}
+          onClick={onClickClaim}
           width={178}
           height={38}
           color="black"
@@ -95,9 +112,8 @@ function LuckyCardSlider() {
           claim
         </PixelButton>
       </div>
-      <LuckyPrizeModal open={isLuckyPrizeOpen} onCancel={() => setIsLuckyPrizeOpen(false)} />
     </div>
   );
-}
+};
 
 export default LuckyCardSlider;

@@ -35,6 +35,25 @@ export interface ILuckNews {
   token: string;
   tokenIcon: string;
 }
+
+export interface IFreePlayGameOrder {
+  orderID: string;
+}
+
+export interface ILuckyPickedInfo {
+  orderID: string;
+  [index: number]: ILuckyCardInfo;
+}
+
+export interface ILuckyCardInfo {
+  id: string;
+  tokens: string[];
+  amounts: number[];
+  luckyToken: string;
+  luckyTokenAddress: string;
+  luckyAmount: number;
+}
+
 //TODO:  sync from
 // http://ec2-13-213-40-242.ap-southeast-1.compute.amazonaws.com:8866/swagger-ui/index.html
 export const LuckyDrawService = {
@@ -60,13 +79,15 @@ export const LuckyDrawService = {
   freePlayGame: {
     key: 'luckyDraw.freePlayGame',
     call: (address: string) =>
-      axiosInstance.get<IResponse<{}>>(`luckDraw/freePlayGame/${address}`).then((res) => res.data)
+      axiosInstance
+        .get<IResponse<IFreePlayGameOrder>>(`luckDraw/freePlayGame/${address}`)
+        .then((res) => res.data)
   },
   pickCard: {
     key: 'luckyDraw.pickCard',
     call: (orderID: string, cardIndexID: string[]) =>
       axiosInstance
-        .get<IResponse<{}>>(`luckDraw/pickCard/${orderID}?cardIndexID=${cardIndexID}`)
+        .get<IResponse<ILuckyPickedInfo>>(`luckDraw/pickCard/${orderID}?cardIndexID=${cardIndexID}`)
         .then((res) => res.data)
   },
   claim: {

@@ -10,8 +10,13 @@ export interface UserInfo {
   isGameActive: boolean;
   freePlayGame: boolean;
   freePlayCount: number;
-  freePlayOrderID: number;
-  gameProgress?: GameProgress;
+  orderID: string;
+  quantity: number;
+  gameProgress: number;
+}
+
+export interface LoginInfo {
+  token: string;
 }
 
 //TODO:  sync from
@@ -28,7 +33,7 @@ export const UserService = {
     key: 'user.login',
     call: (address: string, signature: string) =>
       axiosInstance
-        .get<IResponse<{}>>('user/login', { params: { address, signature } })
+        .get<IResponse<LoginInfo>>('user/login', { params: { address, signature } })
         .then((res) => res.data)
   },
   getUserInfo: {

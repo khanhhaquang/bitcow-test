@@ -1,5 +1,5 @@
-import { IResponse } from 'types/common';
 import { axiosInstance } from 'config/axios';
+import { IResponse } from 'types/common';
 
 export interface ITxnLucky {
   isLucky: boolean;
@@ -25,6 +25,15 @@ export interface ITokenAward {
   tokenIcon: string;
   price: number;
   decimals: number;
+}
+
+export interface ILuckNews {
+  address: string;
+  amount: string;
+  createTime: Date;
+  id: string;
+  token: string;
+  tokenIcon: string;
 }
 //TODO:  sync from
 // http://ec2-13-213-40-242.ap-southeast-1.compute.amazonaws.com:8866/swagger-ui/index.html
@@ -55,16 +64,9 @@ export const LuckyDrawService = {
   },
   pickCard: {
     key: 'luckyDraw.pickCard',
-    call: (txn: string, cardIndexID: string[]) =>
-      axiosInstance
-        .get<IResponse<{}>>(`luckDraw/pickCard/${txn}?cardIndexID=${cardIndexID}`)
-        .then((res) => res.data)
-  },
-  freePickCard: {
-    key: 'luckyDraw.freePickCard',
     call: (orderID: string, cardIndexID: string[]) =>
       axiosInstance
-        .get<IResponse<{}>>(`luckDraw/freePickCard/${orderID}?cardIndexID=${cardIndexID}`)
+        .get<IResponse<{}>>(`luckDraw/pickCard/${orderID}?cardIndexID=${cardIndexID}`)
         .then((res) => res.data)
   },
   claim: {
@@ -78,5 +80,10 @@ export const LuckyDrawService = {
       axiosInstance
         .get<IResponse<ITokenAward[]>>('luckDraw/getTokenAwardList')
         .then((res) => res.data)
+  },
+  getNewsList: {
+    key: 'luckyDraw.getNewsList',
+    call: () =>
+      axiosInstance.get<IResponse<ILuckNews[]>>('luckDraw/getNewsList').then((res) => res.data)
   }
 };

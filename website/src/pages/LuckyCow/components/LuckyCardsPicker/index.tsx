@@ -4,6 +4,7 @@ import PixelButton from 'components/PixelButton';
 import { LuckyCardPickingBorderInner, LuckyCardPickingBorderOuter } from 'resources/icons';
 
 import LuckyFrontCard, { CardPickingStatus } from './LuckyFrontCard';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 
 interface CardsPickerProps {
   numsOfCard: number;
@@ -19,6 +20,7 @@ const LuckyCardPickers = ({
   const [cardsStatus, setCardsStatus] = useState<Array<CardPickingStatus>>([]);
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
+  const { pickCard } = useLuckyGame();
 
   const onCalculateMarginRight = () => {
     if (!containerRef.current) return;
@@ -88,7 +90,19 @@ const LuckyCardPickers = ({
           height={38}
           borderWidth={4}
           color="#000000"
-          onClick={onStartScratching}
+          onClick={async () => {
+            const selectedIndex = cardsStatus.reduce(function (acc, curr, index) {
+              if (curr === CardPickingStatus.SELECTED) {
+                acc.push(index);
+              }
+              return acc;
+            }, []);
+            const result = await pickCard(selectedIndex);
+            if (result.code === 0) {
+              console.log(result);
+              onStartScratching();
+            }
+          }}
           className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black">
           scratch them!
         </PixelButton>

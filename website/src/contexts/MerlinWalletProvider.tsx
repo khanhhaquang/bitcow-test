@@ -319,7 +319,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
             if (loginResult?.code === 0) {
               setIsLoggedIn(true);
               openNotification({ type: 'success', detail: 'You have logged in' });
-              axiosSetupInterceptors(newSignature);
+              axiosSetupInterceptors(loginResult.data.token);
             }
           } catch (error) {
             openNotification({ type: 'error', detail: 'Logging failed' });

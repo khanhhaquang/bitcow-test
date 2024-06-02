@@ -9,7 +9,7 @@ import PixelButton from 'components/PixelButton';
 import LuckyPrizeModal from './LuckyPrizeModal';
 
 function LuckyCardSlider() {
-  const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(true);
+  const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(false);
   const [revealedAll, setRevealedAll] = useState(false);
   const data = [1, 2, 3, 4, 5];
   const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));

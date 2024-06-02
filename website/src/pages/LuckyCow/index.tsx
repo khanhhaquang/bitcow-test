@@ -34,10 +34,8 @@ const LuckyCow = () => {
   );
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
   const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(false);
-
   const content = useMemo(() => {
     if (!wallet) return <NotConnected />;
-
     switch (status) {
       case LuckyCowStatus.BUY:
         return (
@@ -84,18 +82,13 @@ const LuckyCow = () => {
     if (isFromLuckyChance) return;
 
     if (userInfo?.isGameActive) {
-      if (userInfo?.gameProgress === GameProgress.PAID) {
+      if (userInfo?.gameProgress === GameProgress.CARD_SELECTED) {
         setStatus(LuckyCowStatus.CARDS_PICKING);
       } else {
-        setStatus(LuckyCowStatus.CARDS_SCRATCHING);
+        setStatus(LuckyCowStatus.CARDS_PICKING);
       }
     } else if (userInfo?.freePlayGame) {
-      if (userInfo?.gameProgress === 2) {
-        setStatus(LuckyCowStatus.CARDS_PICKING);
-        return;
-      } else {
-        setStatus(LuckyCowStatus.REDEEM);
-      }
+      setStatus(LuckyCowStatus.REDEEM);
     } else {
       setStatus(LuckyCowStatus.BUY);
       return;

@@ -89,6 +89,23 @@ class ScratchCard extends Component<Props, State> {
     this.canvas.style.opacity = '0';
   };
 
+  calcCardArea() {
+    let width = this.canvas.width;
+    let height = this.canvas.height;
+    const cardPixels = this.ctx.getImageData(0, 0, width, height);
+    const scratchPixels = [];
+
+    for (let i = 0; i < cardPixels.data.length; i++) {
+      const item = cardPixels.data[i + 3];
+      if (item === 0) {
+        scratchPixels.push(item);
+      }
+    }
+
+    // return scratchPixels.length / cardPixels.data.length
+    return Math.round((scratchPixels.length / cardPixels.data.length) * 100);
+  }
+
   getFilledInPixels(stride: number) {
     if (!stride || stride < 1) {
       stride = 1;
@@ -161,7 +178,7 @@ class ScratchCard extends Component<Props, State> {
       finishPercent = this.props.finishPercent;
     }
 
-    if (filledInPixels === finishPercent) {
+    if (filledInPixels >= finishPercent) {
       if (this.props.fadeOutOnComplete !== false) {
         this.canvas.style.transition = '1s';
         this.canvas.style.opacity = '0';
@@ -180,7 +197,7 @@ class ScratchCard extends Component<Props, State> {
       finishPercent = this.props.triggerPercent;
     }
 
-    if (filledInPixels === finishPercent) {
+    if (filledInPixels >= finishPercent) {
       // if (this.props.fadeOutOnComplete !== false) {
       //   this.canvas.style.transition = '1s';
       //   this.canvas.style.opacity = '0';
@@ -234,9 +251,23 @@ class ScratchCard extends Component<Props, State> {
     }
 
     this.lastPoint = currentPoint;
-    this.handlePercentage(this.getFilledInPixels(32));
-    this.handleTriggerPercentage(this.getFilledInPixels(32));
+    let percentage = this.getFilledInPixels(10); //this.calcCardArea();
+    // console.log(percentage);
+    this.handlePercentage(percentage);
+    this.handleTriggerPercentage(percentage);
   };
+
+  // handleScratch = (e: MouseEvent) => {
+
+  //   const canvasRect = this.canvas.getClientRects()[0];
+
+  //   const x = e.clientX - canvasRect.x;
+  //   const y = e.clientY - canvasRect.y;
+
+  //   this.ctx.beginPath();
+  //   this.ctx.arc(x, y, 20, 0, Math.PI * 2);
+  //   this.ctx.fill();
+  // };
 
   handleMouseUp = () => {
     if (this.props.disabled) return;

@@ -30,6 +30,10 @@ export interface ITokenAward {
   decimals: number;
 }
 
+export interface ILuckClaimInfo {
+  claimHash: string;
+}
+
 export interface ILuckNews {
   address: string;
   amount: string;
@@ -96,7 +100,9 @@ export const LuckyDrawService = {
   claim: {
     key: 'luckyDraw.claim',
     call: (orderID: string) =>
-      axiosInstance.get<IResponse<{}>>(`luckDraw/claim/${orderID}`).then((res) => res.data)
+      axiosInstance
+        .get<IResponse<ILuckClaimInfo>>(`luckDraw/claim/${orderID}`)
+        .then((res) => res.data)
   },
   getTokenAwardList: {
     key: 'luckyDraw.getTokenAwardList',

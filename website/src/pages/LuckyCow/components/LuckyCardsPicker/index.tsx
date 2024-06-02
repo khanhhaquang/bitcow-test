@@ -70,8 +70,8 @@ const LuckyCardPickers = ({
       }
       return acc;
     }, []);
-    console.log(userInfo.orderID);
     const result = await LuckyDrawService.pickCard.call(userInfo.orderID, selectedIndex);
+    console.log(userInfo.orderID);
     // const result = await pickCard(selectedIndex);
     if (result.code === 0) {
       let pickedCard: ILuckyCardInfo[] = [];

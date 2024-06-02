@@ -7,16 +7,18 @@ import { ReactComponent as SlideNextIcon } from 'resources/icons/slideRight.svg'
 import Button from 'components/Button';
 import PixelButton from 'components/PixelButton';
 import useUserInfo from 'hooks/useUserInfo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getPickedCard } from 'modules/luckyCow/reducer';
 import { LuckyDrawService } from 'services/luckyDraw';
+import luckyCowAction from 'modules/luckyCow/actions';
 
 interface TProps {
   onClaim: () => void;
 }
 const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
+  const dispatch = useDispatch();
   const [revealedAll, setRevealedAll] = useState(false);
-  const [completeAmount, setCompleteAmount] = useState(0);
+  const [completeCard, setCompleteCard] = useState<Array<string>>([]);
   const { data: userInfo } = useUserInfo();
   const data = useSelector(getPickedCard);
   const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));
@@ -30,18 +32,22 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const onClickRevealAll = () => {
     setRevealedAll(true);
   };
-  const onCompleteCard = () => {
-    setCompleteAmount(completeAmount + 1);
-    console.log('onCompleteCard', completeAmount);
-    if (completeAmount >= data.length) {
+  const onCompleteCard = (key) => {
+    if (!completeCard.includes(key)) {
+      // console.log('complete card', key);
+      setCompleteCard([...completeCard, key]);
+    }
+    if (completeCard.length >= data.length) {
       setRevealedAll(true);
     }
   };
   const onClickClaim = async () => {
     try {
       const result = await LuckyDrawService.claim.call(userInfo.orderID);
-      console.log('claim: ', userInfo.orderID);
+      console.log('claim order: ', userInfo.orderID);
       if (result.code === 0) {
+        console.log('claim hash: ', result.data.claimHash);
+        dispatch(luckyCowAction.SET_CLAIM_HASH(result.data.claimHash));
         onClaim();
       }
     } catch (e) {
@@ -69,7 +75,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
                   cardInfo={value}
                   disabled={index != activeIndex}
                   revealed={revealedAll}
-                  onComplete={onCompleteCard}></LuckyCard>
+                  onComplete={() => onCompleteCard(`lucky-card-${index}`)}></LuckyCard>
               </div>
             );
           })}

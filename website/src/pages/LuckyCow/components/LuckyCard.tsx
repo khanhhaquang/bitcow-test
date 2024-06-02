@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Card from 'components/Card';
 import ScratchCard from './ScratchCard';
 import imageScratchChest from 'resources/img/scratchChest.webp';
@@ -32,7 +32,7 @@ interface TProps {
 }
 
 const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete }) => {
-  const { data: tokenInfo } = useTokenAwardInfo();
+  const { data: tokenInfo, isFetched, isLoading, refetch } = useTokenAwardInfo();
   const [finishScrach, setfinishScrach] = useState<Array<string>>([]);
   const cardRef = useRef<ScratchCard>(null);
   const finishPercent = 60;
@@ -54,6 +54,37 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
       return numString;
     }
   };
+
+  const tokenContent = useMemo(() => {
+    return cardInfo.tokens.map((value, index) => {
+      const iconUrl = tokenInfo ? tokenInfo?.find((w) => w.tokenSymbol === value)?.tokenIcon : '';
+      return (
+        <ScratchCard
+          key={`scratch-token-${index}`}
+          ref={cardRef}
+          width={60}
+          height={26}
+          image={imageScratchToken}
+          brushSize={brushSize}
+          disabled={disabled}
+          revealed={revealed}
+          fadeOutOnComplete={fadeOutOnComplete}
+          finishPercent={finishPercent}
+          onComplete={() => onCompleteScratch(`scratch-token-${index}`)}>
+          <div className="flex h-full w-full items-center justify-center">
+            <Image src={iconUrl} width={13} height={13} className="rounded-full" />
+            <div className="ml-1 h-[13px] text-sm leading-none">{value}</div>
+          </div>
+        </ScratchCard>
+      );
+    });
+  }, [tokenInfo, revealed, disabled]);
+
+  useEffect(() => {
+    if (!isFetched && !isLoading) {
+      refetch();
+    }
+  }, [isFetched, isLoading]);
 
   const onCompleteScratch = (key) => {
     if (!finishScrach.includes(key)) {
@@ -79,7 +110,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
         <img src={imageLuckyRight} width={132} height={130} className="absolute bottom-0 right-0" />
         <div className="absolute flex h-full w-full flex-col">
           <div className="mb-[59px] flex justify-center">
-            <Image src={imageLuckyTitle} width={342} height={94} />
+            <Image src={imageLuckyTitle} width={342} height={94} preview={false} />
           </div>
           <div className="flex justify-center gap-x-5">
             {chestList.map((value, index) => (
@@ -111,35 +142,10 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
             <CardCornerBottomLeft className="absolute bottom-0 left-0" />
             <CardCornerBottomRight className="absolute bottom-0 right-0" />
             <div className="flex justify-center">
-              <Image src={imageLuckyToken} width={103} height={36} />
+              <Image src={imageLuckyToken} width={103} height={36} preview={false} />
             </div>
             <div className="mt-3 flex justify-center">
-              <div className="grid w-[330px] grid-cols-5 gap-x-2 gap-y-1">
-                {cardInfo.tokens.map((value, index) => (
-                  <ScratchCard
-                    key={`scratch-token-${index}`}
-                    ref={cardRef}
-                    width={60}
-                    height={26}
-                    image={imageScratchToken}
-                    brushSize={brushSize}
-                    disabled={disabled}
-                    revealed={revealed}
-                    fadeOutOnComplete={fadeOutOnComplete}
-                    finishPercent={finishPercent}
-                    onComplete={() => onCompleteScratch(`scratch-token-${index}`)}>
-                    <div className="flex h-full w-full items-center justify-center">
-                      <Image
-                        src={tokenInfo.find((w) => w.tokenSymbol === value)?.tokenIcon}
-                        width={13}
-                        height={13}
-                        className="rounded-full"
-                      />
-                      <div className="ml-1 h-[13px] text-sm leading-none">{value}</div>
-                    </div>
-                  </ScratchCard>
-                ))}
-              </div>
+              <div className="grid w-[330px] grid-cols-5 gap-x-2 gap-y-1">{tokenContent}</div>
             </div>
             <div className="mt-3 flex justify-center text-center font-pd text-sm leading-none text-amber-900">
               The token that appears the most times
@@ -148,7 +154,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
           </div>
           <div className="flex flex-col justify-center px-3">
             <div className="flex justify-center">
-              <Image src={imageLuckyAmount} width={103} height={36} />
+              <Image src={imageLuckyAmount} width={103} height={36} preview={false} />
             </div>
             <div className="mt-3 flex justify-center">
               <div className="grid w-[302px] grid-cols-5 place-content-center gap-x-3 gap-y-1">

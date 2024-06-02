@@ -4,12 +4,12 @@ import PixelButton from 'components/PixelButton';
 import { LuckyCardPickingBorderInner, LuckyCardPickingBorderOuter } from 'resources/icons';
 
 import LuckyFrontCard, { CardPickingStatus } from './LuckyFrontCard';
-import { ILuckyCardInfo, LuckyDrawService } from 'services/luckyDraw';
+import { LuckyDrawService } from 'services/luckyDraw';
 import useUserInfo from 'hooks/useUserInfo';
-import { useDispatch } from 'react-redux';
-import luckyCowAction from 'modules/luckyCow/actions';
-import { ILuckyAward } from 'pages/LuckyCow/types';
-import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
+// import { useDispatch } from 'react-redux';
+// import luckyCowAction from 'modules/luckyCow/actions';
+// import { ILuckyAward } from 'pages/LuckyCow/types';
+// import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
 
 interface CardsPickerProps {
   numsOfCard: number;
@@ -26,8 +26,8 @@ const LuckyCardPickers = ({
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
   const { data: userInfo } = useUserInfo();
-  const { data: tokenInfo } = useTokenAwardInfo();
-  const dispatch = useDispatch();
+  // const { data: tokenInfo } = useTokenAwardInfo();
+  // const dispatch = useDispatch();
 
   const onCalculateMarginRight = () => {
     if (!containerRef.current) return;
@@ -78,25 +78,24 @@ const LuckyCardPickers = ({
     console.log(userInfo.orderID);
     // const result = await pickCard(selectedIndex);
     if (result.code === 0) {
-      let pickedCard: ILuckyCardInfo[] = [];
-      let luckyAward: ILuckyAward[] = [];
-      Object.keys(result.data).forEach((key) => {
-        if (key != 'orderID') {
-          const card: ILuckyCardInfo = result.data[key] as ILuckyCardInfo;
-          pickedCard.push(card);
-        }
-      });
-      pickedCard.map((card) =>
-        luckyAward.push({
-          token: card.luckyToken,
-          amount: card.luckyAmount,
-          icon: tokenInfo.find((w) => w.tokenSymbol === card.luckyToken)?.tokenIcon
-        })
-      );
+      // let pickedCard: ILuckyCardInfo[] = [];
+      // let luckyAward: ILuckyAward[] = [];
+      // Object.keys(result.data).forEach((key) => {
+      //   if (key != 'orderID') {
+      //     const card: ILuckyCardInfo = result.data[key] as ILuckyCardInfo;
+      //     pickedCard.push(card);
+      //   }
+      // });
+      // pickedCard.map((card) =>
+      //   luckyAward.push({
+      //     token: card.luckyToken,
+      //     amount: card.luckyAmount,
+      //     icon: tokenInfo.find((w) => w.tokenSymbol === card.luckyToken)?.tokenIcon
+      //   })
+      // );
       // console.log('pickedCard', pickedCard);
-      // dispatch(luckyCowAction.CLEAR);
-      dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
-      dispatch(luckyCowAction.SET_LUCKY_AWARD(luckyAward));
+      // dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
+      // dispatch(luckyCowAction.SET_LUCKY_AWARD(luckyAward));
       onStartScratching();
     }
   };

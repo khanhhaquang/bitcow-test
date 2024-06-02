@@ -20,6 +20,7 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
     try {
       const result = await UserService.activateInviteCode.call(wallet?.accounts[0].evm, code);
       if (result.code === 0) {
+        setCode('');
         onSubmit();
       } else {
         setError(result.message);

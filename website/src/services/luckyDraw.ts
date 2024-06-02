@@ -53,7 +53,7 @@ export interface ILuckyPickedInfo {
 }
 
 export interface ILuckyCardInfo {
-  id: string;
+  id?: string;
   tokens: string[];
   amounts: number[];
   luckyToken: string;
@@ -107,9 +107,10 @@ export const LuckyDrawService = {
   getTokenAwardList: {
     key: 'luckyDraw.getTokenAwardList',
     call: () =>
-      axiosInstance
-        .get<IResponse<ITokenAward[]>>('luckDraw/getTokenAwardList')
-        .then((res) => res.data)
+      axiosInstance.get<IResponse<ITokenAward[]>>('luckDraw/getTokenAwardList').then((res) => {
+        console.log(res.data);
+        return res.data;
+      })
   },
   getNewsList: {
     key: 'luckyDraw.getNewsList',

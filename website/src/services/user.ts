@@ -1,9 +1,14 @@
 import { IResponse } from 'types/common';
 import { axiosInstance } from 'config/axios';
+import { ILuckyCardInfo } from './luckyDraw';
 
 export enum GameProgress {
   PAID = 1,
   CARD_SELECTED = 2
+}
+
+export interface ILuckyPickedInfo {
+  [index: number]: ILuckyCardInfo;
 }
 
 export interface UserInfo {
@@ -13,6 +18,7 @@ export interface UserInfo {
   orderID: string;
   quantity: number;
   gameProgress: number;
+  pickCard: ILuckyPickedInfo;
 }
 
 export interface LoginInfo {

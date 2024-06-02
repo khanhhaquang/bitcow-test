@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LuckyCard from './LuckyCard';
 import { cn } from 'utils/cn';
 import styles from './LuckyCardSlider.module.scss';
@@ -7,9 +7,9 @@ import { ReactComponent as SlideNextIcon } from 'resources/icons/slideRight.svg'
 import Button from 'components/Button';
 import PixelButton from 'components/PixelButton';
 import useUserInfo from 'hooks/useUserInfo';
-import { useDispatch, useSelector } from 'react-redux';
-import { getPickedCard } from 'modules/luckyCow/reducer';
-import { LuckyDrawService } from 'services/luckyDraw';
+import { useDispatch } from 'react-redux';
+// import { getPickedCard } from 'modules/luckyCow/reducer';
+import { ILuckyCardInfo, LuckyDrawService } from 'services/luckyDraw';
 import luckyCowAction from 'modules/luckyCow/actions';
 
 interface TProps {
@@ -19,8 +19,84 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const dispatch = useDispatch();
   const [revealedAll, setRevealedAll] = useState(false);
   const [completeCard, setCompleteCard] = useState<Array<string>>([]);
-  const { data: userInfo } = useUserInfo();
-  const data = useSelector(getPickedCard);
+  const { data: userInfo, isFetched, isLoading, refetch } = useUserInfo();
+  const [data, setData] = useState<Array<ILuckyCardInfo>>([]);
+  // const data = useSelector(getPickedCard);
+  // let pickedCard = [];
+  // if (!userInfo && !userInfo.pickCard) {
+  //   Object.keys(userInfo.pickCard).forEach((key) => {
+  //     const card: ILuckyCardInfo = userInfo.pickCard[key] as ILuckyCardInfo;
+  //     pickedCard.push(card);
+  //     // data.push({
+  //     //   tokens: [
+  //     //     'i-coin',
+  //     //     'c-coin',
+  //     //     'b-coin',
+  //     //     'g-coin',
+  //     //     'd-coin',
+  //     //     'd-coin',
+  //     //     'd-coin',
+  //     //     'b-coin',
+  //     //     'h-coin',
+  //     //     'f-coin'
+  //     //   ],
+  //     //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
+  //     //   luckyAmount: 212.6,
+  //     //   luckyToken: 'xxx',
+  //     //   luckyTokenAddress: ''
+  //     // });
+  //     // data.push({
+  //     //   tokens: [
+  //     //     'i-coin',
+  //     //     'c-coin',
+  //     //     'b-coin',
+  //     //     'g-coin',
+  //     //     'd-coin',
+  //     //     'd-coin',
+  //     //     'd-coin',
+  //     //     'b-coin',
+  //     //     'h-coin',
+  //     //     'f-coin'
+  //     //   ],
+  //     //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
+  //     //   luckyAmount: 212.6,
+  //     //   luckyToken: 'xxx',
+  //     //   luckyTokenAddress: ''
+  //     // });
+  //     // data.push({
+  //     //   tokens: [
+  //     //     'i-coin',
+  //     //     'c-coin',
+  //     //     'b-coin',
+  //     //     'g-coin',
+  //     //     'd-coin',
+  //     //     'd-coin',
+  //     //     'd-coin',
+  //     //     'b-coin',
+  //     //     'h-coin',
+  //     //     'f-coin'
+  //     //   ],
+  //     //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
+  //     //   luckyAmount: 212.6,
+  //     //   luckyToken: 'xxx',
+  //     //   luckyTokenAddress: ''
+  //     // });
+  //   });
+  // }
+
+  useEffect(() => {
+    if (!userInfo || !userInfo.pickCard) {
+      refetch();
+    } else {
+      let pickedCard = [];
+      Object.keys(userInfo.pickCard).forEach((key) => {
+        const card: ILuckyCardInfo = userInfo.pickCard[key] as ILuckyCardInfo;
+        pickedCard.push(card);
+      });
+      setData(pickedCard);
+    }
+  }, [isFetched, isLoading, userInfo]);
+
   const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));
 
   const next = () =>

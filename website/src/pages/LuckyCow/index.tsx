@@ -34,8 +34,8 @@ const LuckyCow = () => {
   );
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
   const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(false);
+
   const content = useMemo(() => {
-    if (!wallet) return <NotConnected />;
     switch (status) {
       case LuckyCowStatus.BUY:
         return (
@@ -100,6 +100,13 @@ const LuckyCow = () => {
       setStatus(LuckyCowStatus.CARDS_PICKING);
     }
   }, [playGameRequestResult]);
+
+  if (!wallet)
+    return (
+      <div className="flex flex-col items-center pt-20">
+        <NotConnected />
+      </div>
+    );
 
   if (!userInfo) return <Loader />;
 

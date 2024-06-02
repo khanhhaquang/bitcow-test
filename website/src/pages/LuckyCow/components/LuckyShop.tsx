@@ -124,26 +124,30 @@ const Buy: FC<{ onBuyCallback: (hash: string) => void; onClickRedeemCode: () => 
     setCardsAmount(nextValue);
   };
 
+  const handleIncreaseAllowance = async () => {
+    openTxPendingNotification('Increasing allowance');
+    const increaseResult = await increaseAllowance({ amount: totalPrice });
+
+    if (increaseResult.status === 1) {
+      openTxSuccessNotification(
+        currentNetwork.chainConfig.blockExplorerUrls[0],
+        increaseResult.hash,
+        'Increased allowance successfully'
+      );
+    } else if (increaseResult.status === 0) {
+      openTxErrorNotification(
+        currentNetwork.chainConfig.blockExplorerUrls[0],
+        increaseResult.hash,
+        'Failed to increase'
+      );
+    }
+  };
+
   const handleBuy = async () => {
     if (bitcowSDK) {
       try {
         if (allowance < totalPrice) {
-          openTxPendingNotification('Increasing allowance');
-          const increaseResult = await increaseAllowance({ amount: totalPrice });
-
-          if (increaseResult.status === 1) {
-            openTxSuccessNotification(
-              currentNetwork.chainConfig.blockExplorerUrls[0],
-              increaseResult.hash,
-              'Increased allowance successfully'
-            );
-          } else if (increaseResult.status === 0) {
-            openTxErrorNotification(
-              currentNetwork.chainConfig.blockExplorerUrls[0],
-              increaseResult.hash,
-              'Failed to increase'
-            );
-          }
+          await handleIncreaseAllowance();
         }
 
         const result = await purchase({ amount: cardsAmount });

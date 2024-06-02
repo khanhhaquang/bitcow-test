@@ -94,7 +94,10 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
   );
 };
 
-const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
+const Buy: FC<{ onBuyCallback: (hash: string) => void; onClickRedeemCode: () => void }> = ({
+  onClickRedeemCode,
+  onBuyCallback
+}) => {
   const { data: luckyCard } = useLuckyCard();
   const { allowance, isIncreasingAllowance, isPurchasing, purchase, increaseAllowance } =
     useLuckyShop();
@@ -138,6 +141,7 @@ const Buy: FC<{ onClickRedeemCode: () => void }> = ({ onClickRedeemCode }) => {
                 result.hash,
                 'Buy cards successfully'
               );
+              onBuyCallback(result.hash);
             } else if (result.status === 0) {
               openTxErrorNotification(
                 currentNetwork.chainConfig.blockExplorerUrls[0],

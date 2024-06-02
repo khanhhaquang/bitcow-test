@@ -11,12 +11,12 @@ import useUserInfo from 'hooks/useUserInfo';
 import LuckyCardSlider from './components/LuckyCardSlider';
 import { useLocation } from 'react-router-dom';
 import { GameProgress } from 'services/user';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 
 export enum LuckyCowStatus {
   PRELOADING,
   REDEEM,
   BUY,
-  LOADING_CARDS,
   CARDS_PICKING,
   CARDS_SCRATCHING
 }
@@ -26,6 +26,7 @@ const LuckyCow = () => {
   const { isFromLuckyChance } = (state || {}) as { isFromLuckyChance?: boolean };
 
   const { wallet } = useMerlinWallet();
+  const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
   const { data: userInfo, isLoading: isLoadingUserInfo } = useUserInfo();
   const [status, setStatus] = useState<LuckyCowStatus>(
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
@@ -36,6 +37,15 @@ const LuckyCow = () => {
     if (!wallet) return <NotConnected />;
 
     switch (status) {
+      case LuckyCowStatus.BUY:
+        return (
+          <Buy
+            onBuyCallback={(hash: string) => {
+              playGame(hash);
+            }}
+            onClickRedeemCode={() => setIsLuckyCodeOpen(true)}
+          />
+        );
       case LuckyCowStatus.REDEEM:
         return (
           <Redeem
@@ -44,10 +54,6 @@ const LuckyCow = () => {
             }}
           />
         );
-      case LuckyCowStatus.BUY:
-        return <Buy onClickRedeemCode={() => setIsLuckyCodeOpen(true)} />;
-      case LuckyCowStatus.LOADING_CARDS:
-        return <Loader>Preparing your cards...</Loader>;
       case LuckyCowStatus.CARDS_PICKING:
         return (
           <LuckyCardsPicker
@@ -83,7 +89,15 @@ const LuckyCow = () => {
     }
   }, [userInfo?.isGameActive, userInfo?.freePlayGame]);
 
+  useEffect(() => {
+    if (playGameRequestResult?.code === 0) {
+      setStatus(LuckyCowStatus.CARDS_PICKING);
+    }
+  }, [playGameRequestResult]);
+
   if (wallet && isLoadingUserInfo) return <Loader />;
+
+  if (isPlayGameRequesting) return <Loader>Preparing your card...</Loader>;
 
   return (
     <div className="flex flex-col items-center pt-20">

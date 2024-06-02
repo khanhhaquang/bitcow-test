@@ -6,11 +6,16 @@ import useUserInfo from './useUserInfo';
 export const useLuckyGame = () => {
   const { walletAddress } = useMerlinWallet();
   const { data: userInfo } = useUserInfo();
+
   const { mutateAsync: freePlayGame } = useMutation({
     mutationFn: () => LuckyDrawService.freePlayGame.call(walletAddress)
   });
 
-  const { mutateAsync: playGame } = useMutation({
+  const {
+    mutateAsync: playGame,
+    isPending: isPlayGameRequesting,
+    data: playGameRequestResult
+  } = useMutation({
     mutationFn: (txn: string) => LuckyDrawService.requestPlayGame.call(txn)
   });
 
@@ -19,5 +24,5 @@ export const useLuckyGame = () => {
       LuckyDrawService.pickCard.call(userInfo.orderID, cardIndexID) // onSuccess: (data) => data.code === 0 && refetchUserPoint()
   });
 
-  return { freePlayGame, playGame, pickCard };
+  return { freePlayGame, playGame, pickCard, isPlayGameRequesting, playGameRequestResult };
 };

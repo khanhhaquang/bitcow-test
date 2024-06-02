@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { LuckyCoin } from 'resources/icons';
 import { ILuckNews, LuckyDrawService } from 'services/luckyDraw';
@@ -54,10 +54,15 @@ const LuckyHightLightItem: FC<LuckyHightLightItemProps> = ({
 };
 
 const LuckyResultHighlight = () => {
-  const { data: newsData } = useQuery({
+  const {
+    data: newsData,
+    refetch,
+    isFetched,
+    isLoading
+  } = useQuery({
     queryKey: [LuckyDrawService.getNewsList.key],
-    queryFn: LuckyDrawService.getNewsList.call,
-    enabled: true
+    queryFn: () => LuckyDrawService.getNewsList.call(),
+    enabled: false
   });
   // duplicated content for infinity loop
   const content = useMemo(() => {
@@ -79,6 +84,12 @@ const LuckyResultHighlight = () => {
       </motion.div>
     );
   }, [newsData?.data]);
+
+  useEffect(() => {
+    if (!isFetched && !isLoading) {
+      refetch();
+    }
+  }, [isFetched, isLoading]);
 
   return (
     <div className="z-10 flex w-screen items-center gap-3 overflow-hidden border-4 border-black bg-[#BA3800] py-[18px] shadow-[6px_6px_0px_0px_rgba(0,0,0,0.10),3px_3px_0px_0px_rgba(0,0,0,0.10)]">

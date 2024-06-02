@@ -4,7 +4,12 @@ import PixelButton from 'components/PixelButton';
 import { LuckyCardPickingBorderInner, LuckyCardPickingBorderOuter } from 'resources/icons';
 
 import LuckyFrontCard, { CardPickingStatus } from './LuckyFrontCard';
-import { useLuckyGame } from 'hooks/useLuckyGame';
+import { ILuckyCardInfo, LuckyDrawService } from 'services/luckyDraw';
+import useUserInfo from 'hooks/useUserInfo';
+import { useDispatch } from 'react-redux';
+import luckyCowAction from 'modules/luckyCow/actions';
+import { ILuckyAward } from 'pages/LuckyCow/types';
+import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
 
 interface CardsPickerProps {
   numsOfCard: number;
@@ -20,7 +25,9 @@ const LuckyCardPickers = ({
   const [cardsStatus, setCardsStatus] = useState<Array<CardPickingStatus>>([]);
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
-  const { pickCard } = useLuckyGame();
+  const { data: userInfo } = useUserInfo();
+  const { data: tokenInfo } = useTokenAwardInfo();
+  const dispatch = useDispatch();
 
   const onCalculateMarginRight = () => {
     if (!containerRef.current) return;
@@ -56,6 +63,40 @@ const LuckyCardPickers = ({
     [cardsStatus, isPickEnoughCards]
   );
 
+  const onSubmitPickCard = async () => {
+    const selectedIndex = cardsStatus.reduce(function (acc, curr, index) {
+      if (curr === CardPickingStatus.SELECTED) {
+        acc.push(index);
+      }
+      return acc;
+    }, []);
+    console.log(userInfo.orderID);
+    const result = await LuckyDrawService.pickCard.call(userInfo.orderID, selectedIndex);
+    // const result = await pickCard(selectedIndex);
+    if (result.code === 0) {
+      let pickedCard: ILuckyCardInfo[] = [];
+      let luckyAward: ILuckyAward[] = [];
+      Object.keys(result.data).forEach((key) => {
+        if (key != 'orderID') {
+          const card: ILuckyCardInfo = result.data[key] as ILuckyCardInfo;
+          pickedCard.push(card);
+        }
+      });
+      pickedCard.map((card) =>
+        luckyAward.push({
+          token: card.luckyToken,
+          amount: card.luckyAmount,
+          icon: tokenInfo.find((w) => w.tokenSymbol === card.luckyToken)?.tokenIcon
+        })
+      );
+      // console.log('pickedCard', pickedCard);
+      // dispatch(luckyCowAction.CLEAR);
+      dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
+      dispatch(luckyCowAction.SET_LUCKY_AWARD(luckyAward));
+      onStartScratching();
+    }
+  };
+
   useEffect(() => {
     setCardsStatus(Array(numsOfCard).fill(CardPickingStatus.NOT_SELECT));
   }, [numsOfCard]);
@@ -90,19 +131,7 @@ const LuckyCardPickers = ({
           height={38}
           borderWidth={4}
           color="#000000"
-          onClick={async () => {
-            const selectedIndex = cardsStatus.reduce(function (acc, curr, index) {
-              if (curr === CardPickingStatus.SELECTED) {
-                acc.push(index);
-              }
-              return acc;
-            }, []);
-            const result = await pickCard(selectedIndex);
-            if (result.code === 0) {
-              console.log(result);
-              onStartScratching();
-            }
-          }}
+          onClick={onSubmitPickCard}
           className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black">
           scratch them!
         </PixelButton>

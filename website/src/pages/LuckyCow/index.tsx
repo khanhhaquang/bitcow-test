@@ -12,6 +12,7 @@ import LuckyCardSlider from './components/LuckyCardSlider';
 import { useLocation } from 'react-router-dom';
 import { GameProgress } from 'services/user';
 import { useLuckyGame } from 'hooks/useLuckyGame';
+import LuckyPrizeModal from './components/LuckyPrizeModal';
 
 export enum LuckyCowStatus {
   PRELOADING,
@@ -32,6 +33,7 @@ const LuckyCow = () => {
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );
   const [isLuckyCodeOpen, setIsLuckyCodeOpen] = useState(false);
+  const [isLuckyPrizeOpen, setIsLuckyPrizeOpen] = useState(false);
 
   const content = useMemo(() => {
     if (!wallet) return <NotConnected />;
@@ -65,7 +67,14 @@ const LuckyCow = () => {
           />
         );
       case LuckyCowStatus.CARDS_SCRATCHING:
-        return <LuckyCardSlider />;
+        return (
+          <LuckyCardSlider
+            onClaim={() => {
+              setStatus(LuckyCowStatus.BUY);
+              setIsLuckyPrizeOpen(true);
+            }}
+          />
+        );
       default:
         return <Loader />;
     }
@@ -81,9 +90,15 @@ const LuckyCow = () => {
         setStatus(LuckyCowStatus.CARDS_SCRATCHING);
       }
     } else if (userInfo?.freePlayGame) {
-      setStatus(LuckyCowStatus.REDEEM);
+      if (userInfo?.gameProgress === 2) {
+        setStatus(LuckyCowStatus.CARDS_PICKING);
+        return;
+      } else {
+        setStatus(LuckyCowStatus.REDEEM);
+      }
     } else {
       setStatus(LuckyCowStatus.BUY);
+      return;
     }
   }, [userInfo?.isGameActive, userInfo?.freePlayGame, userInfo?.gameProgress]);
 
@@ -108,6 +123,7 @@ const LuckyCow = () => {
           setIsLuckyCodeOpen(false);
         }}
       />
+      <LuckyPrizeModal open={isLuckyPrizeOpen} onCancel={() => setIsLuckyPrizeOpen(false)} />
     </div>
   );
 };

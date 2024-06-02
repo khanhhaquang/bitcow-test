@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Card from 'components/Card';
 import ScratchCard from './ScratchCard';
 import imageScratchChest from 'resources/img/scratchChest.webp';
@@ -21,32 +21,47 @@ import {
   CardCornerTopLeft,
   CardCornerTopRight
 } from 'resources/icons';
+import { ILuckyCardInfo } from 'services/luckyDraw';
+import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
 
 interface TProps {
+  cardInfo: ILuckyCardInfo;
   disabled?: boolean;
   revealed?: boolean;
+  onComplete: () => void;
 }
 
-const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
+const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete }) => {
+  const { data: tokenInfo } = useTokenAwardInfo();
+  const [finishedAmount, setFinishedAmount] = useState(0);
   const cardRef = useRef<ScratchCard>(null);
   const finishPercent = 70;
   const fadeOutOnComplete = true;
   const brushSize = 10;
 
-  const chestList = [1000, 1000, 0, 0];
-  const tokenList = [
-    'USDT',
-    'USDT',
-    'USDT',
-    'USDT',
-    'USDT',
-    'USDT',
-    'USDT',
-    'USDT',
-    'USDT',
-    'USDT'
-  ];
-  const amountList = [20, 200, 20, 20, 20, 20, 20, 20, 200, 20];
+  const chestList = [0, 0, 0, 0];
+  const decNumber = (num: number) => {
+    // if (num / 10000 >= 1) {
+    //   const decNum = num / 10000;
+    //   return decNum.toPrecision(3);
+    // } else {
+    //   return num;
+    // }
+    const numString = num.toString();
+    if (numString.length > 3) {
+      return numString.substring(0, 3);
+    } else {
+      return numString;
+    }
+  };
+
+  const onCompleteScratch = () => {
+    setFinishedAmount(finishedAmount + 1);
+    console.log('complete', finishedAmount);
+    if (finishedAmount >= 24) {
+      onComplete();
+    }
+  };
 
   return (
     <Card className="dark-stroke-white table:w-full relative flex w-[414px] flex-col gap-y-9 bg-bc-swap bg-cover bg-no-repeat fill-color_text_1 stroke-none text-color_text_1 shadow-bc-swap backdrop-blur-[15px] dark:bg-color_bg_input tablet:w-full tablet:p-4 tablet:pt-5">
@@ -77,7 +92,7 @@ const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
                 revealed={revealed}
                 fadeOutOnComplete={fadeOutOnComplete}
                 finishPercent={finishPercent}
-                onComplete={() => console.log('complete', index)}>
+                onComplete={onCompleteScratch}>
                 <div className="flex h-full w-full items-center justify-center">
                   {value > 0 ? (
                     <Image src={imageJackpot} width={58} height={39} />
@@ -98,7 +113,7 @@ const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
             </div>
             <div className="mt-3 flex justify-center">
               <div className="grid w-[330px] grid-cols-5 gap-x-2 gap-y-1">
-                {tokenList.map((value, index) => (
+                {cardInfo.tokens.map((value, index) => (
                   <ScratchCard
                     key={`scratch-token-${index}`}
                     ref={cardRef}
@@ -110,9 +125,14 @@ const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
                     revealed={revealed}
                     fadeOutOnComplete={fadeOutOnComplete}
                     finishPercent={finishPercent}
-                    onComplete={() => console.log('complete', index)}>
+                    onComplete={onCompleteScratch}>
                     <div className="flex h-full w-full items-center justify-center">
-                      <Image src={'https://bitcow.xyz/images/bitusd.svg'} width={13} height={13} />
+                      <Image
+                        src={tokenInfo.find((w) => w.tokenSymbol === value)?.tokenIcon}
+                        width={13}
+                        height={13}
+                        className="rounded-full"
+                      />
                       <div className="ml-1 h-[13px] text-sm leading-none">{value}</div>
                     </div>
                   </ScratchCard>
@@ -130,7 +150,7 @@ const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
             </div>
             <div className="mt-3 flex justify-center">
               <div className="grid w-[302px] grid-cols-5 place-content-center gap-x-3 gap-y-1">
-                {amountList.map((value, index) => (
+                {cardInfo.amounts.map((value, index) => (
                   <ScratchCard
                     key={`scratch-amount-${index}`}
                     ref={cardRef}
@@ -142,14 +162,14 @@ const LuckyCard: React.FC<TProps> = ({ disabled, revealed }) => {
                     brushSize={brushSize}
                     fadeOutOnComplete={fadeOutOnComplete}
                     finishPercent={finishPercent}
-                    onComplete={() => console.log('complete', index)}>
+                    onComplete={onCompleteScratch}>
                     <div
                       className={cn(
                         styles.strokeText,
                         'flex justify-center font-pdb text-[22px] leading-none'
                       )}
-                      data-storke={value}>
-                      {value}
+                      data-storke={decNumber(value)}>
+                      {decNumber(value)}
                     </div>
                   </ScratchCard>
                 ))}

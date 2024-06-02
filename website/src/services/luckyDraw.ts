@@ -64,16 +64,9 @@ export const LuckyDrawService = {
   },
   pickCard: {
     key: 'luckyDraw.pickCard',
-    call: (txn: string, cardIndexID: string[]) =>
-      axiosInstance
-        .get<IResponse<{}>>(`luckDraw/pickCard/${txn}?cardIndexID=${cardIndexID}`)
-        .then((res) => res.data)
-  },
-  freePickCard: {
-    key: 'luckyDraw.freePickCard',
     call: (orderID: string, cardIndexID: string[]) =>
       axiosInstance
-        .get<IResponse<{}>>(`luckDraw/freePickCard/${orderID}?cardIndexID=${cardIndexID}`)
+        .get<IResponse<{}>>(`luckDraw/pickCard/${orderID}?cardIndexID=${cardIndexID}`)
         .then((res) => res.data)
   },
   claim: {

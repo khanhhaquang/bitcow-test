@@ -73,7 +73,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
           onComplete={() => onCompleteScratch(`scratch-token-${index}`)}>
           <div className="flex h-full w-full items-center justify-center">
             <Image src={iconUrl} width={13} height={13} className="rounded-full" preview={false} />
-            <div className="ml-1 h-[13px] text-sm leading-none">{value}</div>
+            <div className="ml-1 h-[13px] text-sm text-black leading-none">{value}</div>
           </div>
         </ScratchCard>
       );

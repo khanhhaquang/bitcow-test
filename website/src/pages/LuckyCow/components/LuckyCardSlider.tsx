@@ -32,7 +32,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
         const card: ILuckyCardInfo = userInfo.pickCard[key] as ILuckyCardInfo;
         pickedCard.push(card);
       });
-      // pickedCard.push({
+      // const sample = {
       //   tokens: [
       //     'i-coin',
       //     'c-coin',
@@ -49,43 +49,12 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
       //   luckyAmount: 212.6,
       //   luckyToken: 'xxx',
       //   luckyTokenAddress: ''
-      // });
-      // pickedCard.push({
-      //   tokens: [
-      //     'i-coin',
-      //     'c-coin',
-      //     'b-coin',
-      //     'g-coin',
-      //     'd-coin',
-      //     'd-coin',
-      //     'd-coin',
-      //     'b-coin',
-      //     'h-coin',
-      //     'f-coin'
-      //   ],
-      //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
-      //   luckyAmount: 212.6,
-      //   luckyToken: 'xxx',
-      //   luckyTokenAddress: ''
-      // });
-      // pickedCard.push({
-      //   tokens: [
-      //     'i-coin',
-      //     'c-coin',
-      //     'b-coin',
-      //     'g-coin',
-      //     'd-coin',
-      //     'd-coin',
-      //     'd-coin',
-      //     'b-coin',
-      //     'h-coin',
-      //     'f-coin'
-      //   ],
-      //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
-      //   luckyAmount: 212.6,
-      //   luckyToken: 'xxx',
-      //   luckyTokenAddress: ''
-      // });
+      // };
+      // pickedCard.push(sample);
+      // pickedCard.push(sample);
+      // pickedCard.push(sample);
+      // pickedCard.push(sample);
+
       setData(pickedCard);
       setActiveSlide(Math.floor(data.length / 2));
       dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
@@ -194,7 +163,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
           width={178}
           height={38}
           color="black"
-          className="!bg-white text-2xl uppercase leading-none text-black hover:!bg-white hover:!text-black/60 active:!bg-white active:!text-black">
+          className="!bg-white text-2xl uppercase leading-none text-black hover:!bg-white hover:!text-black/60 active:translate-x-1 active:translate-y-1 active:!bg-white active:!text-black disabled:!bg-[#B8B8B8] disabled:!text-black/40">
           claim
         </PixelButton>
       </div>

@@ -33,7 +33,7 @@ interface TProps {
 
 const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete }) => {
   const { data: tokenInfo, isFetched, isLoading, refetch } = useTokenAwardInfo();
-  const [finishScrach, setfinishScrach] = useState<Array<string>>([]);
+  const [finishSctrach, setfinishScratch] = useState<Array<string>>([]);
   const cardRef = useRef<ScratchCard>(null);
   const finishPercent = 60;
   const fadeOutOnComplete = true;
@@ -78,7 +78,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
         </ScratchCard>
       );
     });
-  }, [tokenInfo, revealed, disabled, finishScrach]);
+  }, [tokenInfo, revealed, disabled, finishSctrach]);
 
   useEffect(() => {
     if (!isFetched && !isLoading) {
@@ -87,11 +87,11 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
   }, [isFetched, isLoading]);
 
   const onCompleteScratch = (key) => {
-    if (!finishScrach.includes(key)) {
+    if (!finishSctrach.includes(key)) {
       // console.log('finishScrach', key);
-      setfinishScrach([...finishScrach, key]);
+      setfinishScratch([...finishSctrach, key]);
     }
-    if (finishScrach.length >= 24) {
+    if (finishSctrach.length >= 24) {
       onComplete();
     }
   };

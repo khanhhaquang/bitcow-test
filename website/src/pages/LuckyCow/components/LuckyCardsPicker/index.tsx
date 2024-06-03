@@ -133,7 +133,7 @@ const LuckyCardPickers = ({
           borderWidth={4}
           color="#000000"
           onClick={onSubmitPickCard}
-          className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black">
+          className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black">
           scratch them!
         </PixelButton>
       ) : (

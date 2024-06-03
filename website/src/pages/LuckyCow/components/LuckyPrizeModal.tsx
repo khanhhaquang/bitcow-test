@@ -20,10 +20,14 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
   const { data: tokenInfo } = useTokenAwardInfo();
   const pickedCard = useSelector(getPickedCard);
 
+  const claimHash = useSelector(getClaimHash);
+
+  const link = `${currentNetwork.chainConfig.blockExplorerUrls[0]}/tx/${claimHash}`;
+
   const content = useMemo(() => {
     let data: ILuckyAward[] = [];
     if (!userInfo || !userInfo.pickCard) {
-      return <></>;
+      return null;
     }
     pickedCard.map((card) =>
       data.push({
@@ -50,35 +54,7 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
       );
     });
   }, [tokenInfo, pickedCard]);
-  const claimHash = useSelector(getClaimHash);
-  const link = `${currentNetwork.chainConfig.blockExplorerUrls[0]}/tx/${claimHash}`;
-  // const data = [
-  //   {
-  //     token: 'SOL',
-  //     icon: 'images/WBTC.svg',
-  //     amount: 50
-  //   },
-  //   {
-  //     token: 'SOL',
-  //     icon: 'images/WBTC.svg',
-  //     amount: 50
-  //   },
-  //   {
-  //     token: 'SOL',
-  //     icon: 'images/WBTC.svg',
-  //     amount: 50
-  //   },
-  //   {
-  //     token: 'SOL',
-  //     icon: 'images/WBTC.svg',
-  //     amount: 50
-  //   },
-  //   {
-  //     token: 'SOL',
-  //     icon: 'images/WBTC.svg',
-  //     amount: 50
-  //   }
-  // ];
+
   return (
     <BitcowModal
       closable
@@ -93,10 +69,16 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
         <div className="flex items-center justify-center">
           <div className="mb-1 flex gap-x-6">{content}</div>
         </div>
-        <div className="mb-5 text-center font-micro text-lg text-white">are on the way</div>
+        <div className="mb-5 text-center font-micro text-lg text-white">
+          {pickedCard.length > 1 ? 'are' : 'is'} on the way
+        </div>
         <div className="text-center font-pd text-lg text-white">
           Check the transaction{' '}
-          <a href={link} target="_blank" rel="noreferrer" className="hover:underline">
+          <a
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+            className="text-black hover:text-black hover:underline">
             here
           </a>
         </div>

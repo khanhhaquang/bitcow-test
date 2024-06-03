@@ -49,9 +49,9 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
 const renderTxnView = (content: ReactNode, txnUrl) => {
   return (
     <p className="flex flex-wrap">
-      {content}{' '}
+      {content}
       {!!txnUrl && (
-        <TextLink href={txnUrl} className="!text-bc-blue">
+        <TextLink href={txnUrl} className="ml-1 !text-bc-blue">
           here
         </TextLink>
       )}

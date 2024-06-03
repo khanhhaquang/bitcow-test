@@ -61,10 +61,10 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
   const handleRedeem = async () => {
     try {
       const result = await LuckyDrawService.freePlayGame.call(walletAddress);
-      console.log('handleRedeem', result.data.orderID);
+      // console.log('handleRedeem', result.data.orderID);
       if (result.code === 0) {
-        const data = await refetchUserInfo();
-        console.log('refetchUserInfo', data.data.orderID);
+        await refetchUserInfo();
+        // console.log('refetchUserInfo', data.data.orderID);
         onClickRedeem();
       }
     } catch (e) {

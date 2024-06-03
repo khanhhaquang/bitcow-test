@@ -409,7 +409,10 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       return;
     }
     console.log('Txn error: ', e);
-    if (e.message?.includes('missing revert data')) {
+    if (
+      e.message?.includes('missing revert data') ||
+      e.message?.includes('execution reverted (unknown custom error)')
+    ) {
       openErrorNotification({
         detail: 'You may want to try to refresh page or increase your gas fee. '
       });

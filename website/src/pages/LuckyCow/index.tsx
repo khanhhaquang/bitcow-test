@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import useMerlinWallet from 'hooks/useMerlinWallet';
@@ -20,7 +20,13 @@ export enum LuckyCowStatus {
   CARDS_SCRATCHING
 }
 
-const MAX_CARDS = 10;
+const MAX_CARDS = 5;
+
+const Wrapper = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="flex flex-col items-center pt-20 laptop:scale-75 laptop:pt-0">{children}</div>
+  );
+};
 
 const LuckyCow = () => {
   const { state } = useLocation();
@@ -107,9 +113,9 @@ const LuckyCow = () => {
 
   if (!wallet)
     return (
-      <div className="flex flex-col items-center pt-20">
+      <Wrapper>
         <NotConnected />
-      </div>
+      </Wrapper>
     );
 
   if (!userInfo) return <Loader />;
@@ -117,7 +123,7 @@ const LuckyCow = () => {
   if (isPlayGameRequesting) return <Loader>Preparing your card...</Loader>;
 
   return (
-    <div className="flex flex-col items-center pt-20">
+    <Wrapper>
       {content}
       <LuckyCodeModal
         open={isLuckyCodeOpen}
@@ -128,7 +134,7 @@ const LuckyCow = () => {
         }}
       />
       <LuckyPrizeModal open={isLuckyPrizeOpen} onCancel={() => setIsLuckyPrizeOpen(false)} />
-    </div>
+    </Wrapper>
   );
 };
 

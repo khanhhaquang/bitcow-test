@@ -22,7 +22,9 @@ const LuckyCardPickers = ({
   numsOfSelectedCard,
   onStartScratching
 }: CardsPickerProps) => {
-  const [cardsStatus, setCardsStatus] = useState<Array<CardPickingStatus>>([]);
+  const [cardsStatus, setCardsStatus] = useState<Array<CardPickingStatus>>(
+    Array(numsOfCard).fill(CardPickingStatus.NOT_SELECT)
+  );
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
   const { data: userInfo } = useUserInfo();
@@ -32,9 +34,9 @@ const LuckyCardPickers = ({
   const onCalculateMarginRight = () => {
     if (!containerRef.current) return;
     const containerWidth = containerRef.current.getBoundingClientRect().width;
-    const cardWidth = 263;
-    const remainWidth = containerWidth - cardWidth; // remain width after first card;
-    setCardMarginRight(remainWidth / (numsOfCard - 1) - cardWidth);
+    const CARD_WIDTH = 263;
+    const remainWidth = containerWidth - CARD_WIDTH; // remain width after first card;
+    setCardMarginRight(remainWidth / (numsOfCard - 1) - CARD_WIDTH);
   };
 
   const currentSelected = useMemo(
@@ -100,11 +102,7 @@ const LuckyCardPickers = ({
     }
   };
 
-  useEffect(() => {
-    setCardsStatus(Array(numsOfCard).fill(CardPickingStatus.NOT_SELECT));
-  }, [numsOfCard]);
-
-  useEffect(onCalculateMarginRight, [containerRef?.current?.clientWidth, numsOfCard]);
+  useEffect(onCalculateMarginRight, []);
 
   useEffect(() => {
     window.addEventListener('resize', onCalculateMarginRight);
@@ -115,13 +113,13 @@ const LuckyCardPickers = ({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative flex w-[80vw]" ref={containerRef}>
+      <div className="relative flex w-[80vw] justify-center" ref={containerRef}>
         {cardsStatus.map((status, index) => (
           <LuckyFrontCard
-            key={`${index}_${status}`}
             index={index}
+            key={`${index}_${status}`}
             zIndex={numsOfCard - index}
-            marginRight={cardMarginRight}
+            marginRight={index === cardsStatus.length - 1 ? 0 : cardMarginRight}
             onSelectCard={onSelectCard}
             status={status}
             enableHover={status === CardPickingStatus.NOT_SELECT && !isPickEnoughCards}

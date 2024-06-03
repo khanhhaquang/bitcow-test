@@ -7,19 +7,13 @@ import { ILuckNews, LuckyDrawService } from 'services/luckyDraw';
 import { cn } from 'utils/cn';
 import { displayAddress } from 'wallet/utils/formatter';
 
-type LuckyHightLightItemProps = Pick<ILuckNews, 'address' | 'amount' | 'token' | 'tokenIcon'>;
-
 enum LuckyHighLightIconStatus {
   SUCCESS,
   ERROR
 }
 
-const LuckyHightLightItem: FC<LuckyHightLightItemProps> = ({
-  address,
-  amount,
-  token,
-  tokenIcon
-}) => {
+const LuckyHightLightItem: FC<{ data: ILuckNews }> = ({ data }) => {
+  const { address, amount, token, tokenIcon } = data;
   const [iconStatus, setIconStatus] = useState<LuckyHighLightIconStatus>(
     LuckyHighLightIconStatus.SUCCESS
   );
@@ -72,12 +66,12 @@ const LuckyResultHighlight: FC<{ classNames?: string }> = ({ classNames }) => {
           translateX: ['0%', '-100%']
         }}
         transition={{
-          duration: 30,
+          duration: 60,
           ease: 'linear',
           repeat: Infinity
         }}>
         {winners?.map((item) => (
-          <LuckyHightLightItem key={item?.id} {...item} />
+          <LuckyHightLightItem key={item?.id} data={item} />
         ))}
       </motion.div>
     );

@@ -169,16 +169,18 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
             </Button>
           </div>
         )}
-        <div className="absolute -right-[100px] bottom-0">
-          <PixelButton
-            onClick={onClickRevealAll}
-            width={178}
-            height={38}
-            color="#000"
-            className="bg-[#FFC700] text-2xl uppercase leading-none text-black">
-            REVEAL ALL
-          </PixelButton>
-        </div>
+        {!revealedAll && (
+          <div className="absolute -right-[100px] bottom-0">
+            <PixelButton
+              onClick={onClickRevealAll}
+              width={178}
+              height={38}
+              color="#000"
+              className="bg-[#FFC700] text-2xl uppercase leading-none text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black">
+              REVEAL ALL
+            </PixelButton>
+          </div>
+        )}
       </div>
       <div className="mt-4 items-center justify-center text-center font-pd text-2xl leading-none text-white">
         Only claim when you finish
@@ -192,7 +194,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
           width={178}
           height={38}
           color="black"
-          className="!bg-white text-2xl uppercase leading-none text-black">
+          className="!bg-white text-2xl uppercase leading-none text-black hover:!bg-white hover:!text-black/60 active:!bg-white active:!text-black">
           claim
         </PixelButton>
       </div>

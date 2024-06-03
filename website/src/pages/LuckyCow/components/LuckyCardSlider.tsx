@@ -21,68 +21,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const [completeCard, setCompleteCard] = useState<Array<string>>([]);
   const { data: userInfo, isFetched, isLoading, refetch } = useUserInfo();
   const [data, setData] = useState<Array<ILuckyCardInfo>>([]);
-  // const data = useSelector(getPickedCard);
-  // let pickedCard = [];
-  // if (!userInfo && !userInfo.pickCard) {
-  //   Object.keys(userInfo.pickCard).forEach((key) => {
-  //     const card: ILuckyCardInfo = userInfo.pickCard[key] as ILuckyCardInfo;
-  //     pickedCard.push(card);
-  //     // data.push({
-  //     //   tokens: [
-  //     //     'i-coin',
-  //     //     'c-coin',
-  //     //     'b-coin',
-  //     //     'g-coin',
-  //     //     'd-coin',
-  //     //     'd-coin',
-  //     //     'd-coin',
-  //     //     'b-coin',
-  //     //     'h-coin',
-  //     //     'f-coin'
-  //     //   ],
-  //     //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
-  //     //   luckyAmount: 212.6,
-  //     //   luckyToken: 'xxx',
-  //     //   luckyTokenAddress: ''
-  //     // });
-  //     // data.push({
-  //     //   tokens: [
-  //     //     'i-coin',
-  //     //     'c-coin',
-  //     //     'b-coin',
-  //     //     'g-coin',
-  //     //     'd-coin',
-  //     //     'd-coin',
-  //     //     'd-coin',
-  //     //     'b-coin',
-  //     //     'h-coin',
-  //     //     'f-coin'
-  //     //   ],
-  //     //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
-  //     //   luckyAmount: 212.6,
-  //     //   luckyToken: 'xxx',
-  //     //   luckyTokenAddress: ''
-  //     // });
-  //     // data.push({
-  //     //   tokens: [
-  //     //     'i-coin',
-  //     //     'c-coin',
-  //     //     'b-coin',
-  //     //     'g-coin',
-  //     //     'd-coin',
-  //     //     'd-coin',
-  //     //     'd-coin',
-  //     //     'b-coin',
-  //     //     'h-coin',
-  //     //     'f-coin'
-  //     //   ],
-  //     //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
-  //     //   luckyAmount: 212.6,
-  //     //   luckyToken: 'xxx',
-  //     //   luckyTokenAddress: ''
-  //     // });
-  //   });
-  // }
+  const [activeIndex, setActiveSlide] = useState(0);
 
   useEffect(() => {
     if (!userInfo || !userInfo.pickCard) {
@@ -93,17 +32,71 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
         const card: ILuckyCardInfo = userInfo.pickCard[key] as ILuckyCardInfo;
         pickedCard.push(card);
       });
+      // pickedCard.push({
+      //   tokens: [
+      //     'i-coin',
+      //     'c-coin',
+      //     'b-coin',
+      //     'g-coin',
+      //     'd-coin',
+      //     'd-coin',
+      //     'd-coin',
+      //     'b-coin',
+      //     'h-coin',
+      //     'f-coin'
+      //   ],
+      //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
+      //   luckyAmount: 212.6,
+      //   luckyToken: 'xxx',
+      //   luckyTokenAddress: ''
+      // });
+      // pickedCard.push({
+      //   tokens: [
+      //     'i-coin',
+      //     'c-coin',
+      //     'b-coin',
+      //     'g-coin',
+      //     'd-coin',
+      //     'd-coin',
+      //     'd-coin',
+      //     'b-coin',
+      //     'h-coin',
+      //     'f-coin'
+      //   ],
+      //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
+      //   luckyAmount: 212.6,
+      //   luckyToken: 'xxx',
+      //   luckyTokenAddress: ''
+      // });
+      // pickedCard.push({
+      //   tokens: [
+      //     'i-coin',
+      //     'c-coin',
+      //     'b-coin',
+      //     'g-coin',
+      //     'd-coin',
+      //     'd-coin',
+      //     'd-coin',
+      //     'b-coin',
+      //     'h-coin',
+      //     'f-coin'
+      //   ],
+      //   amounts: [179.36, 24.89, 212.6, 185.24, 63.09, 43.53, 141.72, 88.52, 138.73, 143.74],
+      //   luckyAmount: 212.6,
+      //   luckyToken: 'xxx',
+      //   luckyTokenAddress: ''
+      // });
       setData(pickedCard);
+      setActiveSlide(Math.floor(data.length / 2));
+      dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
     }
   }, [isFetched, isLoading, userInfo]);
 
-  const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));
-
   const next = () =>
-    activeIndex < data.length - 1 ? setactiveSlide(activeIndex + 1) : setactiveSlide(0);
+    activeIndex < data.length - 1 ? setActiveSlide(activeIndex + 1) : setActiveSlide(0);
 
   const prev = () =>
-    activeIndex > 0 ? setactiveSlide(activeIndex - 1) : setactiveSlide(data.length - 1);
+    activeIndex > 0 ? setActiveSlide(activeIndex - 1) : setActiveSlide(data.length - 1);
 
   const onClickRevealAll = () => {
     setRevealedAll(true);

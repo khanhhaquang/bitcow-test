@@ -1,17 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import useMerlinWallet from 'hooks/useMerlinWallet';
-
+import useUserInfo from 'hooks/useUserInfo';
+import { GameProgress } from 'services/user';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 import Loader from './components/Loader';
 import LuckyCardsPicker from './components/LuckyCardsPicker';
 import LuckyCodeModal from './components/LuckyCodeModal';
 import { Buy, NotConnected, Redeem } from './components/LuckyShop';
-import useUserInfo from 'hooks/useUserInfo';
-
 import LuckyCardSlider from './components/LuckyCardSlider';
-import { useLocation } from 'react-router-dom';
-import { GameProgress } from 'services/user';
-import { useLuckyGame } from 'hooks/useLuckyGame';
 import LuckyPrizeModal from './components/LuckyPrizeModal';
 
 export enum LuckyCowStatus {
@@ -61,7 +59,7 @@ const LuckyCow = () => {
         return (
           <LuckyCardsPicker
             numsOfCard={MAX_CARDS}
-            numsOfSelectedCard={userInfo?.quantity}
+            numsOfSelectedCard={userInfo?.quantity || 0}
             onStartScratching={() => {
               setStatus(LuckyCowStatus.CARDS_SCRATCHING);
             }}
@@ -82,7 +80,10 @@ const LuckyCow = () => {
   }, [wallet, status]);
 
   useEffect(() => {
-    if (isFromLuckyChance) return;
+    if (isFromLuckyChance) {
+      window.history.replaceState({}, '');
+      return;
+    }
 
     if (userInfo?.isGameActive) {
       if (userInfo?.gameProgress === GameProgress.CARD_SELECTED) {

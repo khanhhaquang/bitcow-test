@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import VirtualList from 'rc-virtual-list';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
+import uniqBy from 'lodash/uniqBy';
 import { Input, List } from 'components/Antd';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import usePools from 'hooks/usePools';
@@ -26,13 +26,17 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
   const { bitcowSDK, tokenList, tokenBalances, setNeedBalanceTokens, createBitcowSDK } =
     useMerlinWallet();
   const { coinPrices } = usePools();
+
   const commonCoins = useMemo(() => {
-    return tokenList
+    const list = tokenList
       ? tokenList.filter((token) => {
           return ['wBTC', 'WBTC', 'BTC', 'bitusd', 'USDT'].includes(token.symbol);
         })
       : [];
+
+    return uniqBy(list, 'address');
   }, [tokenList]);
+
   const [filter, setFilter] = useState<string>('');
   const [tokenListBalance, setTokenListBalance] = useState<FilteredToken[]>();
   const [searchedPairMessages, setSearchedPairMessages] = useState<SearchPairMessage[]>();
@@ -116,7 +120,7 @@ const CoinSelector: React.FC<TProps> = ({ onClose, actionType }) => {
           return keysForFilter.includes(filter);
         });
       }
-      setTokenListBalance(currentTokenList);
+      setTokenListBalance(uniqBy(currentTokenList, 'token.address'));
     } else {
       setTokenListBalance([]);
     }

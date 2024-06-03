@@ -297,7 +297,7 @@ class ScratchCard extends Component<Props, State> {
       visibility: this.state.loaded ? ('visible' as const) : ('hidden' as const),
       width: '100%',
       height: '100%',
-      'align-content': 'center'
+      alignContent: 'center'
     };
 
     return (

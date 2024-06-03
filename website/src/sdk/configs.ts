@@ -77,7 +77,7 @@ export const CONFIG: {
     swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
     tokensBalance: '0x088Ca4ad4E99862B1f402E8455A54c9e5CabB359',
     pairV1Manager: '0xA235617b8e712E9b28E013d5Ca171c76108bb036',
-    lottery: '0xB5F04408B6691af57caf20C30cE5Aab8131eAAdB',
+    lottery: '0xc482f1e9296007ddd02a7b4f0a3b5a4adfc30119',
     lotteryToken: '0x5cA6bE430A0E5FB022fC0C842430043FEd80cf2B'
   }
 };

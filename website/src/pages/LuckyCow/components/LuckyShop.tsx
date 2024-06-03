@@ -14,7 +14,6 @@ import {
 import useLuckyCard from 'hooks/useLuckyCard';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import {
-  openErrorNotification,
   openTxErrorNotification,
   openTxPendingNotification,
   openTxSuccessNotification
@@ -106,7 +105,7 @@ const Buy: FC<{
   const { data: luckyCard } = useLuckyCard();
   const { allowance, isIncreasingAllowance, isPurchasing, purchase, increaseAllowance } =
     useLuckyShop();
-  const { bitcowSDK } = useMerlinWallet();
+  const { bitcowSDK, checkTransactionError } = useMerlinWallet();
   const { currentNetwork } = useNetwork();
 
   const [cardsAmount, setCardsAmount] = useState(1);
@@ -141,8 +140,7 @@ const Buy: FC<{
         );
       }
     } catch (e) {
-      console.log('🚀 ~ handleClickBuy ~ e:', e);
-      openErrorNotification({ detail: 'Failed to buy' });
+      checkTransactionError(e);
     }
   };
 
@@ -165,8 +163,8 @@ const Buy: FC<{
           'Failed to increase'
         );
       }
-    } catch (error) {
-      openErrorNotification({ detail: 'Failed to increase allowance' });
+    } catch (e) {
+      checkTransactionError(e);
     }
   };
 

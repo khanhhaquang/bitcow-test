@@ -55,6 +55,7 @@ interface MerlinWalletContextType {
   bitusdToken: TokenInfo;
   clearCache: () => void;
   pendingTx: boolean;
+  checkTransactionError: (e) => void;
   requestSwap: (
     quote: Quote,
     minOutputAmt: number,
@@ -809,7 +810,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         requestAddLiquidity,
         requestWithdrawLiquidity,
         requestCreatePairWithManager,
-        requestCreatePair
+        requestCreatePair,
+        checkTransactionError
       }}>
       {children}
     </MerlinWalletContext.Provider>

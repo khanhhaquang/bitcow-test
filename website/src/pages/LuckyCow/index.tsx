@@ -77,7 +77,7 @@ const LuckyCow = () => {
       default:
         return <Loader />;
     }
-  }, [wallet, status]);
+  }, [status, userInfo?.quantity]);
 
   useEffect(() => {
     if (isFromLuckyChance) {

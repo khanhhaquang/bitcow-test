@@ -44,7 +44,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
   const { currentNetwork } = useNetwork();
 
   const { mutateAsync: chooseOptionRequest, isPending } = useMutation({
-    mutationFn: (data: { luckyId: number; choice: RewardChoice }) =>
+    mutationFn: (data: { luckyId: string; choice: RewardChoice }) =>
       LuckyDrawService.chooseRewardOption.call(data.luckyId, data.choice)
   });
 
@@ -112,7 +112,6 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
                     choice: RewardChoice.SCRATCH_CARDS
                   })
                     .then((result) => {
-                      console.log('🚀 chooseOptionRequest ~ SCRATCH_CARDS:', result);
                       if (result.code === 0) {
                         onClose();
                         navigate('/lucky-cow', { state: { isFromLuckyChance: true } });

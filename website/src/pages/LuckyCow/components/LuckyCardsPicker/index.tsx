@@ -142,7 +142,7 @@ const LuckyCardPickers = ({
         <div className="relative z-20 -mt-[30px] flex h-[77px] w-[407px] items-center justify-center bg-white bg-clip-content p-1 font-pd text-2xl text-pink_950">
           <LuckyCardPickingBorderOuter className="absolute" />
           <LuckyCardPickingBorderInner className="absolute" />
-          <span>Pick {numsOfSelectedCard - currentSelected.length} cards </span>
+          <span>Pick {numsOfSelectedCard - currentSelected.length} cards</span>
         </div>
       )}
     </div>

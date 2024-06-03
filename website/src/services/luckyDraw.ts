@@ -3,7 +3,7 @@ import { IResponse } from 'types/common';
 
 export interface ITxnLucky {
   isLucky: boolean;
-  luckyId: number;
+  luckyId: string;
   luckyAmount: number;
   expiryTimestamp: number;
 }
@@ -73,7 +73,7 @@ export const LuckyDrawService = {
   },
   chooseRewardOption: {
     key: 'luckyDraw.selectRewardOption',
-    call: (luckyId: number, choice: RewardChoice) =>
+    call: (luckyId: string, choice: RewardChoice) =>
       axiosInstance
         .get<IResponse<ILuckyReward>>(`luckDraw/swap/chooseReward/${choice}/${luckyId}`)
         .then((res) => res.data)

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://ec2-13-213-40-242.ap-southeast-1.compute.amazonaws.com:8866/',
+  baseURL: 'https://luckycowdev.bitsmiley.io/',
   headers: {
     'Cache-Control': 'no-cache'
   }

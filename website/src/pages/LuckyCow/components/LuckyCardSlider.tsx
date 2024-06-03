@@ -8,9 +8,9 @@ import Button from 'components/Button';
 import PixelButton from 'components/PixelButton';
 import useUserInfo from 'hooks/useUserInfo';
 import { useDispatch } from 'react-redux';
-// import { getPickedCard } from 'modules/luckyCow/reducer';
-import { ILuckyCardInfo, LuckyDrawService } from 'services/luckyDraw';
+import { ILuckyCardInfo } from 'services/luckyDraw';
 import luckyCowAction from 'modules/luckyCow/actions';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 
 interface TProps {
   onClaim: () => void;
@@ -22,6 +22,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const { data: userInfo, isFetched, isLoading, refetch } = useUserInfo();
   const [data, setData] = useState<Array<ILuckyCardInfo>>([]);
   const [activeIndex, setActiveSlide] = useState(0);
+  const { claim, isClaiming, claimResult } = useLuckyGame();
 
   useEffect(() => {
     if (!userInfo || !userInfo.pickCard) {
@@ -79,19 +80,6 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
       setRevealedAll(true);
     }
   };
-  const onClickClaim = async () => {
-    try {
-      const result = await LuckyDrawService.claim.call(userInfo?.orderID);
-      console.log('claim order: ', userInfo?.orderID);
-      if (result.code === 0) {
-        console.log('claim hash: ', result.data.claimHash);
-        dispatch(luckyCowAction.SET_CLAIM_HASH(result.data.claimHash));
-        onClaim();
-      }
-    } catch (e) {
-      console.log('🚀 ~ cliam error:', e);
-    }
-  };
   const getClassName = (index) => {
     if (activeIndex === index) return styles.slideActive;
     else if (activeIndex - 1 === index || activeIndex + 4 === index) return styles.slideSecondLeft;
@@ -101,6 +89,14 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
     else if (index < activeIndex - 2) return styles.slideBackLeft;
     else if (index > activeIndex + 2) return styles.slideBackRight;
   };
+
+  useEffect(() => {
+    if (claimResult?.code === 0) {
+      console.log('claim hash: ', claimResult.data.claimHash);
+      dispatch(luckyCowAction.SET_CLAIM_HASH(claimResult.data.claimHash));
+      onClaim();
+    }
+  }, [claimResult]);
 
   return (
     <div className="flex flex-col">
@@ -158,13 +154,14 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
       </div>
       <div className="mt-5 flex justify-center pl-3">
         <PixelButton
-          disabled={!revealedAll}
-          onClick={onClickClaim}
+          disabled={!revealedAll || isClaiming}
+          onClick={() => claim()}
+          isLoading={isClaiming}
           width={178}
           height={38}
           color="black"
           className="!bg-white text-2xl uppercase leading-none text-black hover:!bg-white hover:!text-black/60 active:translate-x-1 active:translate-y-1 active:!bg-white active:!text-black disabled:!bg-[#B8B8B8] disabled:!text-black/40">
-          claim
+          {isClaiming ? 'processing...' : 'claim'}
         </PixelButton>
       </div>
     </div>

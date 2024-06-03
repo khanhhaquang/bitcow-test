@@ -73,7 +73,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
           finishPercent={finishPercent}
           onComplete={() => onCompleteScratch(`scratch-token-${index}`)}>
           <div className="flex h-full w-full items-center justify-center">
-            <Image src={iconUrl} width={13} height={13} className="rounded-full" />
+            <Image src={iconUrl} width={13} height={13} className="rounded-full" preview={false} />
             <div className="ml-1 h-[13px] text-sm leading-none">{value}</div>
           </div>
         </ScratchCard>
@@ -102,7 +102,6 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
       <div className="relative h-[600px] w-[414px] border-[3px] border-black bg-[#FD8900]">
         <img
           src={imageLuckyTop}
-          alt="loading"
           width={345}
           height={84}
           className="absolute top-[78px] left-1/2 -ml-[166px]"
@@ -129,9 +128,9 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
                 onComplete={() => onCompleteScratch(`scratch-chest-${index}`)}>
                 <div className="flex h-full w-full items-center justify-center">
                   {value > 0 ? (
-                    <Image src={imageJackpot} width={58} height={39} />
+                    <Image src={imageJackpot} width={58} height={39} preview={false} />
                   ) : (
-                    <Image src={imageNextTime} width={51} height={34} />
+                    <Image src={imageNextTime} width={51} height={34} preview={false} />
                   )}
                 </div>
               </ScratchCard>

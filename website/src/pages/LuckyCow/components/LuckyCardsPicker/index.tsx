@@ -4,8 +4,7 @@ import PixelButton from 'components/PixelButton';
 import { LuckyCardPickingBorderInner, LuckyCardPickingBorderOuter } from 'resources/icons';
 
 import LuckyFrontCard, { CardPickingStatus } from './LuckyFrontCard';
-import { LuckyDrawService } from 'services/luckyDraw';
-import useUserInfo from 'hooks/useUserInfo';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 // import { useDispatch } from 'react-redux';
 // import luckyCowAction from 'modules/luckyCow/actions';
 // import { ILuckyAward } from 'pages/LuckyCow/types';
@@ -27,9 +26,7 @@ const LuckyCardPickers = ({
   );
   const [cardMarginRight, setCardMarginRight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>();
-  const { data: userInfo } = useUserInfo();
-  // const { data: tokenInfo } = useTokenAwardInfo();
-  // const dispatch = useDispatch();
+  const { pickCard, isPickCardRequesting, pickCardResult } = useLuckyGame();
 
   const onCalculateMarginRight = () => {
     if (!containerRef.current) return;
@@ -76,31 +73,14 @@ const LuckyCardPickers = ({
       return acc;
     }, []);
 
-    const result = await LuckyDrawService.pickCard.call(userInfo?.orderID, selectedIndex);
-    console.log(userInfo.orderID);
-    // const result = await pickCard(selectedIndex);
-    if (result.code === 0) {
-      // let pickedCard: ILuckyCardInfo[] = [];
-      // let luckyAward: ILuckyAward[] = [];
-      // Object.keys(result.data).forEach((key) => {
-      //   if (key != 'orderID') {
-      //     const card: ILuckyCardInfo = result.data[key] as ILuckyCardInfo;
-      //     pickedCard.push(card);
-      //   }
-      // });
-      // pickedCard.map((card) =>
-      //   luckyAward.push({
-      //     token: card.luckyToken,
-      //     amount: card.luckyAmount,
-      //     icon: tokenInfo.find((w) => w.tokenSymbol === card.luckyToken)?.tokenIcon
-      //   })
-      // );
-      // console.log('pickedCard', pickedCard);
-      // dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
-      // dispatch(luckyCowAction.SET_LUCKY_AWARD(luckyAward));
+    pickCard(selectedIndex);
+  };
+
+  useEffect(() => {
+    if (pickCardResult?.code === 0) {
       onStartScratching();
     }
-  };
+  }, [pickCardResult]);
 
   useEffect(onCalculateMarginRight, []);
 
@@ -133,8 +113,10 @@ const LuckyCardPickers = ({
           borderWidth={4}
           color="#000000"
           onClick={onSubmitPickCard}
-          className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black">
-          scratch them!
+          isLoading={isPickCardRequesting}
+          disabled={isPickCardRequesting}
+          className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black disabled:!text-black">
+          {isPickCardRequesting ? 'processing...' : 'scratch them!'}
         </PixelButton>
       ) : (
         <div className="relative z-20 -mt-[30px] flex h-[77px] w-[407px] items-center justify-center bg-white bg-clip-content p-1 font-pd text-2xl text-pink_950">

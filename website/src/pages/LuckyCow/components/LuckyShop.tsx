@@ -1,5 +1,5 @@
 import { Image } from 'antd';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 
 import PixelButton from 'components/PixelButton';
 import {
@@ -20,8 +20,7 @@ import {
 } from 'utils/notifications';
 import useNetwork from 'hooks/useNetwork';
 import useLuckyShop from 'hooks/useLuckyShop';
-import { LuckyDrawService } from 'services/luckyDraw';
-import useUserInfo from 'hooks/useUserInfo';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 
 type LuckyShopProps = {
   children?: ReactNode;
@@ -56,21 +55,13 @@ const LuckyShopWrapper: FC<LuckyShopProps> = ({ children, text }) => {
 };
 
 const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
-  const { walletAddress } = useMerlinWallet();
-  const { refetch: refetchUserInfo } = useUserInfo();
-  const handleRedeem = async () => {
-    try {
-      const result = await LuckyDrawService.freePlayGame.call(walletAddress);
-      // console.log('handleRedeem', result.data.orderID);
-      if (result.code === 0) {
-        await refetchUserInfo();
-        // console.log('refetchUserInfo', data.data.orderID);
-        onClickRedeem();
-      }
-    } catch (e) {
-      console.log('🚀 ~ Check lucky code error:', e);
+  const { freePlayGame, isFreePlayGameRequesting, freePlayGameResult } = useLuckyGame();
+
+  useEffect(() => {
+    if (freePlayGameResult?.code === 0) {
+      onClickRedeem();
     }
-  };
+  }, [freePlayGameResult]);
 
   return (
     <LuckyShopWrapper text="Wise choice!  Good luck and win some juicy prizes!">
@@ -83,12 +74,14 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
               Your <b className="font-pdb text-[#FF8D00]">LUCKY COW lottery card</b> is ready
             </h3>
             <PixelButton
-              onClick={handleRedeem}
+              onClick={() => freePlayGame()}
+              isLoading={isFreePlayGameRequesting}
+              disabled={isFreePlayGameRequesting}
               width={286}
               height={38}
               color="#000"
-              className="bg-[#FFC700] text-2xl text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black">
-              Redeem now
+              className="bg-[#FFC700] text-2xl text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black disabled:!text-black">
+              {isFreePlayGameRequesting ? 'processing...' : 'Redeem now'}
             </PixelButton>
           </div>
         </div>

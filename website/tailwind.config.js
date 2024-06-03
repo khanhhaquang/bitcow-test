@@ -92,6 +92,7 @@ module.exports = {
           'linear-gradient(51.34deg, rgba(255, 104, 39, 0.3) 0%, #FF792C 24.54%, #FF9C37 48.97%, #FF6827 70.53%, rgba(255, 104, 39, 0.3) 95.27%)',
         accountBg: 'url(resources/img/accountBg.svg)',
         'lucky-cow': 'linear-gradient(129deg, #E26B16 0%, #EA8A14 175.48%)',
+        'lucky-cow-decorator': 'url(resources/img/lucky-cow-decorator.webp)',
         'bc-swap':
           'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)',
         'bc-pool':

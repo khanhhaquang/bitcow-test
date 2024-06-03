@@ -1,13 +1,5 @@
-import { Image } from 'antd';
-
 const LuckyCowDecorator = () => {
-  return (
-    <Image
-      src="/images/lucky-cow-decorator.webp"
-      className="h-full w-full"
-      rootClassName="absolute inset-0"
-    />
-  );
+  return <div className="absolute inset-0 bg-lucky-cow-decorator bg-cover"></div>;
 };
 
 export default LuckyCowDecorator;

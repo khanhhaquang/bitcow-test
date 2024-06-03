@@ -14,5 +14,7 @@ export const bigintTokenBalanceToNumber = (token: Token | TokenInfo, balance: bi
 };
 
 export const getChainTxnUrl = (domain: string, hash: string) => {
+  if (!domain || !hash) return '';
+
   return `${domain}/tx/${hash}`;
 };

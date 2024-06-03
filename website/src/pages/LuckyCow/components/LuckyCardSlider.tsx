@@ -94,6 +94,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
         pickedCard.push(card);
       });
       setData(pickedCard);
+      dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
     }
   }, [isFetched, isLoading, userInfo]);
 

@@ -7,7 +7,12 @@ const useLuckyShop = () => {
   const { bitcowSDK, walletAddress } = useMerlinWallet();
 
   const { data: allowanceResult } = useQuery({
-    queryKey: ['bitcowSDK.lotteryToken.allowance', bitcowSDK, walletAddress],
+    queryKey: [
+      'bitcowSDK.lotteryToken.allowance',
+      walletAddress,
+      bitcowSDK?.lotteryToken?.address,
+      bitcowSDK?.lottery?.contractAddress
+    ],
     queryFn: () =>
       bitcowSDK?.lotteryToken?.allowance(walletAddress, bitcowSDK.lottery.contractAddress),
     enabled: true

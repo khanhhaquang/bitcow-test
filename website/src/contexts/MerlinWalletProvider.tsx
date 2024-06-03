@@ -36,6 +36,7 @@ import {
 import { NetworkConfig } from '../types/bitcow';
 import { getLocalPairMessages } from '../utils/localPools';
 import { useEvmConnectContext, Wallet } from '../wallet';
+import { authToken, generateAuthToken, parseAuthToken } from 'utils/storage';
 
 interface MerlinWalletContextType {
   wallet?: Wallet;
@@ -304,6 +305,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   const setBitcowSdkSigner = useCallback(async () => {
     if (!bitcowSDK) {
+      setIsLoggedIn(false);
       return;
     }
     if (wallet) {
@@ -314,16 +316,38 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
           fetchTokenBalances(true, 'set signer');
 
-          try {
-            const newSignature = await signer.signMessage('hello play bitcow');
-            const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
-            if (loginResult?.code === 0) {
-              setIsLoggedIn(true);
-              openNotification({ type: 'success', detail: 'You have logged in' });
-              axiosSetupInterceptors(loginResult.data.token);
+          const {
+            token: cachedToken,
+            address: cachedAddress,
+            chain: cachedChain
+          } = parseAuthToken(authToken.get());
+
+          if (
+            !cachedToken ||
+            cachedAddress !== wallet.accounts[0].evm ||
+            cachedChain !== wallet.chainId
+          ) {
+            try {
+              const newSignature = await signer.signMessage('hello play bitcow');
+              const loginResult = await UserService.login.call(
+                wallet.accounts[0].evm,
+                newSignature
+              );
+              if (loginResult?.code === 0) {
+                authToken.set(
+                  generateAuthToken(loginResult.data.token, wallet.accounts[0].evm, wallet.chainId)
+                );
+                setIsLoggedIn(true);
+                openNotification({ type: 'success', detail: 'You have logged in' });
+                axiosSetupInterceptors(setBitcowSdkSigner);
+              }
+            } catch (error) {
+              setIsLoggedIn(false);
+              openNotification({ type: 'error', detail: 'Logging failed' });
             }
-          } catch (error) {
-            openNotification({ type: 'error', detail: 'Logging failed' });
+          } else {
+            setIsLoggedIn(true);
+            axiosSetupInterceptors(setBitcowSdkSigner);
           }
         }
       } else {
@@ -331,6 +355,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       }
     } else {
       bitcowSDK.setSigner(undefined, undefined);
+      setIsLoggedIn(false);
       fetchTokenBalances(true);
     }
   }, [bitcowSDK, wallet, fetchTokenBalances, setTokenBalancesCache]);

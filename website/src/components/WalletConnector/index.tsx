@@ -59,7 +59,9 @@ const WalletConnector = () => {
             <PixelButton
               width={WALLET_WIDTH}
               height={WALLET_HEIGHT}
-              onClick={() => disconnect()}
+              onClick={() => {
+                disconnect();
+              }}
               isSolid
               className="bg-white uppercase text-bc-blue hover:!bg-white active:!bg-white">
               Disconnect

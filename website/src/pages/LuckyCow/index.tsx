@@ -35,6 +35,7 @@ const LuckyCow = () => {
   const { wallet } = useMerlinWallet();
   const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
   const { data: userInfo } = useUserInfo();
+
   const [status, setStatus] = useState<LuckyCowStatus>(
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );

@@ -35,7 +35,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
   const { data: tokenInfo, isFetched, isLoading, refetch } = useTokenAwardInfo();
   const [finishScratch, setFinishScratch] = useState<Array<string>>([]);
   const cardRef = useRef<ScratchCard>(null);
-  const finishPercent = 60;
+  const finishPercent = 50;
   const fadeOutOnComplete = true;
   const brushSize = 10;
 

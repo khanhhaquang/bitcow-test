@@ -94,7 +94,7 @@ const LuckyResultHighlight: FC<{ classNames?: string }> = ({ classNames }) => {
   return (
     <div
       className={cn(
-        'fixed inset-x-0 z-10 flex h-15 w-screen items-center overflow-hidden border-y-4 border-black bg-[#BA3800] shadow-[6px_6px_0px_0px_rgba(0,0,0,0.10),3px_3px_0px_0px_rgba(0,0,0,0.10)]',
+        'fixed inset-x-0 z-10 flex h-15 w-screen items-center gap-x-3 overflow-hidden border-y-4 border-black bg-[#BA3800] shadow-[6px_6px_0px_0px_rgba(0,0,0,0.10),3px_3px_0px_0px_rgba(0,0,0,0.10)]',
         classNames
       )}>
       {content}

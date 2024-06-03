@@ -123,51 +123,60 @@ const Buy: FC<{
     setCardsAmount(nextValue);
   };
 
-  const handleIncreaseAllowance = async () => {
-    openTxPendingNotification('Increasing allowance');
-    const increaseResult = await increaseAllowance({ amount: totalPrice });
-
-    if (increaseResult.status === 1) {
-      openTxSuccessNotification(
-        currentNetwork.chainConfig.blockExplorerUrls[0],
-        increaseResult.hash,
-        'Increased allowance successfully'
-      );
-    } else if (increaseResult.status === 0) {
-      openTxErrorNotification(
-        currentNetwork.chainConfig.blockExplorerUrls[0],
-        increaseResult.hash,
-        'Failed to increase'
-      );
+  const handlePurchase = async () => {
+    try {
+      const result = await purchase({ amount: cardsAmount });
+      if (result.status === 1) {
+        openTxSuccessNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          result.hash,
+          'Buy cards successfully'
+        );
+        onBuyCallback(result.hash);
+      } else if (result.status === 0) {
+        openTxErrorNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          result.hash,
+          'Failed to buy'
+        );
+      }
+    } catch (e) {
+      console.log('🚀 ~ handleClickBuy ~ e:', e);
+      openErrorNotification({ detail: 'Failed to buy' });
     }
   };
 
-  const handleBuy = async () => {
-    if (bitcowSDK) {
-      try {
-        if (allowance < totalPrice) {
-          await handleIncreaseAllowance();
-        }
+  const handleIncreaseAllowance = async () => {
+    try {
+      openTxPendingNotification('Increasing allowance');
+      const increaseResult = await increaseAllowance({ amount: totalPrice });
 
-        const result = await purchase({ amount: cardsAmount });
-        if (result.status === 1) {
-          openTxSuccessNotification(
-            currentNetwork.chainConfig.blockExplorerUrls[0],
-            result.hash,
-            'Buy cards successfully'
-          );
-          onBuyCallback(result.hash);
-        } else if (result.status === 0) {
-          openTxErrorNotification(
-            currentNetwork.chainConfig.blockExplorerUrls[0],
-            result.hash,
-            'Failed to buy'
-          );
-        }
-      } catch (e) {
-        console.log('🚀 ~ handleBuy ~ e:', e);
-        openErrorNotification({ detail: 'Failed to process purchasing' });
+      if (increaseResult.status === 1) {
+        openTxSuccessNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          increaseResult.hash,
+          'Increased allowance successfully'
+        );
+        handlePurchase();
+      } else if (increaseResult.status === 0) {
+        openTxErrorNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          increaseResult.hash,
+          'Failed to increase'
+        );
       }
+    } catch (error) {
+      openErrorNotification({ detail: 'Failed to increase allowance' });
+    }
+  };
+
+  const handleClickBuy = async () => {
+    if (bitcowSDK) {
+      if (allowance < totalPrice) {
+        handleIncreaseAllowance();
+        return;
+      }
+      handlePurchase();
     }
   };
 
@@ -214,7 +223,7 @@ const Buy: FC<{
                   </div>
 
                   <button
-                    onClick={() => handleBuy()}
+                    onClick={() => handleClickBuy()}
                     className="group relative flex h-15 min-w-[162px] items-center overflow-hidden p-1.5">
                     <LuckyBuyBtnIcon className="absolute inset-0 w-full text-[#FF8D00] group-hover:text-[#FFC276] group-active:text-[#E85E00]" />
                     <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">

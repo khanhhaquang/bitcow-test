@@ -12,3 +12,7 @@ export const toTruncateStr = (str: string, sliceLength = -200, maxLength = 200):
 export const bigintTokenBalanceToNumber = (token: Token | TokenInfo, balance: bigint) => {
   return new BigNumber(balance.toString()).div(10 ** token.decimals).toNumber();
 };
+
+export const getChainTxnUrl = (domain: string, hash: string) => {
+  return `${domain}/tx/${hash}`;
+};

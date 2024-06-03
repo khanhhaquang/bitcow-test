@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import useMerlinWallet from './useMerlinWallet';
 import { formatEther } from 'viem';
 import { useMemo } from 'react';
+import useMerlinWallet from './useMerlinWallet';
 
 const useLuckyShop = () => {
   const { bitcowSDK, walletAddress } = useMerlinWallet();
@@ -27,8 +27,6 @@ const useLuckyShop = () => {
     () => (allowanceResult ? Number(formatEther(allowanceResult)) : 0),
     [allowanceResult]
   );
-
-  console.log('allowance', allowance);
 
   return { allowance, increaseAllowance, isIncreasingAllowance, purchase, isPurchasing };
 };

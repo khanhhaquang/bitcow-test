@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { notification } from 'components/Antd';
 import TextLink from 'components/TextLink';
 import { NotiErrorIcon, HintIcon, NotiSuccessIcon, CloseIcon } from 'resources/icons';
+import { getChainTxnUrl } from './formatter';
 
 type NotificationType = 'success' | 'error' | 'info' | 'warn';
 
@@ -45,46 +46,34 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
   });
 };
 
+const renderTxnView = (content: ReactNode, txnUrl) => {
+  return (
+    <p className="flex flex-wrap">
+      {content}{' '}
+      {!!txnUrl && (
+        <TextLink href={txnUrl} className="!text-bc-blue">
+          here
+        </TextLink>
+      )}
+    </p>
+  );
+};
+
 export const openErrorNotification = (args: INotificationArgs) =>
   openNotification({ type: 'error', ...args });
 
 export const openTxSuccessNotification = (url: string, txHash: string, content: string) => {
-  const detail = (
-    <p className="flex flex-wrap">
-      {content}
-      <TextLink href={`${url}/tx/${txHash}`} className="!text-bc-blue">
-        View Transaction
-      </TextLink>
-    </p>
-  );
+  const detail = renderTxnView(content, getChainTxnUrl(url, txHash));
   return openNotification({ detail, title: 'Transaction Success' });
 };
 
 export const openTxPendingNotification = (content: string, url = '', txHash = '') => {
-  const detail = (
-    <p className="flex flex-wrap">
-      {content}
-      {!!url && !!txHash && (
-        <TextLink href={`${url}/tx/${txHash}`} className="!text-bc-blue">
-          View Transaction
-        </TextLink>
-      )}
-    </p>
-  );
-  return openNotification({ detail, type: 'warn', title: 'Transaction processing..' });
+  const detail = renderTxnView(content, getChainTxnUrl(url, txHash));
+  return openNotification({ detail, type: 'warn', title: 'Transaction processing...' });
 };
 
 export const openTxErrorNotification = (url: string, txHash: string, content: string) => {
-  const detail = (
-    <p className="flex flex-wrap">
-      {content}
-      {!!url && !!txHash && (
-        <TextLink href={`${url}/tx/${txHash}`} className="!text-bc-blue">
-          View Transaction
-        </TextLink>
-      )}
-    </p>
-  );
+  const detail = renderTxnView(content, getChainTxnUrl(url, txHash));
   return openNotification({ type: 'error', detail, title: 'Transaction Failed' });
 };
 

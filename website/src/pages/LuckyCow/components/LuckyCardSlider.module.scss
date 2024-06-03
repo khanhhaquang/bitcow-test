@@ -16,6 +16,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.slide img {
+  user-select: none;
+  -webkit-user-drag: none;
 }
 .slidePrev{
   width: 73px;

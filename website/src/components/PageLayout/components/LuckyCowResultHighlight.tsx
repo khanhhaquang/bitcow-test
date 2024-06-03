@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
 import { FC, useEffect, useMemo, useState } from 'react';
 
 import { LuckyCoin } from 'resources/icons';
@@ -14,8 +15,15 @@ enum LuckyHighLightIconStatus {
 
 const LuckyHightLightItem: FC<{ data: ILuckNews }> = ({ data }) => {
   const { address, amount, token, tokenIcon } = data;
+
+  const { data: tokensInfo } = useTokenAwardInfo();
   const [iconStatus, setIconStatus] = useState<LuckyHighLightIconStatus>(
     LuckyHighLightIconStatus.SUCCESS
+  );
+
+  const tokenUrl = useMemo(
+    () => tokensInfo?.find((t) => t.contractAddress === token)?.tokenIcon || '',
+    [tokensInfo, token]
   );
 
   const onImgError = () => {
@@ -28,13 +36,13 @@ const LuckyHightLightItem: FC<{ data: ILuckNews }> = ({ data }) => {
         {displayAddress(address).toUpperCase()} just won:
       </span>
       <span className="whitespace-nowrap font-pdb text-color_yellow_3">
-        {amount} {token}
+        {amount} {tokenIcon}
       </span>
-      {iconStatus === LuckyHighLightIconStatus.SUCCESS ? (
+      {iconStatus === LuckyHighLightIconStatus.SUCCESS && tokenUrl ? (
         <img
-          src={tokenIcon}
+          src={tokenUrl}
           className="ml-1 h-6 w-6 min-w-[24px]"
-          alt={token}
+          alt={tokenIcon}
           onError={onImgError}
         />
       ) : (

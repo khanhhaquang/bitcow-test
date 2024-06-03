@@ -78,7 +78,7 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
         </ScratchCard>
       );
     });
-  }, [tokenInfo, revealed, disabled]);
+  }, [tokenInfo, revealed, disabled, finishScrach]);
 
   useEffect(() => {
     if (!isFetched && !isLoading) {

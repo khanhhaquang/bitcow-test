@@ -21,6 +21,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const [completeCard, setCompleteCard] = useState<Array<string>>([]);
   const { data: userInfo, isFetched, isLoading, refetch } = useUserInfo();
   const [data, setData] = useState<Array<ILuckyCardInfo>>([]);
+  const [activeIndex, setactiveSlide] = useState(0);
   // const data = useSelector(getPickedCard);
   // let pickedCard = [];
   // if (!userInfo && !userInfo.pickCard) {
@@ -94,11 +95,10 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
         pickedCard.push(card);
       });
       setData(pickedCard);
+      setactiveSlide(Math.floor(data.length / 2));
       dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
     }
   }, [isFetched, isLoading, userInfo]);
-
-  const [activeIndex, setactiveSlide] = useState(Math.floor(data.length / 2));
 
   const next = () =>
     activeIndex < data.length - 1 ? setactiveSlide(activeIndex + 1) : setactiveSlide(0);

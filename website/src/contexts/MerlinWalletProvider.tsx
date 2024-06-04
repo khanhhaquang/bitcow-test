@@ -339,15 +339,14 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
                 );
                 setIsLoggedIn(true);
                 openNotification({ type: 'success', detail: 'You have logged in' });
-                axiosSetupInterceptors(setBitcowSdkSigner);
               }
             } catch (error) {
               openNotification({ type: 'error', detail: 'Logging failed' });
             }
           } else {
             setIsLoggedIn(true);
-            axiosSetupInterceptors(setBitcowSdkSigner);
           }
+          axiosSetupInterceptors(setBitcowSdkSigner);
         }
       } else {
         setTokenBalancesCache(undefined);

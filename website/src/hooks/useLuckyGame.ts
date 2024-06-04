@@ -2,10 +2,15 @@ import { LuckyDrawService } from 'services/luckyDraw';
 import useMerlinWallet from './useMerlinWallet';
 import { useMutation } from '@tanstack/react-query';
 import useUserInfo from './useUserInfo';
+import { UserService } from 'services/user';
 
 export const useLuckyGame = () => {
   const { walletAddress } = useMerlinWallet();
   const { data: userInfo } = useUserInfo();
+
+  const { mutateAsync: activateLuckyCode, isPending: isActivateLuckyCodeRequesting } = useMutation({
+    mutationFn: (code: string) => UserService.activateInviteCode.call(walletAddress, code)
+  });
 
   const {
     mutateAsync: freePlayGame,
@@ -41,10 +46,12 @@ export const useLuckyGame = () => {
   });
 
   return {
+    activateLuckyCode,
     freePlayGame,
     playGame,
     pickCard,
     claim,
+    isActivateLuckyCodeRequesting,
     isClaiming,
     claimResult,
     isPlayGameRequesting,

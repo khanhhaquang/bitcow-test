@@ -1,9 +1,8 @@
 import BitcowModal from 'components/BitcowModal';
 import PixelButton from 'components/PixelButton';
-import useMerlinWallet from 'hooks/useMerlinWallet';
+import { useLuckyGame } from 'hooks/useLuckyGame';
 import { FC, useState } from 'react';
 import { CloseIcon } from 'resources/icons';
-import { UserService } from 'services/user';
 
 type LuckyCodeModalProps = {
   open: boolean;
@@ -12,13 +11,14 @@ type LuckyCodeModalProps = {
 };
 
 const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) => {
-  const { wallet } = useMerlinWallet();
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
+  const { activateLuckyCode, isActivateLuckyCodeRequesting } = useLuckyGame();
+
   const handleSubmit = async () => {
     try {
-      const result = await UserService.activateInviteCode.call(wallet?.accounts[0].evm, code);
+      const result = await activateLuckyCode(code);
       if (result.code === 0) {
         setCode('');
         onSubmit();
@@ -73,13 +73,14 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
         )}
 
         <PixelButton
-          disabled={!code}
+          isLoading={isActivateLuckyCodeRequesting}
+          disabled={!code || isActivateLuckyCodeRequesting}
           width={278}
           height={38}
           color="#000"
           onClick={handleSubmit}
           className="bg-[#FFC700] text-2xl text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black">
-          Redeem now
+          {isActivateLuckyCodeRequesting ? 'Process' : 'Redeem now'}
         </PixelButton>
       </div>
     </BitcowModal>

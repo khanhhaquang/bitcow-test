@@ -84,7 +84,8 @@ export default function PixelButton({
         }}
       />
       <span className="z-10 flex items-center">
-        {children} {isLoading && '...'}
+        {children}
+        {isLoading && '...'}
       </span>
     </button>
   );

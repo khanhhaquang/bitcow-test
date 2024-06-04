@@ -35,10 +35,9 @@ const LuckyCow = () => {
   const { state } = useLocation();
   const { isFromLuckyChance } = (state || {}) as { isFromLuckyChance?: boolean };
 
-  const { wallet } = useMerlinWallet();
+  const { wallet, isLoggedIn } = useMerlinWallet();
   const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
   const { data: userInfo } = useUserInfo();
-
   const [status, setStatus] = useState<LuckyCowStatus>(
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );
@@ -121,6 +120,8 @@ const LuckyCow = () => {
         <NotConnected />
       </Wrapper>
     );
+
+  if (!isLoggedIn) return <Loader>Please sign message from wallet</Loader>;
 
   if (!userInfo) return <Loader />;
 

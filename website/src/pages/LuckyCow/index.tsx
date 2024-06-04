@@ -121,7 +121,7 @@ const LuckyCow = () => {
       </Wrapper>
     );
 
-  if (!isLoggedIn) return <Loader>Please reconnect and sign</Loader>;
+  if (!isLoggedIn) return <Loader>Please sign message from wallet</Loader>;
 
   if (!userInfo) return <Loader />;
 

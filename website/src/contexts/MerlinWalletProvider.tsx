@@ -304,8 +304,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   );
 
   const setBitcowSdkSigner = useCallback(async () => {
+    setIsLoggedIn(false);
     if (!bitcowSDK) {
-      setIsLoggedIn(false);
       return;
     }
     if (wallet) {
@@ -342,7 +342,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
                 axiosSetupInterceptors(setBitcowSdkSigner);
               }
             } catch (error) {
-              setIsLoggedIn(false);
               openNotification({ type: 'error', detail: 'Logging failed' });
             }
           } else {
@@ -355,7 +354,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       }
     } else {
       bitcowSDK.setSigner(undefined, undefined);
-      setIsLoggedIn(false);
       fetchTokenBalances(true);
     }
   }, [bitcowSDK, wallet, fetchTokenBalances, setTokenBalancesCache]);

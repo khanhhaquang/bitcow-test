@@ -21,15 +21,17 @@ import {
 import useNetwork from 'hooks/useNetwork';
 import useLuckyShop from 'hooks/useLuckyShop';
 import { useLuckyGame } from 'hooks/useLuckyGame';
+import { cn } from 'utils/cn';
 
 type LuckyShopProps = {
+  className?: string;
   children?: ReactNode;
   text?: ReactNode;
 };
 
-const LuckyShopWrapper: FC<LuckyShopProps> = ({ children, text }) => {
+const LuckyShopWrapper: FC<LuckyShopProps> = ({ className, children, text }) => {
   return (
-    <div className="relative flex flex-col items-center">
+    <div className={cn('relative flex flex-col items-center smallLaptop:mb-20', className)}>
       <Image
         src="/images/luckyDraw/lucky-shop.webp"
         alt="shop"

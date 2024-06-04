@@ -20,20 +20,15 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
   );
 
   axiosInstance.interceptors.response.use(
-    (res) => {
-      if (res.data?.data?.message === 'invalid token') {
-        authToken.clear();
-        onResign();
-      }
-      return res;
-    },
+    (res) => res,
     (err) => {
       const status = err.response?.status;
+      const originalRequest = err.config;
+
       // If not Unauthorized error
-      // Reject error
-      if (status !== 401) {
-        onResign();
-        return Promise.reject(err);
+      if (status === 401) {
+        authToken.clear();
+        onResign().then(() => axiosInstance(originalRequest));
       }
 
       return Promise.reject(err);

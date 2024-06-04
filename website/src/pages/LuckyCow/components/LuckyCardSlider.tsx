@@ -161,7 +161,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
           height={38}
           color="black"
           className="!bg-white text-2xl uppercase leading-none text-black hover:!bg-white hover:!text-black/60 active:translate-x-1 active:translate-y-1 active:!bg-white active:!text-black disabled:!bg-[#B8B8B8] disabled:!text-black/40">
-          {isClaiming ? 'processing...' : 'claim'}
+          {isClaiming ? 'processing' : 'claim'}
         </PixelButton>
       </div>
     </div>

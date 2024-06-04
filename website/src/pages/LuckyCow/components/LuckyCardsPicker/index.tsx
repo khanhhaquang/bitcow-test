@@ -116,7 +116,7 @@ const LuckyCardPickers = ({
           isLoading={isPickCardRequesting}
           disabled={isPickCardRequesting}
           className="mt-4 flex items-center justify-center bg-color_yellow_1 p-4 font-micro text-2xl uppercase text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black disabled:!text-black">
-          {isPickCardRequesting ? 'processing...' : 'scratch them!'}
+          {isPickCardRequesting ? 'processing' : 'scratch them!'}
         </PixelButton>
       ) : (
         <div className="relative z-20 -mt-[30px] flex h-[77px] w-[407px] items-center justify-center bg-white bg-clip-content p-1 font-pd text-2xl text-pink_950">

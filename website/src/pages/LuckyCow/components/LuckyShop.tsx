@@ -81,7 +81,7 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
               height={38}
               color="#000"
               className="bg-[#FFC700] text-2xl text-black hover:!bg-[#FFC700] hover:!bg-lucky-redeem-btn-hover active:!bg-[#FFA800] active:!text-black disabled:!text-black">
-              {isFreePlayGameRequesting ? 'processing...' : 'Redeem now'}
+              {isFreePlayGameRequesting ? 'Processing' : 'Redeem now'}
             </PixelButton>
           </div>
         </div>

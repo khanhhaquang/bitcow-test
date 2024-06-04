@@ -13,12 +13,12 @@ export const getLocalStorage = (key: string) => {
 };
 
 export const generateAuthToken = (token: string, address: string, chain: number) => {
-  const separator = '-';
+  const separator = ',';
   return [token, address, chain].join(separator);
 };
 
 export const parseAuthToken = (authToken = '') => {
-  const separator = '-';
+  const separator = ',';
   const result = authToken?.split(separator);
 
   return {

@@ -15,7 +15,8 @@ const useLuckyShop = () => {
     ],
     queryFn: () =>
       bitcowSDK?.lotteryToken?.allowance(walletAddress, bitcowSDK.lottery.contractAddress),
-    enabled: true
+    enabled:
+      !!walletAddress && !!bitcowSDK?.lotteryToken?.address && !!bitcowSDK?.lottery?.contractAddress
   });
 
   const { isPending: isIncreasingAllowance, mutateAsync: increaseAllowance } = useMutation({

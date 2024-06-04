@@ -7,7 +7,7 @@ const useLuckyCard = (id: number = 1) => {
   return useQuery({
     queryKey: ['bitcowSDK.lottery.getCardInfo', id, bitcowSDK?.lottery?.address],
     queryFn: () => bitcowSDK?.lottery?.getCardInfo(id),
-    enabled: true
+    enabled: !!bitcowSDK?.lottery
   });
 };
 

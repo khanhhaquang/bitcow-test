@@ -77,6 +77,7 @@ const EvmConnectProviderInner = ({
           await web3ReactConnector.resetState();
         }
       }
+      authToken.clear();
     } catch (e) {
       console.log('disconnect err', e);
     }
@@ -133,7 +134,6 @@ const EvmConnectProviderInner = ({
         chains.getEVMChainInfoById(currentChain.chainId) === undefined
       ) {
         await onDisconnect();
-        authToken.clear();
         success = true;
       }
       if (currentChain === undefined || currentChain.chainId != chain.chainId) {

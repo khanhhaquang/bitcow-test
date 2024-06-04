@@ -20,14 +20,11 @@ export enum LuckyCowStatus {
   CARDS_SCRATCHING
 }
 
-const MAX_CARDS_BUY = 5;
-const MAX_CARDS_PICK = 10;
+const MAX_CARDS = 5;
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="relative flex flex-col items-center pt-20 laptop:scale-90 laptop:pt-0 smallLaptop:scale-75">
-      {children}
-    </div>
+    <div className="flex flex-col items-center pt-20 laptop:scale-75 laptop:pt-0">{children}</div>
   );
 };
 
@@ -38,7 +35,6 @@ const LuckyCow = () => {
   const { wallet, isLoggedIn } = useMerlinWallet();
   const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
   const { data: userInfo } = useUserInfo();
-
   const [status, setStatus] = useState<LuckyCowStatus>(
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );
@@ -50,7 +46,7 @@ const LuckyCow = () => {
       case LuckyCowStatus.BUY:
         return (
           <Buy
-            numberOfCards={MAX_CARDS_BUY}
+            numberOfCards={MAX_CARDS}
             onBuyCallback={(hash: string) => {
               playGame(hash);
             }}
@@ -68,7 +64,7 @@ const LuckyCow = () => {
       case LuckyCowStatus.CARDS_PICKING:
         return (
           <LuckyCardsPicker
-            numsOfCard={MAX_CARDS_PICK}
+            numsOfCard={MAX_CARDS}
             numsOfSelectedCard={userInfo?.quantity || 0}
             onStartScratching={() => {
               setStatus(LuckyCowStatus.CARDS_SCRATCHING);
@@ -122,7 +118,9 @@ const LuckyCow = () => {
       </Wrapper>
     );
 
-  if (!isLoggedIn || !userInfo) return <Loader />;
+  if (!isLoggedIn) return <Loader>Please reconnect and sign</Loader>;
+
+  if (!userInfo) return <Loader />;
 
   if (isPlayGameRequesting) return <Loader>Preparing your card...</Loader>;
 

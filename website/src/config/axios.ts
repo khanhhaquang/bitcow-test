@@ -21,7 +21,7 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
 
   axiosInstance.interceptors.response.use(
     (res) => {
-      if (res.data.data.message === 'invalid token') {
+      if (res.data?.data?.message === 'invalid token') {
         onResign();
       }
       return res;

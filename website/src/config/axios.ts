@@ -22,6 +22,7 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
   axiosInstance.interceptors.response.use(
     (res) => {
       if (res.data?.data?.message === 'invalid token') {
+        authToken.clear();
         onResign();
       }
       return res;

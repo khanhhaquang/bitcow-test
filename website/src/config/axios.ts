@@ -9,6 +9,9 @@ const axiosInstance = axios.create({
 });
 
 const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
+  axiosInstance.interceptors.request.clear();
+  axiosInstance.interceptors.response.clear();
+
   axiosInstance.interceptors.request.use(
     (config) => {
       const { token } = parseAuthToken(authToken.get());

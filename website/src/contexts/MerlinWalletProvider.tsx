@@ -346,7 +346,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           } else {
             setIsLoggedIn(true);
           }
-          axiosSetupInterceptors(setBitcowSdkSigner);
         }
       } else {
         setTokenBalancesCache(undefined);
@@ -359,6 +358,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
 
   useEffect(() => {
     setBitcowSdkSigner();
+    axiosSetupInterceptors(() => setBitcowSdkSigner());
   }, [setBitcowSdkSigner]);
 
   useEffect(() => {

@@ -1,11 +1,10 @@
 import BitcowModal from 'components/BitcowModal';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { CloseIcon } from 'resources/icons';
 import imageLuckyPrize from 'resources/img/luckyPrize.webp';
 import { useSelector } from 'react-redux';
 import { getClaimHash, getPickedCard } from 'modules/luckyCow/reducer';
 import useNetwork from 'hooks/useNetwork';
-import useUserInfo from 'hooks/useUserInfo';
 import { ILuckyAward } from '../types';
 import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
 
@@ -16,8 +15,9 @@ type LuckyPrizeModalProps = {
 
 const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
   const { currentNetwork } = useNetwork();
-  const { data: userInfo } = useUserInfo();
   const { data: tokenInfo } = useTokenAwardInfo();
+  const minWidth = 428;
+  const [contentWidth, setContentWidth] = useState(minWidth);
   const pickedCard = useSelector(getPickedCard);
 
   const claimHash = useSelector(getClaimHash);
@@ -26,9 +26,6 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
 
   const content = useMemo(() => {
     let data: ILuckyAward[] = [];
-    if (!userInfo || !userInfo.pickCard) {
-      return null;
-    }
     pickedCard.map((card) =>
       data.push({
         token: card.luckyToken,
@@ -36,6 +33,11 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
         icon: tokenInfo ? tokenInfo.find((w) => w.tokenSymbol === card.luckyToken)?.tokenIcon : ''
       })
     );
+    if (data.length > 1) {
+      const curWidth = 111 * data.length + 24 * (data.length - 1) + 144;
+      setContentWidth(curWidth < minWidth ? minWidth : curWidth);
+    }
+
     return data.map((item, index) => {
       return (
         <div key={`lucky-prize-${index}`} className="flex flex-col items-center">
@@ -59,7 +61,7 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
     <BitcowModal
       closable
       open={open}
-      width={795}
+      width={contentWidth}
       bodyStyle={{ padding: 0 }}
       onCancel={() => onCancel()}
       className="h-[391px] bg-[#FF8D00]"

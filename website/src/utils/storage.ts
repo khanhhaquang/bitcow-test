@@ -29,7 +29,7 @@ export const parseAuthToken = (authToken = '') => {
 };
 
 const authTokenManager = () => {
-  let token = '';
+  let token = getLocalStorage(TOKEN_KEY) || '';
 
   const get = () => {
     return token || getLocalStorage(TOKEN_KEY);

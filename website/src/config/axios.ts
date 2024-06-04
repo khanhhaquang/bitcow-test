@@ -28,7 +28,7 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
       // If not Unauthorized error
       if (status === 401) {
         authToken.clear();
-        onResign().then(() => axiosInstance(originalRequest));
+        return onResign().then(() => axiosInstance(originalRequest));
       }
 
       return Promise.reject(err);

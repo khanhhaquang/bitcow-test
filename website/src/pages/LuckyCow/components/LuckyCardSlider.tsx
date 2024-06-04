@@ -19,6 +19,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const dispatch = useDispatch();
   const [revealedAll, setRevealedAll] = useState(false);
   const [completeCard, setCompleteCard] = useState<Array<string>>([]);
+  // let completeCard: Array<string> = [];
   const { data: userInfo, isFetched, isLoading, refetch } = useUserInfo();
   const [data, setData] = useState<Array<ILuckyCardInfo>>([]);
   const [activeIndex, setActiveSlide] = useState(0);
@@ -57,7 +58,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
       // pickedCard.push(sample);
 
       setData(pickedCard);
-      setActiveSlide(Math.floor(data.length / 2));
+      setActiveSlide(Math.floor(pickedCard.length / 2));
       dispatch(luckyCowAction.SET_PICKED_CARD(pickedCard));
     }
   }, [isFetched, isLoading, userInfo]);
@@ -73,11 +74,12 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   };
   const onCompleteCard = (key) => {
     if (!completeCard.includes(key)) {
-      // console.log('complete card', key);
-      setCompleteCard([...completeCard, key]);
-    }
-    if (completeCard.length >= data.length) {
-      setRevealedAll(true);
+      const result = [...completeCard, key];
+      setCompleteCard(result);
+      // console.log('complete card', key, result.length);
+      if (result.length >= data.length) {
+        setRevealedAll(true);
+      }
     }
   };
   const getClassName = (index) => {

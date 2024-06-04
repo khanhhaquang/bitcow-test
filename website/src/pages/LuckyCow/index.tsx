@@ -25,7 +25,9 @@ const MAX_CARDS_PICK = 10;
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex flex-col items-center pt-20 laptop:scale-75 laptop:pt-0">{children}</div>
+    <div className="relative flex flex-col items-center pt-20 laptop:scale-90 laptop:pt-0 smallLaptop:scale-75">
+      {children}
+    </div>
   );
 };
 

@@ -35,7 +35,7 @@ const LuckyCow = () => {
   const { state } = useLocation();
   const { isFromLuckyChance } = (state || {}) as { isFromLuckyChance?: boolean };
 
-  const { wallet } = useMerlinWallet();
+  const { wallet, isLoggedIn } = useMerlinWallet();
   const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
   const { data: userInfo } = useUserInfo();
 
@@ -122,7 +122,7 @@ const LuckyCow = () => {
       </Wrapper>
     );
 
-  if (!userInfo) return <Loader />;
+  if (!isLoggedIn || !userInfo) return <Loader />;
 
   if (isPlayGameRequesting) return <Loader>Preparing your card...</Loader>;
 

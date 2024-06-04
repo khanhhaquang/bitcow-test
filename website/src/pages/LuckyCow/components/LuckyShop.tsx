@@ -198,7 +198,7 @@ const Buy: FC<{
                 <>
                   <div className="relative flex h-15 min-w-[101px] overflow-hidden p-1.5">
                     <LuckyCardsCounterIcon className="absolute inset-0 w-full" />
-                    <p className="relative flex h-full flex-1 shrink-0 items-center justify-center bg-transparent pt-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
+                    <p className="relative flex h-full flex-1 shrink-0 items-center justify-center bg-transparent font-pdb text-[48px] leading-none text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                       {cardsAmount}
                     </p>
                     <div className="relative flex h-full w-7 shrink-0 flex-col justify-between border-l-[3px] border-[#FF6B00] bg-[#FF6B00]">
@@ -221,7 +221,7 @@ const Buy: FC<{
                     <LuckyBuyBtnIcon className="absolute inset-0 w-full text-[#FF8D00] group-hover:text-[#FFC276] group-active:text-[#E85E00]" />
                     <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                       <BitUsdIcon />
-                      <span className="flex items-baseline pt-2">
+                      <span className="flex items-baseline leading-none">
                         {totalPrice}
                         <small className="text-sm">bitUSD</small>
                       </span>

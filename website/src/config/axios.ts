@@ -17,8 +17,14 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
       if (config.url === 'user/login') return config;
 
       const { token } = parseAuthToken(authToken.get());
-      config.headers.Authorization = `Bearer ${token}`;
 
+      if (!token) {
+        const controller = new AbortController();
+        controller.abort('No token found');
+        return config;
+      }
+
+      config.headers.Authorization = `Bearer ${token}`;
       return config;
     },
     (err) => Promise.reject(err)

@@ -207,10 +207,10 @@ const Buy: FC<{
         </>
       }
       className="mb-[211px]">
-      <div className="absolute top-[450px]">
-        <div className="relative flex h-[211px] w-[407px] items-center justify-center overflow-hidden p-2">
-          <LuckyRedeemBorderOuterIcon className="absolute inset-0 h-full" />
-          <LuckyRedeemBorderInnerIcon className="absolute inset-1 h-[calc(100%_-_8px)]" />
+      <div className="absolute top-[450px] left-1/2 -translate-x-1/2">
+        <div className="relative flex h-[211px] w-[444px] items-center justify-center overflow-hidden p-2">
+          <LuckyRedeemBorderOuterIcon className="absolute inset-0 h-full w-full" />
+          <LuckyRedeemBorderInnerIcon className="absolute inset-1 h-[calc(100%_-_8px)] w-full" />
           <div className="flex h-full w-full flex-col items-center bg-white pt-5">
             <h3 className="text-center font-pd text-2xl leading-none text-[#6B001E]">
               Get some <br />

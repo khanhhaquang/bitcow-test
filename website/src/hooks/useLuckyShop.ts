@@ -19,6 +19,12 @@ const useLuckyShop = () => {
       !!walletAddress && !!bitcowSDK?.lotteryToken?.address && !!bitcowSDK?.lottery?.contractAddress
   });
 
+  const { data: balanceResult } = useQuery({
+    queryKey: ['bitcowSDK.lotteryToken.balanceOf', walletAddress, bitcowSDK?.lotteryToken?.address],
+    queryFn: () => bitcowSDK?.lotteryToken?.balanceOf(walletAddress),
+    enabled: !!walletAddress && !!bitcowSDK?.lotteryToken?.address
+  });
+
   const { isPending: isIncreasingAllowance, mutateAsync: increaseAllowance } = useMutation({
     mutationFn: (data: { amount: number }) =>
       bitcowSDK?.lotteryToken?.increaseAllowance(bitcowSDK.lottery.contractAddress, data.amount)
@@ -34,7 +40,19 @@ const useLuckyShop = () => {
     [allowanceResult]
   );
 
-  return { allowance, increaseAllowance, isIncreasingAllowance, purchase, isPurchasing };
+  const balance = useMemo(
+    () => (balanceResult ? Number(formatEther(balanceResult)) : 0),
+    [allowanceResult]
+  );
+
+  return {
+    allowance,
+    balance,
+    isIncreasingAllowance,
+    isPurchasing,
+    purchase,
+    increaseAllowance
+  };
 };
 
 export default useLuckyShop;

@@ -69,7 +69,7 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
     <LuckyShopWrapper
       text="Wise choice!  Good luck and win some juicy prizes!"
       className="mb-[171px]">
-      <div className="absolute top-[440px]">
+      <div className="absolute top-[450px]">
         <div className="relative flex h-[171px] w-[407px] items-center justify-center overflow-hidden p-2">
           <LuckyRedeemBorderOuterIcon className="absolute inset-0" />
           <LuckyRedeemBorderInnerIcon className="absolute inset-1" />
@@ -102,7 +102,7 @@ const Buy: FC<{
   const { data: luckyCard } = useLuckyCard();
   const { allowance, isIncreasingAllowance, isPurchasing, purchase, increaseAllowance } =
     useLuckyShop();
-  const { bitcowSDK, checkTransactionError } = useMerlinWallet();
+  const { bitcowSDK, walletAddress, checkTransactionError } = useMerlinWallet();
   const { currentNetwork } = useNetwork();
 
   const [cardsAmount, setCardsAmount] = useState(1);
@@ -128,7 +128,11 @@ const Buy: FC<{
           result.hash,
           'Buy cards successfully'
         );
-        onBuyCallback(result.hash);
+        console.log('🚀 ~ walletAddress:', walletAddress, result.from);
+
+        if (walletAddress === result.from) {
+          onBuyCallback(result.hash);
+        }
       } else if (result.status === 0) {
         openTxErrorNotification(
           currentNetwork.chainConfig.blockExplorerUrls[0],
@@ -184,7 +188,7 @@ const Buy: FC<{
         </>
       }
       className="mb-[211px]">
-      <div className="absolute top-[440px]">
+      <div className="absolute top-[450px]">
         <div className="relative flex h-[211px] w-[407px] items-center justify-center overflow-hidden p-2">
           <LuckyRedeemBorderOuterIcon className="absolute inset-0 h-full" />
           <LuckyRedeemBorderInnerIcon className="absolute inset-1 h-[calc(100%_-_8px)]" />

@@ -20,14 +20,14 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
   const [revealedAll, setRevealedAll] = useState(false);
   const [completeCard, setCompleteCard] = useState<Array<string>>([]);
   // let completeCard: Array<string> = [];
-  const { data: userInfo, isFetched, isLoading, refetch } = useUserInfo();
+  const { data: userInfo, isFetched, isLoading, refetch: refetchUserInfo } = useUserInfo();
   const [data, setData] = useState<Array<ILuckyCardInfo>>([]);
   const [activeIndex, setActiveSlide] = useState(0);
   const { claim, isClaiming, claimResult } = useLuckyGame();
 
   useEffect(() => {
     if (!userInfo || !userInfo.pickCard) {
-      refetch();
+      refetchUserInfo();
     } else {
       let pickedCard = [];
       Object.keys(userInfo.pickCard).forEach((key) => {
@@ -97,6 +97,8 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
       console.log('claim hash: ', claimResult.data.claimHash);
       dispatch(luckyCowAction.SET_CLAIM_HASH(claimResult.data.claimHash));
       onClaim();
+    } else {
+      refetchUserInfo();
     }
   }, [claimResult]);
 

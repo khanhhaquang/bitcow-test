@@ -27,4 +27,9 @@ export class Erc20 extends ContractRunner {
     const result = await this.contract.allowance(owner, to);
     return result;
   }
+
+  async balanceOf(owner: string) {
+    const result = await this.contract.balanceOf(owner);
+    return result;
+  }
 }

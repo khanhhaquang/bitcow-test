@@ -339,8 +339,13 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
                 );
                 setIsLoggedIn(true);
                 openNotification({ type: 'success', detail: 'You have logged in' });
+              } else {
+                authToken.clear();
+                setIsLoggedIn(false);
               }
-            } catch (error) {
+            } catch (e) {
+              authToken.clear();
+              setIsLoggedIn(false);
               openNotification({ type: 'error', detail: 'Logging failed' });
             }
           } else {

@@ -14,6 +14,8 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
 
   axiosInstance.interceptors.request.use(
     (config) => {
+      if (config.url === 'user/login') return config;
+
       const { token } = parseAuthToken(authToken.get());
       config.headers.Authorization = `Bearer ${token}`;
 

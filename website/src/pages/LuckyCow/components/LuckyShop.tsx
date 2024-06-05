@@ -207,10 +207,10 @@ const Buy: FC<{
         </>
       }
       className="mb-[211px]">
-      <div className="absolute top-[450px] left-1/2 -translate-x-1/2">
-        <div className="relative flex h-[211px] w-[444px] items-center justify-center overflow-hidden p-2">
+      <div className="absolute top-[450px]">
+        <div className="relative flex h-[211px] w-[407px] items-center justify-center overflow-hidden p-2">
           <LuckyRedeemBorderOuterIcon className="absolute inset-0 h-full w-full" />
-          <LuckyRedeemBorderInnerIcon className="absolute inset-1 h-[calc(100%_-_8px)] w-full" />
+          <LuckyRedeemBorderInnerIcon className="absolute inset-1 h-[calc(100%_-_8px)]" />
           <div className="flex h-full w-full flex-col items-center bg-white pt-5">
             <h3 className="text-center font-pd text-2xl leading-none text-[#6B001E]">
               Get some <br />
@@ -222,7 +222,7 @@ const Buy: FC<{
                 <span className="font-pdb text-2xl text-[#FF8D00]">Processing...</span>
               ) : (
                 <>
-                  <div className="relative flex h-15 min-w-[101px] overflow-hidden p-1.5">
+                  <div className="relative flex h-15 w-[101px] overflow-hidden p-1.5">
                     <LuckyCardsCounterIcon className="absolute inset-0 w-full" />
                     <p className="relative flex h-full flex-1 shrink-0 items-center justify-center bg-transparent font-pdb text-[48px] leading-none text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                       {cardsAmount}

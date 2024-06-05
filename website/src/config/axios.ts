@@ -20,7 +20,9 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
 
       if (!token) {
         const controller = new AbortController();
+        config.signal = controller.signal;
         controller.abort('No token found');
+
         return config;
       }
 

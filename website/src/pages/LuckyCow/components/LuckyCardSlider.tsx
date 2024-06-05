@@ -76,7 +76,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
     if (!completeCard.includes(key)) {
       const result = [...completeCard, key];
       setCompleteCard(result);
-      // console.log('complete card', key, result.length);
+      // console.log('complete', key, result.length);
       if (result.length >= data.length) {
         setRevealedAll(true);
       }

@@ -29,7 +29,7 @@ const FrontCard = ({
   return (
     <motion.div
       className={cn(
-        'h-[380px] w-[263px] rounded border-4 border-black bg-white bg-no-repeat hover:cursor-pointer',
+        'relative h-[380px] w-[263px] rounded border-4 border-black bg-no-repeat hover:cursor-pointer',
         isSelected && '!border-white'
       )}
       style={{
@@ -55,6 +55,7 @@ const FrontCard = ({
       }
       drag={false}
       onClick={() => onSelectCard(index)}>
+      {!isSelected && <div className="absolute top-0 left-0 h-full w-full bg-black/20" />}
       <img
         src={FrontCardImg}
         className={cn('h-full w-full', (enableHover || isSelected) && 'hover:opacity-80')}

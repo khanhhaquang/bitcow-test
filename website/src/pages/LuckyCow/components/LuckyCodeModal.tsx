@@ -48,7 +48,7 @@ const LuckyCodeModal: FC<LuckyCodeModalProps> = ({ open, onSubmit, onCancel }) =
       drawerCloseIcon={<CloseIcon className="text-black" />}>
       <div className="flex w-full flex-col items-center gap-y-6 bg-[#FF8D00] pt-3 pb-6">
         <h3 className="text-center font-micro text-4xl text-black">Lucky Code?</h3>
-        <div className="relative mb-5 flex h-[30px] w-[370px] items-center justify-center">
+        <div className="relative flex h-[30px] w-[370px] items-center justify-center">
           <p className="absolute -top-1 left-0 h-1 w-full bg-white/40" />
           <p className="absolute -bottom-1 left-0 h-1 w-full bg-white/40" />
           <p className="absolute -left-1 top-0 h-full w-1 bg-white/40" />

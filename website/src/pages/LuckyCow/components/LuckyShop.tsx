@@ -66,7 +66,9 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
   }, [freePlayGameResult]);
 
   return (
-    <LuckyShopWrapper text="Wise choice!  Good luck and win some juicy prizes!">
+    <LuckyShopWrapper
+      text="Wise choice!  Good luck and win some juicy prizes!"
+      className="mb-[171px]">
       <div className="absolute top-[440px]">
         <div className="relative flex h-[171px] w-[407px] items-center justify-center overflow-hidden p-2">
           <LuckyRedeemBorderOuterIcon className="absolute inset-0" />
@@ -180,7 +182,8 @@ const Buy: FC<{
           Welcome degen! Ready to win big?{' '}
           <b className="font-pdb text-[#FF8D00]">$10,000 jackpot</b> awaits!
         </>
-      }>
+      }
+      className="mb-[211px]">
       <div className="absolute top-[440px]">
         <div className="relative flex h-[211px] w-[407px] items-center justify-center overflow-hidden p-2">
           <LuckyRedeemBorderOuterIcon className="absolute inset-0 h-full" />

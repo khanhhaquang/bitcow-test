@@ -31,7 +31,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <Layout
       className={classNames(
         'relative min-h-screen overflow-hidden',
-        isLuckyCowPage ? 'bg-lucky-cow pb-[60px] pt-10' : 'page-background'
+        isLuckyCowPage ? 'overflow-y-auto bg-lucky-cow pb-[60px] pt-10' : 'page-background'
       )}>
       {isLuckyCowPage && <LuckyResultHighlight classNames="top-0" />}
       {isLuckyCowPage && <LuckyResultHighlight classNames="bottom-0" />}

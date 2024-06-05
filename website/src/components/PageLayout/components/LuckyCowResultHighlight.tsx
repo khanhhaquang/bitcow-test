@@ -53,7 +53,10 @@ const LuckyHightLightItem: FC<{ data: ILuckNews }> = ({ data }) => {
   );
 };
 
-const LuckyResultHighlight: FC<{ classNames?: string }> = ({ classNames }) => {
+const LuckyResultHighlight: FC<{
+  classNames?: string;
+  direction: 'leftToRight' | 'rightToLeft';
+}> = ({ classNames, direction }) => {
   const {
     data: newsData,
     refetch,
@@ -67,11 +70,12 @@ const LuckyResultHighlight: FC<{ classNames?: string }> = ({ classNames }) => {
   // duplicated content for infinity loop
   const content = useMemo(() => {
     const winners = newsData?.data || [];
+
     return (
       <motion.div
         className="flex items-center gap-x-3"
         animate={{
-          translateX: ['0%', '-100%']
+          translateX: direction === 'leftToRight' ? ['-100%', '0%'] : ['0%', '-100%']
         }}
         transition={{
           duration: 60,

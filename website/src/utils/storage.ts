@@ -53,4 +53,8 @@ const authTokenManager = () => {
 
 const authToken = authTokenManager();
 
-export { authToken };
+const getCachedToken = () => parseAuthToken(authToken.get()).token;
+const getCachedAddress = () => parseAuthToken(authToken.get()).address;
+const getCachedChainId = () => parseAuthToken(authToken.get()).chain;
+
+export { authToken, getCachedAddress, getCachedChainId, getCachedToken };

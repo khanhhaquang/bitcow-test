@@ -6,7 +6,7 @@ import useMerlinWallet from './useMerlinWallet';
 const useLuckyShop = () => {
   const { bitcowSDK, walletAddress } = useMerlinWallet();
 
-  const { data: allowanceResult } = useQuery({
+  const { data: allowanceResult, isFetching: isFetchingAllowance } = useQuery({
     queryKey: [
       'bitcowSDK.lotteryToken.allowance',
       walletAddress,
@@ -19,18 +19,26 @@ const useLuckyShop = () => {
       !!walletAddress && !!bitcowSDK?.lotteryToken?.address && !!bitcowSDK?.lottery?.contractAddress
   });
 
-  const { data: balanceResult } = useQuery({
+  const { data: balanceResult, isFetching: isFetchingBalance } = useQuery({
     queryKey: ['bitcowSDK.lotteryToken.balanceOf', walletAddress, bitcowSDK?.lotteryToken?.address],
     queryFn: () => bitcowSDK?.lotteryToken?.balanceOf(walletAddress),
     enabled: !!walletAddress && !!bitcowSDK?.lotteryToken?.address
   });
 
-  const { isPending: isIncreasingAllowance, mutateAsync: increaseAllowance } = useMutation({
+  const {
+    isPending: isIncreasingAllowance,
+    mutateAsync: increaseAllowance,
+    data: increaseAllowanceTxn
+  } = useMutation({
     mutationFn: (data: { amount: number }) =>
       bitcowSDK?.lotteryToken?.increaseAllowance(bitcowSDK.lottery.contractAddress, data.amount)
   });
 
-  const { isPending: isPurchasing, mutateAsync: purchase } = useMutation({
+  const {
+    isPending: isPurchasing,
+    mutateAsync: purchase,
+    data: purchaseTxn
+  } = useMutation({
     mutationFn: (data: { amount: number }) =>
       bitcowSDK.lottery?.purchase(1, data.amount, bitcowSDK.lotteryToken.contractAddress)
   });
@@ -50,6 +58,10 @@ const useLuckyShop = () => {
     balance,
     isIncreasingAllowance,
     isPurchasing,
+    isFetchingBalance,
+    isFetchingAllowance,
+    increaseAllowanceTxn,
+    purchaseTxn,
     purchase,
     increaseAllowance
   };

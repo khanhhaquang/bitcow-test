@@ -323,9 +323,9 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
           } = parseAuthToken(authToken.get());
 
           if (
+            !cachedToken ||
             cachedAddress !== wallet.accounts[0].evm ||
-            cachedChain !== wallet.chainId ||
-            !cachedToken
+            cachedChain !== wallet.chainId
           ) {
             try {
               const newSignature = await signer.signMessage('hello play bitcow');

@@ -97,13 +97,22 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
 
 const Buy: FC<{
   numberOfCards: number;
-  onBuyCallback: (hash: string) => void;
+  onBuyCallback: (txn: string) => void;
   onClickRedeemCode: () => void;
 }> = ({ onClickRedeemCode, onBuyCallback, numberOfCards }) => {
-  const { data: luckyCard } = useLuckyCard();
-  const { allowance, balance, isIncreasingAllowance, isPurchasing, purchase, increaseAllowance } =
-    useLuckyShop();
-  const { bitcowSDK, walletAddress, checkTransactionError } = useMerlinWallet();
+  const { data: luckyCard, isLoading: isLoadingLuckyCard } = useLuckyCard();
+  const {
+    allowance,
+    balance,
+    isFetchingBalance,
+    isIncreasingAllowance,
+    isPurchasing,
+    increaseAllowanceTxn,
+    purchaseTxn,
+    purchase,
+    increaseAllowance
+  } = useLuckyShop();
+  const { bitcowSDK, checkTransactionError } = useMerlinWallet();
   const { currentNetwork } = useNetwork();
 
   const [cardsAmount, setCardsAmount] = useState(1);
@@ -121,31 +130,12 @@ const Buy: FC<{
   };
 
   const handlePurchase = async () => {
-    if (totalPrice > balance) {
+    if (!isFetchingBalance && totalPrice > balance) {
       openErrorNotification({ detail: 'Not enough balance' });
       return;
     }
-
     try {
-      const result = await purchase({ amount: cardsAmount });
-      if (result.status === 1) {
-        openTxSuccessNotification(
-          currentNetwork.chainConfig.blockExplorerUrls[0],
-          result.hash,
-          'Buy cards successfully'
-        );
-        console.log('🚀 ~ walletAddress:', walletAddress, result.from);
-
-        if (walletAddress === result.from) {
-          onBuyCallback(result.hash);
-        }
-      } else if (result.status === 0) {
-        openTxErrorNotification(
-          currentNetwork.chainConfig.blockExplorerUrls[0],
-          result.hash,
-          'Failed to buy'
-        );
-      }
+      await purchase({ amount: cardsAmount });
     } catch (e) {
       checkTransactionError(e);
     }
@@ -154,22 +144,7 @@ const Buy: FC<{
   const handleIncreaseAllowance = async () => {
     try {
       openTxPendingNotification('Increasing allowance');
-      const increaseResult = await increaseAllowance({ amount: totalPrice });
-
-      if (increaseResult.status === 1) {
-        openTxSuccessNotification(
-          currentNetwork.chainConfig.blockExplorerUrls[0],
-          increaseResult.hash,
-          'Increased allowance successfully'
-        );
-        handlePurchase();
-      } else if (increaseResult.status === 0) {
-        openTxErrorNotification(
-          currentNetwork.chainConfig.blockExplorerUrls[0],
-          increaseResult.hash,
-          'Failed to increase'
-        );
-      }
+      await increaseAllowance({ amount: totalPrice });
     } catch (e) {
       checkTransactionError(e);
     }
@@ -184,6 +159,44 @@ const Buy: FC<{
       handlePurchase();
     }
   };
+
+  useEffect(() => {
+    if (purchaseTxn) {
+      if (purchaseTxn.status === 1) {
+        openTxSuccessNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          purchaseTxn.hash,
+          'Buy cards successfully'
+        );
+        onBuyCallback(purchaseTxn.hash);
+      } else if (purchaseTxn.status === 0) {
+        openTxErrorNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          purchaseTxn.hash,
+          'Failed to buy'
+        );
+      }
+    }
+  }, [purchaseTxn]);
+
+  useEffect(() => {
+    if (increaseAllowanceTxn) {
+      if (increaseAllowanceTxn.status === 1) {
+        openTxSuccessNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          increaseAllowanceTxn.hash,
+          'Increased allowance successfully'
+        );
+        handlePurchase();
+      } else if (increaseAllowanceTxn.status === 0) {
+        openTxErrorNotification(
+          currentNetwork.chainConfig.blockExplorerUrls[0],
+          increaseAllowanceTxn.hash,
+          'Failed to increase'
+        );
+      }
+    }
+  }, [increaseAllowanceTxn, currentNetwork]);
 
   return (
     <LuckyShopWrapper
@@ -235,7 +248,7 @@ const Buy: FC<{
                     <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                       <BitUsdIcon />
                       <span className="flex items-baseline leading-none">
-                        {totalPrice}
+                        {isLoadingLuckyCard ? '...' : totalPrice}
                         <small className="text-sm">bitUSD</small>
                       </span>
                     </p>

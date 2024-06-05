@@ -14,7 +14,6 @@ import {
 import useLuckyCard from 'hooks/useLuckyCard';
 import useMerlinWallet from 'hooks/useMerlinWallet';
 import {
-  openErrorNotification,
   openTxErrorNotification,
   openTxPendingNotification,
   openTxSuccessNotification
@@ -103,8 +102,6 @@ const Buy: FC<{
   const { data: luckyCard, isLoading: isLoadingLuckyCard } = useLuckyCard();
   const {
     allowance,
-    balance,
-    isFetchingBalance,
     isIncreasingAllowance,
     isPurchasing,
     increaseAllowanceTxn,
@@ -130,10 +127,6 @@ const Buy: FC<{
   };
 
   const handlePurchase = async () => {
-    if (!isFetchingBalance && totalPrice > balance) {
-      openErrorNotification({ detail: 'Not enough balance' });
-      return;
-    }
     try {
       await purchase({ amount: cardsAmount });
     } catch (e) {
@@ -150,7 +143,7 @@ const Buy: FC<{
     }
   };
 
-  const handleClickBuy = async () => {
+  const handleClickBuy = () => {
     if (bitcowSDK) {
       if (allowance < totalPrice) {
         handleIncreaseAllowance();

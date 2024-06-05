@@ -432,11 +432,18 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   );
 
   const checkTransactionError = useCallback((e: any) => {
+    console.log('Txn error: ', e);
+
     if (e.code === 'ACTION_REJECTED' || e.reason === 'rejected' || e.info?.error?.code === 4001) {
       openErrorNotification({ detail: 'User rejected' });
       return;
     }
-    console.log('Txn error: ', e);
+
+    if (e.name === 'InsufficientPayment') {
+      openErrorNotification({ detail: 'Not enough balance' });
+      return;
+    }
+
     if (
       e.message?.includes('missing revert data') ||
       e.message?.includes('execution reverted (unknown custom error)')

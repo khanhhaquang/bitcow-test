@@ -76,7 +76,7 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
     if (!completeCard.includes(key)) {
       const result = [...completeCard, key];
       setCompleteCard(result);
-      // console.log('complete card', key, result.length);
+      // console.log('complete', key, result.length);
       if (result.length >= data.length) {
         setRevealedAll(true);
       }
@@ -120,20 +120,14 @@ const LuckyCardSlider: React.FC<TProps> = ({ onClaim }) => {
         </div>
         {data.length > 1 && (
           <div className={cn(styles.slidePrev, 'swiper-button-prev')}>
-            <Button
-              variant="icon"
-              className="bg-transparent hover:opacity-90 active:opacity-50"
-              onClick={prev}>
+            <Button variant="icon" onClick={prev}>
               <SlidePrevIcon width={73} height={110} />
             </Button>
           </div>
         )}
         {data.length > 1 && (
           <div className={cn(styles.slideNext, 'swiper-button-next')}>
-            <Button
-              variant="icon"
-              className="bg-transparent hover:opacity-90 active:opacity-50"
-              onClick={next}>
+            <Button variant="icon" onClick={next}>
               <SlideNextIcon width={73} height={110} />
             </Button>
           </div>

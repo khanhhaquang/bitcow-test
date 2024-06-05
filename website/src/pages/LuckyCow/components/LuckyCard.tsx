@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ScratchCard from './ScratchCard';
 import imageScratchChest from 'resources/img/scratchChest.webp';
 import imageScratchToken from 'resources/img/scratchToken.webp';
@@ -34,7 +34,6 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
   const { data: tokenInfo, isFetched, isLoading, refetch } = useTokenAwardInfo();
   const [finishScratch, setFinishScratch] = useState<Array<string>>([]);
   // let finishScratch: Array<string> = [];
-  const cardRef = useRef<ScratchCard>(null);
   const finishPercent = 50;
   const fadeOutOnComplete = true;
   const brushSize = 10;
@@ -62,7 +61,6 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
       return (
         <ScratchCard
           key={`scratch-token-${index}`}
-          ref={cardRef}
           width={60}
           height={26}
           image={imageScratchToken}
@@ -116,7 +114,6 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
           {chestList.map((value, index) => (
             <ScratchCard
               key={`scratch-chest-${index}`}
-              ref={cardRef}
               width={70}
               height={57}
               image={imageScratchChest}
@@ -161,7 +158,6 @@ const LuckyCard: React.FC<TProps> = ({ cardInfo, disabled, revealed, onComplete 
               {cardInfo.amounts.map((value, index) => (
                 <ScratchCard
                   key={`scratch-amount-${index}`}
-                  ref={cardRef}
                   width={48}
                   height={45}
                   image={imageScratchAmount}

@@ -61,7 +61,9 @@ class ScratchCard extends Component<Props, State> {
   componentDidMount() {
     this.isDrawing = false;
     this.lastPoint = null;
-    this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+    this.ctx = this.canvas.getContext('2d', {
+      willReadFrequently: true
+    }) as CanvasRenderingContext2D;
 
     this.image = new Image();
     this.image.crossOrigin = 'Anonymous';

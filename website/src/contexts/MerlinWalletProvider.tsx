@@ -321,7 +321,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         cachedAddress !== wallet.accounts[0].evm ||
         cachedChain !== wallet.chainId
       ) {
-        const newSignature = await signer.signMessage('hello play bitcow');
+        const newSignature = await signer.signMessage('Hello, there! Log in to win the lotto!');
         const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
         if (loginResult?.code === 0) {
           authToken.set(
@@ -360,7 +360,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       bitcowSDK.setSigner(undefined, undefined);
       fetchTokenBalances(true);
     }
-  }, [bitcowSDK, wallet, fetchTokenBalances]);
+  }, [handleSigning, fetchTokenBalances]);
 
   useEffect(() => {
     setBitcowSdkSigner();

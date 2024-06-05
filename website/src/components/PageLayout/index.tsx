@@ -33,8 +33,8 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         'relative min-h-screen overflow-hidden',
         isLuckyCowPage ? 'overflow-y-auto bg-lucky-cow pb-[60px] pt-10' : 'page-background'
       )}>
-      {isLuckyCowPage && <LuckyResultHighlight classNames="top-0" />}
-      {isLuckyCowPage && <LuckyResultHighlight classNames="bottom-0" />}
+      {isLuckyCowPage && <LuckyResultHighlight direction="leftToRight" classNames="top-0" />}
+      {isLuckyCowPage && <LuckyResultHighlight direction="rightToLeft" classNames="bottom-0" />}
       {luckyCowDecorator}
       {appBgDecorators}
       <Header />

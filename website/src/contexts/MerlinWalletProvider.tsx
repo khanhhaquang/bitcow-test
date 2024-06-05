@@ -303,6 +303,46 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     [bitcowSDK, timeOutArray, timeOutLength, setTokenBalancesCache, needBalanceTokens]
   );
 
+  const handleSigning = useCallback(async () => {
+    try {
+      const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
+      const signer = await browserProvider.getSigner();
+      bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
+      fetchTokenBalances(true, 'set signer');
+
+      const {
+        token: cachedToken,
+        address: cachedAddress,
+        chain: cachedChain
+      } = parseAuthToken(authToken.get());
+
+      if (
+        !cachedToken ||
+        cachedAddress !== wallet.accounts[0].evm ||
+        cachedChain !== wallet.chainId
+      ) {
+        const newSignature = await signer.signMessage('hello play bitcow');
+        const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
+        if (loginResult?.code === 0) {
+          authToken.set(
+            generateAuthToken(loginResult.data.token, wallet.accounts[0].evm, wallet.chainId)
+          );
+          setIsLoggedIn(true);
+          openNotification({ type: 'success', detail: 'You have logged in' });
+        } else {
+          authToken.clear();
+          setIsLoggedIn(false);
+        }
+      } else {
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      authToken.clear();
+      setIsLoggedIn(false);
+      openNotification({ type: 'error', detail: 'Logging failed' });
+    }
+  }, [wallet, bitcowSDK]);
+
   const setBitcowSdkSigner = useCallback(async () => {
     setIsLoggedIn(false);
     if (!bitcowSDK) {
@@ -311,46 +351,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     if (wallet) {
       if (wallet.chainId === bitcowSDK.config.chainId) {
         if (wallet.accounts[0].evm != bitcowSDK.getAddress()) {
-          const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
-          const signer = await browserProvider.getSigner();
-          bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
-          fetchTokenBalances(true, 'set signer');
-
-          const {
-            token: cachedToken,
-            address: cachedAddress,
-            chain: cachedChain
-          } = parseAuthToken(authToken.get());
-
-          if (
-            !cachedToken ||
-            cachedAddress !== wallet.accounts[0].evm ||
-            cachedChain !== wallet.chainId
-          ) {
-            try {
-              const newSignature = await signer.signMessage('hello play bitcow');
-              const loginResult = await UserService.login.call(
-                wallet.accounts[0].evm,
-                newSignature
-              );
-              if (loginResult?.code === 0) {
-                authToken.set(
-                  generateAuthToken(loginResult.data.token, wallet.accounts[0].evm, wallet.chainId)
-                );
-                setIsLoggedIn(true);
-                openNotification({ type: 'success', detail: 'You have logged in' });
-              } else {
-                authToken.clear();
-                setIsLoggedIn(false);
-              }
-            } catch (e) {
-              authToken.clear();
-              setIsLoggedIn(false);
-              openNotification({ type: 'error', detail: 'Logging failed' });
-            }
-          } else {
-            setIsLoggedIn(true);
-          }
+          handleSigning();
         }
       } else {
         setTokenBalancesCache(undefined);
@@ -359,11 +360,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       bitcowSDK.setSigner(undefined, undefined);
       fetchTokenBalances(true);
     }
-  }, [bitcowSDK, wallet, fetchTokenBalances, setTokenBalancesCache]);
+  }, [bitcowSDK, wallet, fetchTokenBalances]);
 
   useEffect(() => {
     setBitcowSdkSigner();
-    axiosSetupInterceptors(() => setBitcowSdkSigner());
+    axiosSetupInterceptors(() => handleSigning());
   }, [setBitcowSdkSigner]);
 
   useEffect(() => {

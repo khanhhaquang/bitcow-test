@@ -1,5 +1,5 @@
 import { getClaimHash, getPickedCard } from 'modules/luckyCow/reducer';
-import { FC, useMemo, useState } from 'react';
+import { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import BitcowModal from 'components/BitcowModal';
@@ -18,8 +18,6 @@ type LuckyPrizeModalProps = {
 const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
   const { currentNetwork } = useNetwork();
   const { data: tokenInfo } = useTokenAwardInfo();
-  const minWidth = 428;
-  const [contentWidth, setContentWidth] = useState(minWidth);
   const pickedCard = useSelector(getPickedCard);
 
   const claimHash = useSelector(getClaimHash);
@@ -35,11 +33,6 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
         icon: tokenInfo ? tokenInfo.find((w) => w.tokenSymbol === card.luckyToken)?.tokenIcon : ''
       })
     );
-    if (data.length > 1) {
-      const curWidth = 192 * data.length + 24 * (data.length - 1) + 144;
-      setContentWidth(curWidth < minWidth ? minWidth : curWidth);
-    }
-
     return data.map((item, index) => {
       return (
         <div key={`lucky-prize-${index}`} className="flex flex-col items-center">
@@ -63,28 +56,33 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
     <BitcowModal
       closable
       open={open}
-      width={contentWidth}
+      width="100%"
       bodyStyle={{ padding: 0 }}
-      onCancel={() => onCancel()}
-      className="h-[391px] bg-[#FF8D00]"
-      closeIcon={<CloseIcon className="relative top-4 text-black" />}>
-      <div className="flex h-[391px] w-full flex-col items-center bg-[#FF8D00] py-6">
-        <h3 className="mb-6 text-center font-micro text-4xl text-black">your prizes</h3>
-        <div className="flex items-center justify-center">
-          <div className="mb-1 flex gap-x-6">{content}</div>
-        </div>
-        <div className="mb-5 text-center font-micro text-lg text-white">
-          {pickedCard.length > 1 ? 'are' : 'is'} on the way
-        </div>
-        <div className="text-center font-pd text-lg text-white">
-          Check the transaction{' '}
-          <a
-            href={link}
-            target="_blank"
-            rel="noreferrer"
-            className="text-black hover:text-black hover:underline">
-            here
-          </a>
+      onCancel={() => onCancel()}>
+      <div className="-mt-[100px] flex h-screen items-center justify-center">
+        <div className="relative h-[391px] w-fit bg-[#FF8D00] px-24">
+          <button className="absolute right-4 top-4 cursor-pointer text-black" onClick={onCancel}>
+            <CloseIcon />
+          </button>
+          <div className="flex h-[391px] w-full flex-col items-center bg-[#FF8D00] py-6">
+            <h3 className="mb-6 text-center font-micro text-4xl text-black">your prizes</h3>
+            <div className="flex items-center justify-center">
+              <div className="mb-1 flex gap-x-6">{content}</div>
+            </div>
+            <div className="mb-5 text-center font-micro text-lg text-white">
+              {pickedCard.length > 1 ? 'are' : 'is'} on the way
+            </div>
+            <div className="text-center font-pd text-lg text-white">
+              Check the transaction{' '}
+              <a
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                className="text-black hover:text-black hover:underline">
+                here
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </BitcowModal>

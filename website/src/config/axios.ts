@@ -2,7 +2,7 @@ import axios from 'axios';
 import { authToken, parseAuthToken } from 'utils/storage';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://luckycowdev.bitsmiley.io/',
+  baseURL: 'https://luckycow.bitsmiley.io/',
   headers: {
     'Cache-Control': 'no-cache'
   }

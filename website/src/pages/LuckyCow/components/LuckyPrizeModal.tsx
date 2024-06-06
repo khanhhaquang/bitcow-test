@@ -1,12 +1,14 @@
-import BitcowModal from 'components/BitcowModal';
+import { getClaimHash, getPickedCard } from 'modules/luckyCow/reducer';
 import { FC, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import BitcowModal from 'components/BitcowModal';
+import useNetwork from 'hooks/useNetwork';
+import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
 import { CloseIcon } from 'resources/icons';
 import imageLuckyPrize from 'resources/img/luckyPrize.webp';
-import { useSelector } from 'react-redux';
-import { getClaimHash, getPickedCard } from 'modules/luckyCow/reducer';
-import useNetwork from 'hooks/useNetwork';
+
 import { ILuckyAward } from '../types';
-import useTokenAwardInfo from 'hooks/useTokenAwardInfo';
 
 type LuckyPrizeModalProps = {
   open: boolean;
@@ -34,7 +36,7 @@ const LuckyPrizeModal: FC<LuckyPrizeModalProps> = ({ open, onCancel }) => {
       })
     );
     if (data.length > 1) {
-      const curWidth = 111 * data.length + 24 * (data.length - 1) + 144;
+      const curWidth = 192 * data.length + 24 * (data.length - 1) + 144;
       setContentWidth(curWidth < minWidth ? minWidth : curWidth);
     }
 

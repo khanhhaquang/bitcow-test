@@ -20,7 +20,6 @@ export enum LuckyCowStatus {
   CARDS_SCRATCHING
 }
 
-const MAX_CARDS_BUY = 5;
 const MAX_CARDS_PICK = 10;
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
@@ -49,7 +48,6 @@ const LuckyCow = () => {
       case LuckyCowStatus.BUY:
         return (
           <Buy
-            numberOfCards={MAX_CARDS_BUY}
             onBuyCallback={(hash: string) => {
               playGame(hash);
             }}

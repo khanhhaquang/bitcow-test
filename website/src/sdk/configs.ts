@@ -35,7 +35,9 @@ export const CONFIG: {
     tradingPairV1Creator: '',
     swapRouter: '0xF42F777538911510a38c80aD28B5E358a110b88A',
     tokensBalance: '0xD9739A22415FC1519d2a820Feb8739B09a85bD19',
-    pairV1Manager: '0xB69f3749192582dF8507C139f9a9082708125bdb'
+    pairV1Manager: '0xB69f3749192582dF8507C139f9a9082708125bdb',
+    lottery: '0xEF9a170426277bAA5CB76A3219e354E105760C64',
+    lotteryToken: '0x07373d112edc4570b46996ad1187bc4ac9fb5ed0'
   },
   merlinTestnet: {
     chainId: 686868,

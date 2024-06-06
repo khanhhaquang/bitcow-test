@@ -439,11 +439,6 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       return;
     }
 
-    if (e.name === 'InsufficientPayment') {
-      openErrorNotification({ detail: 'Not enough balance' });
-      return;
-    }
-
     if (
       e.message?.includes('missing revert data') ||
       e.message?.includes('execution reverted (unknown custom error)')

@@ -95,10 +95,9 @@ const Redeem: FC<{ onClickRedeem: () => void }> = ({ onClickRedeem }) => {
 };
 
 const Buy: FC<{
-  numberOfCards: number;
   onBuyCallback: (txn: string) => void;
   onClickRedeemCode: () => void;
-}> = ({ onClickRedeemCode, onBuyCallback, numberOfCards }) => {
+}> = ({ onClickRedeemCode, onBuyCallback }) => {
   const { data: luckyCard, isLoading: isLoadingLuckyCard } = useLuckyCard();
   const {
     allowance,
@@ -114,14 +113,14 @@ const Buy: FC<{
 
   const [cardsAmount, setCardsAmount] = useState(1);
 
-  const isProcessing = isIncreasingAllowance || isPurchasing;
+  const isProcessing = isLoadingLuckyCard || isIncreasingAllowance || isPurchasing;
 
   const cardPrice = luckyCard?.price || 0;
   const totalPrice = cardsAmount * cardPrice;
 
   const handleChangeAmount = (nextValue: number) => {
     if (cardsAmount <= 1 && nextValue < cardsAmount) return;
-    if (cardsAmount === numberOfCards && nextValue > cardsAmount) return;
+    if (cardsAmount === luckyCard.purchaseCap && nextValue > cardsAmount) return;
 
     setCardsAmount(nextValue);
   };
@@ -241,7 +240,7 @@ const Buy: FC<{
                     <p className="relative flex flex-1 items-center justify-center gap-x-1 font-pdb text-[48px] text-[#6B001E] [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                       <BitUsdIcon />
                       <span className="flex items-baseline leading-none">
-                        {isLoadingLuckyCard ? '...' : totalPrice}
+                        {totalPrice}
                         <small className="text-sm">bitUSD</small>
                       </span>
                     </p>

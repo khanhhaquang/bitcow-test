@@ -17,6 +17,7 @@ import type { EIP6963ProviderDetail } from '../evmConnector/eip6963/types';
 import { useConnector, useETHProvider, useModalStateValue } from '../hooks';
 import type { EvmConnector, Metadata, Wallet } from '../types/types';
 import { WalletType } from '../types/types';
+import { authToken } from 'utils/storage';
 
 interface EvmGlobalState {
   openModal: () => void;
@@ -76,6 +77,7 @@ const EvmConnectProviderInner = ({
           await web3ReactConnector.resetState();
         }
       }
+      authToken.clear();
     } catch (e) {
       console.log('disconnect err', e);
     }

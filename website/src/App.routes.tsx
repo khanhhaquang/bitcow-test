@@ -4,13 +4,16 @@ import Home from 'pages/Landing';
 import Pool from 'pages/Pool';
 import Swap from 'pages/Swap';
 import Tokens from 'pages/Tokens';
+import LuckyCow from 'pages/LuckyCow';
+import useUserInfo from 'hooks/useUserInfo';
+
 // import Faucet from 'pages/Faucet';
 // import { useSelector } from 'react-redux';
 // import { getIsResourcesNotFound } from 'modules/common/reducer';
 // import Stats from 'pages/Stats';
 
 export type TRoute = RouteObject & {
-  name: 'Home' | 'Pools' | 'Swap' | 'Tokens' | '404' | 'Faucet' | 'Stats';
+  name: 'Home' | 'Pools' | 'Swap' | 'Lucky Cow' | 'Tokens' | '404' | 'Faucet' | 'Stats';
   hidden?: boolean; //to hide the visibility in header menu
 };
 
@@ -29,8 +32,12 @@ export const routes: TRoute[] = [
   {
     path: 'pools',
     name: 'Pools',
-    // hidden: true,
     element: <Pool />
+  },
+  {
+    path: 'lucky-cow',
+    name: 'Lucky Cow',
+    element: <LuckyCow />
   },
   {
     path: 'tokens',
@@ -56,6 +63,7 @@ export const routes: TRoute[] = [
 ];
 
 const Routes = () => {
+  useUserInfo();
   const activeRoutes = [...routes];
   // const isResourcesNotFound = useSelector(getIsResourcesNotFound);
   // const nav = useNavigate();

@@ -109,7 +109,7 @@ const Pool = () => {
     <div className="flex items-start text-2xl text-bc-white tablet:flex-col">
       <h2 className="flex items-center font-micro text-4xl text-white tablet:text-2xl">Pools</h2>
 
-      <div className="ml-auto flex items-start gap-2 font-pgb text-lg text-bc-gold">
+      <div className="ml-auto flex items-start gap-2 font-pdb text-lg text-bc-gold">
         <div className="flex items-center">
           <img src="/images/coin.gif" alt="coin" className="h-6 w-[22px]" />
           <p>TVL :</p>
@@ -203,7 +203,7 @@ const Pool = () => {
         <div className={'mt-6 hidden tablet:block'}>
           <Radio.Group onChange={(e) => setActiveTab(e.target.value)} value={activeTab}>
             {tabs.map((tab) => (
-              <Radio.Button value={tab.id} key={tab.id} className="bg-transparent font-pg text-lg">
+              <Radio.Button value={tab.id} key={tab.id} className="bg-transparent font-pd text-lg">
                 {tab.label}
               </Radio.Button>
             ))}
@@ -220,7 +220,7 @@ const Pool = () => {
                 <div className="hidden gap-2 tablet:flex">
                   <SelectInput
                     className={
-                      "relative !w-1/2 font-pg text-lg before:absolute before:top-3 before:left-3 before:z-10 before:font-pg before:text-white before:content-['Sort_by']"
+                      "relative !w-1/2 font-pd text-lg before:absolute before:top-3 before:left-3 before:z-10 before:font-pd before:text-white before:content-['Sort_by']"
                     }
                     value={poolFilter.sortBy[poolFilter.sortBy.length - 1].field}
                     options={SortOptions()}
@@ -228,7 +228,7 @@ const Pool = () => {
                   />
                   <SelectInput
                     className={
-                      "relative !w-1/2 font-pg text-lg before:absolute before:top-3 before:left-3 before:z-10 before:font-pg before:text-white before:content-['Time_Basis']"
+                      "relative !w-1/2 font-pd text-lg before:absolute before:top-3 before:left-3 before:z-10 before:font-pd before:text-white before:content-['Time_Basis']"
                     }
                     value={poolFilter.timeBasis}
                     options={filterOptions}
@@ -249,7 +249,7 @@ const Pool = () => {
                 <div className="flex flex-wrap items-center justify-end tablet:my-4">
                   <SearchInput
                     placeholder="Name or address"
-                    className={'w-[220px] font-pg'}
+                    className={'w-[220px] font-pd'}
                     value={poolFilter.text}
                     onChange={(val) => onUpdateFilter(val, 'text')}
                     onSearch={() => {}}
@@ -259,7 +259,7 @@ const Pool = () => {
                       width={126}
                       borderWidth={2}
                       height={34}
-                      className="ml-3 font-pg text-lg text-blue1"
+                      className="ml-3 bg-white/80 font-pd text-lg text-blue1"
                       color="rgba(255, 255, 255, 0.8)"
                       isSolid
                       onClick={() => {
@@ -284,7 +284,7 @@ const Pool = () => {
         onCancel={() => dispatch(poolAction.TOGGLE_LIQUIDITY_MODAL(null))}
         maskClosable={false}
         open={!!liquidityModal}
-        closeIcon={<CloseIcon className="relative top-4" />}
+        closeIcon={<CloseIcon className="relative top-4 text-white" />}
         bodyStyle={{ padding: 0 }}
         width={liquidityModal && liquidityModal.type === 'create' ? 652 : 512}
         destroyOnClose>

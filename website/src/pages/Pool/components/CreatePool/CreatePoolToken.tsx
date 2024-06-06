@@ -113,7 +113,7 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
   );
 
   return (
-    <div className="flex flex-1 flex-col space-y-1.5 font-pg text-lg leading-none">
+    <div className="flex flex-1 flex-col space-y-1.5 font-pd text-lg leading-none">
       <div className="font-micro text-white/20">{tokenTitle}</div>
       <div className="flex flex-col space-y-3 bg-white/5 p-3">
         <div className="flex flex-col space-y-3">

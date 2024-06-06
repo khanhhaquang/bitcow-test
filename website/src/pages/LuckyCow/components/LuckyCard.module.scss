@@ -1,0 +1,31 @@
+.strokeText {
+  color: #ECD15D;
+  // text-shadow: 1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  -webkit-text-stroke: 3px #000;
+  text-stroke: 3px #000;
+  
+}
+.strokeText::before {
+  content: attr(data-storke);
+  position: absolute;
+  -webkit-text-stroke: 0;
+  color: #ECD15D;
+}
+.doubleStrokeText {
+  color: #ECD15D;
+  -webkit-text-stroke: 8px #fff;
+  text-stroke: 8px #fff;
+}
+.doubleStrokeText::before{
+  content: attr(data-storke);
+  position: absolute;
+  -webkit-text-stroke: 3px #000;
+  text-stroke: 3px #000;
+  
+}
+.doubleStrokeText::after {
+  content: attr(data-storke);
+  position: absolute;
+  -webkit-text-stroke: 0;
+  color: #ECD15D; 
+}

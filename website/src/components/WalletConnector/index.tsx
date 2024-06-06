@@ -55,16 +55,15 @@ const WalletConnector = () => {
         className="bc-wallet-connector-active group w-[246px] text-2xl uppercase">
         {walletAddressEllipsis(wallet?.accounts[0].evm || '')}
         {isDisconnectModalOpen && (
-          <div
-            className="absolute z-10"
-            style={{ top: WALLET_HEIGHT - WALLET_BORDER_WIDTH, left: 0 }}>
+          <div className="absolute z-10" style={{ top: WALLET_HEIGHT + 4, left: 0 }}>
             <PixelButton
               width={WALLET_WIDTH}
               height={WALLET_HEIGHT}
-              borderWidth={WALLET_BORDER_WIDTH}
-              onClick={() => disconnect()}
-              isSolid={true}
-              className="uppercase text-bc-blue">
+              onClick={() => {
+                disconnect();
+              }}
+              isSolid
+              className="bg-white uppercase text-bc-blue hover:!bg-white active:!bg-white">
               Disconnect
             </PixelButton>
           </div>
@@ -88,7 +87,6 @@ const WalletConnector = () => {
       )}
       <BitcowModal
         onCancel={() => setDetailModalOpen(false)}
-        className=""
         wrapClassName={wallet ? styles.walletDetail : styles.walletsModal}
         open={detailModalOpen}
         closeIcon={<CancelIcon />}>

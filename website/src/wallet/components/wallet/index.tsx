@@ -20,7 +20,7 @@ export const BtcWalletButton = ({
         src={connector.metadata.icon}
         className="group-hover:shadow-wallet-hover"
       />
-      <span className="font-pg text-lg">{connector.metadata.name}</span>
+      <span className="font-pd text-lg">{connector.metadata.name}</span>
     </button>
   );
 };
@@ -41,7 +41,7 @@ export const EvmWalletButton = ({
         height={60}
         className="group-hover:shadow-wallet-hover"
       />
-      <span className="font-pg text-lg">{connector[0].metadata.name}</span>
+      <span className="font-pd text-lg">{connector[0].metadata.name}</span>
     </button>
   );
 };

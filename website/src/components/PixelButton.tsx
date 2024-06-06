@@ -36,37 +36,56 @@ export default function PixelButton({
         className
       )}
       disabled={disabled}
-      style={{ width, height, ...rest.style }}
+      style={{
+        width: width,
+        height,
+        ...rest.style
+      }}
       onClick={onClick}
       {...rest}>
-      <div
-        className="absolute left-0"
+      <p
+        className="absolute"
         style={{
-          top: borderWidth,
+          left: 0,
+          top: -borderWidth,
           width,
-          height: height - 2 * borderWidth,
-          borderLeftWidth: borderWidth,
-          borderRightWidth: borderWidth,
-          borderStyle: 'solid',
-          borderColor: color,
-          backgroundColor: isSolid ? color : 'transparent'
+          height: borderWidth,
+          backgroundColor: color || 'transparent'
         }}
       />
-      <div
-        className="absolute top-0"
+      <p
+        className="absolute"
         style={{
-          left: borderWidth,
-          width: width - 2 * borderWidth,
+          left: 0,
+          bottom: -borderWidth,
+          width,
+          height: borderWidth,
+          backgroundColor: color || 'transparent'
+        }}
+      />
+      <p
+        className="absolute"
+        style={{
+          left: -borderWidth,
+          top: 0,
+          width: borderWidth,
           height,
-          borderTopWidth: borderWidth,
-          borderBottomWidth: borderWidth,
-          borderStyle: 'solid',
-          borderColor: color,
-          backgroundColor: isSolid ? color : 'transparent'
+          backgroundColor: color || 'transparent'
+        }}
+      />
+      <p
+        className="absolute"
+        style={{
+          right: -borderWidth,
+          top: 0,
+          width: borderWidth,
+          height,
+          backgroundColor: color || 'transparent'
         }}
       />
       <span className="z-10 flex items-center">
-        {children} {isLoading && '...'}
+        {children}
+        {isLoading && '...'}
       </span>
     </button>
   );

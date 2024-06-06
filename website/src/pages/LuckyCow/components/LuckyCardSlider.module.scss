@@ -1,0 +1,114 @@
+.slideContainer {
+  position: relative;
+  perspective: 928px;
+  transform-style: preserve-3d;
+  margin: 0 auto;
+  width: 414px;
+}
+.slide {
+  // width: 362px;
+  // height: 272px;
+  transition: transform 500ms ease 0s, opacity 500ms ease 0s,
+    visibility 500ms ease 0s;
+  position: absolute;
+  top: 0;
+  // border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.slide img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.slidePrev{
+  width: 73px;
+  height: 110px;
+  margin-top: -55px;
+  left: 0;
+  top: 50%;
+  position: absolute;
+  z-index: 10;
+}
+.slideNext{
+  width: 73px;
+  height: 110px;
+  margin-top: -55px;
+  right: 0;
+  top: 50%;
+  position: absolute;
+  z-index: 10;
+}
+.slidePrev svg, .slideNext svg{
+  --color1: #C5C5C5;
+  --color2: #E8E8E8;
+  --color3: #A9A9A9;
+}
+.slidePrev svg:hover, .slideNext svg:hover{
+  --color1: #fff;
+  --color2: #fff;
+  --color3: #A9A9A9;
+}
+.slidePrev svg:active, .slideNext svg:active{
+  --color1: #616161;
+  --color2: #9C9C9C;
+  --color3: #4F4D4D;
+}
+.slideActive{
+  opacity: 1;
+  transform: translateX(0px) translateZ(0px);
+  z-index: 10;
+}
+.slideSecondLeft{
+  opacity: 1;
+  transform: translateX(-240px) translateZ(-300px);
+  z-index: 8
+}
+.slideSecondRight{
+  opacity: 1;
+  transform: translateX(240px) translateZ(-300px);
+  z-index: 8
+}
+.slideSecondLeft::after, .slideSecondRight::after{
+  content:"";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+  background: rgba(0,0,0,0.4);
+}
+.slideThirdLeft{
+  opacity: 1;
+  transform: translateX(-480px) translateZ(-600px);
+  z-index: 6
+}
+
+.slideThirdRight{
+  opacity: 1;
+  transform: translateX(480px) translateZ(-600px);
+  z-index: 6
+}
+.slideThirdLeft::after, .slideThirdRight::after{
+  content:"";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
+  background: rgba(0,0,0,0.6);
+}
+.slideBackLeft{
+  opacity: 1;
+  transform: translateX(-480px) translateZ(-500px);
+  z-index: 5
+}
+.slideBackRight{
+  opacity: 1;
+  transform: translateX(480px) translateZ(-500px);
+  z-index: 5
+}

@@ -63,7 +63,7 @@ const PageHeader: React.FC = () => {
     return (
       <div className="relative flex w-full grow items-center justify-end">
         <WalletConnector />
-        <div className={`absolute top-full w-[${WALLET_WIDTH}px]`}>
+        <div className={`absolute top-full min-w-[${WALLET_WIDTH}px]`}>
           <NetworkSelect className="mt-3" />
         </div>
       </div>
@@ -81,8 +81,8 @@ const PageHeader: React.FC = () => {
             <Avatar
               source={LogoBitCow}
               hoverSource={LogoBitCowHover}
-              width={80}
-              height={80}
+              width={60}
+              height={60}
               alt="Logo"
             />
           </Link>
@@ -97,9 +97,6 @@ const PageHeader: React.FC = () => {
             {navItems}
           </Menu>
         </div>
-        {/*
-        <ThemeToggler />
-            */}
       </div>
     );
   };
@@ -107,33 +104,19 @@ const PageHeader: React.FC = () => {
   return (
     <Header className={'z-10 h-[140px] w-full bg-transparent px-0 pt-10 tablet:pt-0'}>
       <div className={'relative flex h-full items-center justify-between px-[60px] tablet:px-4'}>
-        <Link to="/" className={'flex h-full items-center justify-center'}>
-          <div
-            className={cn('hidden', {
-              'tablet:block': !isLandingPage
-            })}>
+        <Link to="/" className={'flex items-center justify-center'}>
+          <div>
             <Avatar
               source={LogoBitCow}
               hoverSource={LogoBitCowHover}
-              className="block h-auto w-12"
-              alt="Logo"
-            />
-          </div>
-          <div
-            className={cn('block', {
-              'tablet:hidden': !isLandingPage
-            })}>
-            <Avatar
-              source={LogoBitCow}
-              hoverSource={LogoBitCowHover}
-              className="block h-auto w-[81px]"
+              className="block h-[81px] w-[81px] tablet:h-[60px] tablet:w-[60px]"
               alt="Logo"
             />
           </div>
         </Link>
         {/* Desktop */}
         {!isLandingPage && (
-          <div className="absolute left-1/2 z-10 flex h-full grow -translate-x-1/2 items-center tablet:hidden">
+          <div className="absolute left-[140px] z-10 flex h-full grow items-center tablet:hidden">
             <Menu
               mode="horizontal"
               theme="dark"

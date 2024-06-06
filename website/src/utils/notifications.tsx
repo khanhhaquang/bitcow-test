@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { notification } from 'components/Antd';
 import TextLink from 'components/TextLink';
 import { NotiErrorIcon, HintIcon, NotiSuccessIcon, CloseIcon } from 'resources/icons';
+import { getChainTxnUrl } from './formatter';
 
 type NotificationType = 'success' | 'error' | 'info' | 'warn';
 
@@ -22,10 +23,16 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
   if (type === 'success') {
     icon = <NotiSuccessIcon />;
   } else if (type === 'error') {
-    icon = <NotiErrorIcon />;
+    icon = <NotiErrorIcon className="text-[#FF1F00]" />;
   } else if (type === 'info') {
     icon = <HintIcon />;
+  } else if (type === 'warn') {
+    icon = <NotiErrorIcon className="text-[#FF8D00]" />;
   }
+
+  // DUE TO THE SPACING OF TOP HIGHLIGHT LUCKY COW
+  // PLUS 40px
+  const top = window.location.pathname.startsWith('/lucky-cow') ? 220 : 180;
 
   notification.open({
     message: title,
@@ -33,36 +40,40 @@ const openNotification = ({ detail, type = 'success', title = '' }: INotificatio
     placement: 'topRight',
     icon,
     className: `obric-notification obric-notification--${type}`,
-    closeIcon: <CloseIcon className="bottom-1 h-full w-full" />,
-    top: 180,
+    closeIcon: <CloseIcon className="bottom-1 h-full w-full text-white/60" />,
+    top,
     duration: 6
   });
+};
+
+const renderTxnView = (content: ReactNode, txnUrl) => {
+  return (
+    <p className="flex flex-wrap">
+      {content}
+      {!!txnUrl && (
+        <TextLink href={txnUrl} className="ml-1 !text-bc-blue">
+          here
+        </TextLink>
+      )}
+    </p>
+  );
 };
 
 export const openErrorNotification = (args: INotificationArgs) =>
   openNotification({ type: 'error', ...args });
 
 export const openTxSuccessNotification = (url: string, txHash: string, content: string) => {
-  const detail = (
-    <div>
-      <span>{content}</span>
-      <TextLink href={`${url}/tx/${txHash}`} className="block !text-bc-blue">
-        View Transaction
-      </TextLink>
-    </div>
-  );
+  const detail = renderTxnView(content, getChainTxnUrl(url, txHash));
   return openNotification({ detail, title: 'Transaction Success' });
 };
 
+export const openTxPendingNotification = (content: string, url = '', txHash = '') => {
+  const detail = renderTxnView(content, getChainTxnUrl(url, txHash));
+  return openNotification({ detail, type: 'warn', title: 'Transaction processing...' });
+};
+
 export const openTxErrorNotification = (url: string, txHash: string, content: string) => {
-  const detail = (
-    <div>
-      <span>{content}:</span>
-      <TextLink href={`${url}/tx/${txHash}`} className="block !text-bc-blue">
-        View Transaction
-      </TextLink>
-    </div>
-  );
+  const detail = renderTxnView(content, getChainTxnUrl(url, txHash));
   return openNotification({ type: 'error', detail, title: 'Transaction Failed' });
 };
 

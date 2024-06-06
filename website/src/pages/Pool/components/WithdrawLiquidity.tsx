@@ -120,7 +120,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
           <h2 className="pb-3 font-micro text-2xl uppercase text-white">Remove liquidity</h2>
           <hr className="h-[1.5px] border-0 bg-white/20" />
           <div className="mt-9 flex w-full flex-col items-center justify-center px-5 tablet:pb-[88px]">
-            <div className="relative w-full overflow-hidden bg-white/5 px-6 py-4 font-pg">
+            <div className="relative w-full overflow-hidden bg-white/5 px-6 py-4 font-pd">
               <span className="absolute top-0 left-0 h-2 w-2 bg-blue2" />
               <span className="absolute top-0 right-0 h-2 w-2 bg-blue2" />
               <span className="absolute bottom-0 left-0 h-2 w-2 bg-blue2" />
@@ -181,7 +181,7 @@ const WithdrawLiquidity = ({ liquidityPool }: { liquidityPool: IPool }) => {
             {props.values.percent > 0 && (
               <>
                 <RmLiqIcon className="mb-2" />
-                <div className="relative w-full bg-white/5 px-6 py-4 font-pg">
+                <div className="relative w-full bg-white/5 px-6 py-4 font-pd">
                   <span className="absolute top-0 left-0 h-2 w-2 bg-blue2" />
                   <span className="absolute top-0 right-0 h-2 w-2 bg-blue2" />
                   <span className="absolute bottom-0 left-0 h-2 w-2 bg-blue2" />

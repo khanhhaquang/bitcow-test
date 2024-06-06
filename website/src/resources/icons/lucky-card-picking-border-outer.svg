@@ -1,0 +1,8 @@
+<svg width="407" height="77" viewBox="0 0 407 77" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd"
+    d="M4 8H0V69H4V73H8V69H4V8ZM403 73H399.004V77H8.00396L8.00397 73H399V69H403V73ZM403 69V8H407V69H403Z"
+    fill="#6B001E" />
+  <rect width="391" height="4" transform="matrix(1 0 0 -1 8 4)" fill="#6B001E" />
+  <rect x="4" y="4" width="4" height="4" fill="#6B001E" />
+  <rect x="399" y="8" width="4" height="4" transform="rotate(-90 399 8)" fill="#6B001E" />
+</svg>

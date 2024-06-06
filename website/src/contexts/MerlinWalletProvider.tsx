@@ -1,11 +1,22 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import BigNumber from 'bignumber.js';
 import { Eip1193Provider, ethers } from 'ethers';
-import { createContext, FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-
 import {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+
+import { axiosSetupInterceptors } from 'config/axios';
+import { UserService } from 'services/user';
+import { ITxnLucky, LuckyDrawService } from 'services/luckyDraw';
+import openNotification, {
   openErrorNotification,
   openTxErrorNotification,
   openTxSuccessNotification
@@ -19,18 +30,20 @@ import {
   Quote,
   Sdk as BitcowSDK,
   TxOption,
-  UserLpAmount,
   CreateTokenInfo,
   isBTC
 } from '../sdk';
 import { NetworkConfig } from '../types/bitcow';
 import { getLocalPairMessages } from '../utils/localPools';
 import { useEvmConnectContext, Wallet } from '../wallet';
+import { authToken, generateAuthToken, parseAuthToken } from 'utils/storage';
+
 interface MerlinWalletContextType {
   wallet?: Wallet;
+  walletAddress: string;
   openWalletModal: () => void;
   closeWalletModal: () => void;
-  bitcowSDK: BitcowSDK;
+  bitcowSDK?: BitcowSDK;
   createBitcowSDK: () => void;
   liquidityPools: IPool[];
   fetchedPoolsCount: number;
@@ -43,7 +56,12 @@ interface MerlinWalletContextType {
   bitusdToken: TokenInfo;
   clearCache: () => void;
   pendingTx: boolean;
-  requestSwap: (quote: Quote, minOutputAmt: number) => Promise<boolean>;
+  checkTransactionError: (e) => void;
+  requestSwap: (
+    quote: Quote,
+    minOutputAmt: number,
+    onSuccessCallback?: (luckyTxn: ITxnLucky) => void
+  ) => Promise<boolean>;
   requestAddLiquidity: (pool: IPool, xAmount: number, yAmount: number) => Promise<boolean>;
   requestWithdrawLiquidity: (pool: IPool, amt: string) => Promise<boolean>;
   requestCreatePairWithManager: (
@@ -64,6 +82,7 @@ interface MerlinWalletContextType {
     protocolFeeAddress: string,
     addTokenListFee: string
   ) => Promise<boolean>;
+  isLoggedIn: boolean;
 }
 
 interface TProviderProps {
@@ -74,8 +93,7 @@ const MerlinWalletContext = createContext<MerlinWalletContextType>({} as MerlinW
 
 const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const { wallet, openModal, closeModal, setCurrentChain } = useEvmConnectContext();
-
-  const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK>();
+  const [bitcowSDK, setBitcowSDK] = useState<BitcowSDK | undefined>();
 
   const [pendingTx, setPendingTx] = useState<boolean>(false);
   const [txOption] = useState<TxOption>({
@@ -97,8 +115,12 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   const [bitusdToken, setBitusdToken] = useState<TokenInfo>();
   const [fetchedPoolsCount, setFetchedPoolsCount] = useState(0);
   const [startInit, setStartInit] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const { currentNetwork } = useNetwork();
   const currentNetworkRef = useRef<NetworkConfig>();
+
+  const walletAddress = useMemo(() => wallet?.accounts?.[0]?.evm || '', [wallet?.accounts]);
 
   const setTokenBalancesCache = useCallback((tokenBalancesInner: Record<string, bigint>) => {
     if (!currentNetworkRef.current.fetchAllTokenBalance && tokenBalancesInner === undefined) {
@@ -281,17 +303,55 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     [bitcowSDK, timeOutArray, timeOutLength, setTokenBalancesCache, needBalanceTokens]
   );
 
+  const handleSigning = useCallback(async () => {
+    try {
+      const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
+      const signer = await browserProvider.getSigner();
+      bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
+      fetchTokenBalances(true, 'set signer');
+
+      const {
+        token: cachedToken,
+        address: cachedAddress,
+        chain: cachedChain
+      } = parseAuthToken(authToken.get());
+
+      if (
+        !cachedToken ||
+        cachedAddress !== wallet.accounts[0].evm ||
+        cachedChain !== wallet.chainId
+      ) {
+        const newSignature = await signer.signMessage('Hello, there! Log in to win the lotto!');
+        const loginResult = await UserService.login.call(wallet.accounts[0].evm, newSignature);
+        if (loginResult?.code === 0) {
+          authToken.set(
+            generateAuthToken(loginResult.data.token, wallet.accounts[0].evm, wallet.chainId)
+          );
+          setIsLoggedIn(true);
+          openNotification({ type: 'success', detail: 'You have logged in' });
+        } else {
+          authToken.clear();
+          setIsLoggedIn(false);
+        }
+      } else {
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      authToken.clear();
+      setIsLoggedIn(false);
+      openNotification({ type: 'error', detail: 'Logging failed' });
+    }
+  }, [wallet, bitcowSDK]);
+
   const setBitcowSdkSigner = useCallback(async () => {
+    setIsLoggedIn(false);
     if (!bitcowSDK) {
       return;
     }
     if (wallet) {
       if (wallet.chainId === bitcowSDK.config.chainId) {
         if (wallet.accounts[0].evm != bitcowSDK.getAddress()) {
-          const browserProvider = new ethers.BrowserProvider(wallet.provider as Eip1193Provider);
-          const signer = await browserProvider.getSigner();
-          bitcowSDK.setSigner(signer as any, wallet.accounts[0].evm);
-          fetchTokenBalances(true, 'set signer');
+          handleSigning();
         }
       } else {
         setTokenBalancesCache(undefined);
@@ -300,10 +360,11 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
       bitcowSDK.setSigner(undefined, undefined);
       fetchTokenBalances(true);
     }
-  }, [bitcowSDK, wallet, fetchTokenBalances, setTokenBalancesCache]);
+  }, [handleSigning, fetchTokenBalances]);
 
   useEffect(() => {
     setBitcowSdkSigner();
+    axiosSetupInterceptors(() => handleSigning());
   }, [setBitcowSdkSigner]);
 
   useEffect(() => {
@@ -371,11 +432,22 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
   );
 
   const checkTransactionError = useCallback((e: any) => {
+    console.log('Txn error: ', e);
+
     if (e.code === 'ACTION_REJECTED' || e.reason === 'rejected' || e.info?.error?.code === 4001) {
       openErrorNotification({ detail: 'User rejected' });
       return;
     }
-    console.log(e);
+
+    if (
+      e.message?.includes('missing revert data') ||
+      e.message?.includes('execution reverted (unknown custom error)')
+    ) {
+      openErrorNotification({
+        detail: 'You may want to try to refresh page or increase your gas fee. '
+      });
+      return;
+    }
     openErrorNotification({ detail: e.message });
   }, []);
 
@@ -410,7 +482,7 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     [bitcowSDK, checkTransactionError, currentNetwork]
   );
   const requestSwap = useCallback(
-    async (quote, minOutputAmt) => {
+    async (quote, minOutputAmt, onSuccessCallback) => {
       let success = false;
       if (!wallet) throw new Error('Please connect wallet first');
       const fromToken = quote.inputToken;
@@ -434,6 +506,16 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
               result.hash,
               `Swapped ${quote.inAmt} ${fromToken.symbol} to ${toToken.symbol}`
             );
+            LuckyDrawService.getTxnLucky
+              .call(result.hash)
+              .then((resp) => {
+                if (resp.code === 0 && resp.data.isLucky) {
+                  onSuccessCallback?.(resp.data);
+                }
+              })
+              .catch((e) => {
+                console.log('Check Lucky chance:', e);
+              });
             success = true;
           } else if (result.status === 0) {
             openTxErrorNotification(
@@ -740,6 +822,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
     <MerlinWalletContext.Provider
       value={{
         wallet,
+        walletAddress,
+        isLoggedIn,
         openWalletModal: openModal,
         closeWalletModal: closeModal,
         bitcowSDK,
@@ -759,7 +843,8 @@ const MerlinWalletProvider: FC<TProviderProps> = ({ children }) => {
         requestAddLiquidity,
         requestWithdrawLiquidity,
         requestCreatePairWithManager,
-        requestCreatePair
+        requestCreatePair,
+        checkTransactionError
       }}>
       {children}
     </MerlinWalletContext.Provider>

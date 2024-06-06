@@ -45,6 +45,8 @@ module.exports = {
         table_row_bg: '#1E1E1E',
         white_gray_008: 'rgba(4, 18, 25, 0.08)',
         white_color_list_hover: '#EBEDF4',
+        pink_950: '#6B001E',
+        color_yellow_3: '#E0A828',
 
         bc: {
           white: {
@@ -89,16 +91,20 @@ module.exports = {
         accountGradientBg:
           'linear-gradient(51.34deg, rgba(255, 104, 39, 0.3) 0%, #FF792C 24.54%, #FF9C37 48.97%, #FF6827 70.53%, rgba(255, 104, 39, 0.3) 95.27%)',
         accountBg: 'url(resources/img/accountBg.svg)',
+        'lucky-cow': 'linear-gradient(129deg, #E26B16 0%, #EA8A14 175.48%)',
+        'lucky-cow-decorator': 'url(resources/img/lucky-cow-decorator.webp)',
         'bc-swap':
           'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)',
         'bc-pool':
-          'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)'
+          'linear-gradient(100deg, rgba(50, 132, 232, 0.80) 5.12%, rgba(0, 132, 255, 0.80) 110.14%)',
+        'lucky-redeem-btn-hover':
+          'linear-gradient(0deg, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.30) 100%)'
       }
     },
     screens: {
       desktop: { max: '99999px' }, // desktop first
       laptop: { max: '2199px' },
-      smallLaptop: { max: '1440px' },
+      smallLaptop: { max: '1520px' },
       tablet: { max: '1024px' },
       mobile: { max: '768px' }
     },
@@ -108,7 +114,9 @@ module.exports = {
       color_bg_3: '#272B30',
       color_mask: 'rgba(0, 0, 0, 0.9)',
       color_tooltip: '#363B42',
-      color_list_hover: 'rgba(255, 255, 255, 0.08)'
+      color_list_hover: 'rgba(255, 255, 255, 0.08)',
+      color_yellow_1: '#FFC700',
+      color_yellow_2: '#FF8D00'
     }),
     boxShadow: {
       sm: '4px 4px 0px #2D2D2D',
@@ -126,8 +134,7 @@ module.exports = {
       Rany: 'Rany, sans-serif',
       micro: ['Micro', ...defaultTheme.fontFamily.sans],
       pd: ['Pixter Display', ...defaultTheme.fontFamily.sans],
-      pgb: ['Pixter Granular Bold', ...defaultTheme.fontFamily.sans],
-      pg: ['Pixter Granular', ...defaultTheme.fontFamily.sans]
+      pdb: ['Pixter Display Bold', ...defaultTheme.fontFamily.sans]
     }
   },
   plugins: [

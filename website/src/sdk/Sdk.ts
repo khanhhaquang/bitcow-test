@@ -20,6 +20,8 @@ import {
 } from './utils/statsV1';
 import { uiAmountToContractAmount } from './utils/common';
 import { PairV1Manager } from './PairV1Manager';
+import { Lottery } from './Lottery';
+import { Erc20 } from './Erc20';
 
 export class Sdk extends ContractRunner {
   pools: Pool[] = [];
@@ -29,6 +31,9 @@ export class Sdk extends ContractRunner {
   pairV1Manager?: PairV1Manager;
 
   poolCreator?: PoolCreator;
+
+  lottery?: Lottery;
+  lotteryToken?: Erc20;
 
   private readonly routerContract: Contract;
 
@@ -89,6 +94,14 @@ export class Sdk extends ContractRunner {
       ABI_SS_TRADING_PAIR_V1_LIST,
       provider
     );
+
+    this.lottery = config.lottery
+      ? new Lottery(provider, config.lottery, txOption, signer)
+      : undefined;
+
+    this.lotteryToken = config.lotteryToken
+      ? new Erc20(provider, config.lotteryToken, txOption, signer)
+      : undefined;
   }
   getLocalTokens(localPairs: SearchPairMessage[]) {
     const localTokens: Record<string, TokenInfo> = {};
@@ -246,6 +259,8 @@ export class Sdk extends ContractRunner {
     this.pools.forEach((pool) => pool.setSigner(signer, address));
     this.poolCreator?.setSigner(signer, address);
     this.pairV1Manager?.setSigner(signer, address);
+    this.lottery?.setSigner(signer, address);
+    this.lotteryToken?.setSigner(signer, address);
   }
 
   get swapRouter(): string {

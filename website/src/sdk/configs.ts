@@ -35,7 +35,9 @@ export const CONFIG: {
     tradingPairV1Creator: '',
     swapRouter: '0xF42F777538911510a38c80aD28B5E358a110b88A',
     tokensBalance: '0xD9739A22415FC1519d2a820Feb8739B09a85bD19',
-    pairV1Manager: '0xB69f3749192582dF8507C139f9a9082708125bdb'
+    pairV1Manager: '0xB69f3749192582dF8507C139f9a9082708125bdb',
+    lottery: '0xEF9a170426277bAA5CB76A3219e354E105760C64',
+    lotteryToken: '0x07373d112edc4570b46996ad1187bc4ac9fb5ed0'
   },
   merlinTestnet: {
     chainId: 686868,
@@ -76,6 +78,8 @@ export const CONFIG: {
     tradingPairV1Creator: '0x6C99BB0364123035e58Ee3Fa2dD9E28C8E547Aae',
     swapRouter: '0x5193d68a90D89d4F9ea5e005F124b2F2De9A5371',
     tokensBalance: '0x088Ca4ad4E99862B1f402E8455A54c9e5CabB359',
-    pairV1Manager: '0xA235617b8e712E9b28E013d5Ca171c76108bb036'
+    pairV1Manager: '0xA235617b8e712E9b28E013d5Ca171c76108bb036',
+    lottery: '0x05Dc492E37d017c6D75C0DdAbeB56c15401b54CA',
+    lotteryToken: '0x5cA6bE430A0E5FB022fC0C842430043FEd80cf2B'
   }
 };

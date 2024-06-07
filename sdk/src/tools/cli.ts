@@ -42,90 +42,6 @@ async function printSDK() {
 
 main.command('print-sdk').action(printSDK);
 
-async function printTokens() {
-  const sdk = await getSdk();
-  await sdk.coinList.reload(500, 500);
-
-  console.log(JSON.stringify(sdk.coinList.tokens, undefined, '  '));
-}
-
-main.command('print-tokens').action(printTokens);
-
-async function updateTokenLogoUrl(tokenSymbol: string, logoUrl: string) {
-  const sdk = await getSdk();
-  await sdk.coinList.reload(500, 500);
-  await sdk.coinList.updateLogoUrl(tokenSymbol, logoUrl);
-}
-main
-  .command('update-token-logo-url')
-  .argument('tokenSymbol')
-  .argument('logoUrl')
-  .action(updateTokenLogoUrl);
-
-async function updateTokenInfoToManager(tokenSymbol: string) {
-  const sdk = await getSdk();
-  await sdk.coinList.reload(500, 500);
-  console.log(sdk.coinList.symbolToToken);
-  const tokenInfo = sdk.coinList.getTokenBySymbol(tokenSymbol);
-  if (tokenInfo === undefined) {
-    throw new Error('Token not found');
-  }
-  await sdk.pairV1Manager?.updateTokenInfo(tokenInfo);
-}
-main
-  .command('update-token-info-to-manager')
-  .argument('tokenSymbol')
-  .action(updateTokenInfoToManager);
-
-async function copyAllPairToPairManager() {
-  const sdk = await getSdk();
-  await sdk.coinList.reload(500, 500);
-  for (const pool of sdk.pools) {
-    const xTokenInfo = sdk.coinList.getTokenByAddress(pool.xToken.address);
-    const yTokenInfo = sdk.coinList.getTokenByAddress(pool.yToken.address);
-    if (xTokenInfo === undefined || yTokenInfo === undefined) {
-      throw new Error('TokenInfo not found');
-    }
-    await sdk.pairV1Manager?.addPair(xTokenInfo, yTokenInfo, pool.poolAddress);
-  }
-}
-main.command('copy-all-pair-to-pair-manager').action(copyAllPairToPairManager);
-
-async function addPairToPairList(pairAddress: string) {
-  const sdk = await getSdk();
-  const pairContract = new Contract(pairAddress, ABI_SS_TRADING_PAIR_V1, sdk.provider);
-  const xToken = await pairContract.xToken();
-  const yToken = await pairContract.yToken();
-
-  if (await sdk.tradingPairV1ListContract.pairMap(pairAddress)) {
-    throw new Error('Pair address already in');
-  }
-  await sdk.tradingPairV1ListContract.addPairOwner(pairAddress);
-  if (!(await sdk.coinList.tokenListContract.isIn(xToken))) {
-    const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(xToken);
-    await sdk.coinList.tokenListContract.addTokenInfo(
-      xToken,
-      tokenInfo.description,
-      tokenInfo.projectUrl,
-      tokenInfo.logoUrl,
-      tokenInfo.coingeckoId
-    );
-  }
-  if (!(await sdk.coinList.tokenListContract.isIn(yToken))) {
-    const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(yToken);
-    await sdk.coinList.tokenListContract.addTokenInfo(
-      yToken,
-      tokenInfo.description,
-      tokenInfo.projectUrl,
-      tokenInfo.logoUrl,
-      tokenInfo.coingeckoId
-    );
-  }
-  console.log();
-  console.log();
-}
-main.command('add-pair-to-pair-list').argument('pairAddress').action(addPairToPairList);
-
 async function approvePool(xToken: string, yToken: string) {
   const pool = await getPool(xToken, yToken);
   const sdk = await getSdk();
@@ -228,6 +144,91 @@ async function getTokenInfo(tokenAddress: string, provider: Provider) {
     coingeckoId: ''
   };
 }
+
+async function printTokens() {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+
+  console.log(JSON.stringify(sdk.coinList.tokens, undefined, '  '));
+}
+
+main.command('print-tokens').action(printTokens);
+
+async function updateTokenLogoUrl(tokenSymbol: string, logoUrl: string) {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+  await sdk.coinList.updateLogoUrl(tokenSymbol, logoUrl);
+}
+main
+  .command('update-token-logo-url')
+  .argument('tokenSymbol')
+  .argument('logoUrl')
+  .action(updateTokenLogoUrl);
+
+async function updateTokenInfoToManager(tokenSymbol: string) {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+  console.log(sdk.coinList.symbolToToken);
+  const tokenInfo = sdk.coinList.getTokenBySymbol(tokenSymbol);
+  if (tokenInfo === undefined) {
+    throw new Error('Token not found');
+  }
+  await sdk.pairV1Manager?.updateTokenInfo(tokenInfo);
+}
+main
+  .command('update-token-info-to-manager')
+  .argument('tokenSymbol')
+  .action(updateTokenInfoToManager);
+
+async function copyAllPairToPairManager() {
+  const sdk = await getSdk();
+  await sdk.coinList.reload(500, 500);
+  for (const pool of sdk.pools) {
+    const xTokenInfo = sdk.coinList.getTokenByAddress(pool.xToken.address);
+    const yTokenInfo = sdk.coinList.getTokenByAddress(pool.yToken.address);
+    if (xTokenInfo === undefined || yTokenInfo === undefined) {
+      throw new Error('TokenInfo not found');
+    }
+    await sdk.pairV1Manager?.addPair(xTokenInfo, yTokenInfo, pool.poolAddress);
+  }
+}
+main.command('copy-all-pair-to-pair-manager').action(copyAllPairToPairManager);
+
+async function addPairToPairList(pairAddress: string) {
+  const sdk = await getSdk();
+  const pairContract = new Contract(pairAddress, ABI_SS_TRADING_PAIR_V1, sdk.provider);
+  const xToken = await pairContract.xToken();
+  const yToken = await pairContract.yToken();
+
+  if (await sdk.tradingPairV1ListContract.pairMap(pairAddress)) {
+    throw new Error('Pair address already in');
+  }
+  await sdk.tradingPairV1ListContract.addPairOwner(pairAddress);
+  if (!(await sdk.coinList.tokenListContract.isIn(xToken))) {
+    const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(xToken);
+    await sdk.coinList.tokenListContract.addTokenInfo(
+      xToken,
+      tokenInfo.description,
+      tokenInfo.projectUrl,
+      tokenInfo.logoUrl,
+      tokenInfo.coingeckoId
+    );
+  }
+  if (!(await sdk.coinList.tokenListContract.isIn(yToken))) {
+    const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(yToken);
+    await sdk.coinList.tokenListContract.addTokenInfo(
+      yToken,
+      tokenInfo.description,
+      tokenInfo.projectUrl,
+      tokenInfo.logoUrl,
+      tokenInfo.coingeckoId
+    );
+  }
+  console.log();
+  console.log();
+}
+main.command('add-pair-to-pair-list').argument('pairAddress').action(addPairToPairList);
+
 async function createPair() {
   const sdk = await getSdk();
   const testTokenX = '0xbFcf24768Fe4ECFBE23a198D806222d8b857841e';

@@ -19,7 +19,7 @@ export class CoinList extends ContractRunner {
 
   addressToToken: Record<string, TokenInfo> = {};
 
-  private readonly tokenListContract: Contract;
+  readonly tokenListContract: Contract;
 
   public readonly tokensBalanceContract: Contract;
 

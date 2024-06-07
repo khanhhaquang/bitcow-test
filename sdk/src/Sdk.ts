@@ -35,7 +35,7 @@ export class Sdk extends ContractRunner {
 
   private readonly routerContract: Contract;
 
-  private tradingPairV1ListContract: Contract;
+  tradingPairV1ListContract: Contract;
 
   readonly promiseThrottle: PromiseThrottle;
 

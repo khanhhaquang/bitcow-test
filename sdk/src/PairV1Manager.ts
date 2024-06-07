@@ -7,7 +7,7 @@ import { parsePairMessage, parseStatsV1 } from './utils/statsV1';
 import { multUiAmount, uiAmountToContractAmount } from './utils/common';
 
 export class PairV1Manager extends ContractRunner {
-  private pairV1Contract: Contract;
+  pairV1ManagerContract: Contract;
   constructor(
     provider: Provider,
     public pairV1ManagerAddress: string,
@@ -17,7 +17,7 @@ export class PairV1Manager extends ContractRunner {
     private debug: (message?: any) => void = console.log
   ) {
     super(provider, txOption, signer);
-    this.pairV1Contract = new Contract(pairV1ManagerAddress, ABI_PAIR_V1_MANAGER, provider);
+    this.pairV1ManagerContract = new Contract(pairV1ManagerAddress, ABI_PAIR_V1_MANAGER, provider);
   }
 
   async createPair(
@@ -31,7 +31,7 @@ export class PairV1Manager extends ContractRunner {
     yPrice: number
   ) {
     return this.send(
-      this.pairV1Contract.createPair,
+      this.pairV1ManagerContract.createPair,
       {
         tokenAddress: xToken.address,
         description: xToken.description,
@@ -61,7 +61,7 @@ export class PairV1Manager extends ContractRunner {
       return;
     }
     return this.send(
-      this.pairV1Contract.addPair,
+      this.pairV1ManagerContract.addPair,
       {
         tokenAddress: xToken.address,
         description: xToken.description,
@@ -83,7 +83,7 @@ export class PairV1Manager extends ContractRunner {
 
   async updateTokenInfo(xToken: TokenInfo) {
     return this.send(
-      this.pairV1Contract.updateTokenInfo,
+      this.pairV1ManagerContract.updateTokenInfo,
       {
         tokenAddress: xToken.address,
         description: xToken.description,
@@ -103,7 +103,7 @@ export class PairV1Manager extends ContractRunner {
         const promisePair = await this.promiseThrottle.add(
           async () => {
             this.debug(`Fetch pools from ${start}`);
-            return this.pairV1Contract.searchPairsPaginate(
+            return this.pairV1ManagerContract.searchPairsPaginate(
               tokenAddress,
               start,
               start + paginateCount
@@ -153,7 +153,7 @@ export class PairV1Manager extends ContractRunner {
         return await this.promiseThrottle.add(
           async () => {
             this.debug(`Fetch pairStats from index ${index}`);
-            return this.pairV1Contract.fetchPairsStats(pairAddresses);
+            return this.pairV1ManagerContract.fetchPairsStats(pairAddresses);
           },
           { weight: 1 }
         );
@@ -185,7 +185,7 @@ export class PairV1Manager extends ContractRunner {
   }
 
   async getTokenInfo(tokenAddress: string) {
-    const tokenInfo = await this.pairV1Contract.tokens(tokenAddress);
+    const tokenInfo = await this.pairV1ManagerContract.tokens(tokenAddress);
     const obj = tokenInfo.toObject();
     obj.decimals = Number(obj.decimals.toString());
     return obj;
@@ -199,7 +199,7 @@ export class PairV1Manager extends ContractRunner {
   }
   async isPoolExist(xTokenAddress: string, yTokenAddress: string) {
     const sortedAddresses = this.sortAddress(xTokenAddress, yTokenAddress);
-    const pairAddress = await this.pairV1Contract.pairByTokenAddresses(
+    const pairAddress = await this.pairV1ManagerContract.pairByTokenAddresses(
       sortedAddresses[0],
       sortedAddresses[1]
     );

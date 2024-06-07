@@ -15,6 +15,7 @@ import { Sdk } from '../Sdk';
 import { PairStats, TokenInfo } from '../types';
 import { sleep } from '../utils/common';
 import { ABI_ERC20 } from '../abi/ERC20';
+import { ABI_SS_TRADING_PAIR_V1 } from '../abi/SsTradindPairV1';
 
 export const main = new Command();
 
@@ -76,7 +77,7 @@ main
   .argument('tokenSymbol')
   .action(updateTokenInfoToManager);
 
-async function copyFromPairListToPairManager() {
+async function copyAllPairToPairManager() {
   const sdk = await getSdk();
   await sdk.coinList.reload(500, 500);
   for (const pool of sdk.pools) {
@@ -88,7 +89,42 @@ async function copyFromPairListToPairManager() {
     await sdk.pairV1Manager?.addPair(xTokenInfo, yTokenInfo, pool.poolAddress);
   }
 }
-main.command('copy-from-pair-list-to-pair-manager').action(copyFromPairListToPairManager);
+main.command('copy-all-pair-to-pair-manager').action(copyAllPairToPairManager);
+
+async function addPairToPairList(pairAddress: string) {
+  const sdk = await getSdk();
+  const pairContract = new Contract(pairAddress, ABI_SS_TRADING_PAIR_V1, sdk.provider);
+  const xToken = await pairContract.xToken();
+  const yToken = await pairContract.yToken();
+
+  if (await sdk.tradingPairV1ListContract.pairMap(pairAddress)) {
+    throw new Error('Pair address already in');
+  }
+  await sdk.tradingPairV1ListContract.addPairOwner(pairAddress);
+  if (!(await sdk.coinList.tokenListContract.isIn(xToken))) {
+    const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(xToken);
+    await sdk.coinList.tokenListContract.addTokenInfo(
+      xToken,
+      tokenInfo.description,
+      tokenInfo.projectUrl,
+      tokenInfo.logoUrl,
+      tokenInfo.coingeckoId
+    );
+  }
+  if (!(await sdk.coinList.tokenListContract.isIn(yToken))) {
+    const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(yToken);
+    await sdk.coinList.tokenListContract.addTokenInfo(
+      yToken,
+      tokenInfo.description,
+      tokenInfo.projectUrl,
+      tokenInfo.logoUrl,
+      tokenInfo.coingeckoId
+    );
+  }
+  console.log();
+  console.log();
+}
+main.command('add-pair-to-pair-list').argument('pairAddress').action(addPairToPairList);
 
 async function approvePool(xToken: string, yToken: string) {
   const pool = await getPool(xToken, yToken);

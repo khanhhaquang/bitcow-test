@@ -4,6 +4,7 @@ import { ButtonHTMLAttributes, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import BitcowModal from 'components/BitcowModal';
+import useNetwork from 'hooks/useNetwork';
 import {
   CardCornerBottomLeft,
   CardCornerBottomRight,
@@ -11,13 +12,12 @@ import {
   CardCornerTopRight,
   LuckyRewardBitUSDTicketBg
 } from 'resources/icons';
-import { ReactComponent as BitUSDLuckyIcon } from 'resources/icons/bitUSDLucky.svg';
 import { ReactComponent as CloseIcon } from 'resources/icons/pixelClose.svg';
+import { ReactComponent as USDTLuckyIcon } from 'resources/icons/usdtLucky.svg';
 import InvitationFirework from 'resources/img/luckyInvitationFirework.webp';
 import LotteryTicket from 'resources/img/luckyLotteryTicket.webp';
 import { ITxnLucky, LuckyDrawService, RewardChoice } from 'services/luckyDraw';
 import { openTxSuccessNotification } from 'utils/notifications';
-import useNetwork from 'hooks/useNetwork';
 
 interface RewardOptionProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 const RewardOption = ({ disabled, children, ...rest }: RewardOptionProps) => {
@@ -95,7 +95,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
                 <h3 className="text-center text-lg leading-4">Receive bitUSD airdrop</h3>
                 <div className="relative flex h-[82px] w-[169px] items-center justify-center bg-color_yellow_2 bg-clip-content py-2 px-1">
                   <LuckyRewardBitUSDTicketBg className="absolute inset-0 left-0" />
-                  <BitUSDLuckyIcon />
+                  <USDTLuckyIcon />
                   <p className="flex flex-col items-end font-pdb text-pink_950">
                     <span className="text-5xl [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                       {luckyTxn?.luckyAmount.toFixed(1)}

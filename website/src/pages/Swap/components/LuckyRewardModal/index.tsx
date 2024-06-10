@@ -92,7 +92,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
                     })
                     .catch((e) => console.log(e));
                 }}>
-                <h3 className="text-center text-lg leading-4">Receive bitUSD airdrop</h3>
+                <h3 className="text-center text-lg leading-4">Receive USDT airdrop</h3>
                 <div className="relative flex h-[82px] w-[169px] items-center justify-center bg-color_yellow_2 bg-clip-content py-2 px-1">
                   <LuckyRewardBitUSDTicketBg className="absolute inset-0 left-0" />
                   <USDTLuckyIcon />
@@ -100,7 +100,7 @@ const LuckyRewardModal: FC<LuckyRewardModalProps> = ({ luckyTxn, onClose }) => {
                     <span className="text-5xl [text-shadow:_2px_2px_0px_rgba(0,0,0,0.13)]">
                       {luckyTxn?.luckyAmount.toFixed(1)}
                     </span>
-                    <span className="-mt-2 text-sm">bitUSD</span>
+                    <span className="-mt-2 text-sm">USDT</span>
                   </p>
                 </div>
               </RewardOption>

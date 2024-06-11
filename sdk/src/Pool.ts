@@ -337,12 +337,7 @@ export class Pool extends ContractRunner implements IPool {
   }
 
   async updatePrice(xPrice: number, yPrice: number) {
-    return this.send(
-      this.poolContract.updatePrice,
-      xPrice,
-      yPrice
-      //this.txOption
-    );
+    return this.send(this.poolContract.updatePrice, xPrice, yPrice, this.txOption);
   }
 
   async printMessage() {
@@ -364,6 +359,8 @@ export class Pool extends ContractRunner implements IPool {
     console.log('Swap fee millionth: ', this.swapFeeMillionth);
     console.log('Protocol fee share thousandth: ', this.protocolFeeShareThousandth.toString());
     console.log('Big k: ', this.stats?.bigK.toString());
+    console.log('State multX:', this.stats?.multX.toString());
+    console.log('State multY:', this.stats?.multY.toString());
     console.log('24 hour stats (protocolFees):', this.get24HourStats('protocolFees'));
     console.log('24 hour stats (lpFees):', this.get24HourStats('lpFees'));
     console.log('24 hour stats (fullFees):', this.get24HourStats('fullFees'));

@@ -283,7 +283,7 @@ export class Sdk extends ContractRunner {
       localPairs,
       txOption,
       signer,
-      undefined
+      () => {}
     );
     await sdk.reload(100, 140, (pools) => {});
     const address = await signer?.getAddress();

@@ -46,6 +46,37 @@ export const ABI_SS_TRADING_PAIR_V1 = [
     inputs: [
       {
         indexed: false,
+        internalType: 'address',
+        name: 'user',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'xAmount',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'yAmount',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'lpAmount',
+        type: 'uint256'
+      }
+    ],
+    name: 'AddLiquidity',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: 'uint64',
         name: 'version',
         type: 'uint64'
@@ -103,6 +134,68 @@ export const ABI_SS_TRADING_PAIR_V1 = [
       }
     ],
     name: 'Paused',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'user',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'lpAmount',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'xAmount',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'yAmount',
+        type: 'uint256'
+      }
+    ],
+    name: 'RemoveLiquidity',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'user',
+        type: 'address'
+      },
+      {
+        indexed: false,
+        internalType: 'bool',
+        name: 'isXtoY',
+        type: 'bool'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'xAmount',
+        type: 'uint256'
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'yAmount',
+        type: 'uint256'
+      }
+    ],
+    name: 'Swap',
     type: 'event'
   },
   {
@@ -200,81 +293,88 @@ export const ABI_SS_TRADING_PAIR_V1 = [
     name: 'getStats',
     outputs: [
       {
-        internalType: 'uint64',
-        name: 'concentration_',
-        type: 'uint64'
-      },
-      {
-        internalType: 'uint256',
-        name: 'feeMillionth_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'protocolFeeShareThousandth_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'totalProtocolFeeX_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'totalProtocolFeeY_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'cumulativeVolume_',
-        type: 'uint256'
-      },
-      {
         components: [
           {
-            internalType: 'uint256[7]',
-            name: 'xProtocolFees',
-            type: 'uint256[7]'
+            internalType: 'uint64',
+            name: 'concentration',
+            type: 'uint64'
           },
           {
-            internalType: 'uint256[7]',
-            name: 'yProtocolFees',
-            type: 'uint256[7]'
+            internalType: 'uint256',
+            name: 'feeMillionth',
+            type: 'uint256'
           },
           {
-            internalType: 'uint256[7]',
-            name: 'volumes',
-            type: 'uint256[7]'
+            internalType: 'uint256',
+            name: 'protocolFeeShareThousandth',
+            type: 'uint256'
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalProtocolFeeX',
+            type: 'uint256'
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalProtocolFeeY',
+            type: 'uint256'
+          },
+          {
+            internalType: 'uint256',
+            name: 'cumulativeVolume',
+            type: 'uint256'
+          },
+          {
+            components: [
+              {
+                internalType: 'uint256[7]',
+                name: 'xProtocolFees',
+                type: 'uint256[7]'
+              },
+              {
+                internalType: 'uint256[7]',
+                name: 'yProtocolFees',
+                type: 'uint256[7]'
+              },
+              {
+                internalType: 'uint256[7]',
+                name: 'volumes',
+                type: 'uint256[7]'
+              }
+            ],
+            internalType: 'struct ISsTradingPairV1.FeeRecords',
+            name: 'feeRecords',
+            type: 'tuple'
+          },
+          {
+            internalType: 'uint256',
+            name: 'currentX_',
+            type: 'uint256'
+          },
+          {
+            internalType: 'uint256',
+            name: 'currentY_',
+            type: 'uint256'
+          },
+          {
+            internalType: 'uint256',
+            name: 'multX_',
+            type: 'uint256'
+          },
+          {
+            internalType: 'uint256',
+            name: 'multY_',
+            type: 'uint256'
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalLP_',
+            type: 'uint256'
           }
         ],
-        internalType: 'struct SsTradingPairV1.FeeRecords',
-        name: 'feeRecords_',
+        internalType: 'struct ISsTradingPairV1.StatsV1',
+        name: '',
         type: 'tuple'
-      },
-      {
-        internalType: 'uint256',
-        name: 'currentX_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'currentY_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'multX_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'multY_',
-        type: 'uint256'
-      },
-      {
-        internalType: 'uint256',
-        name: 'totalLP_',
-        type: 'uint256'
       }
     ],
     stateMutability: 'view',
@@ -557,13 +657,6 @@ export const ABI_SS_TRADING_PAIR_V1 = [
       }
     ],
     name: 'updateFeeMillionth',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [],
-    name: 'updateFeeRecords',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function'

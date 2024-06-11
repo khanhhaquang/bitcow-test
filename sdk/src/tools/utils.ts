@@ -75,6 +75,9 @@ export function getSigner() {
 
 export async function getPool(xToken: string, yToken: string): Promise<Pool> {
   const sdk = await getSdk();
+  return findPool(sdk, xToken, yToken);
+}
+export async function findPool(sdk: Sdk, xToken: string, yToken: string) {
   for (const pool of sdk.pools) {
     if (pool.xToken.symbol == xToken && pool.yToken.symbol == yToken) {
       return pool;

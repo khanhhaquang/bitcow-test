@@ -56,6 +56,17 @@ export class PairV1Manager extends ContractRunner {
     );
   }
 
+  async updatePrice(xTokenAddress: string, yTokenAddress: string, xPrice: string, yPrice: string) {
+    await this.send(
+      this.pairV1ManagerContract.updateTradingPairPrice,
+      xTokenAddress,
+      yTokenAddress,
+      xPrice,
+      yPrice,
+      this.txOption
+    );
+  }
+
   async addPair(xToken: TokenInfo, yToken: TokenInfo, pairAddress: string) {
     if (await this.isPoolExist(xToken.address, yToken.address)) {
       return;

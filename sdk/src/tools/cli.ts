@@ -4,6 +4,7 @@ import { Contract, ethers, Provider } from 'ethers';
 import {
   checkAndApprovePool,
   checkAndApproveSdk,
+  findPool,
   getPool,
   getSdk,
   readFile,
@@ -16,6 +17,8 @@ import { PairStats, TokenInfo } from '../types';
 import { sleep } from '../utils/common';
 import { ABI_ERC20 } from '../abi/ERC20';
 import { ABI_SS_TRADING_PAIR_V1 } from '../abi/SsTradindPairV1';
+import { ABI_SS_TRADING_PAIR_V1_LIST } from '../abi/SsTradingPairV1List';
+import { ABI_TOKEN_LIST } from '../abi/TokenList';
 
 export const main = new Command();
 
@@ -84,13 +87,23 @@ main
   .action(withdraw);
 
 async function updatePrice(xToken: string, yToken: string, xPrice: string, yPrice: string) {
-  const pool = await getPool(xToken, yToken);
-  await pool.printMessage();
+  const sdk = await getSdk();
+  const pool = await findPool(sdk, xToken, yToken);
+  console.log('------Before update------');
+  console.log('multX:', pool.stats?.multX.toString());
+  console.log('multY:', pool.stats?.multY.toString());
   await sleep(1000);
-  await pool.updatePrice(parseFloat(xPrice), parseFloat(yPrice));
+  if (pool.address === (await pool.poolContract.owner())) {
+    console.log('------Pool is created by admin, update... ------');
+    await pool.updatePrice(parseFloat(xPrice), parseFloat(yPrice));
+  } else {
+    console.log('------Pool is created by user, update... ------');
+    await sdk.pairV1Manager?.updatePrice(pool.xToken.address, pool.yToken.address, xPrice, yPrice);
+  }
+  console.log('------After update------');
   await pool.reload();
-  console.log('');
-  await pool.printMessage();
+  console.log('multX:', pool.stats?.multX.toString());
+  console.log('multY:', pool.stats?.multY.toString());
 }
 main
   .command('update-price')
@@ -200,13 +213,17 @@ async function addPairToPairList(pairAddress: string) {
   const xToken = await pairContract.xToken();
   const yToken = await pairContract.yToken();
 
-  if (await sdk.tradingPairV1ListContract.pairMap(pairAddress)) {
-    throw new Error('Pair address already in');
+  if (!(await sdk.tradingPairV1ListContract.pairMap(pairAddress))) {
+    await new Contract(
+      sdk.config.tradingPairV1List,
+      ABI_SS_TRADING_PAIR_V1_LIST,
+      sdk.signer
+    ).addPairOwner(pairAddress);
   }
-  await sdk.tradingPairV1ListContract.addPairOwner(pairAddress);
+
   if (!(await sdk.coinList.tokenListContract.isIn(xToken))) {
     const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(xToken);
-    await sdk.coinList.tokenListContract.addTokenInfo(
+    await new Contract(sdk.config.tokenList, ABI_TOKEN_LIST, sdk.signer).addTokenInfo(
       xToken,
       tokenInfo.description,
       tokenInfo.projectUrl,
@@ -216,7 +233,7 @@ async function addPairToPairList(pairAddress: string) {
   }
   if (!(await sdk.coinList.tokenListContract.isIn(yToken))) {
     const tokenInfo = await sdk.pairV1Manager?.getTokenInfo(yToken);
-    await sdk.coinList.tokenListContract.addTokenInfo(
+    await new Contract(sdk.config.tokenList, ABI_TOKEN_LIST, sdk.signer).addTokenInfo(
       yToken,
       tokenInfo.description,
       tokenInfo.projectUrl,

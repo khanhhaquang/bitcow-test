@@ -6,6 +6,7 @@ import Swap from 'pages/Swap';
 import Tokens from 'pages/Tokens';
 import LuckyCow from 'pages/LuckyCow';
 import useUserInfo from 'hooks/useUserInfo';
+import Campaign from 'pages/Campaign';
 
 // import Faucet from 'pages/Faucet';
 // import { useSelector } from 'react-redux';
@@ -13,7 +14,16 @@ import useUserInfo from 'hooks/useUserInfo';
 // import Stats from 'pages/Stats';
 
 export type TRoute = RouteObject & {
-  name: 'Home' | 'Pools' | 'Swap' | 'Lucky Cow' | 'Tokens' | '404' | 'Faucet' | 'Stats';
+  name:
+    | 'Home'
+    | 'Pools'
+    | 'Swap'
+    | 'Lucky Cow'
+    | 'Campaign'
+    | 'Tokens'
+    | '404'
+    | 'Faucet'
+    | 'Stats';
   hidden?: boolean; //to hide the visibility in header menu
 };
 
@@ -38,6 +48,11 @@ export const routes: TRoute[] = [
     path: 'lucky-cow',
     name: 'Lucky Cow',
     element: <LuckyCow />
+  },
+  {
+    path: 'campaign',
+    name: 'Campaign',
+    element: <Campaign />
   },
   {
     path: 'tokens',

@@ -18,7 +18,7 @@ const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isLuckyCowPage = currentPageName === 'Lucky Cow';
 
   const appBgDecorators = useMemo(() => {
-    if (!['Swap', 'Pools'].includes(currentPageName)) return null;
+    if (!['Swap', 'Pools', 'Campaign'].includes(currentPageName)) return null;
     return <AppPageDecorators />;
   }, [currentPageName]);
 

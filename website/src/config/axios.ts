@@ -7,6 +7,12 @@ const axiosInstance = axios.create({
     'Cache-Control': 'no-cache'
   }
 });
+const campaignAxiosInstance = axios.create({
+  baseURL: 'https://apis.bitsmiley.io/',
+  headers: {
+    'Cache-Control': 'no-cache'
+  }
+});
 
 const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
   axiosInstance.interceptors.request.clear();
@@ -49,4 +55,4 @@ const axiosSetupInterceptors = (onResign: () => Promise<void>) => {
   );
 };
 
-export { axiosInstance, axiosSetupInterceptors };
+export { axiosInstance, campaignAxiosInstance, axiosSetupInterceptors };

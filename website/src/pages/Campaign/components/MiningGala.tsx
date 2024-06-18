@@ -6,8 +6,8 @@ import { Image } from 'antd';
 const MiningGala = () => {
   return (
     <div className="mt-11 flex h-fit max-w-[1200px] flex-col text-bc-white shadow-bc-swap backdrop-blur-lg tablet:mt-4">
-      <div className="flex h-[70px] w-full items-center bg-[#FF8D00] px-6 py-3 text-black">
-        <div>BITLAYER MINING GALA</div>
+      <div className="grid h-[70px] grid-cols-2 items-center bg-[#FF8D00] px-6 py-3 text-black">
+        <div className="font-micro text-[36px]">BITLAYER MINING GALA</div>
         <div className="justify-self-end">
           <Image src={bitlayerLogo} width={40} height={37} preview={false} />
         </div>

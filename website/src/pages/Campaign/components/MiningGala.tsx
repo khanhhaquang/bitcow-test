@@ -1,12 +1,12 @@
 import { Image } from 'antd';
+import { useMemo } from 'react';
 
+import useCampaign from 'hooks/useCampaign';
 import bitlayerLogo from 'resources/img/bitlayerLogo.webp';
 import bitlayerMask from 'resources/img/bitlayerMask.webp';
 import imageYourRecord from 'resources/img/yourRecord.webp';
 
 import TaskRecord from './TaskRecord';
-import useCampaign from 'hooks/useCampaign';
-import { useMemo } from 'react';
 
 const MiningGala = () => {
   const { data: taskInfo } = useCampaign();
@@ -24,7 +24,7 @@ const MiningGala = () => {
   }, [taskInfo]);
   return (
     <div className="relative mt-11 flex h-fit max-w-[1200px] flex-col overflow-hidden text-bc-white shadow-bc-swap backdrop-blur-lg tablet:mt-4">
-      <div className="z-10 grid h-[70px] grid-cols-2 items-center bg-[#FF8D00] px-6 py-3 text-black">
+      <div className="z-[2] grid h-[70px] grid-cols-2 items-center bg-[#FF8D00] px-6 py-3 text-black">
         <div className="font-micro text-[36px]">BITLAYER MINING GALA</div>
         <div className="justify-self-end">
           <Image src={bitlayerLogo} width={40} height={37} preview={false} />

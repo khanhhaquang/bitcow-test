@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import useMerlinWallet from './useMerlinWallet';
-import { UserService } from 'services/user';
 import { CampaignService } from 'services/campaign';
 
 const useCampaign = () => {

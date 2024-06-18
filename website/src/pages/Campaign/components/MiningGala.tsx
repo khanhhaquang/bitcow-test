@@ -5,8 +5,15 @@ import bitlayerMask from 'resources/img/bitlayerMask.webp';
 import imageYourRecord from 'resources/img/yourRecord.webp';
 
 import TaskRecord from './TaskRecord';
+import useCampaign from 'hooks/useCampaign';
+import { useMemo } from 'react';
 
 const MiningGala = () => {
+  const { data: taskInfo } = useCampaign();
+  const swapCompleted = useMemo(() => {
+    if (!taskInfo) return false;
+    return taskInfo.find((t) => t.title.toLowerCase() === 'swap')?.finished;
+  }, [taskInfo]);
   return (
     <div className="relative mt-11 flex h-fit max-w-[1200px] flex-col overflow-hidden text-bc-white shadow-bc-swap backdrop-blur-lg tablet:mt-4">
       <div className="z-10 grid h-[70px] grid-cols-2 items-center bg-[#FF8D00] px-6 py-3 text-black">
@@ -27,21 +34,20 @@ const MiningGala = () => {
           </div>
         </div>
         <TaskRecord
-          record={{ taskid: '001', title: 'Swap', progress: 100, finished: true }}
-          tooltipContent="Mint bitUSD directly on bitSmiley."></TaskRecord>
-        <TaskRecord
-          record={{
-            taskid: '001',
-            title: 'Liquidity',
-            progress: 100,
-            finished: true
-          }}
+          title="Swap"
+          status={swapCompleted ? 'completed' : 'uncompleted'}
           tooltipContent="Swap bitUSD-USDT (for transactions greater than 1000 bitUSD) and bitUSD-WBTC (for transactions greater than 20 bitUSD) on bitCow."></TaskRecord>
         <TaskRecord
-          record={{ taskid: '001', title: 'Mint', progress: 100, finished: true }}
+          title="Liquidity"
+          status={'completed'}
           tooltipContent="Add liquidity for bitUSD-WBTC and bitUSD-USDT."></TaskRecord>
         <TaskRecord
-          record={{ taskid: '001', title: 'Rewards', progress: 100, finished: true }}
+          title="Mint"
+          status={'completed'}
+          tooltipContent="Mint bitUSD directly on bitSmiley."></TaskRecord>
+        <TaskRecord
+          title="Rewards"
+          status={'calculating'}
           tooltipContent="We are calculating the designated token rewards for you. Exact amount revealed soon."></TaskRecord>
       </div>
       <div className="absolute -right-3 top-0 z-0 h-auto w-[373px] opacity-50">

@@ -1,5 +1,6 @@
-import { Tooltip } from 'components/Antd';
 import { useMemo } from 'react';
+
+import { Tooltip } from 'components/Antd';
 import { ReactComponent as QuestionMarkIcon } from 'resources/icons/questionMark.svg';
 import { ReactComponent as TaskCheckIcon } from 'resources/icons/taskCheck.svg';
 
@@ -28,7 +29,7 @@ const TaskRecord: React.FC<TProps> = ({ title, status, tooltipContent }) => {
       );
   }, [status]);
   return (
-    <div className="flex flex-col gap-y-[12px] font-pdb text-[18px]">
+    <div className="z-[2] flex flex-col gap-y-[12px] font-pdb text-[18px] ">
       <div className="flex items-center gap-1 text-white">
         <div>{title}</div>
         <Tooltip placement="top" title={tooltipContent}>

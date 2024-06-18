@@ -9,7 +9,9 @@ import imageYourRecord from 'resources/img/yourRecord.webp';
 import TaskRecord from './TaskRecord';
 
 const MiningGala = () => {
-  const { data: taskInfo } = useCampaign();
+  const { data: campaignData } = useCampaign();
+  const { data: taskInfo } = campaignData || {};
+
   const swapCompleted = useMemo(() => {
     if (!taskInfo) return false;
     return taskInfo.find((t) => t.title.toLowerCase() === 'swap')?.finished;

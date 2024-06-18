@@ -1,7 +1,9 @@
-import TaskRecord from './TaskRecord';
-import imageYourRecord from 'resources/img/yourRecord.webp';
-import bitlayerLogo from 'resources/img/bitlayerLogo.webp';
 import { Image } from 'antd';
+
+import bitlayerLogo from 'resources/img/bitlayerLogo.webp';
+import imageYourRecord from 'resources/img/yourRecord.webp';
+
+import TaskRecord from './TaskRecord';
 
 const MiningGala = () => {
   return (
@@ -24,18 +26,22 @@ const MiningGala = () => {
           </div>
         </div>
         <TaskRecord
-          record={{ taskid: '001', title: 'swap', progress: 100, finished: true }}></TaskRecord>
+          record={{ taskid: '001', title: 'Swap', progress: 100, finished: true }}
+          tooltipContent="Mint bitUSD directly on bitSmiley."></TaskRecord>
         <TaskRecord
           record={{
             taskid: '001',
             title: 'Liquidity',
             progress: 100,
             finished: true
-          }}></TaskRecord>
+          }}
+          tooltipContent="Swap bitUSD-USDT (for transactions greater than 1000 bitUSD) and bitUSD-WBTC (for transactions greater than 20 bitUSD) on bitCow."></TaskRecord>
         <TaskRecord
-          record={{ taskid: '001', title: 'mint', progress: 100, finished: true }}></TaskRecord>
+          record={{ taskid: '001', title: 'Mint', progress: 100, finished: true }}
+          tooltipContent="Add liquidity for bitUSD-WBTC and bitUSD-USDT."></TaskRecord>
         <TaskRecord
-          record={{ taskid: '001', title: 'Rewards', progress: 100, finished: true }}></TaskRecord>
+          record={{ taskid: '001', title: 'Rewards', progress: 100, finished: true }}
+          tooltipContent="We are calculating the designated token rewards for you. Exact amount revealed soon."></TaskRecord>
       </div>
     </div>
   );

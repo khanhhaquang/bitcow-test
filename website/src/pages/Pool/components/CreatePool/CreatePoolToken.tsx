@@ -122,7 +122,11 @@ const CreatePoolToken: React.FC<TProps> = ({ tokenType, setError, setIsValidatin
             {values[tokenType + 'LogoUrl'].length > 0 ? (
               <img src={values[tokenType + 'LogoUrl']} width={24} height={24} className="mr-2" />
             ) : (
-              <QuestionMarkIcon width={17} height={17} className="mr-2 w-[17px] self-center" />
+              <QuestionMarkIcon
+                width={17}
+                height={17}
+                className="mr-2 w-[17px] self-center text-white"
+              />
             )}
             <input
               className={classNames(

@@ -46,11 +46,11 @@ const MiningGala = () => {
         <TaskRecord
           title="Swap"
           status={swapCompleted ? 'completed' : 'uncompleted'}
-          tooltipContent="Swap bitUSD-USDT (for transactions greater than 1000 bitUSD) and bitUSD-WBTC (for transactions greater than 20 bitUSD) on bitCow."></TaskRecord>
+          tooltipContent="Swap bitUSD-USDT (for transactions greater than 1000 bitUSD) or bitUSD-WBTC (for transactions greater than 20 bitUSD) on bitCow."></TaskRecord>
         <TaskRecord
           title="Liquidity"
           status={liquidityCompleted ? 'completed' : 'uncompleted'}
-          tooltipContent="Add liquidity for bitUSD-WBTC and bitUSD-USDT."></TaskRecord>
+          tooltipContent="Add liquidity for bitUSD-WBTC or bitUSD-USDT."></TaskRecord>
         <TaskRecord
           title="Mint"
           status={mintCompleted ? 'completed' : 'uncompleted'}

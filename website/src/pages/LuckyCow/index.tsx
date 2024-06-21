@@ -36,7 +36,7 @@ const LuckyCow = () => {
 
   const { wallet, isLoggedIn } = useMerlinWallet();
   const { playGame, isPlayGameRequesting, playGameRequestResult } = useLuckyGame();
-  const { data: userInfo } = useUserInfo();
+  const { data: userInfo, refetch: refetchUserInfo } = useUserInfo();
   const [status, setStatus] = useState<LuckyCowStatus>(
     isFromLuckyChance ? LuckyCowStatus.REDEEM : LuckyCowStatus.PRELOADING
   );
@@ -136,7 +136,13 @@ const LuckyCow = () => {
           setIsLuckyCodeOpen(false);
         }}
       />
-      <LuckyPrizeModal open={isLuckyPrizeOpen} onCancel={() => setIsLuckyPrizeOpen(false)} />
+      <LuckyPrizeModal
+        open={isLuckyPrizeOpen}
+        onCancel={() => {
+          refetchUserInfo();
+          setIsLuckyPrizeOpen(false);
+        }}
+      />
     </Wrapper>
   );
 };
